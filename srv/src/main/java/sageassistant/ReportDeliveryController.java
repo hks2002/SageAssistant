@@ -18,7 +18,7 @@ import com.crystaldecisions.sdk.occa.report.lib.ReportSDKExceptionBase;
 @RestController
 public class ReportDeliveryController {
 	private static final Logger logger = LoggerFactory.getLogger(ReportDeliveryController.class);
-	private ReportClientDocument reportClientDocument = new ReportClientDocument();
+	private static ReportClientDocument reportClientDocument = new ReportClientDocument();
 
 	@Autowired
 	ReportDBConfig rptCfg;
@@ -30,11 +30,9 @@ public class ReportDeliveryController {
 				rptCfg.getDriveClassName(), null);
 
 	}
-
-	@GetMapping("Report/Delivery/showPdf")
-	public void showPdf(HttpServletRequest request, HttpServletResponse response)
+	
+	private void handingRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ReportSDKExceptionBase, IOException {
-
 		if (!reportClientDocument.isOpen()) {
 			openReport();
 		}
@@ -49,6 +47,14 @@ public class ReportDeliveryController {
 		}
 		CRJavaHelper.addDiscreteParameterValue(reportClientDocument, "", "DeliveryNO", DeliveryNO);
 		reportClientDocument.getReportDocument().getSummaryInfo().setTitle(DeliveryNO);
+	}
+	
+	@GetMapping("Report/Delivery/showPdf")
+	public void showPdf(HttpServletRequest request, HttpServletResponse response)
+			throws ReportSDKExceptionBase, IOException {
+
+		handingRequest(request, response);
+		
 		// This will be used by the viewer to display the desired report. True to
 		// Download this report.
 		CRJavaHelper.exportPDF(reportClientDocument, response, false);
@@ -58,21 +64,8 @@ public class ReportDeliveryController {
 	public void exportPdf(HttpServletRequest request, HttpServletResponse response)
 			throws ReportSDKExceptionBase, IOException {
 
-		if (!reportClientDocument.isOpen()) {
-			openReport();
-		}
-
-		String DeliveryNO = request.getParameter("DeliveryNO");
-
-		logger.debug("exportPdf : DeliveryNO : " + DeliveryNO);
-
-		if (DeliveryNO == null || DeliveryNO.isEmpty()) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Delivery NO can not be empty!");
-			return;
-		}
-
-		CRJavaHelper.addDiscreteParameterValue(reportClientDocument, "", "DeliveryNO", DeliveryNO);
-		reportClientDocument.getReportDocument().getSummaryInfo().setTitle(DeliveryNO);
+		handingRequest(request, response);
+		
 		// This will be used by the viewer to display the desired report. True to
 		// Download this report.
 		CRJavaHelper.exportPDF(reportClientDocument, response, true);
@@ -81,22 +74,9 @@ public class ReportDeliveryController {
 	@GetMapping("Report/Delivery/exportWord")
 	public void exportWord(HttpServletRequest request, HttpServletResponse response)
 			throws ReportSDKExceptionBase, IOException {
-
-		if (!reportClientDocument.isOpen()) {
-			openReport();
-		}
-
-		String DeliveryNO = request.getParameter("DeliveryNO");
-
-		logger.debug("exportWord : DeliveryNO : " + DeliveryNO);
-
-		if (DeliveryNO == null || DeliveryNO.isEmpty()) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Delivery NO can not be empty!");
-			return;
-		}
-
-		CRJavaHelper.addDiscreteParameterValue(reportClientDocument, "", "DeliveryNO", DeliveryNO);
-		reportClientDocument.getReportDocument().getSummaryInfo().setTitle(DeliveryNO);
+		
+		handingRequest(request, response);
+		
 		// This will be used by the viewer to display the desired report. True to
 		// Download this report.
 		CRJavaHelper.exportRTF(reportClientDocument, response, true);

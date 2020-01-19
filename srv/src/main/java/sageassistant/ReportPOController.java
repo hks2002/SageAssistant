@@ -19,7 +19,7 @@ import com.crystaldecisions.sdk.occa.report.lib.ReportSDKExceptionBase;
 public class ReportPOController {
 	private static final Logger logger = LoggerFactory.getLogger(ReportPOController.class);
 
-	private ReportClientDocument reportClientDocument = new ReportClientDocument();
+	private static ReportClientDocument reportClientDocument = new ReportClientDocument();
 
 	@Autowired
 	ReportDBConfig rptCfg;
@@ -31,11 +31,9 @@ public class ReportPOController {
 				rptCfg.getDriveClassName(), null);
 
 	}
-
-	@GetMapping("Report/PurchaseOrder/showPdf")
-	public void showPdf(HttpServletRequest request, HttpServletResponse response)
+	
+	private void handingRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ReportSDKExceptionBase, IOException {
-
 		if (!reportClientDocument.isOpen()) {
 			openReport();
 		}
@@ -53,6 +51,14 @@ public class ReportPOController {
 		CRJavaHelper.addDiscreteParameterValue(reportClientDocument, "", "PurchaseNO", PurchaseNO);
 		CRJavaHelper.addDiscreteParameterValue(reportClientDocument, "", "TaxInclude", TaxInclude);
 		reportClientDocument.getReportDocument().getSummaryInfo().setTitle(PurchaseNO);
+	}
+	
+	@GetMapping("Report/PurchaseOrder/showPdf")
+	public void showPdf(HttpServletRequest request, HttpServletResponse response)
+			throws ReportSDKExceptionBase, IOException {
+
+		handingRequest(request, response);
+		
 		// This will be used by the viewer to display the desired report. True to
 		// Download this report.
 		CRJavaHelper.exportPDF(reportClientDocument, response, false);
@@ -62,24 +68,9 @@ public class ReportPOController {
 	@GetMapping("Report/PurchaseOrder/exportPdf")
 	public void exportPdf(HttpServletRequest request, HttpServletResponse response)
 			throws ReportSDKExceptionBase, IOException {
-
-		if (!reportClientDocument.isOpen()) {
-			openReport();
-		}
-
-		String PurchaseNO = request.getParameter("PurchaseNO");
-		Boolean TaxInclude = Boolean.parseBoolean(request.getParameter("TaxInclude"));
-
-		logger.debug("exportPdf : PurchaseNO : " + PurchaseNO + "  " + "TaxInclude : " + TaxInclude);
-
-		if (PurchaseNO == null || PurchaseNO.isEmpty()) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Puchase NO can not be empty!");
-			return;
-		}
-
-		CRJavaHelper.addDiscreteParameterValue(reportClientDocument, "", "PurchaseNO", PurchaseNO);
-		CRJavaHelper.addDiscreteParameterValue(reportClientDocument, "", "TaxInclude", TaxInclude);
-		reportClientDocument.getReportDocument().getSummaryInfo().setTitle(PurchaseNO);
+		
+		handingRequest(request, response);
+		
 		// This will be used by the viewer to display the desired report. True to
 		// Download this report.
 		CRJavaHelper.exportPDF(reportClientDocument, response, true);
@@ -88,24 +79,9 @@ public class ReportPOController {
 	@GetMapping("Report/PurchaseOrder/exportWord")
 	public void exportWord(HttpServletRequest request, HttpServletResponse response)
 			throws ReportSDKExceptionBase, IOException {
-
-		if (!reportClientDocument.isOpen()) {
-			openReport();
-		}
-
-		String PurchaseNO = request.getParameter("PurchaseNO");
-		Boolean TaxInclude = Boolean.parseBoolean(request.getParameter("TaxInclude"));
-
-		logger.debug("exportWord : PurchaseNO : " + PurchaseNO + "  " + "TaxInclude : " + TaxInclude);
-
-		if (PurchaseNO == null || PurchaseNO.isEmpty()) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Puchase NO can not be empty!");
-			return;
-		}
-
-		CRJavaHelper.addDiscreteParameterValue(reportClientDocument, "", "PurchaseNO", PurchaseNO);
-		CRJavaHelper.addDiscreteParameterValue(reportClientDocument, "", "TaxInclude", TaxInclude);
-		reportClientDocument.getReportDocument().getSummaryInfo().setTitle(PurchaseNO);
+		
+		handingRequest(request, response);
+		
 		// This will be used by the viewer to display the desired report. True to
 		// Download this report.
 		CRJavaHelper.exportRTF(reportClientDocument, response, true);

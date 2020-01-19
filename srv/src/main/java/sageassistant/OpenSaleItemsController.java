@@ -29,38 +29,42 @@ public class OpenSaleItemsController {
 	private static final Logger logger = LoggerFactory.getLogger(OpenSaleItemsController.class);
 
 	@Autowired
-	private JdbcTemplate jdbcTemplate=new JdbcTemplate();
+	private  JdbcTemplate jdbcTemplate=new JdbcTemplate();
 	
 	@Autowired
-	private NamedParameterJdbcTemplate namedTemplate=new NamedParameterJdbcTemplate(jdbcTemplate);
+	private  NamedParameterJdbcTemplate namedTemplate=new NamedParameterJdbcTemplate(jdbcTemplate);
 
 	private static ObjectMapper MAPPER = new ObjectMapper();
-
+    private static String sql=Utils.readFileContent("sql/openSaleItems.sql");
+    private static List<Map<String, Object>> list;
+    private static MapSqlParameterSource sqlParas = new MapSqlParameterSource();
+    
 	/**
 	 * guava cache
 	 */
-	private LoadingCache<String, String> cache = CacheBuilder.newBuilder().refreshAfterWrite(30, TimeUnit.MINUTES)
-			.build(new CacheLoader<String, String>() {
-				@Override
-				public String load(String facility) throws JsonProcessingException {
-					return getFromDB(facility);
-				}
+	private static LoadingCache<String, String> cache;
+	
+	public OpenSaleItemsController () {
+		cache = CacheBuilder.newBuilder().refreshAfterWrite(30, TimeUnit.MINUTES)
+				.build(new CacheLoader<String, String>() {
+					@Override
+					public String load(String facility) throws JsonProcessingException {
+						return getFromDB(facility);
+					}
 
-				private String getFromDB(String facility) throws JsonProcessingException {
-					String sql = Utils.readFileContent("sql/openSaleItems.sql");
+					private String getFromDB(String facility) throws JsonProcessingException {
+						logger.debug(sql);
+						
+						sqlParas.addValue("facility", facility);
+						list = namedTemplate.queryForList(sql, sqlParas);
 
-					logger.debug(sql);
-					MapSqlParameterSource sqlParas = new MapSqlParameterSource();
-					sqlParas.addValue("facility", facility);
-					List<Map<String, Object>> list = namedTemplate.queryForList(sql, sqlParas);
+						logger.info("Fetched <OpenSaleItems> From database");
 
-					logger.info("Fetched <OpenSaleItems> From database");
-
-					MAPPER.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
-					String sjson = MAPPER.writeValueAsString(list);
-					return sjson;
-				}
-			});
+						MAPPER.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
+						return MAPPER.writeValueAsString(list);
+					}
+				});
+	}
 
 	@GetMapping("Data/OpenSaleItems")
 	public String get(@RequestParam(value = "facility", required = false, defaultValue = "ZHU") String facility)

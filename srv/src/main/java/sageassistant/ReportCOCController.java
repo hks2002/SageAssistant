@@ -18,7 +18,7 @@ import com.crystaldecisions.sdk.occa.report.lib.ReportSDKExceptionBase;
 @RestController
 public class ReportCOCController {
 	private static final Logger logger = LoggerFactory.getLogger(ReportCOCController.class);
-	private ReportClientDocument reportClientDocument = new ReportClientDocument();
+	private static ReportClientDocument reportClientDocument = new ReportClientDocument();
 
 	@Autowired
 	ReportDBConfig rptCfg;
@@ -30,11 +30,9 @@ public class ReportCOCController {
 				rptCfg.getDriveClassName(), null);
 
 	}
-	
-	@GetMapping("Report/COC/showPdf")
-	public void showPdf(HttpServletRequest request, HttpServletResponse response)
-			throws ReportSDKExceptionBase, IOException {
 
+	private void handingRequest(HttpServletRequest request, HttpServletResponse response)
+			throws ReportSDKExceptionBase, IOException {
 		if (!reportClientDocument.isOpen()) {
 			openReport();
 		}
@@ -42,8 +40,8 @@ public class ReportCOCController {
 		String ProjectNO = request.getParameter("ProjectNO");
 		Boolean CustomerOri = Boolean.parseBoolean(request.getParameter("CustomerOri"));
 
-		logger.debug("exportPdf : ProjectNO : " + ProjectNO+ "  " + "CustomerOri : " + CustomerOri);
-		
+		logger.debug("exportPdf : ProjectNO : " + ProjectNO + "  " + "CustomerOri : " + CustomerOri);
+
 		if (ProjectNO == null || ProjectNO.isEmpty()) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Project NO can not be empty!");
 			return;
@@ -52,6 +50,14 @@ public class ReportCOCController {
 		CRJavaHelper.addDiscreteParameterValue(reportClientDocument, "", "ProjectNO", ProjectNO);
 		CRJavaHelper.addDiscreteParameterValue(reportClientDocument, "", "CustomerOri", CustomerOri);
 		reportClientDocument.getReportDocument().getSummaryInfo().setTitle("COC" + ProjectNO);
+	}
+
+	@GetMapping("Report/COC/showPdf")
+	public void showPdf(HttpServletRequest request, HttpServletResponse response)
+			throws ReportSDKExceptionBase, IOException {
+
+		handingRequest(request, response);
+
 		// This will be used by the viewer to display the desired report. True to
 		// Download this report.
 		CRJavaHelper.exportPDF(reportClientDocument, response, false);
@@ -61,23 +67,8 @@ public class ReportCOCController {
 	public void exportPdf(HttpServletRequest request, HttpServletResponse response)
 			throws ReportSDKExceptionBase, IOException {
 
-		if (!reportClientDocument.isOpen()) {
-			openReport();
-		}
-
-		String ProjectNO = request.getParameter("ProjectNO");
-		Boolean CustomerOri = Boolean.parseBoolean(request.getParameter("CustomerOri"));
-
-		logger.debug("exportPdf : ProjectNO : " + ProjectNO+ "  " + "CustomerOri : " + CustomerOri);
-
-		if (ProjectNO == null || ProjectNO.isEmpty()) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Project NO can not be empty!");
-			return;
-		}
-
-		CRJavaHelper.addDiscreteParameterValue(reportClientDocument, "", "ProjectNO", ProjectNO);
-		CRJavaHelper.addDiscreteParameterValue(reportClientDocument, "", "CustomerOri", CustomerOri);
-		reportClientDocument.getReportDocument().getSummaryInfo().setTitle("COC" + ProjectNO);
+		handingRequest(request, response);
+		
 		// This will be used by the viewer to display the desired report. True to
 		// Download this report.
 		CRJavaHelper.exportPDF(reportClientDocument, response, true);
@@ -87,23 +78,8 @@ public class ReportCOCController {
 	public void exportWord(HttpServletRequest request, HttpServletResponse response)
 			throws ReportSDKExceptionBase, IOException {
 
-		if (!reportClientDocument.isOpen()) {
-			openReport();
-		}
-
-		String ProjectNO = request.getParameter("ProjectNO");
-		Boolean CustomerOri = Boolean.parseBoolean(request.getParameter("CustomerOri"));
-
-		logger.debug("exportPdf : ProjectNO : " + ProjectNO+ "  " + "CustomerOri : " + CustomerOri);
-
-		if (ProjectNO == null || ProjectNO.isEmpty()) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Project NO can not be empty!");
-			return;
-		}
-
-		CRJavaHelper.addDiscreteParameterValue(reportClientDocument, "", "ProjectNO", ProjectNO);
-		CRJavaHelper.addDiscreteParameterValue(reportClientDocument, "", "CustomerOri", CustomerOri);
-		reportClientDocument.getReportDocument().getSummaryInfo().setTitle("COC" + ProjectNO);
+		handingRequest(request, response);
+		
 		// This will be used by the viewer to display the desired report. True to
 		// Download this report.
 		CRJavaHelper.exportRTF(reportClientDocument, response, true);
