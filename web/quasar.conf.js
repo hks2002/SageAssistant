@@ -4,16 +4,12 @@
 module.exports = function (ctx) {
   return {
     // app boot file (/src/boot)
-    // --> boot files are part of "main.js"
+    // --> boot files are part of 'main.js'
     // https://quasar.dev/quasar-cli/cli-documentation/boot-files
-    boot: [
-      'axios'
-    ],
+    boot: ['axios'],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
-    css: [
-      'app.sass'
-    ],
+    css: ['app.sass'],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
@@ -33,7 +29,7 @@ module.exports = function (ctx) {
       iconSet: 'fontawesome-v5', // Quasar icon set
       lang: 'en-us', // Quasar language pack
 
-      // Possible values for "all":
+      // Possible values for 'all':
       // * 'auto' - Auto-import needed Quasar components & directives
       //            (slightly higher compile time; next to minimum bundle size; most convenient)
       // * false  - Manually specify what to import
@@ -46,7 +42,7 @@ module.exports = function (ctx) {
       directives: [],
 
       // Quasar plugins
-      plugins: ['Notify']
+      plugins: ['Notify', 'Loading']
     },
 
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ie
@@ -57,8 +53,8 @@ module.exports = function (ctx) {
       scopeHoisting: true,
       vueRouterMode: 'hash', // available values: 'hash', 'history'
       showProgress: true,
-      gzip: false,
-      analyze: false,
+      gzip: true,
+      analyze: true,
       // Options below are automatically set depending on the env, set them if you want to override
       // preloadChunks: false,
       // extractCSS: false,
@@ -107,29 +103,29 @@ module.exports = function (ctx) {
         theme_color: '#027be3',
         icons: [
           {
-            'src': 'statics/icons/icon-128x128.png',
-            'sizes': '128x128',
-            'type': 'image/png'
+            src: 'statics/icons/icon-128x128.png',
+            sizes: '128x128',
+            type: 'image/png'
           },
           {
-            'src': 'statics/icons/icon-192x192.png',
-            'sizes': '192x192',
-            'type': 'image/png'
+            src: 'statics/icons/icon-192x192.png',
+            sizes: '192x192',
+            type: 'image/png'
           },
           {
-            'src': 'statics/icons/icon-256x256.png',
-            'sizes': '256x256',
-            'type': 'image/png'
+            src: 'statics/icons/icon-256x256.png',
+            sizes: '256x256',
+            type: 'image/png'
           },
           {
-            'src': 'statics/icons/icon-384x384.png',
-            'sizes': '384x384',
-            'type': 'image/png'
+            src: 'statics/icons/icon-384x384.png',
+            sizes: '384x384',
+            type: 'image/png'
           },
           {
-            'src': 'statics/icons/icon-512x512.png',
-            'sizes': '512x512',
-            'type': 'image/png'
+            src: 'statics/icons/icon-512x512.png',
+            sizes: '512x512',
+            type: 'image/png'
           }
         ]
       }

@@ -1,6 +1,6 @@
 <template>
   <q-page class="row">
-    <div class="column col-3">
+    <div class="column col-sm-4 col-lg-3 ">
 
       <q-item>
         <q-item-section avatar>
@@ -14,18 +14,14 @@
                    v-model="COCProj"
                    outlined
                    clearable
+                   hint="e.g.: ZCC190001-1 or ZCC190001-11 or ZDSRP190001"
+                   :hide-hint="true"
                    @input="showCOC"
                    input-class="text-uppercase"
                    class="q-pa-xs">
             <q-checkbox v-model="CustomerOri"
                         @input="showCOC"
                         label="Ori" />
-            <q-popup-proxy>
-              <q-banner>
-                <span style="color: green">Purchase</span> Project NO like <span style="color: green"><strong>ZCC190001-1</strong></span> or <span style="color: green"><strong>ZCC190001-11</strong></span> <br />
-                <span style="color: purple">Repair</span> Project NO like <span style="color: purple"><strong>ZDSRP190001</strong></span>
-              </q-banner>
-            </q-popup-proxy>
           </q-input>
         </q-item-section>
         <q-item-section side>
@@ -54,15 +50,11 @@
                    v-model="DeliveryNO"
                    outlined
                    clearable
-                   mask="ABL#######"
+                   hint="e.g.: ZBL1901001"
+                   :hide-hint="true"
                    @input="showDelivery"
                    input-class="text-uppercase"
                    class="q-pa-xs">
-            <q-popup-proxy>
-              <q-banner>
-                Delivery NO like <span style="color: green"><strong>ZBL1901001</strong></span>
-              </q-banner>
-            </q-popup-proxy>
           </q-input>
         </q-item-section>
         <q-item-section side>
@@ -91,14 +83,11 @@
                    v-model="InvoiceNO"
                    outlined
                    clearable
+                   hint="e.g.: ZFC1901001 or ZPC190001"
+                   :hide-hint="true"
                    @input="showInvoice"
                    input-class="text-uppercase"
                    class="q-pa-xs">
-            <q-popup-proxy>
-              <q-banner>
-                Invoice NO like <span style="color: green"><strong>ZFC1901001</strong></span> or <span style="color: green"><strong>ZPC190001</strong></span>
-              </q-banner>
-            </q-popup-proxy>
           </q-input>
         </q-item-section>
         <q-item-section side>
@@ -126,18 +115,14 @@
                    v-model="PurchaseNO"
                    outlined
                    clearable
-                   mask="ACF#######"
+                   hint="e.g.: ZCF1901001"
+                   :hide-hint="true"
                    @input="showPO"
                    input-class="text-uppercase"
                    class="q-pa-xs">
             <q-checkbox v-model="POtax"
                         @input="showPO"
                         label="Tax" />
-            <q-popup-proxy>
-              <q-banner>
-                Purchase NO like <span style="color: green"><strong>ZCF1901001</strong></span>
-              </q-banner>
-            </q-popup-proxy>
           </q-input>
         </q-item-section>
         <q-item-section side>
@@ -165,15 +150,11 @@
                    v-model="WorkorderNO"
                    outlined
                    clearable
-                   mask="AOF########"
+                   hint="e.g.: ZOF1901001"
+                   :hide-hint="true"
                    @input="showWO"
                    input-class="text-uppercase"
                    class="q-pa-xs">
-            <q-popup-proxy>
-              <q-banner>
-                Work Order NO like <span style="color: green"><strong>ZOF1901001</strong></span>
-              </q-banner>
-            </q-popup-proxy>
           </q-input>
         </q-item-section>
         <q-item-section side>
@@ -196,6 +177,7 @@
     <div class="column col q-pa-xs">
       <iframe :src="UrlShow"
               frameborder="0"
+              @load="onLoad"
               class="fit" />
     </div>
   </q-page>
@@ -221,6 +203,10 @@ export default {
     showCOC: function (value) {
       if (this.COCProj && (this.COCProj.length === 11 || this.COCProj.length === 12) && (this.COCProj.slice(1, 3).toUpperCase() === 'CC' || this.COCProj.slice(1, 5).toUpperCase() === 'DSRP')) {
         this.UrlShow = 'Report/COC/showPdf?ProjectNO=' + this.COCProj.toUpperCase() + '&CustomerOri=' + this.CustomerOri
+
+        this.$q.loading.show({
+          message: '<h3>Generating COC ' + this.COCProj.toUpperCase() + '</h3>'
+        })
       } else {
         this.UrlShow = 'about:blank'
       }
@@ -228,6 +214,10 @@ export default {
     showDelivery: function (value) {
       if (value && value.length === 9 && value.slice(1, 3).toUpperCase() === 'BL') {
         this.UrlShow = 'Report/Delivery/showPdf?DeliveryNO=' + value.toUpperCase()
+
+        this.$q.loading.show({
+          message: '<h3>Generating Delivery ' + value.toUpperCase() + '</h3>'
+        })
       } else {
         this.UrlShow = 'about:blank'
       }
@@ -235,6 +225,10 @@ export default {
     showInvoice: function (value) {
       if (value && (value.length === 10 || value.length === 9) && (value.slice(1, 3).toUpperCase() === 'FC' || value.slice(1, 3).toUpperCase() === 'PC')) {
         this.UrlShow = 'Report/Invoice/showPdf?InvoiceNO=' + value.toUpperCase()
+
+        this.$q.loading.show({
+          message: '<h3>Generating Invoice ' + value.toUpperCase() + '</h3>'
+        })
       } else {
         this.UrlShow = 'about:blank'
       }
@@ -242,6 +236,10 @@ export default {
     showPO: function (value) {
       if (this.PurchaseNO && this.PurchaseNO.length === 10 && this.PurchaseNO.slice(1, 3).toUpperCase() === 'CF') {
         this.UrlShow = 'Report/PurchaseOrder/showPdf?PurchaseNO=' + this.PurchaseNO.toUpperCase() + '&TaxInclude=' + this.POtax
+
+        this.$q.loading.show({
+          message: '<h3>Generating Purchase ' + value.toUpperCase() + '</h3>'
+        })
       } else {
         this.UrlShow = 'about:blank'
       }
@@ -249,9 +247,16 @@ export default {
     showWO: function (value) {
       if (value && value.length === 11 && value.slice(1, 3).toUpperCase() === 'OF') {
         this.UrlShow = 'Report/WorkorderNO/showPdf?WorkorderNO=' + value
+
+        this.$q.loading.show({
+          message: '<h3>Generating WO ' + value.toUpperCase() + '</h3>'
+        })
       } else {
         this.UrlShow = 'about:blank'
       }
+    },
+    onLoad: function () {
+      this.$q.loading.hide()
     }
   },
   computed: {

@@ -1,12 +1,12 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <PageHeader/>
+    <PageHeader />
 
-    <q-page-container class="fit">
-      <router-view />
+    <q-page-container>
+      <router-view class="fit" />
     </q-page-container>
 
-    <PageFooter/>
+    <PageFooter />
   </q-layout>
 </template>
 

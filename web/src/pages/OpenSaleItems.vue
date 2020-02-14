@@ -296,7 +296,8 @@
                   q-pa-xs>
               <div>
                 {{ props.row.WO_SHIQTY }}
-                <div v-show="props.row.WO_ALLQTY" style="display:inline"> : {{ props.row.WO_ALLQTY }}</div>
+                <div v-show="props.row.WO_ALLQTY"
+                     style="display:inline"> : {{ props.row.WO_ALLQTY }}</div>
               </div>
             </q-td>
 
@@ -515,10 +516,14 @@ export default {
   methods: {
     loadData () {
       this.loading = true
+      this.$q.loading.show({
+        message: '<h3>Loading...</h3>'
+      })
 
       this.$axios.get('Data/OpenSaleItems')
         .then((response) => {
           this.data = response.data
+
           let projectIndex = 0
           this.data.forEach((row, index) => {
             row.index = index + 1
@@ -540,9 +545,11 @@ export default {
           // with state change detection
           Object.freeze(this.data)
           this.loading = false
+          this.$q.loading.hide()
         })
         .catch(() => {
           this.loading = false
+          this.$q.loading.hide()
 
           this.$q.notify({
             color: 'negative',

@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     loadData () {
-      this.$axios.get('srvInfo')
+      this.$axios.get('Data/SrvInfo')
         .then((response) => {
           this.srvName = response.data.name
           this.srvVersion = response.data.version
