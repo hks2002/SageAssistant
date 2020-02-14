@@ -35,7 +35,7 @@ public class OpenSaleItemsController {
 	private  NamedParameterJdbcTemplate namedTemplate=new NamedParameterJdbcTemplate(jdbcTemplate);
 
 	private static ObjectMapper MAPPER = new ObjectMapper();
-    private static String sql=Utils.readFileContent("sql/openSaleItems.sql");
+    private static String sql="";//Utils.readFileContent("sql/openSaleItems.sql");
     private static List<Map<String, Object>> list;
     private static MapSqlParameterSource sqlParas = new MapSqlParameterSource();
     

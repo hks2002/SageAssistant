@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin
 @RestController
-public class srvInfoController {
+public class SrvInfoController {
 	 @Value("${project.name}")
 	 private String name;
 
@@ -17,17 +17,17 @@ public class srvInfoController {
 	 @Value("${spring.boot.version}")
 	 private String springBootVersion;
 	 
-	@GetMapping("srvVersion")
+	@GetMapping("Data/SrvVersion")
 	public String getVersion() {
 	 return version;
 	}
 
-	@GetMapping("srvName")
+	@GetMapping("Data/SrvName")
 	public String getName() {
 		return name;
 	}
 
-	@GetMapping("srvInfo")
+	@GetMapping("Data/SrvInfo")
 	public String getInfo() {
 		return "{\"name\":\"" + name + "\",\"version\":\"" + version+ "\",\"springBootVersion\":\"" + springBootVersion + "\"}";
 	}
