@@ -52,7 +52,8 @@ public class Utils {
 	}
 
 	public static String readFileContent(String filename) {
-		// Reading files in jar, use getResourceAsStream(filename), here is reading for war distribution
+		// Reading files in jar, use getResourceAsStream(filename), here is reading for
+		// war distribution
 		String path = Thread.currentThread().getContextClassLoader().getResource("").getPath();
 		log.debug("Resource base path :" + path);
 
@@ -67,5 +68,13 @@ public class Utils {
 			return "";
 		}
 
+	}
+
+	public static boolean isNullOrEmpty(String str) {
+		if (str == null || str.isEmpty()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
