@@ -1,5 +1,7 @@
 package sageassistant;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.ResultSet;
@@ -17,8 +19,9 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 
+//@Slf4j  //using it cause this class Utils cannot directly use in other class method
 public class Utils {
-	private static final Logger logger = LoggerFactory.getLogger(Utils.class);
+	private static final Logger log = LoggerFactory.getLogger(Utils.class);
 
 	public static String resultSetToJson(ResultSet rs) throws SQLException, JSONException {
 		// json数组
@@ -48,18 +51,21 @@ public class Utils {
 		return resultSetToJson((ResultSet) rs);
 	}
 
-	//// this method is used to reading files in jar. 
 	public static String readFileContent(String filename) {
-		InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(filename); 
-		
-        String rtn="";
+		// Reading files in jar, use getResourceAsStream(filename), here is reading for war distribution
+		String path = Thread.currentThread().getContextClassLoader().getResource("").getPath();
+		log.debug("Resource base path :" + path);
+
 		try {
-			rtn = new String(ByteStreams.toByteArray(inputStream));
+			InputStream inputStream = new FileInputStream(path + filename);
+			return new String(ByteStreams.toByteArray(inputStream));
+		} catch (FileNotFoundException e) {
+			log.info("FileNotFound: " + path + filename);
+			return "";
 		} catch (IOException e) {
-			logger.error("Reading File with Error!");
-			e.printStackTrace();
+			log.error("IOException: " + "When reading " + filename);
+			return "";
 		}
-		
-		return rtn;
+
 	}
 }
