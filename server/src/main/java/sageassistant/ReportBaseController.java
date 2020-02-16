@@ -1,45 +1,75 @@
 package sageassistant;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 
 import com.crystaldecisions.sdk.occa.report.application.ReportClientDocument;
 import com.crystaldecisions.sdk.occa.report.lib.ReportSDKException;
+import com.crystaldecisions.sdk.occa.report.lib.ReportSDKExceptionBase;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class ReportBaseController {
-	protected static final Logger logger = LoggerFactory.getLogger(ReportCOCController.class);
 	protected ReportClientDocument reportClientDocument = new ReportClientDocument();
 
-	protected String rpt;
 	@Autowired
-	ReportDBConfig rptCfg;
+	private Environment env;
+
+	protected String rpt;
 
 	protected void openReport() {
-
 		try {
-			if (reportClientDocument.isOpen() && reportClientDocument != null) {
-				// here could throw one exception, if document is timeout closed.
-				reportClientDocument.getStatusVariables();
+			reportClientDocument.open(rpt, 0);
+		} catch (ReportSDKException e) {
+			log.error("Code: " + e.errorCode() + e.getMessage());
+		}
+		try {
+			CRJavaHelper.changeDataSource(reportClientDocument, env.getProperty("spring.datasource.username"),
+					env.getProperty("spring.datasource.password"), env.getProperty("spring.datasource.url"),
+					env.getProperty("spring.datasource.driver-class-name"), null);
+		} catch (ReportSDKException e) {
+			log.error("Code: " + e.errorCode() + e.getMessage());
+		}
+	}
+
+	protected void prepareReport() {
+		try {
+			if (!reportClientDocument.isOpen()) {
+				openReport();
 			}
 		} catch (ReportSDKException e) {
-			logger.error("Code:" + e.errorCode() + e.getMessage());
-
-			if (e.errorCode() == -2147215349) {// Code:-2147215349 Document is closed。
-				reportClientDocument = null;
-			}
+			log.error("Code: " + e.errorCode() + e.getMessage());
 		}
 
 		try {
-			if (!reportClientDocument.isOpen() || reportClientDocument == null) {
-				reportClientDocument = new ReportClientDocument();
-				reportClientDocument.open(rpt, 0);
-				CRJavaHelper.changeDataSource(reportClientDocument, rptCfg.getUsername(), rptCfg.getPassword(),
-						rptCfg.getUrl(), rptCfg.getDriveClassName(), null);
-			}
+			// here could throw one exception, if document is timeout closed.
+			reportClientDocument.getStatusVariables();
 		} catch (ReportSDKException e) {
-			logger.error("Code:" + e.errorCode() + e.getMessage());
+			log.error("Code: " + e.errorCode() + e.getMessage());
+			reportClientDocument = new ReportClientDocument();
+			openReport();
 		}
 
+	}
+
+	protected void doAction(HttpServletResponse response, String action) {
+		try {
+			if (action == "showPdf") {
+				CRJavaHelper.exportPDF(reportClientDocument, response, false);
+			} else if (action == "exportPdf") {
+				CRJavaHelper.exportPDF(reportClientDocument, response, true);
+			} else if (action == "exportWord") {
+				CRJavaHelper.exportRTF(reportClientDocument, response, true);
+			}
+		} catch (ReportSDKExceptionBase e) {
+			log.error("Code: " + e.errorCode() + e.getMessage());
+		} catch ( IOException  e2) {
+			log.error(e2.getMessage());
+		}
 	}
 }

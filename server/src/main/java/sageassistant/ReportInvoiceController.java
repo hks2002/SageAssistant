@@ -10,58 +10,46 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.crystaldecisions.sdk.occa.report.lib.ReportSDKExceptionBase;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 public class ReportInvoiceController extends ReportBaseController {
 	public ReportInvoiceController() {
 		rpt = "reports/Invoice.rpt";
 	}
-	
-	private void handingRequest(HttpServletRequest request, HttpServletResponse response)
-			throws ReportSDKExceptionBase, IOException {
-				openReport();
 
+	private void handingRequest(HttpServletRequest request, HttpServletResponse response, String action) {
 		String InvoiceNO = request.getParameter("InvoiceNO");
 
-		logger.debug("showPdf : InvoiceNO : " + InvoiceNO);
-
-		if (InvoiceNO == null || InvoiceNO.isEmpty()) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invoice NO can not be empty!");
-			return;
+		if (Utils.isNullOrEmpty(InvoiceNO)) {
+			InvoiceNO = "NULL";
 		}
-		CRJavaHelper.addDiscreteParameterValue(reportClientDocument, "", "InvoiceNO", InvoiceNO);
-		reportClientDocument.getReportDocument().getSummaryInfo().setTitle(InvoiceNO);
+
+		prepareReport();
+
+		try {
+			CRJavaHelper.addDiscreteParameterValue(reportClientDocument, "", "InvoiceNO", InvoiceNO);
+			reportClientDocument.getReportDocument().getSummaryInfo().setTitle(InvoiceNO);
+		} catch (ReportSDKExceptionBase e) {
+			log.error("Code: " + e.errorCode() + e.getMessage());
+		}
+
+		doAction(response, action);
 	}
-	
+
 	@GetMapping("Report/Invoice/showPdf")
-	public void showPdf(HttpServletRequest request, HttpServletResponse response)
-			throws ReportSDKExceptionBase, IOException {
-		
-		handingRequest(request, response);
-		
-		// This will be used by the viewer to display the desired report. True to
-		// Download this report.
-		CRJavaHelper.exportPDF(reportClientDocument, response, false);
+	public void showPdf(HttpServletRequest request, HttpServletResponse response) {
+		handingRequest(request, response, "showPdf");
 	}
 
 	@GetMapping("Report/Invoice/exportPdf")
-	public void exportPdf(HttpServletRequest request, HttpServletResponse response)
-			throws ReportSDKExceptionBase, IOException {
-
-		handingRequest(request, response);
-		
-		// This will be used by the viewer to display the desired report. True to
-		// Download this report.
-		CRJavaHelper.exportPDF(reportClientDocument, response, true);
+	public void exportPdf(HttpServletRequest request, HttpServletResponse response) {
+		handingRequest(request, response, "exportPdf");
 	}
 
 	@GetMapping("Report/Invoice/exportWord")
-	public void exportWord(HttpServletRequest request, HttpServletResponse response)
-			throws ReportSDKExceptionBase, IOException {
-		
-		handingRequest(request, response);
-		
-		// This will be used by the viewer to display the desired report. True to
-		// Download this report.
-		CRJavaHelper.exportRTF(reportClientDocument, response, true);
+	public void exportWord(HttpServletRequest request, HttpServletResponse response) {
+		handingRequest(request, response, "exportWord");
 	}
 }
