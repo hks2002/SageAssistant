@@ -520,7 +520,7 @@ export default {
         message: '<h3>Loading...</h3>'
       })
 
-      this.$axios.get('Data/OpenSaleItems')
+      this.$axios.get('/dData/OpenSaleItems')
         .then((response) => {
           this.data = response.data
 

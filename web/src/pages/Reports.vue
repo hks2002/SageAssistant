@@ -27,13 +27,13 @@
         <q-item-section side>
           <q-btn text-color="indigo-7"
                  dense
-                 :to="urlCOCWord"
+                 @click="exportWordCOC"
                  icon="fas fa-file-word" />
         </q-item-section>
         <q-item-section side>
           <q-btn text-color="deep-orange-10"
                  dense
-                 :to="urlCOCPdf"
+                 @click="exportPdfCOC"
                  icon="fas fa-file-pdf" />
         </q-item-section>
       </q-item>
@@ -60,13 +60,13 @@
         <q-item-section side>
           <q-btn text-color="indigo-7"
                  dense
-                 :to="urlDeliveryWord"
+                 @click="exportWordDelivery"
                  icon="fas fa-file-word" />
         </q-item-section>
         <q-item-section side>
           <q-btn text-color="deep-orange-10"
                  dense
-                 :to="urlDeliveryPdf"
+                 @click="exportPdfDelivery"
                  icon="fas fa-file-pdf" />
         </q-item-section>
       </q-item>
@@ -93,13 +93,13 @@
         <q-item-section side>
           <q-btn text-color="indigo-7"
                  dense
-                 :to="urlInvoiceWord"
+                 @click="exportWordInvoice"
                  icon="fas fa-file-word" />
         </q-item-section>
         <q-item-section side>
           <q-btn text-color="deep-orange-10"
                  dense
-                 :to="urlInvoicePdf"
+                 @click="exportPdfInvoice"
                  icon="fas fa-file-pdf" />
         </q-item-section>
       </q-item>
@@ -128,13 +128,13 @@
         <q-item-section side>
           <q-btn text-color="indigo-7"
                  dense
-                 :to="urlPOWord"
+                 @click="exportWordPO"
                  icon="fas fa-file-word" />
         </q-item-section>
         <q-item-section side>
           <q-btn text-color="deep-orange-10"
                  dense
-                 :to="urlPOPdf"
+                 @click="exportPdfPO"
                  icon="fas fa-file-pdf" />
         </q-item-section>
       </q-item>
@@ -160,13 +160,13 @@
         <q-item-section side>
           <q-btn text-color="indigo-7"
                  dense
-                 :to="urlWOWord"
+                 @click="exportWordWO"
                  icon="fas fa-file-word" />
         </q-item-section>
         <q-item-section side>
           <q-btn text-color="deep-orange-10"
                  dense
-                 :to="urlWOPdf"
+                 @click="exportPdfWO"
                  icon="fas fa-file-pdf" />
         </q-item-section>
       </q-item>
@@ -179,6 +179,10 @@
               frameborder="0"
               @load="onLoad"
               class="fit" />
+      <iframe :src="UrlExport"
+              frameborder="0"
+              width=0
+              height=0 />
     </div>
   </q-page>
 
@@ -196,13 +200,14 @@ export default {
       PurchaseNO: '',
       POtax: true,
       WorkorderNO: '',
-      UrlShow: 'about:blank'
+      UrlShow: 'about:blank',
+      UrlExport: 'about:blank'
     }
   },
   methods: {
     showCOC: function (value) {
-      if (this.COCProj && (this.COCProj.length === 11 || this.COCProj.length === 12) && (this.COCProj.slice(1, 3).toUpperCase() === 'CC' || this.COCProj.slice(1, 5).toUpperCase() === 'DSRP')) {
-        this.UrlShow = 'Report/COC/showPdf?ProjectNO=' + this.COCProj.toUpperCase() + '&CustomerOri=' + this.CustomerOri
+      if (this.validateCOC()) {
+        this.UrlShow = this.UrlCOC
 
         this.$q.loading.show({
           message: '<h3>Generating COC ' + this.COCProj.toUpperCase() + '</h3>'
@@ -212,123 +217,180 @@ export default {
       }
     },
     showDelivery: function (value) {
-      if (value && value.length === 9 && value.slice(1, 3).toUpperCase() === 'BL') {
-        this.UrlShow = 'Report/Delivery/showPdf?DeliveryNO=' + value.toUpperCase()
+      if (this.validateDelivery()) {
+        this.UrlShow = this.UrlDelivery
 
         this.$q.loading.show({
-          message: '<h3>Generating Delivery ' + value.toUpperCase() + '</h3>'
+          message: '<h3>Generating Delivery ' + this.DeliveryNO.toUpperCase() + '</h3>'
         })
       } else {
         this.UrlShow = 'about:blank'
       }
     },
     showInvoice: function (value) {
-      if (value && (value.length === 10 || value.length === 9) && (value.slice(1, 3).toUpperCase() === 'FC' || value.slice(1, 3).toUpperCase() === 'PC')) {
-        this.UrlShow = 'Report/Invoice/showPdf?InvoiceNO=' + value.toUpperCase()
+      if (this.validateInvoice()) {
+        this.UrlShow = this.UrlInvoice
 
         this.$q.loading.show({
-          message: '<h3>Generating Invoice ' + value.toUpperCase() + '</h3>'
+          message: '<h3>Generating Invoice ' + this.InvoiceNO.toUpperCase() + '</h3>'
         })
       } else {
         this.UrlShow = 'about:blank'
       }
     },
     showPO: function (value) {
-      if (this.PurchaseNO && this.PurchaseNO.length === 10 && this.PurchaseNO.slice(1, 3).toUpperCase() === 'CF') {
-        this.UrlShow = 'Report/PurchaseOrder/showPdf?PurchaseNO=' + this.PurchaseNO.toUpperCase() + '&TaxInclude=' + this.POtax
+      if (this.validatePO()) {
+        this.UrlShow = this.UrlPurchaseOrder
 
         this.$q.loading.show({
-          message: '<h3>Generating Purchase ' + value.toUpperCase() + '</h3>'
+          message: '<h3>Generating Purchase ' + this.PurchaseNO.toUpperCase() + '</h3>'
         })
       } else {
         this.UrlShow = 'about:blank'
       }
     },
     showWO: function (value) {
-      if (value && value.length === 11 && value.slice(1, 3).toUpperCase() === 'OF') {
-        this.UrlShow = 'Report/WorkorderNO/showPdf?WorkorderNO=' + value
-
+      if (this.validateWO()) {
+        this.UrlShow = this.UrlWorkorder
         this.$q.loading.show({
-          message: '<h3>Generating WO ' + value.toUpperCase() + '</h3>'
+          message: '<h3>Generating WO ' + this.WorkorderNO.toUpperCase() + '</h3>'
         })
       } else {
         this.UrlShow = 'about:blank'
       }
     },
+    exportWordCOC: function () {
+      if (this.validateCOC()) {
+        this.UrlExport = this.UrlCOC.replace('showPdf', 'exportWord')
+      } else {
+        this.UrlExport = 'about:blank'
+      }
+    },
+    exportWordDelivery: function () {
+      if (this.validateDelivery()) {
+        this.UrlExport = this.UrlDelivery.replace('showPdf', 'exportWord')
+      } else {
+        this.UrlExport = 'about:blank'
+      }
+    },
+    exportWordInvoice: function () {
+      if (this.validateInvoice()) {
+        this.UrlExport = this.UrlInvoice.replace('showPdf', 'exportWord')
+      } else {
+        this.UrlExport = 'about:blank'
+      }
+    },
+    exportWordPO: function () {
+      if (this.validatePO()) {
+        this.UrlExport = this.UrlPurchaseOrder.replace('showPdf', 'exportWord')
+      } else {
+        this.UrlExport = 'about:blank'
+      }
+    },
+    exportWordWO: function () {
+      if (this.validateWO()) {
+        this.UrlExport = this.UrlWorkorder.replace('showPdf', 'exportWord')
+      } else {
+        this.UrlExport = 'about:blank'
+      }
+    },
+    exportPdfCOC: function () {
+      if (this.validateCOC()) {
+        this.UrlExport = this.UrlCOC.replace('showPdf', 'exportPdf')
+      } else {
+        this.UrlExport = 'about:blank'
+      }
+    },
+    exportPdfDelivery: function () {
+      if (this.validateDelivery()) {
+        this.UrlExport = this.UrlDelivery.replace('showPdf', 'exportPdf')
+      } else {
+        this.UrlExport = 'about:blank'
+      }
+    },
+    exportPdfInvoice: function () {
+      if (this.validateInvoice()) {
+        this.UrlExport = this.UrlInvoice.replace('showPdf', 'exportPdf')
+      } else {
+        this.UrlExport = 'about:blank'
+      }
+    },
+    exportPdfPO: function () {
+      if (this.validatePO()) {
+        this.UrlExport = this.UrlPurchaseOrder.replace('showPdf', 'exportPdf')
+      } else {
+        this.UrlExport = 'about:blank'
+      }
+    },
+    exportPdfWO: function () {
+      if (this.validateWO()) {
+        this.UrlExport = this.UrlWorkorder.replace('showPdf', 'exportPdf')
+      } else {
+        this.UrlExport = 'about:blank'
+      }
+    },
     onLoad: function () {
       this.$q.loading.hide()
+    },
+    validateCOC: function () {
+      if (this.COCProj &&
+        (this.COCProj.length === 11 || this.COCProj.length === 12) &&
+        (this.COCProj.slice(1, 3).toUpperCase() === 'CC' || this.COCProj.slice(1, 5).toUpperCase() === 'DSRP')) {
+        return true
+      } else {
+        return false
+      }
+    },
+    validateDelivery: function () {
+      if (this.DeliveryNO && this.DeliveryNO.length === 9 &&
+        this.DeliveryNO.slice(1, 3).toUpperCase() === 'BL') {
+        return true
+      } else {
+        return false
+      }
+    },
+    validateInvoice: function () {
+      if (this.InvoiceNO &&
+        (this.InvoiceNO.length === 10 || this.InvoiceNO.length === 9) &&
+        (this.InvoiceNO.slice(1, 3).toUpperCase() === 'FC' || this.InvoiceNO.slice(1, 3).toUpperCase() === 'PC')) {
+        return true
+      } else {
+        return false
+      }
+    },
+    validatePO: function () {
+      if (this.PurchaseNO &&
+        this.PurchaseNO.length === 10 &&
+        this.PurchaseNO.slice(1, 3).toUpperCase() === 'CF') {
+        return true
+      } else {
+        return false
+      }
+    },
+    validateWO: function () {
+      if (this.WorkorderNO && this.WorkorderNO.length === 11 &&
+        this.WorkorderNO.slice(1, 3).toUpperCase() === 'OF') {
+        return true
+      } else {
+        return false
+      }
     }
   },
   computed: {
-    urlCOCWord: function () {
-      if (this.COCProj) {
-        return 'Report/COC/exportWord?DeliveryNO=' + this.COCProj.toUpperCase() + '&CustomerOri=' + this.CustomerOri
-      } else {
-        return ''
-      }
+    UrlCOC: function () {
+      return '/Report/COC/showPdf?ProjectNO=' + this.COCProj.toUpperCase() + '&CustomerOri=' + this.CustomerOri
     },
-    urlDeliveryWord: function () {
-      if (this.DeliveryNO) {
-        return 'Report/Delivery/exportWord?DeliveryNO=' + this.DeliveryNO.toUpperCase()
-      } else {
-        return ''
-      }
+    UrlDelivery: function () {
+      return '/Report/Delivery/showPdf?DeliveryNO=' + this.DeliveryNO.toUpperCase()
     },
-    urlInvoiceWord: function () {
-      if (this.InvoiceNO) {
-        return 'Report/Invoice/exportWord?InvoiceNO=' + this.InvoiceNO.toUpperCase()
-      } else {
-        return ''
-      }
+    UrlInvoice: function () {
+      return 'Report/Invoice/showPdf?InvoiceNO=' + this.InvoiceNO.toUpperCase()
     },
-    urlPOWord: function () {
-      if (this.PurchaseNO) {
-        return 'Report/PurchaseOrder/exportWord?PurchaseNO=' + this.PurchaseNO.toUpperCase() + '&TaxInclude=' + this.POtax
-      } else {
-        return ''
-      }
+    UrlPurchaseOrder: function () {
+      return '/Report/PurchaseOrder/showPdf?PurchaseNO=' + this.PurchaseNO.toUpperCase() + '&TaxInclude=' + this.POtax
     },
-    urlWOWord: function () {
-      if (this.WorkorderNO) {
-        return 'Report/WorkOrder/exportWord?WorkorderNO=' + this.WorkorderNO.toUpperCase()
-      } else {
-        return ''
-      }
-    },
-    urlCOCPdf: function () {
-      if (this.COCProj) {
-        return 'Report/COC/exportWord?DeliveryNO=' + this.COCProj.toUpperCase() + '&COCori=' + this.COCori
-      } else {
-        return ''
-      }
-    },
-    urlDeliveryPdf: function () {
-      if (this.DeliveryNO) {
-        return 'Report/Delivery/exportPdf?DeliveryNO=' + this.DeliveryNO.toUpperCase()
-      } else {
-        return ''
-      }
-    },
-    urlInvoicePdf: function () {
-      if (this.InvoiceNO) {
-        return 'Report/Invoice/exportPdf?InvoiceNO=' + this.InvoiceNO.toUpperCase()
-      } else {
-        return ''
-      }
-    },
-    urlPOPdf: function () {
-      if (this.PurchaseNO) {
-        return 'Report/PurchaseOrder/exportPdf?PurchaseNO=' + this.PurchaseNO.toUpperCase() + '&TaxInclude=' + this.POtax
-      } else {
-        return ''
-      }
-    },
-    urlWOPdf: function () {
-      if (this.WorkorderNO) {
-        return 'Report/WorkOrder/exportPdf?WorkorderNO=' + this.WorkorderNO.toUpperCase()
-      } else {
-        return ''
-      }
+    UrlWorkorder: function () {
+      return '/Report/WorkorderNO/showPdf?WorkorderNO=' + this.WorkorderNO
     }
   }
 }
