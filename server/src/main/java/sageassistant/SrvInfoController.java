@@ -17,17 +17,17 @@ public class SrvInfoController {
 	 @Value("${spring.boot.version}")
 	 private String springBootVersion;
 	 
-	@GetMapping("Data/SrvVersion")
+	@GetMapping("/Data/SrvVersion")
 	public String getVersion() {
 	 return version;
 	}
 
-	@GetMapping("Data/SrvName")
+	@GetMapping("/Data/SrvName")
 	public String getName() {
 		return name;
 	}
 
-	@GetMapping("Data/SrvInfo")
+	@GetMapping("/Data/SrvInfo")
 	public String getInfo() {
 		return "{\"name\":\"" + name + "\",\"version\":\"" + version+ "\",\"springBootVersion\":\"" + springBootVersion + "\"}";
 	}
