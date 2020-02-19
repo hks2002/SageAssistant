@@ -6,8 +6,9 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,60 +22,67 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @CrossOrigin
 @RestController
 public class OpenSaleItemsController {
-	@Autowired
-	private JdbcTemplate jdbcTemplate = new JdbcTemplate();
-
-	@Autowired
-	private NamedParameterJdbcTemplate namedTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
+	private static final Logger log = LoggerFactory.getLogger(OpenSaleItemsController.class);
 
 	private String sql = Utils.readFileContent("sql/openSaleItems.sql");
+	private boolean initFlag = false;
 
+	@Autowired
+	NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	/**
 	 * google guava cache
 	 */
 	private LoadingCache<String, String> cache;
 
-	public OpenSaleItemsController() {
-		cache = CacheBuilder.newBuilder().refreshAfterWrite(30, TimeUnit.MINUTES)
-				.build(new CacheLoader<String, String>() {
-					@Override
-					public String load(String facility) {						
-						return getFromDB(facility);
-					}
+	private String getFromDB(String facility) {
+		try {
+			MapSqlParameterSource sqlParas = new MapSqlParameterSource();
+			sqlParas.addValue("facility", facility);
 
-					private String getFromDB(String facility) {
-						try {
-							MapSqlParameterSource sqlParas = new MapSqlParameterSource();
-							sqlParas.addValue("facility", facility);						
+			log.debug("OpenSaleItems sql :" + sql);
+			log.debug("OpenSaleItems facility :" + facility);
 
-							List<Map<String, Object>> list;
-							list = namedTemplate.queryForList(sql, sqlParas);
+			List<Map<String, Object>> list;
+			list = namedParameterJdbcTemplate.queryForList(sql, sqlParas);
 
-							log.info("Fetched <OpenSaleItems> From database for :" + facility);
-							
-							ObjectMapper MAPPER = new ObjectMapper();
-							MAPPER.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
-							
-							return MAPPER.writeValueAsString(list);
-						} catch (JsonProcessingException e) {
-							log.error("JsonProcessingException");
-							return "";
-						}
+			log.info("Fetched <OpenSaleItems> From database for :" + facility);
 
-					}
-				});
-		
+			ObjectMapper MAPPER = new ObjectMapper();
+			MAPPER.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
+
+			return MAPPER.writeValueAsString(list);
+		} catch (JsonProcessingException e) {
+			log.error("JsonProcessingException");
+			return "";
+		}
+
 	}
 
-	@GetMapping("Data/OpenSaleItems")
+	private void initCache() {
+		cache = CacheBuilder.newBuilder()
+							.refreshAfterWrite(30, TimeUnit.MINUTES)
+							.build(new CacheLoader<String, String>() {
+								@Override
+								public String load(String facility) {
+									return getFromDB(facility);
+								}
+							});
+	}
+
+	public String getSql() {
+		return sql;
+	}
+
+	@GetMapping("/Data/OpenSaleItems")
 	public String get(@RequestParam(value = "facility", required = false, defaultValue = "ZHU") String facility) {
 		try {
+			if (!initFlag) {
+				initCache();
+				initFlag = true;
+			}
 			return cache.get(facility);
 		} catch (ExecutionException e) {
 			log.error("ExecutionException :" + "When getting OpenSaleItems for " + facility);
