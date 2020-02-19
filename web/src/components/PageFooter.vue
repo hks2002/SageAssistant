@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     loadData () {
-      this.$axios.get('srvInfo')
+      this.$axios.get('/Data/SrvInfo')
         .then((response) => {
           this.springBootVersion = response.data.springBootVersion
         })
