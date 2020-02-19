@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>sageassistant</groupId>
 	<artifactId>SageAssistantSrv</artifactId>
-	<version>0.0.4</version>
+	<version>0.1.0</version>
 	<packaging>war</packaging>
 	<name>SageAssistantSrv</name>
 	<description>Sage assistant data server</description>
