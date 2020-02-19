@@ -1,20 +1,19 @@
 package sageassistant;
 
-import java.io.IOException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.crystaldecisions.sdk.occa.report.lib.ReportSDKExceptionBase;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @RestController
 public class ReportInvoiceController extends ReportBaseController {
+	private static final Logger log = LoggerFactory.getLogger(ReportInvoiceController.class);
+	
 	public ReportInvoiceController() {
 		rpt = "reports/Invoice.rpt";
 	}
@@ -38,17 +37,17 @@ public class ReportInvoiceController extends ReportBaseController {
 		doAction(response, action);
 	}
 
-	@GetMapping("Report/Invoice/showPdf")
+	@GetMapping("/Report/Invoice/showPdf")
 	public void showPdf(HttpServletRequest request, HttpServletResponse response) {
 		handingRequest(request, response, "showPdf");
 	}
 
-	@GetMapping("Report/Invoice/exportPdf")
+	@GetMapping("/Report/Invoice/exportPdf")
 	public void exportPdf(HttpServletRequest request, HttpServletResponse response) {
 		handingRequest(request, response, "exportPdf");
 	}
 
-	@GetMapping("Report/Invoice/exportWord")
+	@GetMapping("/Report/Invoice/exportWord")
 	public void exportWord(HttpServletRequest request, HttpServletResponse response) {
 		handingRequest(request, response, "exportWord");
 	}

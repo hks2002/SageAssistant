@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
@@ -11,10 +13,9 @@ import com.crystaldecisions.sdk.occa.report.application.ReportClientDocument;
 import com.crystaldecisions.sdk.occa.report.lib.ReportSDKException;
 import com.crystaldecisions.sdk.occa.report.lib.ReportSDKExceptionBase;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 public class ReportBaseController {
+	private static final Logger log = LoggerFactory.getLogger(ReportBaseController.class);
+	
 	protected ReportClientDocument reportClientDocument = new ReportClientDocument();
 
 	@Autowired
