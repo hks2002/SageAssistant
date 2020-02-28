@@ -4,6 +4,7 @@ node_modules
 # Quasar core related directories
 .quasar
 /dist
+package-lock.json
 
 # Log files
 npm-debug.log*
