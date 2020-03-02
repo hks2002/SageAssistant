@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -22,6 +23,9 @@ public class SrvInfoControllerTests {
 
 	@Autowired
 	private MockMvc mockMvc;
+	
+	@Autowired
+	JdbcTemplate jdbcTemplate;
 
 	@MockBean
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
