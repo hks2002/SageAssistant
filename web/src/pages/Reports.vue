@@ -147,7 +147,7 @@
         </q-item-section>
         <q-item-section>
           <q-input label="Work Order NO"
-                   v-model="WorkorderNO"
+                   v-model="WorkOrderNO"
                    outlined
                    clearable
                    hint="e.g.: ZOF1901001"
@@ -199,7 +199,7 @@ export default {
       InvoiceNO: '',
       PurchaseNO: '',
       POtax: true,
-      WorkorderNO: '',
+      WorkOrderNO: '',
       UrlShow: 'about:blank',
       UrlExport: 'about:blank'
     }
@@ -251,9 +251,9 @@ export default {
     },
     showWO: function (value) {
       if (this.validateWO()) {
-        this.UrlShow = this.UrlWorkorder
+        this.UrlShow = this.UrlWorkOrder
         this.$q.loading.show({
-          message: '<h3>Generating WO ' + this.WorkorderNO.toUpperCase() + '</h3>'
+          message: '<h3>Generating WO ' + this.WorkOrderNO.toUpperCase() + '</h3>'
         })
       } else {
         this.UrlShow = 'about:blank'
@@ -289,7 +289,7 @@ export default {
     },
     exportWordWO: function () {
       if (this.validateWO()) {
-        this.UrlExport = this.UrlWorkorder.replace('showPdf', 'exportWord')
+        this.UrlExport = this.UrlWorkOrder.replace('showPdf', 'exportWord')
       } else {
         this.UrlExport = 'about:blank'
       }
@@ -324,7 +324,7 @@ export default {
     },
     exportPdfWO: function () {
       if (this.validateWO()) {
-        this.UrlExport = this.UrlWorkorder.replace('showPdf', 'exportPdf')
+        this.UrlExport = this.UrlWorkOrder.replace('showPdf', 'exportPdf')
       } else {
         this.UrlExport = 'about:blank'
       }
@@ -368,8 +368,8 @@ export default {
       }
     },
     validateWO: function () {
-      if (this.WorkorderNO && this.WorkorderNO.length === 11 &&
-        this.WorkorderNO.slice(1, 3).toUpperCase() === 'OF') {
+      if (this.WorkOrderNO && this.WorkOrderNO.length === 11 &&
+        this.WorkOrderNO.slice(1, 3).toUpperCase() === 'OF') {
         return true
       } else {
         return false
@@ -389,8 +389,8 @@ export default {
     UrlPurchaseOrder: function () {
       return '/Report/PurchaseOrder/showPdf?PurchaseNO=' + this.PurchaseNO.toUpperCase() + '&TaxInclude=' + this.POtax
     },
-    UrlWorkorder: function () {
-      return '/Report/WorkorderNO/showPdf?WorkorderNO=' + this.WorkorderNO
+    UrlWorkOrder: function () {
+      return '/Report/WorkOrder/showPdf?WorkOrderNO=' + this.WorkOrderNO
     }
   }
 }
