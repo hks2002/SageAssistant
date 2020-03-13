@@ -3,7 +3,6 @@
     <q-toolbar style="min-height: 30px;">
       <q-btn flat
              round
-             dense
              @click="handelClick"
              to="/"
              aria-label="Home"
@@ -12,12 +11,21 @@
           <img src="~assets/logo.svg" />
         </q-avatar>
       </q-btn>
-      <q-toolbar-title>
+      <q-toolbar-title class="q-pa-xs">
         <q-btn flat
                dense
                @click="handelClick"
                to="/OpenSaleItems"
                label="Status"
+               size="21px"
+               text-color="white"
+               class="q-mr-sm" />
+        <q-btn flat
+               dense
+               @click="handelClick"
+               to="/Products"
+               label="Products"
+               size="21px"
                text-color="white"
                class="q-mr-sm" />
         <q-btn flat
@@ -25,16 +33,17 @@
                @click="handelClick"
                to="/Reports"
                label="Reports"
+               size="21px"
                text-color="white"
-               class="q-mr-sm" />
+               class="q-mr-xs" />
         <q-btn flat
                dense
                @click="handelClick"
                to="/About"
                label="About"
-               :style="como"
+               size="21px"
                text-color="white"
-               class="q-mr-sm" />
+               class="q-mr-xs" />
       </q-toolbar-title>
       <q-space />
       <div></div>
@@ -65,14 +74,14 @@ export default {
       if (this.activePage === '') {
         let allNodes = evt.target.parentNode.parentNode.parentNode.parentNode.parentNode.nextSibling.childNodes
         for (let i = 0; i < allNodes.length; i++) {
-          allNodes[i].style = 'background-color:primary'
+          allNodes[i].style = 'background-color:primary; font-size:21px'
         }
       } else {
         let allNodes = evt.target.parentNode.parentNode.parentNode.parentNode.childNodes
         for (let i = 0; i < allNodes.length; i++) {
-          allNodes[i].style = 'background-color:primary'
+          allNodes[i].style = 'background-color:primary; font-size:21px'
         }
-        evt.target.parentNode.parentNode.parentNode.style = 'background-color:orange'
+        evt.target.parentNode.parentNode.parentNode.style = 'background-color:orange; font-size:21px'
       }
     }
   },
