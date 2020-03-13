@@ -3,30 +3,27 @@ const routes = [
   {
     path: '/',
     component: () => import('layouts/MyLayout.vue'),
-    children: [
-      { path: '', component: () => import('pages/Index.vue') }
-    ]
+    children: [{ path: '', component: () => import('pages/Index.vue') }]
   },
   {
     path: '/OpenSaleItems',
     component: () => import('layouts/MyLayout.vue'),
-    children: [
-      { path: '', component: () => import('pages/OpenSaleItems.vue') }
-    ]
+    children: [{ path: '', component: () => import('pages/OpenSaleItems.vue') }]
+  },
+  {
+    path: '/Products',
+    component: () => import('layouts/MyLayout.vue'),
+    children: [{ path: '', component: () => import('pages/Products.vue') }]
   },
   {
     path: '/Reports',
     component: () => import('layouts/MyLayout.vue'),
-    children: [
-      { path: '', component: () => import('pages/Reports.vue') }
-    ]
+    children: [{ path: '', component: () => import('pages/Reports.vue') }]
   },
   {
     path: '/About',
     component: () => import('layouts/MyLayout.vue'),
-    children: [
-      { path: '', component: () => import('pages/About.vue') }
-    ]
+    children: [{ path: '', component: () => import('pages/About.vue') }]
   }
 ]
 
