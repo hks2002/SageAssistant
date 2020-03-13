@@ -2,8 +2,8 @@
   <q-layout view="lHh Lpr lFf">
     <PageHeader />
 
-    <q-page-container>
-      <router-view class="fit" />
+    <q-page-container class="fit">
+      <router-view />
     </q-page-container>
 
     <PageFooter />
