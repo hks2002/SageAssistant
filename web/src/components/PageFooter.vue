@@ -16,6 +16,8 @@
 </template>
 
 <script>
+// import '../mock/SrvInfo.js'
+
 export default {
   name: 'PageFooter',
   data () {
