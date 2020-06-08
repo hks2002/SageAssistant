@@ -28,7 +28,12 @@ public class RssController {
 			@RequestParam(value = "type", required = false, defaultValue = "") String type) {
 		Channel channel = new Channel();
 		channel.setFeedType("rss_2.0");
-		channel.setTitle(site + type);
+        if (type.equals("")){
+            channel.setTitle(site + " All");
+        }else{
+            channel.setTitle(site + " "+ type);
+        }
+		
 		channel.setDescription("Alert From SageAssistant");
 		channel.setLink("http://SageAssistant");
 		channel.setGenerator("Rome");
@@ -99,23 +104,23 @@ public class RssController {
 		}
 
 		if (!pnContent.equals("")) {
-			content += "<h3>Pn not be ACTIVE status now:</h3>[PnStatus]";
+			content += "<h3>Pn not be ACTIVE status now:[PnStatus]</h3>";
 			content += pnContent;
 		}
 		if (!tobeDeliveryContent.equals("")) {
-			content += "<h3>The product need to be delivery:</h3>[Delivery]";
+			content += "<h3>The product need to be delivery:[Delivery]</h3>";
 			content += tobeDeliveryContent;
 		}
 		if (!tobeDealWithOrderLineContent.equals("")) {
-			content += "<h3>These sales order need to be deal with:</h3>[OrderLine]";
+			content += "<h3>These sales order need to be deal with:[OrderLine]</h3>";
 			content += tobeDealWithOrderLineContent;
 		}
 		if (!tobePurchaseBom.equals("")) {
-			content += "<h3>These Boms need to be puchase:</h3>[PurchaseBom]";
+			content += "<h3>These Boms need to be puchase:[PurchaseBom]</h3>";
 			content += tobePurchaseBom;
 		}
 		if (!tobeReceiveContent.equals("")) {
-			content += "<h3>These Boms need to be receive:</h3>[Receive]";
+			content += "<h3>These Boms need to be receive:[Receive]</h3>";
 			content += tobeReceiveContent;
 		}
 
