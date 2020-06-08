@@ -31,24 +31,26 @@ public class RssService {
 
 		String content = "<table border=\"2\" style=\"border-collapse:collapse;\">";
 		content += "<tr>";
+		content += "<th>ProjectNO</th>";
 		content += "<th>PN</th>";
 		content += "<th>Desc1</th>";
 		content += "<th>Desc2</th>";
 		content += "<th>Desc3</th>";
 		content += "<th>PN Status</th>";
-		content += "<th>SalesOrder</th>";
+		content += "<th>WC</th>";
 		content += "<th>CustomerCode</th>";
 		content += "<th>CustomerName</th>";
 		content += "</tr>";
 
 		for (PnStatus o : list) {
 			content += "<tr style=\"background-color:red;\">";
+			content += "<td>" + o.getProjectNO() + "</td>";
 			content += "<td>" + o.getPN() + "</td>";
 			content += "<td>" + o.getDesc1() + "</td>";
 			content += "<td>" + o.getDesc2() + "</td>";
 			content += "<td>" + o.getDesc3() + "</td>";
 			content += "<td>" + o.getPNStatus() + "</td>";
-			content += "<td>" + o.getSalesOrderNO() + "</td>";
+			content += "<td>" + o.getWC() + "</td>";
 			content += "<td>" + o.getCustomerCode() + "</td>";
 			content += "<td>" + o.getCustomerName() + "</td>";
 			content += "</tr>";
