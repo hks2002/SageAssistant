@@ -113,7 +113,6 @@ export default {
             formatter: '{@NetPrice} {@Currency}'
           },
           tooltip: {
-            position: 'top',
             trigger: 'item',
             formatter: (params, ticket, callback) => {
               return jsonToMultLine(this.dimensions, params.data)

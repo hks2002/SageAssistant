@@ -117,7 +117,6 @@ export default {
             formatter: '{@ProjectNO}'
           },
           tooltip: {
-            position: 'top',
             trigger: 'item',
             formatter: (params, ticket, callback) => {
               return jsonToMultLine(this.dimensions, params.data)
