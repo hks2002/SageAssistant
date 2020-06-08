@@ -15,9 +15,11 @@ public class PnStatus implements Serializable {
 	private String Desc2;
 	private String Desc3;
 	private String PNStatus;
-	private String SalesOrderNO;
+	private String WC;
+	private String ProjectNO;
 	private String CustomerCode;
 	private String CustomerName;
+	
 	public String getPN() {
 		return PN;
 	}
@@ -48,12 +50,7 @@ public class PnStatus implements Serializable {
 	public void setPNStatus(String pNStatus) {
 		PNStatus = pNStatus;
 	}
-	public String getSalesOrderNO() {
-		return SalesOrderNO;
-	}
-	public void setSalesOrderNO(String salesOrderNO) {
-		SalesOrderNO = salesOrderNO;
-	}
+	
 	public String getCustomerCode() {
 		return CustomerCode;
 	}
@@ -71,5 +68,17 @@ public class PnStatus implements Serializable {
 	public String toString() {
 		return JSON.toJSONString(this, SerializeConfig.globalInstance, new SerializeFilter[] { new PascalNameFilter() },
 				"yyyy-MM-dd", JSON.DEFAULT_GENERATE_FEATURE);
+	}
+	public String getProjectNO() {
+		return ProjectNO;
+	}
+	public void setProjectNO(String projectNO) {
+		ProjectNO = projectNO;
+	}
+	public String getWC() {
+		return WC;
+	}
+	public void setWC(String wC) {
+		WC = wC;
 	}
 }

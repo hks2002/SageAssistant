@@ -28,7 +28,7 @@ public class RssController {
 			@RequestParam(value = "type", required = false, defaultValue = "") String type) {
 		Channel channel = new Channel();
 		channel.setFeedType("rss_2.0");
-		channel.setTitle("SageAssistant");
+		channel.setTitle(site + type);
 		channel.setDescription("Alert From SageAssistant");
 		channel.setLink("http://SageAssistant");
 		channel.setGenerator("Rome");
@@ -98,8 +98,6 @@ public class RssController {
 			tobeReceiveContent = rssService.checkTobeReceive(site);
 		}
 
-		
-		
 		if (!pnContent.equals("")) {
 			content += "<h3>Pn not be ACTIVE status now:</h3>[PnStatus]";
 			content += pnContent;
