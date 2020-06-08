@@ -30,7 +30,7 @@ public class RssService {
 		List<PnStatus> list = pnService.findObseletPnBySite(site);
 
 		String content = "<table border=\"2\" style=\"border-collapse:collapse;\">";
-		content += "<tr>";
+		content += "<tr style=\"background-color:blue;\">";
 		content += "<th>ProjectNO</th>";
 		content += "<th>PN</th>";
 		content += "<th>Desc1</th>";
@@ -70,7 +70,7 @@ public class RssService {
 
 		String content = "<table border=\"2\" style=\"border-collapse:collapse;\">";
 
-		content += "<tr>";
+		content += "<tr style=\"background-color:blue;\">";
 		content += "<th>ProjectNO</th>";
 		content += "<th>PN</th>";
 		content += "<th>Desc</th>";
@@ -119,7 +119,7 @@ public class RssService {
 
 		String content = "<table border=\"2\" style=\"border-collapse:collapse;\">";
 
-		content += "<tr>";
+		content += "<tr style=\"background-color:blue;\">";
 		content += "<th>PurchaseNO</th>";
 		content += "<th>Line</th>";
 		content += "<th>ProjectNO</th>";
@@ -178,7 +178,7 @@ public class RssService {
 
 		String content = "<table border=\"2\" style=\"border-collapse:collapse;\">";
 
-		content += "<tr>";
+		content += "<tr style=\"background-color:blue;\">";
 		content += "<th>ProjectNO</th>";
 		content += "<th>PN2</th>";
 		content += "<th>WorkOrderNO</th>";
@@ -239,7 +239,7 @@ public class RssService {
 
 		String content = "<table border=\"2\" style=\"border-collapse:collapse;\">";
 
-		content += "<tr>";
+		content += "<tr style=\"background-color:blue;\">";
 		content += "<th>ProjectNO</th>";
 		content += "<th>OrderType</th>";
 		content += "<th>PN</th>";
