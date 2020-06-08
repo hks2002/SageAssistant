@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sageassistant.dao.StatusMapper">
+ <!--Open L2 Cache under Names pace: 1 Hour-->
+    <select id="findTobeDeliveryBySite" parameterType="String" resultType="sageassistant.model.TobeDelivery">
+        SELECT 
+	        SORDERQ.YSOH_PJT_0 AS ProjectNO,
+	        SORDER.SOHTYP_0 AS OrderType,
+	        SORDERP.ITMREF_0 AS PN,
+	        SORDERP.ITMDES_0 AS Description,
+	        SORDERQ.QTY_0 AS QTY,
+			SORDERP.NETPRI_0 AS NetPrice,
+			SORDER.CUR_0 AS Currency,
+	        SORDER.BPCORD_0 AS CustomerCode,
+	        SORDER.BPCNAM_0 AS CustomerName,
+			SORDER.ORDDAT_0 AS OrderDate,
+	        SORDERQ.DEMDLVDAT_0 AS RequestDate
+	    FROM EXPLOIT.SORDERQ AS SORDERQ
+	        LEFT JOIN EXPLOIT.SORDERP AS SORDERP
+	        ON SORDERP.SOHNUM_0 = SORDERQ.SOHNUM_0
+	            AND SORDERP.SOPLIN_0 = SORDERQ.SOPLIN_0
+			LEFT JOIN EXPLOIT.SORDER SORDER
+			ON SORDERP.SOHNUM_0 = SORDER.SOHNUM_0
+	    WHERE 
+	        SORDERQ.SOQSTA_0 != 3 AND SORDERQ.SALFCY_0=#{site}
+    </select>
+    <select id="findTobeReceiveBySite" parameterType="String" resultType="sageassistant.model.TobeReceive">
+	    SELECT PORDERP.POHNUM_0 AS PurchaseNO,
+	        PORDERP.POPLIN_0 AS Line,
+	        PORDERP.PJT_0 AS ProjectNO,
+	        PORDERP.ITMREF_0 AS PN,
+	        PORDERP.ITMDES_0 AS Description,
+	        PORDER.CUR_0 AS Currency,
+	        PORDERP.NETPRI_0 AS NetPrice,
+	        PORDERQ.QTYPUU_0 AS QTY,
+	        PORDERQ.PUU_0 AS Unit,
+	        PORDER.BPSNUM_0 AS VendorCode,
+	        PORDER.BPRNAM_0 AS VendorName,
+	        IIF(PORDERQ.LINOCNDAT_0='1753-01-01','',PORDERQ.LINOCNDAT_0) AS AckDate,
+	        PORDERQ.EXTRCPDAT_0 AS ExpectDate,
+	        PORDER.ORDDAT_0 AS OrderDate,
+	        PORDER.CREUSR_0 AS CreateUser
+	    FROM  EXPLOIT.PORDERP AS PORDERP
+	        LEFT JOIN EXPLOIT.PORDERQ AS PORDERQ
+	        ON PORDERP.POHNUM_0=PORDERQ.POHNUM_0
+	            AND PORDERP.POPLIN_0=PORDERQ.POPLIN_0
+	        LEFT JOIN EXPLOIT.PORDER AS PORDER
+	        ON PORDERP.POHNUM_0=PORDER.POHNUM_0
+	    WHERE PORDERQ.LINCLEFLG_0 != 2
+		    AND PORDERQ.PTHNUM_0 =''
+	        AND PORDERQ.PRHFCY_0=#{site}
+    </select>    
+    <select id="findTobeDealWithOrderLineBySite" parameterType="String" resultType="sageassistant.model.TobeDealWithOrderLine">
+        SELECT SORDERP.SOHNUM_0 AS SalesOrderNO,
+	        SORDER.SOHTYP_0 AS OrderType,
+	        SORDERP.ITMREF_0 AS PN,
+	        SORDERP.ITMDES_0 AS Description,
+	        SORDERQ.QTY_0 AS QTY,
+	        SORDERP.SAU_0 AS Unit,
+	        SORDER.BPCORD_0 AS CustomerCode,
+	        SORDER.BPCNAM_0 AS CustomerName,
+	        SORDERQ.ORDDAT_0 AS OrderDate,
+	        SORDERQ.DEMDLVDAT_0 AS DemandDate,
+	        SORDERQ.YSOH_PJT_0 AS ProjectNO,
+			(CASE WHEN SORDERQ.YSOQ_STA_0 =1 THEN 'Methods' 
+			WHEN SORDERQ.YSOQ_STA_0 =2 THEN 'InteralProd'
+			WHEN SORDERQ.YSOQ_STA_0 =3 THEN 'ExternalProd'
+			WHEN SORDERQ.YSOQ_STA_0 =4 THEN 'Design'
+			WHEN SORDERQ.YSOQ_STA_0 =5 THEN 'Stock'
+			WHEN SORDERQ.YSOQ_STA_0 =6 THEN 'Trading'
+			WHEN SORDERQ.YSOQ_STA_0 =7 THEN 'Services'
+			WHEN SORDERQ.YSOQ_STA_0 =8 THEN 'SalesAdmin' 
+			ELSE 'UNK' END) AS OrderCategory
+	    FROM EXPLOIT.SORDERQ AS SORDERQ
+	        LEFT JOIN EXPLOIT.SORDERP AS SORDERP
+	        ON SORDERP.SOHNUM_0 = SORDERQ.SOHNUM_0
+	            AND SORDERP.SOPLIN_0 = SORDERQ.SOPLIN_0  
+	        LEFT JOIN EXPLOIT.SORDER
+	         ON SORDERP.SOHNUM_0 = SORDER.SOHNUM_0      
+	    WHERE SORDERQ.SOQSTA_0 != 3 AND SORDERQ.SOQSTA_0 != 8
+			AND SORDERQ.YSOH_PJT_0 NOT IN (SELECT DISTINCT MFGITM.PJT_0 FROM MFGITM)
+			AND SORDERQ.YSOH_PJT_0 NOT IN (SELECT DISTINCT PORDERP.PJT_0 FROM PORDERP)
+	        AND SORDERQ.SALFCY_0=#{site}
+    </select>
+    <select id="findTobePurchaseBomBySite" parameterType="String" resultType="sageassistant.model.TobePurchaseBom">
+        SELECT DISTINCT
+			MFGITM.PJT_0 AS ProjectNO,			
+	        SORDER.SOHTYP_0 AS OrderType,
+	        SORDER.BPCORD_0 AS CustomerCode,
+	        SORDER.BPCNAM_0 AS CustomerName,
+			MFGITM.ITMREF_0 AS ForPN,
+			MFGMAT.MFGNUM_0 AS WorkOrderNO,
+	        MFGMAT.BOMSEQ_0 AS BomSeq,
+	        MFGMAT.ITMREF_0 AS PN,
+			CONCAT(ITMMASTER.ITMDES1_0,ITMMASTER.ITMDES2_0,ITMMASTER.ITMDES3_0) AS Description,		
+	        MFGMAT.BOMQTY_0 AS QTY,
+	        MFGMAT.BOMUOM_0 AS Unit,
+	        MFGMAT.SHTQTY_0 AS ShortQty,
+	        MFGMAT.ALLQTY_0 AS AllQty,
+	        MFGMAT.CREDAT_0 AS CreateDate
+	    FROM EXPLOIT.MFGMAT AS MFGMAT
+	         LEFT JOIN EXPLOIT.MFGITM AS MFGITM
+	           ON MFGITM.MFGNUM_0 = MFGMAT.MFGNUM_0
+	              AND MFGITM.MFGLIN_0 = MFGMAT.MFGLIN_0   
+		     LEFT JOIN EXPLOIT.ITMMASTER AS ITMMASTER
+			   ON MFGMAT.ITMREF_0 = ITMMASTER.ITMREF_0
+			 LEFT JOIN EXPLOIT.SORDERQ AS SORDERQ
+			   ON SORDERQ.YSOH_PJT_0 = MFGITM.PJT_0
+			 LEFT JOIN EXPLOIT.SORDER AS SORDER
+			   ON SORDERQ.SOHNUM_0 = SORDER.SOHNUM_0
+	    WHERE MFGMAT.SHTQTY_0 > 0 
+		    AND NOT EXISTS (SELECT 1 FROM EXPLOIT.PORDERP AS PORDERP WHERE PORDERP.PRHFCY_0=#{site} AND PORDERP.PJT_0=MFGITM.PJT_0 AND PORDERP.ITMREF_0=MFGMAT.ITMREF_0)
+	        AND MFGMAT.MFGFCY_0=#{site}
+        </select>
+</mapper>
