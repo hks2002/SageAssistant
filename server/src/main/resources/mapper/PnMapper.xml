@@ -49,8 +49,7 @@
 		LEFT JOIN ITMMASTER
 		    ON SORDERP.ITMREF_0 = ITMMASTER.ITMREF_0
 		WHERE
-		     SORDERP.NETPRI_0 > 0   AND ITMMASTER.XITM_RACIN_0 = #{pnRoot} 
-		ORDER BY OrderDate ASC
+		     SORDERP.NETPRI_0 > 0   AND ITMMASTER.XITM_RACIN_0 = #{pnRoot}
     </select>  
     <select id="findQuoteHistoryByPnRoot" parameterType="String" resultType="sageassistant.model.QuoteHistory">
 	    SELECT
@@ -72,7 +71,6 @@
 		    ON SQUOTED.ITMREF_0=ITMMASTER.ITMREF_0
 		WHERE 
 		    SQUOTED.NETPRI_0 > 0   AND ITMMASTER.XITM_RACIN_0 = #{pnRoot}
-		ORDER BY SQUOTED.QUODAT_0 ASC
      </select>
      <select id="findDeliveryDurationByPnRoot" parameterType="String" resultType="sageassistant.model.DeliveryDuration">
 		SELECT SORDERP.SALFCY_0 AS SalesSite,
@@ -127,6 +125,5 @@
 	         ON SORDERQ.SOHNUM_0 = SORDER.SOHNUM_0 
 		WHERE 
 		  SORDERQ.SOQSTA_0 != 3 AND (ITMMASTER.ITMSTA_0 !=1 OR ITMMASTER.YITM_SUP_0 ='NQ') AND  SORDERQ.SALFCY_0=#{site}
-		ORDER BY XITM_IND_0 DESC, YITM_SUP_0 DESC, PN DESC
     </select> 
 </mapper>
