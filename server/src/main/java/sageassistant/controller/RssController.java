@@ -1,0 +1,130 @@
+package sageassistant.controller;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.rometools.rome.feed.rss.Channel;
+import com.rometools.rome.feed.rss.Description;
+import com.rometools.rome.feed.rss.Item;
+
+import sageassistant.service.RssService;
+
+@RestController
+public class RssController {
+
+	@Autowired
+	RssService rssService;
+
+	@GetMapping(path = "/Data/Rss")
+	public Channel rss(@RequestParam(value = "site", required = false, defaultValue = "ZHU") String site,
+			@RequestParam(value = "type", required = false, defaultValue = "") String type) {
+		Channel channel = new Channel();
+		channel.setFeedType("rss_2.0");
+		channel.setTitle("SageAssistant");
+		channel.setDescription("Alert From SageAssistant");
+		channel.setLink("http://SageAssistant");
+		channel.setGenerator("Rome");
+		channel.setTtl(24 * 60);
+
+		List<String> skipDays = new ArrayList<String>();
+		skipDays.add("Saturday");
+		skipDays.add("Sunday");
+
+		List<Integer> skipHours = new ArrayList<Integer>();
+		skipHours.add(0);
+		skipHours.add(1);
+		skipHours.add(2);
+		skipHours.add(3);
+		skipHours.add(4);
+		skipHours.add(5);
+		skipHours.add(6);
+		skipHours.add(7);
+		skipHours.add(8);
+		skipHours.add(18);
+		skipHours.add(19);
+		skipHours.add(20);
+		skipHours.add(21);
+		skipHours.add(22);
+		skipHours.add(23);
+
+		channel.setSkipDays(skipDays);
+		channel.setSkipHours(skipHours);
+
+		Date postDate = new Date();
+		channel.setPubDate(postDate);
+		channel.setItems(Collections.singletonList(getRssItemBySite(site, type)));
+		return channel;
+	}
+
+	private Item getRssItemBySite(String site, String type) {
+		Item item = new Item();
+		Date postDate = new Date();
+		SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+
+		item.setPubDate(postDate);
+		item.setAuthor(site);
+		item.setTitle("Date:" + fmt.format(postDate));
+		item.setLink("http://SageAssistant/#/Todo");
+		Description descr = new Description();
+
+		String content = "";
+		String pnContent = "";
+		String tobeDeliveryContent = "";
+		String tobeDealWithOrderLineContent = "";
+		String tobePurchaseBom = "";
+		String tobeReceiveContent = "";
+
+		if (type.equals("") || type.equals("PnStatus")) {
+			pnContent = rssService.checkPnUpdate(site);
+		}
+		if (type.equals("") || type.equals("Delivery")) {
+			tobeDeliveryContent = rssService.checkTobeDelivery(site);
+		}
+		if (type.equals("") || type.equals("OrderLine")) {
+			tobeDealWithOrderLineContent = rssService.checkTobeDealWithOrderLine(site);
+		}
+		if (type.equals("") || type.equals("PurchaseBom")) {
+			tobePurchaseBom = rssService.checkTobePurchaseBom(site);
+		}
+		if (type.equals("") || type.equals("Receive")) {
+			tobeReceiveContent = rssService.checkTobeReceive(site);
+		}
+
+		
+		
+		if (!pnContent.equals("")) {
+			content += "<h3>Pn not be ACTIVE status now:</h3>[PnStatus]";
+			content += pnContent;
+		}
+		if (!tobeDeliveryContent.equals("")) {
+			content += "<h3>The product need to be delivery:</h3>[Delivery]";
+			content += tobeDeliveryContent;
+		}
+		if (!tobeDealWithOrderLineContent.equals("")) {
+			content += "<h3>These sales order need to be deal with:</h3>[OrderLine]";
+			content += tobeDealWithOrderLineContent;
+		}
+		if (!tobePurchaseBom.equals("")) {
+			content += "<h3>These Boms need to be puchase:</h3>[PurchaseBom]";
+			content += tobePurchaseBom;
+		}
+		if (!tobeReceiveContent.equals("")) {
+			content += "<h3>These Boms need to be receive:</h3>[Receive]";
+			content += tobeReceiveContent;
+		}
+
+		descr.setValue(content);
+
+		item.setDescription(descr);
+		return item;
+	}
+
+}

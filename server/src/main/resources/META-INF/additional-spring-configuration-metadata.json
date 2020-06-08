@@ -1,0 +1,32 @@
+{"properties": [
+  {
+    "name": "project.name",
+    "type": "java.lang.String",
+    "description": "A description for 'project.name'"
+  },
+  {
+    "name": "project.version",
+    "type": "java.lang.String",
+    "description": "A description for 'project.version'"
+  },
+  {
+    "name": "project.name",
+    "type": "java.lang.String",
+    "description": "A description for 'project.name'"
+  },
+  {
+    "name": "attachment.path.linux",
+    "type": "java.lang.String",
+    "description": "A description for 'attachment.path.linux'"
+  },
+  {
+    "name": "attachment.path.windows",
+    "type": "java.lang.String",
+    "description": "A description for 'attachment.path.windows'"
+  },
+  {
+    "name": "spring.boot.version",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.boot.version'"
+  }
+]}
