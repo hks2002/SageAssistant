@@ -5,7 +5,10 @@
 * web(is developed with vue/quasar)
 
 ### Screen snap
-![Products Show](./products.png)
+![Products Show](./product.png)
+![Todo](./Todo.png)
+![DataView](./DataView.png)
+![Report](./Report.png)
 
 ### Server install&config
 1. install Oracle Jre Environment
