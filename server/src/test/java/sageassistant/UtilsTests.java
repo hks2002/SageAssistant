@@ -1,5 +1,9 @@
 package sageassistant;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -73,5 +77,15 @@ public class UtilsTests {
 		log.debug(Utils.makeShortPn("A12345-1_A_-"));
 		Assertions.assertEquals(Utils.makeShortPn("A12345-1_A_-"),"A12345_A");
 	}
-		
+	
+	@Test
+	public void testDateDiff() throws ParseException {
+		SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+        
+        Date start = fmt.parse("2010-01-02");
+        Date end = fmt.parse("2010-03-02");
+		long diff = Utils.dateDiff(start, end);
+		log.debug("diff:"+diff);
+		Assertions.assertEquals(diff, 59);
+	}
 }
