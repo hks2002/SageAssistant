@@ -25,15 +25,16 @@ public class RssController {
 
 	@GetMapping(path = "/Data/Rss")
 	public Channel rss(@RequestParam(value = "site", required = false, defaultValue = "ZHU") String site,
-			@RequestParam(value = "type", required = false, defaultValue = "") String type) {
+			@RequestParam(value = "type", required = false, defaultValue = "") String type,
+			@RequestParam(value = "range", required = false, defaultValue = "28") Integer range) {
 		Channel channel = new Channel();
 		channel.setFeedType("rss_2.0");
-        if (type.equals("")){
-            channel.setTitle(site + " All");
-        }else{
-            channel.setTitle(site + " "+ type);
-        }
-		
+		if (type.equals("")) {
+			channel.setTitle(site + " All");
+		} else {
+			channel.setTitle(site + " " + type);
+		}
+
 		channel.setDescription("Alert From SageAssistant");
 		channel.setLink("http://SageAssistant");
 		channel.setGenerator("Rome");
@@ -65,11 +66,11 @@ public class RssController {
 
 		Date postDate = new Date();
 		channel.setPubDate(postDate);
-		channel.setItems(Collections.singletonList(getRssItemBySite(site, type)));
+		channel.setItems(Collections.singletonList(getRssItemBySite(site, type, range)));
 		return channel;
 	}
 
-	private Item getRssItemBySite(String site, String type) {
+	private Item getRssItemBySite(String site, String type, Integer range) {
 		Item item = new Item();
 		Date postDate = new Date();
 		SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
@@ -91,7 +92,7 @@ public class RssController {
 			pnContent = rssService.checkPnUpdate(site);
 		}
 		if (type.equals("") || type.equals("Delivery")) {
-			tobeDeliveryContent = rssService.checkTobeDelivery(site);
+			tobeDeliveryContent = rssService.checkTobeDelivery(site, range);
 		}
 		if (type.equals("") || type.equals("OrderLine")) {
 			tobeDealWithOrderLineContent = rssService.checkTobeDealWithOrderLine(site);
@@ -100,7 +101,7 @@ public class RssController {
 			tobePurchaseBom = rssService.checkTobePurchaseBom(site);
 		}
 		if (type.equals("") || type.equals("Receive")) {
-			tobeReceiveContent = rssService.checkTobeReceive(site);
+			tobeReceiveContent = rssService.checkTobeReceive(site, range);
 		}
 
 		if (!pnContent.equals("")) {
@@ -108,7 +109,7 @@ public class RssController {
 			content += pnContent;
 		}
 		if (!tobeDeliveryContent.equals("")) {
-			content += "<h3>The product need to be delivery:[Delivery]</h3>";
+			content += "<h3>The product need to be delivery in next " + range + " Days:[Delivery]</h3>";
 			content += tobeDeliveryContent;
 		}
 		if (!tobeDealWithOrderLineContent.equals("")) {
@@ -120,7 +121,7 @@ public class RssController {
 			content += tobePurchaseBom;
 		}
 		if (!tobeReceiveContent.equals("")) {
-			content += "<h3>These Boms need to be receive:[Receive]</h3>";
+			content += "<h3>These Boms need to be receive in next " + range + " Days:[Receive]</h3>";
 			content += tobeReceiveContent;
 		}
 
