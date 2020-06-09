@@ -189,7 +189,7 @@ public class RssService {
 
 		content += "<tr style=\"background-color:blue;\">";
 		content += "<th>ProjectNO</th>";
-		content += "<th>PN2</th>";
+		content += "<th>For PN</th>";
 		content += "<th>WorkOrderNO</th>";
 		content += "<th>getBomSeq</th>";
 		content += "<th>PN</th>";
@@ -245,7 +245,8 @@ public class RssService {
 		content += "<th>Desc</th>";
 		content += "<th>Qty</th>";
 		content += "<th>Unit</th>";
-		content += "<th>Customer</th>";
+		content += "<th>CustomerCode</th>";
+		content += "<th>CustomerName</th>";
 		content += "<th>OrDerDate</th>";
 		content += "<th>DemandDate</th>";
 		content += "<th>Days</th>";
