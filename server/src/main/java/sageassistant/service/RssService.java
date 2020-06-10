@@ -136,6 +136,7 @@ public class RssService {
 		content += "<th>OrderDate</th>";
 		content += "<th>AckDate</th>";
 		content += "<th>ExpectDate</th>";
+		content += "<th>Purchaser</th>";
 		content += "<th>OverDueDays</th>";
 		content += "</tr>";
 		
@@ -166,6 +167,7 @@ public class RssService {
 				content += "<td>" + fmt.format(o.getOrderDate()) + "</td>";
 				content += "<td>" + fmt.format(o.getAckDate()) + "</td>";
 				content += "<td>" + fmt.format(o.getExpectDate()) + "</td>";
+				content += "<td>" + o.getCreateUser() + "</td>";
 				content += "<td>" + diff + "</td>";
 				content += "</tr>";		
 			} else {

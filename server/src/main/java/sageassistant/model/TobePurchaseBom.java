@@ -24,6 +24,7 @@ public class TobePurchaseBom implements Serializable {
 	private Integer AllQty;
 	private String Unit;
 	private Date CreateDate;
+	private String CreateUser;
 
 	public Integer getAllQty() {
 		return AllQty;
@@ -141,5 +142,13 @@ public class TobePurchaseBom implements Serializable {
 	public String toString() {
 		return JSON.toJSONString(this, SerializeConfig.globalInstance, new SerializeFilter[] { new PascalNameFilter() },
 				"yyyy-MM-dd", JSON.DEFAULT_GENERATE_FEATURE);
+	}
+
+	public String getCreateUser() {
+		return CreateUser;
+	}
+
+	public void setCreateUser(String createUser) {
+		CreateUser = createUser;
 	}
 }

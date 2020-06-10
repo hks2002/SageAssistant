@@ -4,9 +4,17 @@
 <mapper namespace="sageassistant.dao.StatusMapper">
  <!--Open L2 Cache under Names pace: 1 Hour-->
     <select id="findTobeDeliveryBySite" parameterType="String" resultType="sageassistant.model.TobeDelivery">
-        SELECT 
+        SELECT DISTINCT
 	        SORDERQ.YSOH_PJT_0 AS ProjectNO,
-	        SORDER.SOHTYP_0 AS OrderType,
+	        (CASE WHEN SORDERQ.YSOQ_STA_0 =1 THEN SORDER.SOHTYP_0 + '-Methods' 
+			WHEN SORDERQ.YSOQ_STA_0 =2 THEN SORDER.SOHTYP_0 + '-InteralProd'
+			WHEN SORDERQ.YSOQ_STA_0 =3 THEN SORDER.SOHTYP_0 + '-ExternalProd'
+			WHEN SORDERQ.YSOQ_STA_0 =4 THEN SORDER.SOHTYP_0 + '-Design'
+			WHEN SORDERQ.YSOQ_STA_0 =5 THEN SORDER.SOHTYP_0 + '-Stock'
+			WHEN SORDERQ.YSOQ_STA_0 =6 THEN SORDER.SOHTYP_0 + '-Trading'
+			WHEN SORDERQ.YSOQ_STA_0 =7 THEN SORDER.SOHTYP_0 + '-Services'
+			WHEN SORDERQ.YSOQ_STA_0 =8 THEN SORDER.SOHTYP_0 + '-SalesAdmin' 
+			ELSE SORDER.SOHTYP_0 + '-UNK' END) AS OrderType,
 	        SORDERP.ITMREF_0 AS PN,
 	        SORDERP.ITMDES_0 AS Description,
 	        SORDERQ.QTY_0 AS QTY,
@@ -26,7 +34,8 @@
 	        SORDERQ.SOQSTA_0 != 3 AND SORDERQ.SALFCY_0=#{site}
     </select>
     <select id="findTobeReceiveBySite" parameterType="String" resultType="sageassistant.model.TobeReceive">
-	    SELECT PORDERP.POHNUM_0 AS PurchaseNO,
+	    SELECT DISTINCT
+	        PORDERP.POHNUM_0 AS PurchaseNO,
 	        PORDERP.POPLIN_0 AS Line,
 	        PORDERP.PJT_0 AS ProjectNO,
 	        PORDERP.ITMREF_0 AS PN,
@@ -52,7 +61,8 @@
 	        AND PORDERQ.PRHFCY_0=#{site}
     </select>    
     <select id="findTobeDealWithOrderLineBySite" parameterType="String" resultType="sageassistant.model.TobeDealWithOrderLine">
-        SELECT SORDERP.SOHNUM_0 AS SalesOrderNO,
+        SELECT DISTINCT
+            SORDERP.SOHNUM_0 AS SalesOrderNO,
 	        SORDER.SOHTYP_0 AS OrderType,
 	        SORDERP.ITMREF_0 AS PN,
 	        SORDERP.ITMDES_0 AS Description,
