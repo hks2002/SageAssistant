@@ -1,6 +1,6 @@
 {
   "name": "web",
-  "version": "0.0.14",
+  "version": "0.1.0",
   "description": "An Assistant for Sage",
   "productName": "SageAssistantWeb",
   "author": "Robert Huang<r.huang@dedienne-aero.com><56649783@qq.com>",
