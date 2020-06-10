@@ -11,7 +11,14 @@
 	</parent>
 	<groupId>sageassistant</groupId>
 	<artifactId>SageAssistantSrv</artifactId>
-	<version>0.2.3</version>
+	<!-- version
+	A.B.C.D 
+	A: project 
+	B: add/remove function
+	C: fix bug
+	D: build time stamp
+	 -->
+	<version>1.3.3.${maven.build.timestamp}</version>
 	<packaging>war</packaging>
 	<name>SageAssistantSrv</name>
 	<description>Sage assistant data server</description>
@@ -19,8 +26,9 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<maven.test.skip>true</maven.test.skip>
+		<maven.build.timestamp.format>MMddHHmmss</maven.build.timestamp.format>
 	</properties>
-
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
