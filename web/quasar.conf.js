@@ -61,18 +61,20 @@ module.exports = function (ctx) {
         let pkg = fs.readFileSync('package.json')
         let timeStamp = moment().format('MMDDHHmmss')
         pkg = JSON.parse(pkg)
-        pkg.version = pkg.version.replace(/(\d *\.\d *\.\d*)\w*/, '$1')
+        pkg.version = pkg.version.replace(/^(\d+\.\d+\.\d+)(\S*)/, '$1')
         pkg.version = pkg.version + '.' + timeStamp
         fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2))
         console.log('update version with timestamp ---->' + pkg.version)
       },
       beforeBuild () {
-        console.log('update version with timestamp')
         let pkg = fs.readFileSync('package.json')
         let timeStamp = moment().format('MMDDHHmmss')
         pkg = JSON.parse(pkg)
-        pkg.version = pkg.version.replace(/(\d *\.\d *\.\d*)\w*/, '$1')
+
+        pkg.version = pkg.version.replace(/^(\d+\.\d+\.\d+)(\S*)/, '$1')
         pkg.version = pkg.version + '.' + timeStamp
+
+        console.log('update version with timestamp: ' + pkg.version)
         fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2))
       },
       uglifyOptions: {
