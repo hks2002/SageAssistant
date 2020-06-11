@@ -69,6 +69,7 @@ export default {
             this.dataCountedByLengend.push({ SalesSite: value[0]['SalesSite'], Qty: _sumBy(value, 'Qty') })
           })
 
+          this.eChart.hideLoading()
           this.setEchartLine()
           this.setEchartPie()
           this.setEchart()
@@ -82,6 +83,14 @@ export default {
             icon: 'fas fa-exclamation-triangle'
           })
         })
+    },
+
+    showLoading () {
+      if (this.eChart) {
+        this.eChart.showLoading({
+          text: 'Loading'
+        })
+      }
     },
 
     doReset () {
@@ -215,6 +224,7 @@ export default {
 
         if (newVal) {
           this.doReset()
+          this.showLoading()
           this.doUpdate(newVal)
         } else {
           this.doReset()
@@ -225,6 +235,7 @@ export default {
   },
   mounted: function () {
     this.eChart = echarts.init(document.getElementById('EchartSalesHistory'))
+    this.showLoading()
   }
 }
 </script>

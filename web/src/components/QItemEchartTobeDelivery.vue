@@ -72,6 +72,7 @@ export default {
           this.dataByLengend = _groupBy(this.data, 'OrderType')
           console.debug(JSON.stringify(this.dataByLengend))
 
+          this.eChart.hideLoading()
           this.setEchartScatter()
           this.setEchart()
         })
@@ -84,6 +85,14 @@ export default {
             icon: 'fas fa-exclamation-triangle'
           })
         })
+    },
+
+    showLoading () {
+      if (this.eChart) {
+        this.eChart.showLoading({
+          text: 'Loading'
+        })
+      }
     },
 
     doReset () {
@@ -191,6 +200,7 @@ export default {
 
         if (newVal) {
           this.doReset()
+          this.showLoading()
           this.doUpdate(newVal)
         } else {
           this.doReset()
@@ -201,6 +211,7 @@ export default {
   },
   mounted: function () {
     this.eChart = echarts.init(document.getElementById('EchartTobeDelivery'))
+    this.showLoading()
   }
 }
 </script>
