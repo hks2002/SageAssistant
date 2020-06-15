@@ -235,7 +235,7 @@ export default {
   },
   mounted: function () {
     this.eChart = echarts.init(document.getElementById('EchartSalesHistory'))
-    this.showLoading()
+    // this.showLoading()
   }
 }
 </script>

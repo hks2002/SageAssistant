@@ -249,7 +249,7 @@ export default {
   },
   mounted: function () {
     this.eChart = echarts.init(document.getElementById('EchartQuoteHistory'))
-    this.showLoading()
+    // this.showLoading()
   }
 }
 </script>
