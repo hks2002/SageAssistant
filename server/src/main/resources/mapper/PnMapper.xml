@@ -50,6 +50,7 @@
 		    ON SORDERP.ITMREF_0 = ITMMASTER.ITMREF_0
 		WHERE
 		     SORDERP.NETPRI_0 > 0   AND ITMMASTER.XITM_RACIN_0 = #{pnRoot}
+		ORDER BY OrderDate ASC
     </select>  
     <select id="findQuoteHistoryByPnRoot" parameterType="String" resultType="sageassistant.model.QuoteHistory">
 	    SELECT
@@ -71,6 +72,7 @@
 		    ON SQUOTED.ITMREF_0=ITMMASTER.ITMREF_0
 		WHERE 
 		    SQUOTED.NETPRI_0 > 0   AND ITMMASTER.XITM_RACIN_0 = #{pnRoot}
+		ORDER BY QuoteDate ASC
      </select>
      <select id="findDeliveryDurationByPnRoot" parameterType="String" resultType="sageassistant.model.DeliveryDuration">
 		SELECT SORDERP.SALFCY_0 AS SalesSite,
