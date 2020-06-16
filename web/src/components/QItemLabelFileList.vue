@@ -7,32 +7,16 @@
            class="q-mr-sm"
            @click="clickBtn(file.Path)"
            dense>
-      <q-badge v-if="file.Cat===4"
-               floating>DG</q-badge>
-      <q-badge v-else-if="file.Cat===5"
+      <q-badge v-if="file.Cat==='Drawing'"
                floating>D</q-badge>
-      <q-badge v-else-if="file.Cat===6"
-               floating>TC</q-badge>
-      <q-badge v-else-if="file.Cat===8"
-               floating>DS</q-badge>
-      <q-badge v-else-if="file.Cat===9"
+      <q-badge v-else-if="file.Cat==='Manual'"
                floating>M</q-badge>
-      <q-badge v-else-if="file.Cat===12"
-               floating>QS</q-badge>
       <q-badge v-else
                floating>?</q-badge>
-      <q-tooltip v-if="file.Cat===4"
-                 floating>Design:{{file.File}}</q-tooltip>
-      <q-tooltip v-else-if="file.Cat===5"
+      <q-tooltip v-if="file.Cat==='Drawing'"
                  floating>Drawing:{{file.File}}</q-tooltip>
-      <q-tooltip v-else-if="file.Cat===6"
-                 floating>Testing Certificate:{{file.File}}</q-tooltip>
-      <q-tooltip v-else-if="file.Cat===8"
-                 floating>Data Sheet:{{file.File}}</q-tooltip>
-      <q-tooltip v-else-if="file.Cat===9"
+      <q-tooltip v-else-if="file.Cat==='Manual'"
                  floating>Manual:{{file.File}}</q-tooltip>
-      <q-tooltip v-else-if="file.Cat===12"
-                 floating>Qulity Sheet:{{file.File}}</q-tooltip>
       <q-tooltip v-else
                  floating>Unknown Category:{{file.File}}</q-tooltip>
       <q-menu touch-position
@@ -103,31 +87,15 @@ export default {
       files: [],
       showLoadingFile: false,
       showFileUploader: false,
-      upLoadFileCategory: 5,
+      upLoadFileCategory: 'Drawing',
       upLoadFileCategoryOptions: [
         {
           label: 'Drawing',
-          value: 5
-        },
-        {
-          label: 'Design',
-          value: 4
-        },
-        {
-          label: 'Testing Certificate',
-          value: 6
+          value: 'Drawing'
         },
         {
           label: 'Manual',
-          value: 8
-        },
-        {
-          label: 'Data Sheet',
-          value: 9
-        },
-        {
-          label: 'Qulity Sheet',
-          value: 12
+          value: 'Manual'
         }
       ]
     }

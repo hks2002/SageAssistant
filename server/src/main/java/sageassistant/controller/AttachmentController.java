@@ -88,47 +88,40 @@ public class AttachmentController {
 		}
 	}
 
+	/*
+	 * @param pn could be Pn or PnRoot, PnRoot without version
+	 */
 	@GetMapping("/Data/AttachmentPath")
-	public String getAttachmentPath(@RequestParam(value = "Pn", required = false, defaultValue = "NULL") String pn,
-			@RequestParam(value = "Cat", required = true) String cat) {
+	public String getAttachmentPath(@RequestParam(value = "Pn", required = false, defaultValue = "NULL") String pn) {
 		if (pn.equals("NULL")) {
 			return "[]";
 		}
 
-		String attachmentPath = Utils.isWin() ? attachmentPathWindows : attachmentPathLinux;
-
 		// change / \ * ? to -
-		String pnStand = pn.replaceAll("(\\\\|\\*|\\/|\\?)", "-");
-		String pnShort = Utils.makeShortPn(pnStand);
+		String pnShort = pn.replaceAll("(\\\\|\\*|\\/|\\?)", "-");
+		pnShort = Utils.makeShortPn(pnShort);
 
+
+		//Manual's folder without version end with '_', if pn with version, ManualsShort is empty, only return Drawing.
+		//And if Pn without version and Pn==PnRoot, both return Manual and Drawing
+		JSONArray ManualsShort = makeJsonAarry(pn, "Manual", pnShort);
+		JSONArray DrawingShort = makeJsonAarry(pn, "Drawing", pnShort);
+
+		
 		JSONArray all = new JSONArray();
 
-		if (cat.equals("Manual")) {
-			JSONArray ManualsStand = makeJsonAarry(pn, "Manual", pnStand,
-					Utils.findFiles(attachmentPath + "Manual/" + pnStand));
-			JSONArray ManualsShort = makeJsonAarry(pn, "Manual", pnShort,
-					Utils.findFiles(attachmentPath + "Manual/" + pnShort));
-
-			all.addAll(ManualsStand);
-			all.addAll(ManualsShort);
-		} else if (cat.equals("Drawing")) {
-			// Stand parts
-			JSONArray DrawingStand = makeJsonAarry(pn, "Drawing", pnStand,
-					Utils.findFiles(attachmentPath + "/Drawing/" + pnStand));
-			JSONArray DrawingShort = makeJsonAarry(pn, "Drawing", pnShort,
-					Utils.findFiles(attachmentPath + "/Drawing/" + pnShort));
-			
-			all.addAll(DrawingStand);
-			all.addAll(DrawingShort);
-		} else {
-
-		}
+		all.addAll(ManualsShort);
+		all.addAll(DrawingShort);
 
 		return all.toJSONString();
 	}
 
-	private JSONArray makeJsonAarry(String pn, String catStr, String folder, String[] files) {
+	private JSONArray makeJsonAarry(String pn, String catStr, String folder) {
 		JSONArray arr = new JSONArray();
+
+		String attachmentPath = Utils.isWin() ? attachmentPathWindows : attachmentPathLinux;
+
+		String[] files = Utils.findFiles(attachmentPath + "/" + catStr + "/" + folder);
 
 		for (int i = 0, l = files.length; i < l; i++) {
 			JSONObject obj = new JSONObject();
