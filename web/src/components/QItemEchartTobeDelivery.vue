@@ -69,7 +69,7 @@ export default {
             row.DaysLeft = date.getDateDiff(row.RequestDate, newDate, 'days')
           })
           this.lengend = _uniq(_map(this.data, 'OrderType'))
-          this.dataByLengend = _groupBy(this.data, 'ProjectNO')
+          this.dataByLengend = _groupBy(this.data, 'OrderType')
           console.debug(JSON.stringify(this.dataByLengend))
 
           this.eChart.hideLoading()
@@ -115,9 +115,8 @@ export default {
         this.dataset[index] = { source: this.dataByLengend[value] }
         // series
         this.series[index] = {
-          type: 'line',
+          type: 'scatter',
           name: value,
-          stack: 'z',
           datasetIndex: index,
           dimensions: this.dimensionsScatter,
           label: {
@@ -177,7 +176,7 @@ export default {
           minInterval: 3600 * 24 * 1000 // 最小刻度1天
         },
         yAxis: [{
-          type: 'category',
+          type: 'value',
           // min: 10,
           axisLabel: {
             formatter: '{value}\nDay'
