@@ -178,10 +178,21 @@ export default {
           }
         }],
         dataZoom: [{
-          start: 0,
-          end: 100
-        }, {
-          type: 'inside'
+          type: 'slider',
+          xAxisIndex: [0]
+        },
+        {
+          type: 'slider',
+          yAxisIndex: [0],
+          left: '93%'
+        },
+        {
+          type: 'inside',
+          xAxisIndex: [0]
+        },
+        {
+          type: 'inside',
+          yAxisIndex: [0]
         }],
         dataset: this.dataset,
         series: this.series
