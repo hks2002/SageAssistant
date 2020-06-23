@@ -25,7 +25,7 @@ Mock.mock(RegExp('^(/Data/TobeReceive)' + '.*'), options => {
         'AckDate': () => { return Mock.mock('@date("yyyy-MM-dd")') },
         'ExpectDate': () => { return Mock.mock('@date("yyyy-MM-dd")') },
         'OrderDate': () => { return Mock.mock('@date("yyyy-MM-dd")') },
-        'CreateUser': /0000[A-D]{1}/
+        'CreateUser': /0000[A-Z]{1}/
       }
     ]
   })
