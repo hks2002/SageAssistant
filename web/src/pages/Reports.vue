@@ -97,6 +97,37 @@
                  icon="fas fa-file-word" />
         </q-item-section>
       </q-item>
+            <q-item>
+        <q-item-section avatar>
+          <q-avatar color="primary"
+                    text-color="white">
+            I2
+          </q-avatar>
+        </q-item-section>
+        <q-item-section>
+          <q-input label="Order NO"
+                   v-model="OrderNO"
+                   outlined
+                   clearable
+                   hint="e.g.: ZCC180020 or customer order"
+                   :hide-hint="true"
+                   input-class="text-uppercase"
+                   class="q-pa-xs">
+          </q-input>
+        </q-item-section>
+        <q-item-section side>
+          <q-btn text-color="orange-10"
+                 dense
+                 @click="showInvoice2"
+                 icon="fas fa-file-pdf" />
+        </q-item-section>
+        <q-item-section side>
+          <q-btn text-color="indigo-7"
+                 dense
+                 @click="exportWordInvoice2"
+                 icon="fas fa-file-word" />
+        </q-item-section>
+      </q-item>
       <q-item>
         <q-item-section avatar>
           <q-avatar color="primary"
@@ -234,6 +265,7 @@ export default {
       COCProj: '',
       DeliveryNO: '',
       InvoiceNO: '',
+      OrderNO: '',
       PurchaseNO: '',
       POtax: true,
       ReceiptNO: '',
@@ -281,6 +313,20 @@ export default {
 
         this.$q.loading.show({
           message: '<h3>Generating Invoice ' + this.InvoiceNO.toUpperCase() + '</h3>'
+        })
+      } else {
+        this.UrlShow = 'about:blank'
+      }
+    },
+    showInvoice2: function (value) {
+      if (this.validateInvoice2()) {
+        if (this.UrlShow === this.UrlInvoice2) {
+          return
+        }
+        this.UrlShow = this.UrlInvoice2
+
+        this.$q.loading.show({
+          message: '<h3>Generating Invoice for Order ' + this.OrderNO.toUpperCase() + '</h3>'
         })
       } else {
         this.UrlShow = 'about:blank'
@@ -348,6 +394,13 @@ export default {
         this.UrlExport = 'about:blank'
       }
     },
+    exportWordInvoice2: function () {
+      if (this.validateInvoice2()) {
+        this.UrlExport = this.UrlInvoice2.replace('showPdf', 'exportWord')
+      } else {
+        this.UrlExport = 'about:blank'
+      }
+    },
     exportWordPO: function () {
       if (this.validatePO()) {
         this.UrlExport = this.UrlPurchaseOrder.replace('showPdf', 'exportWord')
@@ -401,6 +454,14 @@ export default {
         return false
       }
     },
+    validateInvoice2: function () {
+      if (this.OrderNO) {
+        return true
+      } else {
+        this.showAlert = true
+        return false
+      }
+    },
     validatePO: function () {
       if (this.PurchaseNO &&
         this.PurchaseNO.length === 10 &&
@@ -445,6 +506,9 @@ export default {
     },
     UrlInvoice: function () {
       return '/Report/Invoice/showPdf?InvoiceNO=' + this.InvoiceNO.toUpperCase()
+    },
+    UrlInvoice2: function () {
+      return '/Report/Invoice2/showPdf?OrderNO=' + this.OrderNO.toUpperCase()
     },
     UrlPurchaseOrder: function () {
       return '/Report/PurchaseOrder/showPdf?PurchaseNO=' + this.PurchaseNO.toUpperCase() + '&TaxInclude=' + this.POtax
