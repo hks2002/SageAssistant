@@ -282,10 +282,9 @@ export default {
           return
         }
         this.UrlShow = this.UrlCOC
-
-        this.$q.loading.show({
-          message: '<h3>Generating COC ' + this.COCProj.toUpperCase() + '</h3>'
-        })
+        // this.$q.loading.show({
+        // message: '<h3>Generating COC ' + this.COCProj.toUpperCase() + '</h3>'
+        // })
       } else {
         this.UrlShow = 'about:blank'
       }
@@ -297,9 +296,9 @@ export default {
         }
         this.UrlShow = this.UrlDelivery
 
-        this.$q.loading.show({
-          message: '<h3>Generating Delivery ' + this.DeliveryNO.toUpperCase() + '</h3>'
-        })
+        // this.$q.loading.show({
+        //  message: '<h3>Generating Delivery ' + this.DeliveryNO.toUpperCase() + '</h3>'
+        // })
       } else {
         this.UrlShow = 'about:blank'
       }
@@ -311,9 +310,9 @@ export default {
         }
         this.UrlShow = this.UrlInvoice
 
-        this.$q.loading.show({
-          message: '<h3>Generating Invoice ' + this.InvoiceNO.toUpperCase() + '</h3>'
-        })
+        // this.$q.loading.show({
+        //  message: '<h3>Generating Invoice ' + this.InvoiceNO.toUpperCase() + '</h3>'
+        // })
       } else {
         this.UrlShow = 'about:blank'
       }
@@ -339,9 +338,9 @@ export default {
         }
         this.UrlShow = this.UrlPurchaseOrder
 
-        this.$q.loading.show({
-          message: '<h3>Generating Purchase ' + this.PurchaseNO.toUpperCase() + '</h3>'
-        })
+        // this.$q.loading.show({
+        //  message: '<h3>Generating Purchase ' + this.PurchaseNO.toUpperCase() + '</h3>'
+        // })
       } else {
         this.UrlShow = 'about:blank'
       }
@@ -353,9 +352,9 @@ export default {
         }
         this.UrlShow = this.UrlReceipt
 
-        this.$q.loading.show({
-          message: '<h3>Generating Receipt ' + this.ReceiptNO.toUpperCase() + '</h3>'
-        })
+        // this.$q.loading.show({
+        //  message: '<h3>Generating Receipt ' + this.ReceiptNO.toUpperCase() + '</h3>'
+        // })
       } else {
         this.UrlShow = 'about:blank'
       }
@@ -366,9 +365,9 @@ export default {
           return
         }
         this.UrlShow = this.UrlWorkOrder
-        this.$q.loading.show({
-          message: '<h3>Generating WO ' + this.WorkOrderNO.toUpperCase() + '</h3>'
-        })
+        // this.$q.loading.show({
+        // message: '<h3>Generating WO ' + this.WorkOrderNO.toUpperCase() + '</h3>'
+        // })
       } else {
         this.UrlShow = 'about:blank'
       }
