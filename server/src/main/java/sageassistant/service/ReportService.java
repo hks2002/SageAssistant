@@ -1,18 +1,27 @@
 package sageassistant.service;
 
 import java.io.IOException;
-import java.util.Map;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.crystaldecisions.sdk.occa.report.application.ReportClientDocument;
 import com.crystaldecisions.sdk.occa.report.lib.ReportSDKExceptionBase;
 
+import sageassistant.dao.RptMapper;
+import sageassistant.model.RptCOC;
+import sageassistant.model.RptCOCLot;
+import sageassistant.model.RptCOCSerial;
+import sageassistant.model.RptInvoicePay;
+import sageassistant.model.RptPurchaseTax;
+import sageassistant.model.RptWorkOrder;
+import sageassistant.model.RptWorkOrderComp;
+import sageassistant.model.RptWorkOrderOpestt;
+import sageassistant.model.RptWorkOrderSfichsui;
 import sageassistant.utils.CRJavaHelper;
 
 /*************************************************************
@@ -23,70 +32,194 @@ import sageassistant.utils.CRJavaHelper;
 public class ReportService {
 	private static final Logger log = LoggerFactory.getLogger(ReportService.class);
 
-    private String path="";
-    
-	@Value("${spring.datasource.username}")
-	private String username;
-
-	@Value("${spring.datasource.password}")
-	private String password;
-
-	@Value("${spring.datasource.url}")
-	private String url;
-
-	@Value("${spring.datasource.driver-class-name}")
-	private String driverClassNname;
+	@Autowired
+	private RptMapper rptMapper;
 
 	/*
 	 * request url like /Report/COC/showPdf
 	 */
 	public void handRequest(HttpServletRequest request, HttpServletResponse response) {
 
+		String ProjectNO = null;
+		String DeliveryNO = null;
+		String PurchaseNO = null;
+		String ReceiptNO = null;
+		String InvoiceNO = null;
+		String OrderNO = null;
+		String ProjectOrWorkOrderNO = null;
+		String TaxInclude = null;
+		String MfgNO = null;
+		String PN = null;
+		List<?> list = null;
+		List<RptInvoicePay> InvoicePay=null;
+		
 		String report = request.getServletPath().split("/")[2];
 		String action = request.getServletPath().split("/")[3];
-		Map<String, String[]> requestParams = request.getParameterMap();
-		String reportTitle = "";
-		
-		/*
-		 * Define it at class, could improve the request performance,
-		 * But, you must reload SageAssistantSrv each time you update your deployed war package.
-		 */
-		 ReportClientDocument reportClientDocument = new ReportClientDocument();
-			
+
+		ReportClientDocument reportClientDocument = new ReportClientDocument();
+
 		try {
-			//if (reportClientDocument ==null || !reportClientDocument.isOpen()) {	
-				
-				path = "reports/" + report + ".rpt";
-				reportClientDocument.open(path, 0);
-				
-			//}
-			CRJavaHelper.changeDataSource(reportClientDocument, username, password, url, driverClassNname, "SAGE");
+			switch (report) {
+			case "COC":
+				reportClientDocument.open("reports/COC.rpt", 0);
 
-			reportClientDocument.getReportDocument().getSummaryInfo().setTitle("");
-			for (String key : requestParams.keySet()) {
-				String val = requestParams.get(key)[0];
-				CRJavaHelper.addDiscreteParameterValue(reportClientDocument, "", key, val);
-				reportTitle = reportTitle + val;
-			}
-			if (report.equals("COC")) {
-				reportTitle = "COC" + reportTitle;
-			}
-			reportClientDocument.getReportDocument().getSummaryInfo().setTitle(reportTitle);
+				ProjectNO = request.getParameter("ProjectNO");
+				list = rptMapper.findCOCByProjectNO(ProjectNO);
+				if (list.size() == 0) {
+					response.getWriter().write("<H1>ProjectNO:" + ProjectNO + " not found!</H1>");
+					return;
+				}
 
-			if (action.equals("showPdf")) {
+				PN = ((RptCOC) list.get(0)).getITMREF_0();
+
+				List<RptCOCSerial> COCSer = rptMapper.findCOCSerialByProjectNOAndPn(ProjectNO, PN);
+				List<RptCOCLot> COCLot = rptMapper.findCOCLotByProjectNOAndPn(ProjectNO, PN);
+
+				String StringSer = "";
+				for (int i = 1, l = COCSer.size(); i < l; i++) {
+					StringSer = ";" + StringSer + COCSer.get(i).getSERNUM_0();
+					COCSer.remove(i);
+				}
+				if (COCSer.size() >= 1) {
+					COCSer.get(0).setSERNUM_0(COCSer.get(0).getSERNUM_0() + StringSer);
+				}
+
+				CRJavaHelper.passPOJO(reportClientDocument, list, "sageassistant.model.RptCOC", "");
+				CRJavaHelper.passPOJO(reportClientDocument, COCSer, "sageassistant.model.RptCOCSerial", "Serial");
+				CRJavaHelper.passPOJO(reportClientDocument, COCLot, "sageassistant.model.RptCOCLot", "Lot");
+
+				reportClientDocument.getReportDocument().getSummaryInfo().setTitle("COC" + ProjectNO);
+				break;
+			case "Delivery":
+				reportClientDocument.open("reports/Delivery.rpt", 0);
+
+				DeliveryNO = request.getParameter("DeliveryNO");
+				list = rptMapper.findDeliveryByDeliveryNO(DeliveryNO);
+				if (list.size() == 0) {
+					response.getWriter().write("<H1>DeliveryNO:" + DeliveryNO + " not found!</H1>");
+					return;
+				}
+				CRJavaHelper.passPOJO(reportClientDocument, list, "sageassistant.model.RptDelivery", "");
+
+				reportClientDocument.getReportDocument().getSummaryInfo().setTitle(DeliveryNO);
+				break;
+			case "Invoice":
+				reportClientDocument.open("reports/Invoice.rpt", 0);
+
+				InvoiceNO = request.getParameter("InvoiceNO");
+				list = rptMapper.findInvoiceByInvoiceNO(InvoiceNO);
+				if (list.size() == 0) {
+					response.getWriter().write("<H1>InvoiceNO:" + InvoiceNO + " not found!</H1>");
+					return;
+				}
+				
+				InvoicePay = rptMapper.findInvoicePayByInvoiceNO(InvoiceNO);
+				
+				CRJavaHelper.passPOJO(reportClientDocument, list, "sageassistant.model.RptInvoice", "");
+				CRJavaHelper.passPOJO(reportClientDocument, InvoicePay, "sageassistant.model.RptInvoicePay", "Pay");
+
+				reportClientDocument.getReportDocument().getSummaryInfo().setTitle(InvoiceNO);
+				break;
+			case "Invoice2":
+				reportClientDocument.open("reports/Invoice2.rpt", 0);
+
+				OrderNO = request.getParameter("OrderNO");
+				list = rptMapper.findInvoice2ByOrderNO(OrderNO);
+				if (list.size() == 0) {
+					response.getWriter().write("<H1>Sales OrderNO:" + OrderNO + " not found!</H1>");
+					return;
+				}
+				
+				InvoicePay = rptMapper.findInvoice2PayByOrderNO(OrderNO);
+				
+				CRJavaHelper.passPOJO(reportClientDocument, list, "sageassistant.model.RptInvoice2", "");
+				CRJavaHelper.passPOJO(reportClientDocument, InvoicePay, "sageassistant.model.RptInvoicePay", "Pay");
+
+				reportClientDocument.getReportDocument().getSummaryInfo().setTitle("IVC-"+OrderNO);
+				break;
+			case "PurchaseOrder":
+				reportClientDocument.open("reports/PurchaseOrder.rpt", 0);
+
+				PurchaseNO = request.getParameter("PurchaseNO");
+				TaxInclude = request.getParameter("TaxInlude");
+				if (TaxInclude == null) {
+					TaxInclude = "true";
+				}
+
+				list = rptMapper.findPurchaseByPurchaseNO(PurchaseNO);
+				if (list.size() == 0) {
+					response.getWriter().write("<H1>PurchaseNO:" + PurchaseNO + " not found!</H1>");
+					return;
+				}
+				List<RptPurchaseTax> PurchaseTax = rptMapper.findPurchaseTaxByPurchaseNO(PurchaseNO);
+
+				CRJavaHelper.passPOJO(reportClientDocument, list, "sageassistant.model.RptPurchase", "");
+				CRJavaHelper.passPOJO(reportClientDocument, PurchaseTax, "sageassistant.model.RptPurchaseTax",
+						"TaxLine");
+
+				CRJavaHelper.addDiscreteParameterValue(reportClientDocument, "", "TaxInclude", TaxInclude);
+
+				reportClientDocument.getReportDocument().getSummaryInfo().setTitle(PurchaseNO);
+				break;
+			case "Receipt":
+				reportClientDocument.open("reports/Receipt.rpt", 0);
+
+				ReceiptNO = request.getParameter("ReceiptNO");
+				list = rptMapper.findReceiptByReceiptNO(ReceiptNO);
+				if (list.size() == 0) {
+					response.getWriter().write("<H1>ReceiptNO:" + ReceiptNO + " not found!</H1>");
+					return;
+				}
+				
+				CRJavaHelper.passPOJO(reportClientDocument, list, "sageassistant.model.RptReceipt", "");
+			
+				reportClientDocument.getReportDocument().getSummaryInfo().setTitle(ReceiptNO);
+				break;
+			case "WorkOrder":
+				reportClientDocument.open("reports/WorkOrder.rpt", 0);
+
+				ProjectOrWorkOrderNO = request.getParameter("ProjectOrWorkOrderNO");
+				list = rptMapper.findWorkOrderByProjectOrWorkOrderNO(ProjectOrWorkOrderNO);
+				if (list.size() == 0) {
+					response.getWriter().write("<H1>ProjectOrWorkOrderNO:" + ProjectOrWorkOrderNO + " not found!</H1>");
+					return;
+				}
+				MfgNO = ((RptWorkOrder) list.get(0)).getMFGNUM_0();
+				List<RptWorkOrderComp> WorkOrderComp = rptMapper.findWorkOrderCompByMfgNO(MfgNO);
+				List<RptWorkOrderOpestt> WorkOrderOpestt = rptMapper.findWorkOrderOpesttByMfgNO(MfgNO);
+				List<RptWorkOrderSfichsui> WorkOrderSfichsui = rptMapper.findWorkOrderSfichsuiByMfgNO(MfgNO);
+
+				CRJavaHelper.passPOJO(reportClientDocument, list, "sageassistant.model.RptWorkOrder", "");
+				CRJavaHelper.passPOJO(reportClientDocument, WorkOrderComp, "sageassistant.model.RptWorkOrderComp",
+						"Comp");
+				CRJavaHelper.passPOJO(reportClientDocument, WorkOrderOpestt, "sageassistant.model.RptWorkOrderOpestt",
+						"Opestt");
+				CRJavaHelper.passPOJO(reportClientDocument, WorkOrderSfichsui,
+						"sageassistant.model.RptWorkOrderSfichsui", "Sfichsui");
+
+				reportClientDocument.getReportDocument().getSummaryInfo().setTitle(ProjectOrWorkOrderNO);
+				break;
+			default:
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.getWriter().write("<H1>Report " + report + "not support yet!</H1>");
+			}
+
+			/* Do report action */
+			if ("showPdf".equals(action)) {
 				CRJavaHelper.exportPDF(reportClientDocument, response, false);
-			} else if (action.equals("exportPdf")) {
+			} else if ("exportPdf".equals(action)) {
 				CRJavaHelper.exportPDF(reportClientDocument, response, true);
-			} else if (action.equals("exportWord")) {
+			} else if ("exportWord".equals(action)) {
 				CRJavaHelper.exportRTF(reportClientDocument, response, true);
 			} else {
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				response.getWriter().write("Only support showPdf,exportPdf,exportWord");
 			}
 
-			 reportClientDocument.close();
+			/* Close report */
+			reportClientDocument.close();
 
-		} catch (IOException | ReportSDKExceptionBase e) {
+		} catch (IOException | ReportSDKExceptionBase | ClassNotFoundException e) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			try {
 				response.getWriter().write("<H1>Handle report error!</H1>");
@@ -94,8 +227,9 @@ public class ReportService {
 				log.error(e1.getMessage());
 			}
 			log.error(e.getMessage());
+			//** Open it,  if want to debug report, it could output detail message, such ORM field error.**/ 
+			e.printStackTrace();
 		}
 
 	}
-
 }
