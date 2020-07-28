@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- status: log4j2 log level, monitorInterval="30" could let auto reload 
+	the config -->
+<Configuration status="OFF">
+	<Properties>
+		<Property name="LOG_HOME">../logs</Property>
+		<Property name="patternCosole">%d{HH:mm:ss.SSS} [%-5level] [%c{36}] %msg%n</Property>
+		<Property name="patternFile">%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] [%c{36}] %msg%n</Property>
+	</Properties>
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout>
+				<Pattern>${patternCosole}</Pattern>
+			</PatternLayout>
+			<ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+		</Console>
+		<RollingFile name="File" fileName="${LOG_HOME}/sageassistant.log"
+			filePattern="${LOG_HOME}/sageassistant.%d{yyyy-MM-dd}.log" append="true">
+			<PatternLayout>
+				<Pattern>${patternFile}</Pattern>
+			</PatternLayout>
+			
+			<Policies>
+				<!-- Apply policies every 1 day -->
+				<TimeBasedTriggeringPolicy modulate="true" interval="1" />
+			</Policies>
+			<DefaultRolloverStrategy>
+				<Delete basePath="${baseLogDir}" maxDepth="1">
+					<IfFileName glob="*.log" />
+					<IfLastModified age="15d" />
+				</Delete>
+			</DefaultRolloverStrategy>
+		</RollingFile>
+	</Appenders>
+	<Loggers name="com.crystaldecisions.reports.formulas.Evaluator">
+		<Root level="info">
+			<AppenderRef ref="Console" level="info" />
+			<AppenderRef ref="File" level="error" />
+		</Root>
+	</Loggers>
+</Configuration>

@@ -13,8 +13,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONArray;
@@ -24,7 +24,7 @@ import com.google.common.cache.LoadingCache;
 
 @Service
 public class CurrencyService {
-	private static final Logger log = LoggerFactory.getLogger(CurrencyService.class);
+	private static final Logger log = LogManager.getLogger();
 
 	private static HashMap<String, String> dafaultRate = new HashMap<String, String>();
 

@@ -11,13 +11,8 @@
 	</parent>
 	<groupId>sageassistant</groupId>
 	<artifactId>SageAssistantSrv</artifactId>
-	<!-- version
-	A.B.C.D 
-	A: project 
-	B: add/remove function
-	C: fix bug
-	D: build time stamp
-	 -->
+	<!-- version A.B.C.D A: project B: add/remove function C: fix bug D: build 
+		time stamp -->
 	<version>1.5.5.${maven.build.timestamp}</version>
 	<packaging>war</packaging>
 	<name>SageAssistantSrv</name>
@@ -28,11 +23,22 @@
 		<maven.test.skip>true</maven.test.skip>
 		<maven.build.timestamp.format>MMddHHmmss</maven.build.timestamp.format>
 	</properties>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+			<exclusions><!-- remove default logger config, default is logback -->
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency> <!-- use log4j2 -->
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-log4j2</artifactId>
 		</dependency>
 
 		<dependency>
@@ -117,11 +123,14 @@
 			<artifactId>commons-logging</artifactId>
 			<version>1.2</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/log4j/log4j -->
+
+		<!-- Adapter change log4j to log4j2 <dependency> <groupId>org.apache.logging.log4j</groupId> 
+			<artifactId>log4j-api</artifactId> <version>2.13.3</version> </dependency> 
+			<dependency> <groupId>org.apache.logging.log4j</groupId> <artifactId>log4j-core</artifactId> 
+			<version>2.13.3</version> </dependency> -->
 		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-1.2-api</artifactId>
 		</dependency>
 
 		<dependency>
