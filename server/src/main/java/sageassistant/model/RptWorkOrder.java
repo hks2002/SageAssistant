@@ -19,7 +19,7 @@ public class RptWorkOrder {
 	private Byte LOTMGTCOD_0;
 	private String MFGFCY_0;
 	private String PJT_0;
-	private String UOMEXTQTY_0;
+	private Float UOMEXTQTY_0;
 	private String UOM_0;
 	private Date STRDAT_0;
 	private Date ENDDAT_0;
@@ -96,10 +96,10 @@ public class RptWorkOrder {
 	public void setPJT_0(String pJT_0) {
 		PJT_0 = pJT_0;
 	}
-	public String getUOMEXTQTY_0() {
+	public Float getUOMEXTQTY_0() {
 		return UOMEXTQTY_0;
 	}
-	public void setUOMEXTQTY_0(String uOMEXTQTY_0) {
+	public void setUOMEXTQTY_0(Float uOMEXTQTY_0) {
 		UOMEXTQTY_0 = uOMEXTQTY_0;
 	}
 	public String getUOM_0() {

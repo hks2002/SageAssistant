@@ -292,7 +292,31 @@ public class CRJavaHelper {
 					Class.forName(className), tableAlias, tableAlias);
 
 	}
-	
+	/**
+	 * Passes a populated collection of a Java class to a Table object
+	 * 
+	 * @param clientDoc  The reportClientDocument representing the report being used
+	 * @param dataSet    The java.sql.Resultset used to populate the Table
+	 * @param className  The fully-qualified class name of the POJO objects being
+	 *                   passed
+	 * @param reportName The name of the subreport. If tables in the main report is
+	 *                   to be used, "" should be passed
+	 * @throws ReportSDKException
+	 */
+	public static void passPOJO(ReportClientDocument clientDoc, @SuppressWarnings("rawtypes") Collection dataSet,
+			String className, String reportName) throws ReportSDKException, ClassNotFoundException {
+		String tableAlias=null;
+		if (reportName.equals("")) {
+			tableAlias = clientDoc.getDatabase().getTables().get(0).getName();
+			clientDoc.getDatabaseController().setDataSource(dataSet, Class.forName(className), tableAlias, tableAlias);
+		}
+		else {
+			tableAlias = clientDoc.getSubreportController().getSubreport(reportName).getDatabaseController().getDatabase().getTables().get(0).getName();
+			clientDoc.getSubreportController().getSubreport(reportName).getDatabaseController().setDataSource(dataSet,
+					Class.forName(className), tableAlias, tableAlias);
+		}
+
+	}
 
 	/**
 	 * Passes a single discrete parameter value to a report parameter
