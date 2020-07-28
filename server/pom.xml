@@ -13,7 +13,7 @@
 	<artifactId>SageAssistantSrv</artifactId>
 	<!-- version A.B.C.D A: project B: add/remove function C: fix bug D: build 
 		time stamp -->
-	<version>1.5.5.${maven.build.timestamp}</version>
+	<version>1.6.6.${maven.build.timestamp}</version>
 	<packaging>war</packaging>
 	<name>SageAssistantSrv</name>
 	<description>Sage assistant data server</description>
