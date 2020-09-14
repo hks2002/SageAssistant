@@ -1,5 +1,5 @@
 let jsonToTable = function (headers, jsonData, title) {
-  var table = '<table style="width:100%;text-align:center"><caption style="font-size:28px">' + title + '</caption>'
+  var table = '<div class="q-table--dense"><table style="width:100%;text-align:center" class="q-table"><caption style="font-size:28px">' + title + '</caption>'
   table += '<tr>'
   for (let i = 0, l = headers.length; i < l; i++) {
     table += '<th style="background:#00B0F0;color:white">' + headers[i] + '</th>'
@@ -8,11 +8,11 @@ let jsonToTable = function (headers, jsonData, title) {
   for (let i2 = 0, l2 = jsonData.length; i2 < l2; i2++) {
     table += '<tr>'
     for (let i3 = 0, l3 = headers.length; i3 < l3; i3++) {
-      table += '<td>' + jsonData[i2][headers[i3]] + '</td>'
+      table += '<td style="white-space: nowrap">' + jsonData[i2][headers[i3]] + '</td>'
     }
     table += '</tr>'
   }
-  table += '</table>'
+  table += '</table><div>'
   return table
 }
 
