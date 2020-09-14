@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.github.pagehelper.PageHelper;
 
 import sageassistant.dao.PnMapper;
+import sageassistant.model.CostHistory;
 import sageassistant.model.DeliveryDuration;
 import sageassistant.model.PnDetails;
 import sageassistant.model.PnRootPn;
@@ -124,6 +125,34 @@ public class PnService {
 			listOri.add(o);
 		}
 
+		return listOri;
+	}
+	
+	public List<CostHistory> findCostHistoryByPnRoot(String pnRoot, Integer count) {
+		PageHelper.startPage(1, count);
+
+		List<CostHistory> listPage = pnMapper.findCostHistoryByPnRoot(pnRoot);
+
+		// PageHelper override toString, added page info, here output clean list
+		List<CostHistory> listOri = new ArrayList<>();
+
+		
+		for (CostHistory o : listPage) {
+			String key=o.getCurrency()+"RMB"+Utils.formatDate(o.getOrderDate());
+			log.debug("key:"+key);
+			try {
+				o.setRate(Float.parseFloat(CurrencyService.cache.get(key)));
+				log.debug("Rate:"+o.getRate());
+			} catch (NumberFormatException e) {
+				log.error(e.getMessage());
+			} catch (ExecutionException e) {
+				log.error(e.getMessage());
+			}
+			o.setRMB(o.getNetPrice()*o.getRate());
+			listOri.add(o);
+		}
+        // one project maybe purchase line with different currency
+		
 		return listOri;
 	}
 	

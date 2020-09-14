@@ -68,10 +68,13 @@
       </q-toolbar>
       <!-- Show Sales History -->
       <q-item-echart-sales-history :pnRoot="pnRoot"
-                                   style="padding:0px; height:400px;" />
+                                   style="padding:0px; height:300px;" />
       <!-- Show Quote History -->
       <q-item-echart-quote-history :pnRoot="pnRoot"
-                                   style="padding:0px; height:400px;" />
+                                   style="padding:0px; height:300px;" />
+      <!-- Show Cost History -->
+      <q-item-echart-cost-history :pnRoot="pnRoot"
+                                   style="padding:0px; height:300px;" />
     </q-list>
   </q-page>
 </template>
@@ -84,6 +87,7 @@ import QItemDeliveryDuration from 'components/QItemDeliveryDuration'
 import QItemInventoryStock from 'components/QItemInventoryStock'
 import QItemEchartSalesHistory from 'components/QItemEchartSalesHistory'
 import QItemEchartQuoteHistory from 'components/QItemEchartQuoteHistory'
+import QItemEchartCostHistory from 'components/QItemEchartCostHistory'
 
 export default {
   name: 'Products',
@@ -94,7 +98,8 @@ export default {
     QItemDeliveryDuration,
     QItemInventoryStock,
     QItemEchartSalesHistory,
-    QItemEchartQuoteHistory
+    QItemEchartQuoteHistory,
+    QItemEchartCostHistory
   },
   data () {
     return {

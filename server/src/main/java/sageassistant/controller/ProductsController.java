@@ -50,6 +50,12 @@ public class ProductsController {
 		return pnService.findQuoteHistoryByPnRoot(pnRoot, 0).toString();
 	}
 
+	@GetMapping("/Data/CostHistory")
+	public String getCostHistory(
+			@RequestParam(value = "PnRoot", required = false, defaultValue = "NULL") String pnRoot) {
+		return pnService.findCostHistoryByPnRoot(pnRoot, 0).toString();
+	}
+	
 	@GetMapping("/Data/DeliveryDuration")
 	public String getDeliveryDuration(
 			@RequestParam(value = "PnRoot", required = false, defaultValue = "NULL") String pnRoot) {
