@@ -33,7 +33,6 @@ export default {
   data () {
     return {
       eChart: null,
-      costHistory: [],
       lengend: [],
       dataByLengend: [],
       dataBySiteProject: [],
@@ -110,10 +109,9 @@ export default {
     },
 
     doReset () {
-      this.costHistory = []
+      this.data = []
       if (this.eChart) {
         this.eChart.clear()
-        this.costHistory = []
         this.lengend = []
         this.dataByLengend = []
         this.dataBySiteProject = []
@@ -179,7 +177,7 @@ export default {
               onclick: () => {
                 let timeStamp = Date.now()
                 let formattedString = date.formatDate(timeStamp, 'YYYY-MM-DD')
-                jsonToExcel(this.dimensions, this.costHistory, 'CostHistory' + formattedString)
+                jsonToExcel(this.dimensions, this.data, 'CostHistory' + formattedString)
               }
             }
           }
