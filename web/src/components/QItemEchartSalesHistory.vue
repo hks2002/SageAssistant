@@ -62,9 +62,9 @@ export default {
           console.info('[axios] ' + response.status + ' ' + response.statusText + ' ' + response.config.url)
           console.debug(JSON.stringify(response.data))
 
-          this.salesHistory = response.data
-          this.lengend = _uniq(_map(this.salesHistory, 'SalesSite'))
-          this.dataByLengend = _groupBy(this.salesHistory, 'SalesSite')
+          this.data = response.data
+          this.lengend = _uniq(_map(this.data, 'SalesSite'))
+          this.dataByLengend = _groupBy(this.data, 'SalesSite')
           _forEach(this.dataByLengend, (value, index, array) => {
             this.dataCountedByLengend.push({ SalesSite: value[0]['SalesSite'], Qty: _sumBy(value, 'Qty') })
           })
@@ -212,7 +212,11 @@ export default {
         xAxis: {
           type: 'time'
         },
-        yAxis: {},
+        yAxis: {
+          axisLabel: {
+            formatter: '{value} RMB'
+          }
+        },
         series: this.series
       })
     }
