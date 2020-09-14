@@ -47,7 +47,7 @@ export default {
     doAjax (pnOrPnRoot) {
       this.$axios.get('/Data/PNHelper?PnOrPnRoot=' + pnOrPnRoot)
         .then((response) => {
-          console.info('[axios] ' + response.status + ' ' + response.statusText + ' ' + response.config.url)
+          console.debug('[axios] ' + response.status + ' ' + response.statusText + ' ' + response.config.url)
           console.debug(JSON.stringify(response.data))
 
           this.pns = Object.freeze(response.data)

@@ -49,7 +49,7 @@ export default {
 
       this.$axios.get('/Data/DeliveryDuration?PnRoot=' + pnRoot)
         .then((response) => {
-          console.info('[axios] ' + response.status + ' ' + response.statusText + ' ' + response.config.url)
+          console.debug('[axios] ' + response.status + ' ' + response.statusText + ' ' + response.config.url)
           console.debug(JSON.stringify(response.data))
 
           this.deliveryDuration = response.data

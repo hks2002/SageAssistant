@@ -47,7 +47,7 @@ export default {
 
       this.$axios.get('/Data/InventoryStock?PnRoot=' + pnRoot)
         .then((response) => {
-          console.info('[axios] ' + response.status + ' ' + response.statusText + ' ' + response.config.url)
+          console.debug('[axios] ' + response.status + ' ' + response.statusText + ' ' + response.config.url)
           console.debug(JSON.stringify(response.data))
 
           this.inventoryStock = response.data
