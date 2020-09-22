@@ -523,6 +523,8 @@ public class CRJavaHelper {
 		exportOptions.setExportFormatType(ReportExportFormat.PDF);
 		exportOptions.setFormatOptions(pdfOptions);
 
+		// Show Chinese font
+		response.setCharacterEncoding("GB18030");
 		export(clientDoc, exportOptions, response, attachment, "application/pdf", "pdf");
 	}
 
