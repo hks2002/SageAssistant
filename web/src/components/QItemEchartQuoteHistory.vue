@@ -224,7 +224,7 @@ export default {
         yAxis: {
           gridIndex: 0,
           axisLabel: {
-            formatter: '{value} RMB'
+            formatter: '{value}\nRMB'
           }
         },
         series: this.series

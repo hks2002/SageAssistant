@@ -193,7 +193,11 @@ export default {
         xAxis: {
           type: 'time'
         },
-        yAxis: {},
+        yAxis: {
+          axisLabel: {
+            formatter: '{value}\nRMB'
+          }
+        },
         series: this.series
       })
     }

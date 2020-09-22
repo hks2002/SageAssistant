@@ -212,7 +212,7 @@ export default {
         },
         yAxis: {
           axisLabel: {
-            formatter: '{value} RMB'
+            formatter: '{value}\nRMB'
           }
         },
         series: this.series
