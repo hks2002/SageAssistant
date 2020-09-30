@@ -99,7 +99,7 @@
 					  ON PORDER.POHNUM_0 = PORDERP.POHNUM_0
 			    LEFT JOIN ITMMASTER
 				      ON ITMMASTER.ITMREF_0 = SORDERQ.ITMREF_0
-			WHERE ITMMASTER.XITM_RACIN_0 = #{pnRoot}
+			WHERE ITMMASTER.XITM_RACIN_0 = #{pnRoot} AND PORDERP.NETPRI_0 > 0
 			
      </select>
      <select id="findDeliveryDurationByPnRoot" parameterType="String" resultType="sageassistant.model.DeliveryDuration">
