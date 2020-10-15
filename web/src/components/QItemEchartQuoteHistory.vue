@@ -210,7 +210,9 @@ export default {
             }
           }
         },
-        tooltip: {},
+        tooltip: {
+          position: 'right'
+        },
         dataset: this.dataset,
         dataZoom: [{
           start: 0,
