@@ -51,5 +51,7 @@ public interface RptMapper {
 	List<RptDelivery> findDeliveryByDeliveryNO(@Param("DeliveryNo") String DeliveryNo);
 
 	List<RptReceipt> findReceiptByReceiptNO(@Param("ReceiptNO") String ReceiptNO);
+	
+	List<RptReceipt> findReceiptByPurchaseSiteVenderCodeDuration(@Param("PurchaseSite") String PurchaseSite, @Param("VendorCode") String VendorCode, @Param("StartDay") String StartDay, @Param("EndDay") String EndDay);
 
 }

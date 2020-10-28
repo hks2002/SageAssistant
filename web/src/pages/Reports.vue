@@ -196,6 +196,37 @@
         <q-item-section avatar>
           <q-avatar color="primary"
                     text-color="white">
+            R2
+          </q-avatar>
+        </q-item-section>
+        <q-item-section>
+          <q-input label="PurchaseSite-VendorCode-Duration"
+                   v-model="PurchaseSiteVendorCodeDuration"
+                   outlined
+                   clearable
+                   hint="e.g.:ZHU-20715-20201001-20201031"
+                   :hide-hint="true"
+                   input-class="text-uppercase"
+                   class="q-pa-xs">
+          </q-input>
+        </q-item-section>
+        <q-item-section side>
+          <q-btn text-color="orange-10"
+                 dense
+                 @click="showReceipt2"
+                 icon="fas fa-file-pdf" />
+        </q-item-section>
+        <q-item-section side>
+          <q-btn text-color="indigo-7"
+                 dense
+                 @click="exportWordReceipt2"
+                 icon="fas fa-file-word" />
+        </q-item-section>
+      </q-item>
+      <q-item>
+        <q-item-section avatar>
+          <q-avatar color="primary"
+                    text-color="white">
             W
           </q-avatar>
         </q-item-section>
@@ -269,6 +300,7 @@ export default {
       PurchaseNO: '',
       POtax: true,
       ReceiptNO: '',
+      PurchaseSiteVendorCodeDuration: '',
       ProjectOrWorkOrderNO: '',
       UrlShow: 'about:blank',
       UrlExport: 'about:blank',
@@ -324,9 +356,9 @@ export default {
         }
         this.UrlShow = this.UrlInvoice2
 
-        this.$q.loading.show({
-          message: '<h3>Generating Invoice for Order ' + this.OrderNO.toUpperCase() + '</h3>'
-        })
+        // this.$q.loading.show({
+        //  message: '<h3>Generating Invoice for Order ' + this.OrderNO.toUpperCase() + '</h3>'
+        // })
       } else {
         this.UrlShow = 'about:blank'
       }
@@ -351,6 +383,20 @@ export default {
           return
         }
         this.UrlShow = this.UrlReceipt
+
+        // this.$q.loading.show({
+        //  message: '<h3>Generating Receipt ' + this.ReceiptNO.toUpperCase() + '</h3>'
+        // })
+      } else {
+        this.UrlShow = 'about:blank'
+      }
+    },
+    showReceipt2: function (value) {
+      if (this.validateReceipt2()) {
+        if (this.UrlShow === this.UrlReceipt2) {
+          return
+        }
+        this.UrlShow = this.UrlReceipt2
 
         // this.$q.loading.show({
         //  message: '<h3>Generating Receipt ' + this.ReceiptNO.toUpperCase() + '</h3>'
@@ -410,6 +456,13 @@ export default {
     exportWordReceipt: function () {
       if (this.validateReceipt()) {
         this.UrlExport = this.UrlReceipt.replace('showPdf', 'exportWord')
+      } else {
+        this.UrlExport = 'about:blank'
+      }
+    },
+    exportWordReceipt2: function () {
+      if (this.validateReceipt2()) {
+        this.UrlExport = this.UrlReceipt2.replace('showPdf', 'exportWord')
       } else {
         this.UrlExport = 'about:blank'
       }
@@ -481,6 +534,18 @@ export default {
         return false
       }
     },
+    validateReceipt2: function () {
+      if (this.PurchaseSiteVendorCodeDuration &&
+        this.PurchaseSiteVendorCodeDuration.length === 27 &&
+        this.PurchaseSiteVendorCodeDuration.slice(3, 4) === '-' &&
+        this.PurchaseSiteVendorCodeDuration.slice(9, 10) === '-' &&
+        this.PurchaseSiteVendorCodeDuration.slice(18, 19) === '-') {
+        return true
+      } else {
+        this.showAlert = true
+        return false
+      }
+    },
     validateWO: function () {
       if (this.ProjectOrWorkOrderNO && this.ProjectOrWorkOrderNO.length === 11 &&
         this.ProjectOrWorkOrderNO.slice(1, 3).toUpperCase() === 'OF') {
@@ -514,6 +579,9 @@ export default {
     },
     UrlReceipt: function () {
       return '/Report/Receipt/showPdf?ReceiptNO=' + this.ReceiptNO.toUpperCase()
+    },
+    UrlReceipt2: function () {
+      return '/Report/Receipt2/showPdf?PurchaseSite=' + this.PurchaseSiteVendorCodeDuration.slice(0, 3).toUpperCase() + '&VendorCode=' + this.PurchaseSiteVendorCodeDuration.slice(4, 9) + '&StartDay=' + this.PurchaseSiteVendorCodeDuration.slice(10, 18) + '&EndDay=' + this.PurchaseSiteVendorCodeDuration.slice(19, 27)
     },
     UrlWorkOrder: function () {
       return '/Report/WorkOrder/showPdf?ProjectOrWorkOrderNO=' + this.ProjectOrWorkOrderNO.toUpperCase()

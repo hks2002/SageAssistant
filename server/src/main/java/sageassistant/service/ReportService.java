@@ -1,6 +1,9 @@
 package sageassistant.service;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,6 +48,10 @@ public class ReportService {
 		String DeliveryNO = null;
 		String PurchaseNO = null;
 		String ReceiptNO = null;
+		String PurchaseSite = null;
+		String VendorCode = null;
+		String StartDay = null;
+		String EndDay = null;
 		String InvoiceNO = null;
 		String OrderNO = null;
 		String ProjectOrWorkOrderNO = null;
@@ -58,8 +65,9 @@ public class ReportService {
 		String action = request.getServletPath().split("/")[3];
 
 		ReportClientDocument reportClientDocument = new ReportClientDocument();
-
+		
 		try {
+			
 			switch (report) {
 			case "COC":
 				reportClientDocument.open("reports/COC.rpt", 0);
@@ -176,6 +184,37 @@ public class ReportService {
 			
 				reportClientDocument.getReportDocument().getSummaryInfo().setTitle(ReceiptNO);
 				break;
+			case "Receipt2":
+				reportClientDocument.open("reports/Receipt.rpt", 0);
+
+				PurchaseSite = request.getParameter("PurchaseSite");
+				VendorCode = request.getParameter("VendorCode");
+				StartDay = request.getParameter("StartDay");
+				EndDay = request.getParameter("EndDay");
+			
+				try {
+					DateTimeFormatter fmt=DateTimeFormatter.ofPattern("yyyyMMdd");
+					LocalDate startDate = LocalDate.parse(StartDay, fmt);
+					LocalDate endDate = LocalDate.parse(EndDay, fmt);
+					
+					DateTimeFormatter fmtsqlserver=DateTimeFormatter.ofPattern("yyyy-dd-MM");
+					StartDay = startDate.format(fmtsqlserver);
+					EndDay = endDate.format(fmtsqlserver);
+				} catch (DateTimeParseException ex) {
+					response.getWriter().write("<H1>Date Format is not correct!</H1>");
+					return;
+				}				
+				
+				list = rptMapper.findReceiptByPurchaseSiteVenderCodeDuration(PurchaseSite, VendorCode, StartDay, EndDay);
+				if (list.size() == 0) {
+					response.getWriter().write("<H1>PurchaseSite:" + PurchaseSite + " for vendor " + VendorCode + "bewteen " + StartDay +"--> " + EndDay + " not found!</H1>");
+					return;
+				}
+				
+				CRJavaHelper.passPOJO(reportClientDocument, list, "sageassistant.model.RptReceipt", "");
+			
+				reportClientDocument.getReportDocument().getSummaryInfo().setTitle(PurchaseSite + "-" + VendorCode + "-" +StartDay + "-" + EndDay);
+				break;
 			case "WorkOrder":
 				reportClientDocument.open("reports/WorkOrder.rpt", 0);
 
@@ -216,7 +255,10 @@ public class ReportService {
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				response.getWriter().write("Only support showPdf,exportPdf,exportWord");
 			}
-
+			
+			/* Change Author */
+			reportClientDocument.getReportDocument().getSummaryInfo().setAuthor("SageAssistant");
+			
 			/* Close report */
 			reportClientDocument.close();
 
