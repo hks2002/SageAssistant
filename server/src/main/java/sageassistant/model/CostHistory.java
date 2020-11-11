@@ -24,7 +24,7 @@ public class CostHistory implements Serializable {
 	private String Currency;
 	private Float NetPrice;
 	private Integer Qty;
-	private Float RMB;
+	private Float USD;
 	private Float Rate;
 	
 	public String getPurchaseSite() {
@@ -131,12 +131,12 @@ public class CostHistory implements Serializable {
 		Qty = qty;
 	}
 
-	public Float getRMB() {
-		return RMB;
+	public Float getUSD() {
+		return USD;
 	}
 
-	public void setRMB(Float rMB) {
-		RMB = rMB;
+	public void setUSD(Float USD) {
+		USD = USD;
 	}
 
 	public Float getRate() {

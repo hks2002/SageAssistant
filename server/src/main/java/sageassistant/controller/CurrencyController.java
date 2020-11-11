@@ -13,7 +13,7 @@ public class CurrencyController {
 	@GetMapping("/Data/CurrencyRate")
 	public String getCurrencyRate(@RequestParam(value = "Date", required = true) String Date,
 			@RequestParam(value = "Sour", required = true) String Sour,
-			@RequestParam(value = "Dest", required = false, defaultValue = "RMB") String Dest) {
+			@RequestParam(value = "Dest", required = false, defaultValue = "USD") String Dest) {
 		return CurrencyService.getCurrencyRate(Sour+Dest+Date);
 	}
 	

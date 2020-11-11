@@ -23,7 +23,7 @@ public class QuoteHistory implements Serializable {
 	private String CustomerCode;
 	private Date QuoteDate;
 	private String QuoteNO;
-	private Float RMB;
+	private Float USD;
 	private Float Rate;
 
 	public Integer getOrderFlag() {
@@ -114,12 +114,12 @@ public class QuoteHistory implements Serializable {
 		QuoteNO = quoteNO;
 	}
 
-	public Float getRMB() {
-		return RMB;
+	public Float getUSD() {
+		return USD;
 	}
 
-	public void setRMB(Float rMB) {
-		RMB = rMB;
+	public void setUSD(Float USD) {
+		USD = USD;
 	}
 
 	public Float getRate() {

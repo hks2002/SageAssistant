@@ -20,7 +20,7 @@ public class SalesHistory implements Serializable {
 	private String CustomerName;
 	private String CustomerCode;
 	private Date OrderDate;
-	private Float RMB;
+	private Float USD;
 	private Float Rate;
 
 	public String getSalesSite() {
@@ -95,12 +95,12 @@ public class SalesHistory implements Serializable {
 		OrderDate = orderDate;
 	}
 
-	public Float getRMB() {
-		return RMB;
+	public Float getUSD() {
+		return USD;
 	}
 
-	public void setRMB(Float rMB) {
-		RMB = rMB;
+	public void setUSD(Float USD) {
+		USD = USD;
 	}
 
 	public Float getRate() {

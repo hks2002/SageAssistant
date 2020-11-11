@@ -85,7 +85,7 @@ public class PnService {
 		List<SalesHistory> listOri = new ArrayList<>();
 
 		for (SalesHistory o : listPage) {
-			String key=o.getCurrency()+"RMB"+Utils.formatDate(o.getOrderDate());
+			String key=o.getCurrency()+"USD"+Utils.formatDate(o.getOrderDate());
 			log.debug("key:"+key);
 			try {
 				o.setRate(Float.parseFloat(CurrencyService.cache.get(key)));
@@ -111,7 +111,7 @@ public class PnService {
 		List<QuoteHistory> listOri = new ArrayList<>();
 
 		for (QuoteHistory o : listPage) {
-			String key=o.getCurrency()+"RMB"+Utils.formatDate(o.getQuoteDate());
+			String key=o.getCurrency()+"USD"+Utils.formatDate(o.getQuoteDate());
 			log.debug("key:"+key);
 			try {
 				o.setRate(Float.parseFloat(CurrencyService.cache.get(key)));
@@ -138,7 +138,7 @@ public class PnService {
 
 		
 		for (CostHistory o : listPage) {
-			String key=o.getCurrency()+"RMB"+Utils.formatDate(o.getOrderDate());
+			String key=o.getCurrency()+"USD"+Utils.formatDate(o.getOrderDate());
 			log.debug("key:"+key);
 			try {
 				o.setRate(Float.parseFloat(CurrencyService.cache.get(key)));
