@@ -53,7 +53,7 @@ export default {
         'Qty',
         'Currency',
         'NetPrice',
-        'RMB',
+        'USD',
         'Rate'
       ],
       miniDemensions: [
@@ -61,7 +61,8 @@ export default {
         'ProjectNO',
         'OrderPN',
         'OrderDate',
-        'RMB']
+        'USD'],
+      dataZoomStartValue: '1900-01-01'
     }
   },
   methods: {
@@ -72,6 +73,12 @@ export default {
           console.debug(JSON.stringify(response.data))
 
           this.data = response.data
+          let len = this.data.length
+          if (len >= 20) {
+            this.dataZoomStartValue = this.data[len - 20].OrderDate
+          } else {
+            this.dataZoomStartValue = this.data[0].OrderDate
+          }
           this.dataBySiteProject = _groupBy(this.data, function (n) { return n.PurchaseSite + n.ProjectNO })
           _forEach(this.dataBySiteProject, (value, index, array) => {
             this.dataSumBySiteProject.push({
@@ -79,7 +86,7 @@ export default {
               ProjectNO: value[0]['ProjectNO'],
               OrderPN: value[0]['OrderPN'],
               OrderDate: value[0]['OrderDate'],
-              RMB: _sumBy(value, 'RMB')
+              USD: _sumBy(value, 'USD')
             })
           })
           this.lengend = _uniq(_map(this.data, 'PurchaseSite'))
@@ -134,7 +141,7 @@ export default {
           label: {
             show: true,
             position: 'bottom',
-            formatter: '{@RMB} RMB'
+            formatter: '{@USD} USD'
           },
           tooltip: {
             trigger: 'item',
@@ -145,7 +152,7 @@ export default {
           dimensions: this.miniDemensions,
           encode: {
             x: 'OrderDate',
-            y: 'RMB'
+            y: 'USD'
           }
         }
       })
@@ -161,7 +168,7 @@ export default {
         },
         legend: { left: 10, top: 20 },
         grid: [
-          { left: '5%', right: '50%' }
+          { left: '5%', right: '5%' }
         ],
         toolbox: {
           feature: {
@@ -187,6 +194,9 @@ export default {
         },
         dataset: this.dataset,
         dataZoom: [{
+          height: 15,
+          bottom: '5px',
+          startValue: this.dataZoomStartValue,
           start: 0,
           end: 100
         }, {
@@ -197,7 +207,7 @@ export default {
         },
         yAxis: {
           axisLabel: {
-            formatter: '{value}\nRMB'
+            formatter: '{value}\nUSD'
           }
         },
         series: this.series

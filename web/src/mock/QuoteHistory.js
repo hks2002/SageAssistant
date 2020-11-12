@@ -1,5 +1,6 @@
 import Mock from 'mockjs'
 import { getUrlParam } from '../js/getUrlParam'
+let _orderBy = require('lodash/orderBy')
 
 Mock.setup({
   timeout: '1000-3000'
@@ -22,11 +23,11 @@ Mock.mock(RegExp('^(/Data/QuoteHistory)' + '.*'), options => {
         'Qty|1-200': 1,
         QuoteDate: () => { return Mock.mock('@date("yyyy-MM-dd")') },
         QuoteNO: /(H|Z|S|T|M)DC[0-9]{6}/,
-        'RMB|1000-2000': 1,
+        'USD|1000-2000': 1,
         'Rate|6-9': 1,
         SalesSite: /(ZHU|HKG|SGP|TLS|MIA)/
       }
     ]
   })
-  return list.data
+  return _orderBy(list.data, ['QuoteDate'], ['asc'])
 })

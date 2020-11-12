@@ -68,13 +68,13 @@
       </q-toolbar>
       <!-- Show Sales History -->
       <q-item-echart-sales-history :pnRoot="pnRoot"
-                                   style="padding:0px; height:300px;" />
+                                   style="padding:0px; height:350px;" />
       <!-- Show Quote History -->
       <q-item-echart-quote-history :pnRoot="pnRoot"
-                                   style="padding:0px; height:300px;" />
+                                   style="padding:0px; height:350px;" />
       <!-- Show Cost History -->
       <q-item-echart-cost-history :pnRoot="pnRoot"
-                                   style="padding:0px; height:300px;" />
+                                   style="padding:0px; height:350px;" />
     </q-list>
   </q-page>
 </template>
@@ -115,3 +115,6 @@ export default {
   }
 }
 </script>
+
+<style lang="sass" >
+</style>

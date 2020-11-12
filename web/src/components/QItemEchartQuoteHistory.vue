@@ -49,13 +49,14 @@ export default {
         'Qty',
         'Currency',
         'NetPrice',
-        'RMB',
+        'USD',
         'Rate',
         'CustomerCode',
         'CustomerName',
         'OrderFlag',
         'OrderNO'
-      ]
+      ],
+      dataZoomStartValue: '1900-01-01'
     }
   },
   methods: {
@@ -66,6 +67,12 @@ export default {
           console.debug(JSON.stringify(response.data))
 
           this.data = response.data
+          let len = this.data.length
+          if (len >= 20) {
+            this.dataZoomStartValue = this.data[len - 20].QuoteDate
+          } else {
+            this.dataZoomStartValue = this.data[0].QuoteDate
+          }
           this.lengend = _uniq(_map(this.data, 'SalesSite'))
           this.dataByLengend = _groupBy(this.data, 'SalesSite')
 
@@ -139,7 +146,7 @@ export default {
           dimensions: this.dimensions,
           encode: {
             x: 'QuoteDate',
-            y: 'RMB'
+            y: 'USD'
           }
         }
       })
@@ -151,7 +158,7 @@ export default {
       let seriesBySite = {
         type: 'pie',
         datasetIndex: this.dataset.length - 1,
-        center: ['75%', '50%'],
+        center: ['88%', '50%'],
         radius: [0, '50%'],
         label: {
           formatter: '{@SalesSite} \nQty:{@Qty}\n{d}%'
@@ -189,7 +196,7 @@ export default {
         },
         legend: { left: 10, top: 20 },
         grid: [
-          { left: '5%', right: '50%' }
+          { left: '5%', right: '25%' }
         ],
         toolbox: {
           feature: {
@@ -215,6 +222,9 @@ export default {
         },
         dataset: this.dataset,
         dataZoom: [{
+          height: 15,
+          bottom: '5px',
+          startValue: this.dataZoomStartValue,
           start: 0,
           end: 100
         }, {
@@ -226,7 +236,7 @@ export default {
         yAxis: {
           gridIndex: 0,
           axisLabel: {
-            formatter: '{value}\nRMB'
+            formatter: '{value}\nUSD'
           }
         },
         series: this.series

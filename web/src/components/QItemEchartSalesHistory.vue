@@ -47,11 +47,12 @@ export default {
         'Qty',
         'Currency',
         'NetPrice',
-        'RMB',
+        'USD',
         'Rate',
         'CustomerCode',
         'CustomerName'
-      ]
+      ],
+      dataZoomStartValue: '1900-01-01'
     }
   },
   methods: {
@@ -62,6 +63,12 @@ export default {
           console.debug(JSON.stringify(response.data))
 
           this.data = response.data
+          let len = this.data.length
+          if (len >= 20) {
+            this.dataZoomStartValue = this.data[len - 20].OrderDate
+          } else {
+            this.dataZoomStartValue = this.data[0].OrderDate
+          }
           this.lengend = _uniq(_map(this.data, 'SalesSite'))
           this.dataByLengend = _groupBy(this.data, 'SalesSite')
           _forEach(this.dataByLengend, (value, index, array) => {
@@ -128,7 +135,7 @@ export default {
           dimensions: this.dimensions,
           encode: {
             x: 'OrderDate',
-            y: 'RMB'
+            y: 'USD'
           }
         }
       })
@@ -140,7 +147,7 @@ export default {
       let seriesBySite = {
         type: 'pie',
         datasetIndex: this.dataset.length - 1,
-        center: ['75%', '50%'],
+        center: ['88%', '50%'],
         radius: [0, '50%'],
         label: {
           formatter: '{@SalesSite} \nQty:{@Qty}\n{d}%'
@@ -178,7 +185,7 @@ export default {
         },
         legend: { left: 10, top: 20 },
         grid: [
-          { left: '5%', right: '50%' }
+          { left: '5%', right: '25%' }
         ],
         toolbox: {
           feature: {
@@ -204,7 +211,9 @@ export default {
         },
         dataset: this.dataset,
         dataZoom: [{
-          start: 0,
+          height: 15,
+          bottom: '5px',
+          startValue: this.dataZoomStartValue,
           end: 100
         }, {
           type: 'inside'
@@ -214,7 +223,7 @@ export default {
         },
         yAxis: {
           axisLabel: {
-            formatter: '{value}\nRMB'
+            formatter: '{value}\nUSD'
           }
         },
         series: this.series

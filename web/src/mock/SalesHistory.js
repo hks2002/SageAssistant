@@ -1,5 +1,6 @@
 import Mock from 'mockjs'
 import { getUrlParam } from '../js/getUrlParam'
+let _orderBy = require('lodash/orderBy')
 
 Mock.setup({
   timeout: '1000-3000'
@@ -10,7 +11,7 @@ Mock.mock(RegExp('^(/Data/SalesHistory)' + '.*'), options => {
 
   // list = {data:[{},{}]}
   let list = Mock.mock({
-    'data|1-10': [
+    'data|1-100': [
       {
         Currency: /(RMB|USD|EUR|HKD)/,
         CustomerCode: /\d{5}/,
@@ -21,10 +22,10 @@ Mock.mock(RegExp('^(/Data/SalesHistory)' + '.*'), options => {
         PN: () => { return PnRoot + '_' + Mock.mock('@character("ABCDEFG")') },
         'Qty|1-100': 1,
         'Rate|6-9': 1,
-        'RMB|1000-2000': 1,
+        'USD|1000-2000': 1,
         SalesSite: /(ZHU|HKG|SGP|TLS|MIA)/
       }
     ]
   })
-  return list.data
+  return _orderBy(list.data, ['OrderDate'], ['asc'])
 })
