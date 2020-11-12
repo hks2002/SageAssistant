@@ -100,7 +100,7 @@
 			    LEFT JOIN ITMMASTER
 				      ON ITMMASTER.ITMREF_0 = SORDERQ.ITMREF_0
 			WHERE ITMMASTER.XITM_RACIN_0 = #{pnRoot} AND PORDERP.NETPRI_0 > 0
-			
+			ORDER BY OrderDate ASC
      </select>
      <select id="findDeliveryDurationByPnRoot" parameterType="String" resultType="sageassistant.model.DeliveryDuration">
 		SELECT SORDERP.SALFCY_0 AS SalesSite,
