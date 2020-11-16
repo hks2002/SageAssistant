@@ -85,7 +85,7 @@
                           minimal
                           first-day-of-week="1"
                           mask="YYYY-MM-DD"
-                          @input="() => $refs.searchSalesDeliDateProxy.hide()" />
+                          />
                 </q-popup-proxy>
               </q-icon>
             </template>
@@ -106,8 +106,7 @@
                   <q-date v-model="searchSalesSaleDate"
                           minimal
                           first-day-of-week="1"
-                          mask="YYYY-MM-DD"
-                          @input="() => $refs.searchSalesSaleDateProxy.hide()" />
+                          mask="YYYY-MM-DD"/>
                 </q-popup-proxy>
               </q-icon>
             </template>
@@ -177,8 +176,7 @@
                   <q-date v-model="searchPurchaseReturnDate"
                           minimal
                           first-day-of-week="1"
-                          mask="YYYY-MM-DD"
-                          @input="() => $refs.searchPurchaseReturnDateProxy.hide()" />
+                          mask="YYYY-MM-DD"/>
                 </q-popup-proxy>
               </q-icon>
             </template>
@@ -471,7 +469,7 @@ export default {
   },
   computed: {
     filter () {
-      let filt = {}
+      const filt = {}
       if (this.searchCustomer) {
         filt.searchCustomer = this.searchCustomer
       }

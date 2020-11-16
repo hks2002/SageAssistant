@@ -1,16 +1,16 @@
 import Mock from 'mockjs'
 import { getUrlParam } from '../js/getUrlParam'
-let _orderBy = require('lodash/orderBy')
+const _orderBy = require('lodash/orderBy')
 
 Mock.setup({
   timeout: '1000-3000'
 })
 
 Mock.mock(RegExp('^(/Data/QuoteHistory)' + '.*'), options => {
-  let PnRoot = getUrlParam(options.url, 'PnRoot')
+  const PnRoot = getUrlParam(options.url, 'PnRoot')
 
   // list = {data:[{},{}]}
-  let list = Mock.mock({
+  const list = Mock.mock({
     'data|1-10': [
       {
         Currency: /(RMB|USD|EUR|HKD)/,

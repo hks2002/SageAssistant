@@ -121,7 +121,7 @@ export default {
       window.open(path)
     },
     setUploadParams (pn, cat) {
-      let params = [
+      const params = [
         { name: 'Pn', value: pn },
         { name: 'Cat', value: cat }]
       return params

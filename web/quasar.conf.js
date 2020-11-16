@@ -1,7 +1,7 @@
 // Configuration for your app
 // https://quasar.dev/quasar-cli/quasar-conf-js
-let fs = require('fs')
-let moment = require('moment')
+const fs = require('fs')
+const moment = require('moment')
 
 module.exports = function (ctx) {
   return {
@@ -48,7 +48,7 @@ module.exports = function (ctx) {
     },
 
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ie
-    supportIE: false,
+    supportIE: true,
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
@@ -59,7 +59,7 @@ module.exports = function (ctx) {
       analyze: true,
       beforeDev () {
         let pkg = fs.readFileSync('package.json')
-        let timeStamp = moment().format('MMDDHHmmss')
+        const timeStamp = moment().format('MMDDHHmmss')
         pkg = JSON.parse(pkg)
         pkg.version = pkg.version.replace(/^(\d+\.\d+\.\d+)(\S*)/, '$1')
         pkg.version = pkg.version + '.' + timeStamp
@@ -68,7 +68,7 @@ module.exports = function (ctx) {
       },
       beforeBuild () {
         let pkg = fs.readFileSync('package.json')
-        let timeStamp = moment().format('MMDDHHmmss')
+        const timeStamp = moment().format('MMDDHHmmss')
         pkg = JSON.parse(pkg)
 
         pkg.version = pkg.version.replace(/^(\d+\.\d+\.\d+)(\S*)/, '$1')

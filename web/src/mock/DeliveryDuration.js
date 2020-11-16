@@ -6,10 +6,10 @@ Mock.setup({
 })
 
 Mock.mock(RegExp('^(/Data/DeliveryDuration)' + '.*'), options => {
-  let PnRoot = getUrlParam(options.url, 'PnRoot')
+  const PnRoot = getUrlParam(options.url, 'PnRoot')
 
   // list = {data:[{},{}]}
-  let list = Mock.mock({
+  const list = Mock.mock({
     'data|1-10': [
       {
         'ROWID|+1': 1,

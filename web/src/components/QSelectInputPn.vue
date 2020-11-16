@@ -62,7 +62,7 @@ export default {
     },
 
     autoSelect (pnOrPnRoot) {
-      let optionIndex = _findIndex(this.pns, o => { return o.PN === pnOrPnRoot })
+      const optionIndex = _findIndex(this.pns, o => { return o.PN === pnOrPnRoot })
       if (optionIndex === -1) {
       } else {
         this.$refs.selectPN.scrollTo(optionIndex) // moveOptionSelection() // scrollTo(optionIndex)
@@ -80,7 +80,7 @@ export default {
       setTimeout(() => {
         update(
           async () => {
-            let pnOrPnRoot = val.toUpperCase()
+            const pnOrPnRoot = val.toUpperCase()
             await this.doAjax(pnOrPnRoot)
             this.autoSelect(pnOrPnRoot)
           }

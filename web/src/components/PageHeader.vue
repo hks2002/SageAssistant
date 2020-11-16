@@ -7,7 +7,6 @@
                 :options="siteList"></q-select>
       <q-btn flat
              round
-             @click="handelClick"
              to="/"
              aria-label="Home"
              class="q-mr-sm">
@@ -15,40 +14,29 @@
           <img src="~assets/logo.svg" />
         </q-avatar>
       </q-btn>
-      <q-toolbar-title class="q-pa-xs">
-        <q-btn flat
-               dense
-               @click="handelClick"
+      <q-tabs class="q-pa-xs bg-primary text-white"
+              v-model="activePage">
+        <q-route-tab
+               align="left"
                to="/Todo"
-               label="Todo"
-               size="21px"
-               text-color="white"
-               class="q-mr-sm" />
-        <q-btn flat
-               dense
-               @click="handelClick"
+               label="Todo"/>
+        <q-route-tab
+               align="left"
                to="/Products"
-               label="Products"
-               size="21px"
-               text-color="white"
-               class="q-mr-sm" />
-        <q-btn flat
-               dense
-               @click="handelClick"
+               label="Products"/>
+        <q-route-tab
+               align="left"
+               to="/Supplies"
+               label="Supplies"/>
+        <q-route-tab
+               align="left"
                to="/Reports"
-               label="Reports"
-               size="21px"
-               text-color="white"
-               class="q-mr-xs" />
-        <q-btn flat
-               dense
-               @click="handelClick"
+               label="Reports"/>
+        <q-route-tab
+               align="left"
                to="/About"
-               label="About"
-               size="21px"
-               text-color="white"
-               class="q-mr-xs" />
-      </q-toolbar-title>
+               label="About"/>
+      </q-tabs>
       <q-space />
       <div></div>
     </q-toolbar>
@@ -71,35 +59,18 @@ export default {
   },
   methods: {
     formatedNow () {
-      let timeStamp = Date.now()
+      const timeStamp = Date.now()
       this.noformattedString = date.formatDate(timeStamp, 'YYYY-MM-DD ddd HH:mm:ss')
     },
     setCookieSite () {
       setCookie('site', this.site, 1000)
-    },
-    handelClick (evt) {
-      this.activePage = evt.target.innerText
-
-      // Todo, if have new way to do it, please change it
-      if (this.activePage === '') {
-        let allNodes = evt.target.parentNode.parentNode.parentNode.parentNode.parentNode.nextSibling.childNodes
-        for (let i = 0; i < allNodes.length; i++) {
-          allNodes[i].style = 'background-color:primary; font-size:21px'
-        }
-      } else {
-        let allNodes = evt.target.parentNode.parentNode.parentNode.parentNode.childNodes
-        for (let i = 0; i < allNodes.length; i++) {
-          allNodes[i].style = 'background-color:primary; font-size:21px'
-        }
-        evt.target.parentNode.parentNode.parentNode.style = 'background-color:orange; font-size:21px'
-      }
     }
   },
   mounted () {
     // setInterval(this.formatedNow, 1000)
 
     // update site if have cookie
-    let cookieSite = getCookie('site')
+    const cookieSite = getCookie('site')
     if (cookieSite) {
       this.site = cookieSite
     } else {
@@ -113,10 +84,10 @@ export default {
 </script>
 
 <style lang="sass" >
-.q-btn
-  text-transform: capitalize;
-
 .q-select>.q-field__inner>.q-field__control>.q-field__control-container>.q-field__native>span
   color: white;
 
+.q-tab__label
+  font-size: 24px;
+  text-transform: capitalize;
 </style>

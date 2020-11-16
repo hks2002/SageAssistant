@@ -21,6 +21,11 @@ const routes = [
     children: [{ path: '', component: () => import('pages/Products.vue') }]
   },
   {
+    path: '/Supplies',
+    component: () => import('layouts/MyLayout.vue'),
+    children: [{ path: '', component: () => import('pages/Supplies.vue') }]
+  },
+  {
     path: '/Reports',
     component: () => import('layouts/MyLayout.vue'),
     children: [{ path: '', component: () => import('pages/Reports.vue') }]

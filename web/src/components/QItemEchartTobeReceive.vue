@@ -7,7 +7,7 @@ if (process.env.DEV) {
   require('../mock/TobeReceive')
 }
 
-let echarts = require('echarts/lib/echarts')
+const echarts = require('echarts/lib/echarts')
 require('echarts/lib/chart/scatter')
 require('echarts/lib/chart/line')
 require('echarts/lib/component/tooltip')
@@ -20,10 +20,10 @@ import { EchartColors } from '../js/EchartColors'
 import { jsonToExcel, jsonToTable, jsonToMultLine } from '../js/jsonTool'
 import { date } from 'quasar'
 
-let _map = require('lodash/map')
-let _uniq = require('lodash/uniq')
-let _groupBy = require('lodash/groupBy')
-let _forEach = require('lodash/forEach')
+const _map = require('lodash/map')
+const _uniq = require('lodash/uniq')
+const _groupBy = require('lodash/groupBy')
+const _forEach = require('lodash/forEach')
 
 export default {
   name: 'QItemEchartTobeReceive',
@@ -68,7 +68,7 @@ export default {
           console.debug(JSON.stringify(response.data))
 
           this.data = response.data
-          let newDate = new Date()
+          const newDate = new Date()
           this.data.forEach((row) => {
             row.DaysLeft = date.getDateDiff(row.ExpectDate, newDate, 'days')
           })
@@ -135,7 +135,7 @@ export default {
             }
           },
           symbolSize: function (data) {
-            return Math.pow(Math.sqrt(data['RMB']), 1 / 3) * Math.E
+            return Math.pow(Math.sqrt(data.RMB), 1 / 3) * Math.E
           },
           encode: {
             x: 'ExpectDate',
@@ -167,8 +167,8 @@ export default {
               title: 'Downlaod',
               icon: 'path://M4.7,22.9L29.3,45.5L54.7,23.4M4.6,43.6L4.6,58L53.8,58L53.8,43.6M29.2,45.1L29.2,0',
               onclick: () => {
-                let timeStamp = Date.now()
-                let formattedString = date.formatDate(timeStamp, 'YYYY-MM-DD')
+                const timeStamp = Date.now()
+                const formattedString = date.formatDate(timeStamp, 'YYYY-MM-DD')
                 jsonToExcel(this.dimensions, this.data, 'BomTobeReceive' + formattedString)
               }
             }

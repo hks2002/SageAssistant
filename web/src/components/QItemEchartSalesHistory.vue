@@ -7,7 +7,7 @@ if (process.env.DEV) {
   require('../mock/SalesHistory')
 }
 
-let echarts = require('echarts/lib/echarts')
+const echarts = require('echarts/lib/echarts')
 require('echarts/lib/chart/pie')
 require('echarts/lib/chart/line')
 require('echarts/lib/component/tooltip')
@@ -20,11 +20,11 @@ import { EchartColors } from '../js/EchartColors'
 import { jsonToExcel, jsonToTable, jsonToMultLine } from '../js/jsonTool'
 import { date } from 'quasar'
 
-let _map = require('lodash/map')
-let _uniq = require('lodash/uniq')
-let _groupBy = require('lodash/groupBy')
-let _forEach = require('lodash/forEach')
-let _sumBy = require('lodash/sumBy')
+const _map = require('lodash/map')
+const _uniq = require('lodash/uniq')
+const _groupBy = require('lodash/groupBy')
+const _forEach = require('lodash/forEach')
+const _sumBy = require('lodash/sumBy')
 
 export default {
   name: 'QItemEchartSalesHistory',
@@ -63,7 +63,7 @@ export default {
           console.debug(JSON.stringify(response.data))
 
           this.data = response.data
-          let len = this.data.length
+          const len = this.data.length
           if (len >= 20) {
             this.dataZoomStartValue = this.data[len - 20].OrderDate
           } else {
@@ -72,7 +72,7 @@ export default {
           this.lengend = _uniq(_map(this.data, 'SalesSite'))
           this.dataByLengend = _groupBy(this.data, 'SalesSite')
           _forEach(this.dataByLengend, (value, index, array) => {
-            this.dataCountedByLengend.push({ SalesSite: value[0]['SalesSite'], Qty: _sumBy(value, 'Qty') })
+            this.dataCountedByLengend.push({ SalesSite: value[0].SalesSite, Qty: _sumBy(value, 'Qty') })
           })
 
           this.eChart.hideLoading()
@@ -144,7 +144,7 @@ export default {
     setEchartPie () {
       this.dataset.push({ source: this.dataCountedByLengend })
 
-      let seriesBySite = {
+      const seriesBySite = {
         type: 'pie',
         datasetIndex: this.dataset.length - 1,
         center: ['88%', '50%'],
@@ -156,8 +156,8 @@ export default {
           trigger: 'item',
           formatter: (params, ticket, callback) => {
             let s = ''
-            s += params.data['SalesSite'] + '<br/>'
-            s += 'Qty:' + params.data['Qty'] + '<br/>'
+            s += params.data.SalesSite + '<br/>'
+            s += 'Qty:' + params.data.Qty + '<br/>'
             return s
           }
         },
@@ -199,8 +199,8 @@ export default {
               title: 'Downlaod Data',
               icon: 'path://M4.7,22.9L29.3,45.5L54.7,23.4M4.6,43.6L4.6,58L53.8,58L53.8,43.6M29.2,45.1L29.2,0',
               onclick: () => {
-                let timeStamp = Date.now()
-                let formattedString = date.formatDate(timeStamp, 'YYYY-MM-DD')
+                const timeStamp = Date.now()
+                const formattedString = date.formatDate(timeStamp, 'YYYY-MM-DD')
                 jsonToExcel(this.dimensions, this.data, 'SalesHistory' + formattedString)
               }
             }

@@ -6,10 +6,10 @@ Mock.setup({
 })
 
 Mock.mock(RegExp('^(/Data/PNHelper)' + '.*'), options => {
-  let PnOrPnRoot = getUrlParam(options.url, 'PnOrPnRoot')
+  const PnOrPnRoot = getUrlParam(options.url, 'PnOrPnRoot')
 
   // list = {data:[{},{}]}
-  let list = Mock.mock({
+  const list = Mock.mock({
     'data|1-10': [
       {
         PNROOT: PnOrPnRoot,

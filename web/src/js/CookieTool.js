@@ -1,5 +1,5 @@
 function setCookie (name, value, expires) {
-  let exp = new Date()
+  const exp = new Date()
   exp.setTime(exp.getTime() + expires * 1000)
   document.cookie = name + '=' + escape(value) + ';expires=' + exp.toGMTString()
 }

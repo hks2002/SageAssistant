@@ -5,17 +5,17 @@ Mock.setup({
 })
 
 Mock.mock(RegExp('^(/Data/AttachmentPath)' + '.*'), options => {
-  let Pn = getUrlParam(options.url, 'Pn')
+  const Pn = getUrlParam(options.url, 'Pn')
 
   // list = {data:[{},{}]}
-  let list = Mock.mock({
+  const list = Mock.mock({
     'data|1-10': [
       {
         'ROWID|+1': 1,
-        'PN': Pn,
-        'Cat': /(Drawing|Manual|UNK)/,
-        'DocType': /(PDF|JPG|JPEG|TIF|BMP|DOC|DOCX|XLS|XLSX|PPT|PPTX|ZIP|RAR|7Z|OTHER)/,
-        'Path': /\/File\/MockFile\/[A-Z]*\.(PDF|JPG|JPEG|TIF|BMP|DOC|DOCX|XLS|XLSX|PPT|PPTX|ZIP|RAR|7Z|OTHER)/
+        PN: Pn,
+        Cat: /(Drawing|Manual|UNK)/,
+        DocType: /(PDF|JPG|JPEG|TIF|BMP|DOC|DOCX|XLS|XLSX|PPT|PPTX|ZIP|RAR|7Z|OTHER)/,
+        Path: /\/File\/MockFile\/[A-Z]*\.(PDF|JPG|JPEG|TIF|BMP|DOC|DOCX|XLS|XLSX|PPT|PPTX|ZIP|RAR|7Z|OTHER)/
       }
     ]
   })

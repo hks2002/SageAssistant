@@ -24,7 +24,7 @@ export default {
   },
   methods: {
     updateSite () {
-      let site = getCookie('site')
+      const site = getCookie('site')
       if (!site) {
         this.site = 'ZHU'
       } else if (site !== this.site) {

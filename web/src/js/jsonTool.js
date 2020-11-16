@@ -1,4 +1,4 @@
-let jsonToTable = function (headers, jsonData, title) {
+const jsonToTable = function (headers, jsonData, title) {
   var table = '<div class="q-table--dense"><table style="width:100%;text-align:center" class="q-table"><caption style="font-size:28px">' + title + '</caption>'
   table += '<tr>'
   for (let i = 0, l = headers.length; i < l; i++) {
@@ -16,7 +16,7 @@ let jsonToTable = function (headers, jsonData, title) {
   return table
 }
 
-let jsonToExcel = function (headers, jsonData, filename) {
+const jsonToExcel = function (headers, jsonData, filename) {
   var str = '<tr>'
   for (let i = 0, l = headers.length; i < l; i++) {
     str += '<td style="background:#00B0F0;color:white">' + headers[i] + '</td>'
@@ -32,10 +32,10 @@ let jsonToExcel = function (headers, jsonData, filename) {
     str += '</tr>'
   }
 
-  let worksheet = 'Sheet1'
-  let uri = 'data:application/vnd.ms-excel;base64,'
+  const worksheet = 'Sheet1'
+  const uri = 'data:application/vnd.ms-excel;base64,'
 
-  let template = `<html xmlns:o="urn:schemas-microsoft-com:office:office" 
+  const template = `<html xmlns:o="urn:schemas-microsoft-com:office:office" 
       xmlns:x="urn:schemas-microsoft-com:office:excel" 
       xmlns="http://www.w3.org/TR/REC-html40">
       <head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>
@@ -56,7 +56,7 @@ let jsonToExcel = function (headers, jsonData, filename) {
 }
 function base64 (s) { return window.btoa(unescape(encodeURIComponent(s))) }
 
-let jsonToMultLine = function (fields, jsonObj) {
+const jsonToMultLine = function (fields, jsonObj) {
   let s = '<table>'
   for (let i = 0, l = fields.length; i < l; i++) {
     s += '<tr><td>' + fields[i] + ':</td><td>' + jsonObj[fields[i]] + '</tr>'

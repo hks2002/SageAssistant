@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-let EchartColors = [
+const EchartColors = [
   '#4472C5',
   '#ED7C30',
   '#C1232B',

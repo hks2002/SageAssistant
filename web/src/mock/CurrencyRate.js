@@ -6,13 +6,13 @@ Mock.setup({
 })
 
 Mock.mock(RegExp('^(/Data/CurrencyRateBatch)' + '.*'), options => {
-  let query = getUrlParam(options.url, 'query')
+  const query = getUrlParam(options.url, 'query')
 
-  let allq = query.split('_')
-  let allres = []
+  const allq = query.split('_')
+  const allres = []
 
   for (let i = 0, l = allq.length; i < l; i++) {
-    let sour = allq[i].substring(0, 3)
+    const sour = allq[i].substring(0, 3)
     if (sour === 'USD') {
       allres[i] = Mock.mock('@float(6, 8.5, 3, 5)')
     } else if (sour === 'EUR') {

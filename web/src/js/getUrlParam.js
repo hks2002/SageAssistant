@@ -1,7 +1,7 @@
 
-let getUrlParam = function (url, name) {
-  let reg = new RegExp('[?&]' + name + '=([^&#]+)')
-  let query = url.match(reg)
+const getUrlParam = function (url, name) {
+  const reg = new RegExp('[?&]' + name + '=([^&#]+)')
+  const query = url.match(reg)
   return query ? query[1] : ''
 }
 
