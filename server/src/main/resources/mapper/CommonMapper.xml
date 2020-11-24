@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sageassistant.dao.CommonMapper">
+ <!--Open L2 Cache under Names pace: 1 Hour-->
+    <select id="getAllSites" parameterType="String" resultType="sageassistant.model.Sites">
+        SELECT DISTINCT
+	        FCY_0 AS Site
+	    FROM EXPLOIT.FACILITY
+    </select>
+</mapper>
