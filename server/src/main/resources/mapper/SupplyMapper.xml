@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sageassistant.dao.SupplyMapper">
+    <!--Open L2 Cache under Names pace: 1 Hour-->
+    <cache eviction="LRU" flushInterval="3600000" readOnly="true" size="1024"/>
+    <select id="supplyByCodeOrName" parameterType="String" resultType="sageassistant.model.SupplyName">
+	    SELECT 
+	        BPARTNER.BPRNUM_0 AS SupplyCode,
+	        BPARTNER.BPRNAM_0+BPARTNER.BPRNAM_1 AS SupplyName
+	    FROM EXPLOIT.BPARTNER AS BPARTNER
+			INNER JOIN EXPLOIT.BPSUPPLIER AS BPSUPPLIER
+				ON BPARTNER.BPRNUM_0 = BPSUPPLIER.BPSNUM_0
+		WHERE BPARTNER.BPRNUM_0 LIKE #{SupplyCodeOrName} OR BPARTNER.BPRNAM_0 LIKE #{SupplyCodeOrName} OR BPARTNER.BPRNAM_1 LIKE #{SupplyCodeOrName}
+			ORDER BY BPRNUM_0 ASC
+    </select>
+    <select id="supplyTotalAmount" parameterType="String" resultType="sageassistant.model.SupplySummaryAmount">
+        SELECT DISTINCT
+			POHFCY_0 AS Site,
+			BPSNUM_0 AS SupplyCode,
+			CUR_0 AS Currency,
+			SUM(TOTLINATI_0) OVER (PARTITION BY PORDER.POHFCY_0, PORDER.BPSNUM_0, CUR_0 ) AS Amount
+		FROM EXPLOIT.PORDER AS PORDER
+		WHERE BPSNUM_0=#{SupplyCode}
+    </select>
+    <select id="supplyTotalProjectQty" parameterType="String" resultType="sageassistant.model.SupplySummaryQty">
+        SELECT DISTINCT
+			PORDER.POHFCY_0 AS Site,
+			PORDER.BPSNUM_0 AS SupplyCode,
+			COUNT(DISTINCT PORDERP.PJT_0) AS Qty
+		FROM EXPLOIT.PORDER AS PORDER
+			LEFT JOIN EXPLOIT.PORDERP AS PORDERP
+			    ON PORDER.POHNUM_0=PORDERP.POHNUM_0
+		WHERE PORDER.BPSNUM_0=#{SupplyCode}
+		GROUP BY PORDER.POHFCY_0,PORDER.BPSNUM_0
+    </select>
+    <select id="supplyTotalLineQty" parameterType="String" resultType="sageassistant.model.SupplySummaryQty">
+        SELECT DISTINCT
+			PORDER.POHFCY_0 AS Site,
+			PORDER.BPSNUM_0 AS SupplyCode,
+			SUM(PORDER.LINNBR_0) OVER (PARTITION BY POHFCY_0, BPSNUM_0) AS Qty
+		FROM EXPLOIT.PORDER AS PORDER
+		WHERE PORDER.BPSNUM_0=#{SupplyCode}
+    </select>
+    <select id="supplyTotalProductQty" parameterType="String" resultType="sageassistant.model.SupplySummaryQty">
+        SELECT DISTINCT
+			PORDER.POHFCY_0 AS Site,
+			PORDER.BPSNUM_0 AS SupplyCode,
+			SUM(PORDER.TOTLINQTY_0) OVER (PARTITION BY POHFCY_0, BPSNUM_0) AS Qty
+		FROM EXPLOIT.PORDER AS PORDER
+			WHERE BPSNUM_0=#{SupplyCode}
+    </select>
+    <select id="supplyOpenAmount" parameterType="String" resultType="sageassistant.model.SupplySummaryAmount">
+        SELECT DISTINCT 
+            PORDER.POHFCY_0 AS Site,
+			PORDER.CUR_0 AS Currency,
+	        PORDER.BPSNUM_0 AS SupplyCode,
+			SUM(PORDERQ.LINATIAMT_0) OVER (PARTITION BY PORDER.POHFCY_0, PORDER.BPSNUM_0, PORDER.CUR_0 ) AS Amount
+	    FROM  EXPLOIT.PORDERQ AS PORDERQ
+	        LEFT JOIN EXPLOIT.PORDER AS PORDER
+	        	ON PORDERQ.POHNUM_0=PORDER.POHNUM_0
+	    WHERE PORDERQ.LINCLEFLG_0 != 2
+		    AND PORDERQ.PTHNUM_0 =''
+		    AND PORDER.BPSNUM_0=#{SupplyCode}
+	</select>
+	<select id="supplyOpenProjectQty" parameterType="String" resultType="sageassistant.model.SupplySummaryQty">
+        SELECT DISTINCT 
+            PORDER.POHFCY_0 AS Site,
+	        PORDER.BPSNUM_0 AS SupplyCode,
+			COUNT(DISTINCT PORDERP.PJT_0) AS Qty
+	    FROM  EXPLOIT.PORDERQ AS PORDERQ
+	        LEFT JOIN EXPLOIT.PORDER AS PORDER
+	        	ON PORDERQ.POHNUM_0=PORDER.POHNUM_0
+	        LEFT JOIN EXPLOIT.PORDERP AS PORDERP
+	            ON PORDERQ.POHNUM_0=PORDERP.POHNUM_0
+	               AND PORDERQ.POPLIN_0 = PORDERP.POPLIN_0
+	    WHERE PORDERQ.LINCLEFLG_0 != 2
+		    AND PORDERQ.PTHNUM_0 =''
+		    AND PORDER.BPSNUM_0=#{SupplyCode}
+		GROUP BY PORDER.POHFCY_0,PORDER.BPSNUM_0
+	</select>
+	<select id="supplyOpenLineQty" parameterType="String" resultType="sageassistant.model.SupplySummaryQty">
+        SELECT DISTINCT 
+            PORDER.POHFCY_0 AS Site,
+	        PORDER.BPSNUM_0 AS SupplyCode,
+			COUNT(DISTINCT PORDERQ.ROWID) AS Qty
+	    FROM  EXPLOIT.PORDERQ AS PORDERQ
+	        LEFT JOIN EXPLOIT.PORDER AS PORDER
+	        ON PORDERQ.POHNUM_0=PORDER.POHNUM_0
+	    WHERE PORDERQ.LINCLEFLG_0 != 2
+		    AND PORDERQ.PTHNUM_0 =''
+		    AND PORDER.BPSNUM_0=#{SupplyCode}
+		GROUP BY PORDER.POHFCY_0,PORDER.BPSNUM_0
+	</select>
+	<select id="supplyOpenProductQty" parameterType="String" resultType="sageassistant.model.SupplySummaryQty">
+        SELECT DISTINCT 
+            PORDER.POHFCY_0 AS Site,
+	        PORDER.BPSNUM_0 AS SupplyCode,
+			SUM(PORDERQ.QTYUOM_0) OVER (PARTITION BY PORDER.POHFCY_0, PORDER.BPSNUM_0) AS Qty
+	    FROM  EXPLOIT.PORDERQ AS PORDERQ
+	        LEFT JOIN EXPLOIT.PORDER AS PORDER
+	        ON PORDERQ.POHNUM_0=PORDER.POHNUM_0
+	    WHERE PORDERQ.LINCLEFLG_0 != 2
+		    AND PORDERQ.PTHNUM_0 =''
+		    AND PORDER.BPSNUM_0=#{SupplyCode}
+	</select>
+	<select id="supplyDeliveryHistory" parameterType="String" resultType="sageassistant.model.SupplyDeliveryHistory">
+	    SELECT DISTINCT 
+	        PORDERQ.PRHFCY_0 AS Site,
+	        PORDER.BPSNUM_0 AS SupplyCode,
+	        PORDERP.POHNUM_0 AS PurchaseNO,
+	        PORDERP.PJT_0 AS ProjectNO,
+	        PORDERP.ITMREF_0 AS PN,
+	        PORDERP.ITMDES_0 AS Description,
+	        IIF(PORDERQ.LINOCNDAT_0='1900-01-01',null,PORDERQ.LINOCNDAT_0) AS AckDate,
+	        PORDERQ.EXTRCPDAT_0 AS ExpectDate,
+	        PORDER.ORDDAT_0 AS OrderDate,
+			PORDERQ.PTHNUM_0 AS ReceiptNO,
+			RECEIPTD.RCPDAT_0 AS ReceiptDate,
+			DATEDIFF(day,PORDER.ORDDAT_0, RECEIPTD.RCPDAT_0) AS DateNeed
+	    FROM  EXPLOIT.PORDERP AS PORDERP
+	        LEFT JOIN EXPLOIT.PORDERQ AS PORDERQ
+	        ON PORDERP.POHNUM_0=PORDERQ.POHNUM_0
+	            AND PORDERP.POPLIN_0=PORDERQ.POPLIN_0
+	        LEFT JOIN EXPLOIT.PORDER AS PORDER
+	        ON PORDERP.POHNUM_0=PORDER.POHNUM_0
+			LEFT JOIN EXPLOIT.PRECEIPTD AS RECEIPTD
+			ON PORDERQ.POHNUM_0 = RECEIPTD.POHNUM_0 AND PORDERQ.POPLIN_0 = RECEIPTD.POPLIN_0
+	    WHERE PORDERQ.LINCLEFLG_0 = 2
+		    AND PORDERQ.PTHNUM_0 !=''
+			AND RECEIPTD.RCPDAT_0 >= DATEADD(yyyy,#{YearCount,javaType=int},getDate())
+		    AND PORDER.BPSNUM_0=#{SupplyCode}
+		ORDER BY PORDER.ORDDAT_0 ASC
+	</select>
+	<select id="supplyDelayHistory" parameterType="String" resultType="sageassistant.model.SupplyDelayHistory">
+	    SELECT DISTINCT 
+	        PORDERQ.PRHFCY_0 AS Site,
+	        PORDER.BPSNUM_0 AS SupplyCode,
+	        PORDERP.POHNUM_0 AS PurchaseNO,
+	        PORDERP.PJT_0 AS ProjectNO,
+	        PORDERP.ITMREF_0 AS PN,
+	        PORDERP.ITMDES_0 AS Description,
+	        IIF(PORDERQ.LINOCNDAT_0='1900-01-01',null,PORDERQ.LINOCNDAT_0) AS AckDate,
+	        PORDERQ.EXTRCPDAT_0 AS ExpectDate,
+	        PORDER.ORDDAT_0 AS OrderDate,
+			PORDERQ.PTHNUM_0 AS ReceiptNO,
+			RECEIPTD.RCPDAT_0 AS ReceiptDate,
+			IIF(PORDERQ.PTHNUM_0 = '' AND getDate()>PORDERQ.EXTRCPDAT_0,
+			    DATEDIFF(day,PORDERQ.EXTRCPDAT_0,getDate()) ,
+				DATEDIFF(day,PORDERQ.EXTRCPDAT_0, RECEIPTD.RCPDAT_0)) AS DateDelay
+	    FROM  EXPLOIT.PORDERP AS PORDERP
+	        LEFT JOIN EXPLOIT.PORDERQ AS PORDERQ
+	        ON PORDERP.POHNUM_0=PORDERQ.POHNUM_0
+	            AND PORDERP.POPLIN_0=PORDERQ.POPLIN_0
+	        LEFT JOIN EXPLOIT.PORDER AS PORDER
+	        ON PORDERP.POHNUM_0=PORDER.POHNUM_0
+			LEFT JOIN EXPLOIT.PRECEIPTD AS RECEIPTD
+			ON PORDERQ.POHNUM_0 = RECEIPTD.POHNUM_0 AND PORDERQ.POPLIN_0 = RECEIPTD.POPLIN_0
+	    WHERE (RECEIPTD.RCPDAT_0 >= DATEADD(yyyy,#{YearCount,javaType=int},getDate()) OR PORDERQ.PTHNUM_0 = '')
+		    AND PORDER.BPSNUM_0=#{SupplyCode}
+		ORDER BY PORDERQ.EXTRCPDAT_0 ASC
+	</select>
+	<select id="supplyOpenLines" parameterType="String" resultType="sageassistant.model.SupplyOpenLines">
+	    SELECT DISTINCT 
+	        PORDERQ.PRHFCY_0 AS Site,
+	        PORDER.BPSNUM_0 AS SupplyCode,
+	        PORDERP.POHNUM_0 AS PurchaseNO,
+	        PORDERP.PJT_0 AS ProjectNO,
+	        PORDERP.ITMREF_0 AS PN,
+	        PORDERP.ITMDES_0 AS Description,
+	        IIF(PORDERQ.LINOCNDAT_0='1900-01-01',null,PORDERQ.LINOCNDAT_0) AS AckDate,
+	        PORDERQ.EXTRCPDAT_0 AS ExpectDate,
+	        PORDER.ORDDAT_0 AS OrderDate,
+			PORDERQ.PTHNUM_0 AS ReceiptNO,
+			RECEIPTD.RCPDAT_0 AS ReceiptDate,
+			IIF(PORDERQ.PTHNUM_0 = '' AND getDate()>PORDERQ.EXTRCPDAT_0,
+			    DATEDIFF(day,PORDERQ.EXTRCPDAT_0,getDate()) ,
+				DATEDIFF(day,PORDERQ.EXTRCPDAT_0, RECEIPTD.RCPDAT_0)) AS DateDelay
+	    FROM  EXPLOIT.PORDERP AS PORDERP
+	        LEFT JOIN EXPLOIT.PORDERQ AS PORDERQ
+	        ON PORDERP.POHNUM_0=PORDERQ.POHNUM_0
+	            AND PORDERP.POPLIN_0=PORDERQ.POPLIN_0
+	        LEFT JOIN EXPLOIT.PORDER AS PORDER
+	        ON PORDERP.POHNUM_0=PORDER.POHNUM_0
+			LEFT JOIN EXPLOIT.PRECEIPTD AS RECEIPTD
+			ON PORDERQ.POHNUM_0 = RECEIPTD.POHNUM_0 AND PORDERQ.POPLIN_0 = RECEIPTD.POPLIN_0
+	    WHERE PORDERQ.LINCLEFLG_0 != 2
+		    AND PORDERQ.PTHNUM_0 =''
+		    AND PORDER.BPSNUM_0=#{SupplyCode}
+		ORDER BY PORDERQ.EXTRCPDAT_0 ASC
+	</select>
+</mapper>
