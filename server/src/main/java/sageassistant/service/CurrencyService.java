@@ -38,17 +38,7 @@ public class CurrencyService {
 		}
 	});
 	
-	public CurrencyService() {
-		dafaultRate.put("USDRMB", "7.0");
-		dafaultRate.put("EURRMB", "7.5");
-		dafaultRate.put("HKDRMB", "0.9");
-		dafaultRate.put("GBPRMB", "9.0");
-		dafaultRate.put("AUDRMB", "4.6");
-		dafaultRate.put("JPYRMB", "0.06");
-		dafaultRate.put("SDGRMB", "5.0");
-		dafaultRate.put("AEDRMB", "0.5");
-		dafaultRate.put("CADRMB", "5.2");
-		
+	public CurrencyService() {		
 		dafaultRate.put("EURUSD", "1.18");
 		dafaultRate.put("GBPUSD", "1.31");
 		dafaultRate.put("SGDUSD", "0.73");
@@ -56,7 +46,10 @@ public class CurrencyService {
 		dafaultRate.put("HKDUSD", "0.13");
 		dafaultRate.put("MXNUSD", "0.064");
 		dafaultRate.put("AEDUSD", "0.27");
-		dafaultRate.put("QARUSD", "0.0275");
+		dafaultRate.put("QARUSD", "0.275");
+		dafaultRate.put("CADUSD", "0.7639");
+		dafaultRate.put("AUDUSD", "0.7285");
+		dafaultRate.put("JPYUSD", "0.00962");
 	}
 	
 	/*
@@ -141,6 +134,7 @@ public class CurrencyService {
 		}
 
 		float rate = 0;
+		float rateRMBUSD = 0;
 
 		// get from 'State Administration of Foreign Exchange'
 		String responseText = doGet("http://www.safe.gov.cn/AppStructured/hlw/ENJsonRmb.do?date=" + Date);
@@ -151,28 +145,18 @@ public class CurrencyService {
 		for (int i = 0, l = jsonArrayOuter.size(); i < l; i++) {
 			JSONArray jsonArrayInner = jsonArrayOuter.getJSONArray(i);
 
+			if (jsonArrayInner.getString(1).equals("USD") && jsonArrayInner.getString(3).equals("RMB")) {
+				rateRMBUSD = jsonArrayInner.getIntValue(0) / jsonArrayInner.getFloat(2);
+			}
+			
 			if (jsonArrayInner.getString(1).equals(Sour) && jsonArrayInner.getString(3).equals("RMB")) {
-				rate = jsonArrayInner.getFloat(2) / jsonArrayInner.getIntValue(0);
+				rate = jsonArrayInner.getFloat(2) / jsonArrayInner.getIntValue(0) * rateRMBUSD;
 				break;
 			} else if (jsonArrayInner.getString(3).equals(Sour) && jsonArrayInner.getString(1).equals("RMB")) { //backup of if
-				rate = jsonArrayInner.getFloat(2) / jsonArrayInner.getIntValue(0);
+				rate = jsonArrayInner.getIntValue(0) /  jsonArrayInner.getFloat(2) * rateRMBUSD;
 				break;
 			}
 		}
-		
-		// Change RMB  rate to others
-		for (int i = 0, l = jsonArrayOuter.size(); i < l; i++) {
-			JSONArray jsonArrayInner = jsonArrayOuter.getJSONArray(i);
-
-			if (jsonArrayInner.getString(1).equals(Dest) && jsonArrayInner.getString(3).equals("RMB")) {
-				rate = jsonArrayInner.getFloat(2) / (jsonArrayInner.getIntValue(0)* rate);
-				break;
-			} else if (jsonArrayInner.getString(3).equals(Dest) && jsonArrayInner.getString(1).equals("RMB")) { //backup of if
-				rate = jsonArrayInner.getFloat(2) / (jsonArrayInner.getIntValue(0)* rate);
-				break;
-			}
-		}
-		
 
 		NumberFormat nf = NumberFormat.getInstance();
 		nf.setGroupingUsed(false);

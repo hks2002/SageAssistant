@@ -95,7 +95,7 @@ public class PnService {
 			} catch (ExecutionException e) {
 				log.error(e.getMessage());
 			}
-			o.setRMB(o.getNetPrice()*o.getRate());
+			o.setUSD(o.getNetPrice()*o.getRate());
 			listOri.add(o);
 		}
 
@@ -121,7 +121,7 @@ public class PnService {
 			} catch (ExecutionException e) {
 				log.error(e.getMessage());
 			}
-			o.setRMB(o.getNetPrice()*o.getRate());
+			o.setUSD(o.getNetPrice()*o.getRate());
 			listOri.add(o);
 		}
 
@@ -148,7 +148,7 @@ public class PnService {
 			} catch (ExecutionException e) {
 				log.error(e.getMessage());
 			}
-			o.setRMB(o.getNetPrice()*o.getRate());
+			o.setUSD(o.getNetPrice()*o.getRate());
 			listOri.add(o);
 		}
         // one project maybe purchase line with different currency

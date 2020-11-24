@@ -135,8 +135,8 @@ public class CostHistory implements Serializable {
 		return USD;
 	}
 
-	public void setUSD(Float USD) {
-		USD = USD;
+	public void setUSD(Float usd) {
+		USD = usd;
 	}
 
 	public Float getRate() {

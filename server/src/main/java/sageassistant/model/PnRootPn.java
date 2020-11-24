@@ -12,7 +12,8 @@ public class PnRootPn implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String PNROOT;
-
+	private String PN;
+	
 	public String getPNROOT() {
 		return PNROOT;
 	}
@@ -29,7 +30,6 @@ public class PnRootPn implements Serializable {
 		PN = pN;
 	}
 
-	private String PN;
 
 	@Override
 	public String toString() {
