@@ -12,7 +12,6 @@ public class SupplySummaryQty implements Serializable {
 
 	private String Site;
 	private String SupplyCode;
-	private String SupplyName;
 	private String CountType;
 	private int Qty;
 
@@ -30,14 +29,6 @@ public class SupplySummaryQty implements Serializable {
 
 	public void setSite(String site) {
 		Site = site;
-	}
-
-	public String getSupplyName() {
-		return SupplyName;
-	}
-
-	public void setSupplyName(String supplyName) {
-		SupplyName = supplyName;
 	}
 
 	public String getCountType() {

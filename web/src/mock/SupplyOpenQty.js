@@ -14,49 +14,42 @@ Mock.mock(RegExp('^(/Data/SupplyOpenQty)' + '.*'), options => {
       {
         Site: /ZHU/,
         SupplyCode: SupplyCode,
-        SupplyName: () => { return Mock.mock('@title(3, 5)') },
         CountType: /Item|Product|Project/,
         Qty: () => { return Mock.mock('@integer(20, 10000)') }
       },
       {
         Site: /HKG/,
         SupplyCode: SupplyCode,
-        SupplyName: () => { return Mock.mock('@title(3, 5)') },
         CountType: /Item|Product|Project/,
         Qty: () => { return Mock.mock('@integer(20, 10000)') }
       },
       {
         Site: /TLS/,
         SupplyCode: SupplyCode,
-        SupplyName: () => { return Mock.mock('@title(3, 5)') },
         CountType: /Item|Product|Project/,
         Qty: () => { return Mock.mock('@integer(20, 10000)') }
       },
       {
         Site: /SGP/,
         SupplyCode: SupplyCode,
-        SupplyName: () => { return Mock.mock('@title(3, 5)') },
         CountType: /Item|Product|Project/,
         Qty: () => { return Mock.mock('@integer(20, 10000)') }
       },
       {
         Site: /MIA/,
         SupplyCode: SupplyCode,
-        SupplyName: () => { return Mock.mock('@title(3, 5)') },
         CountType: /Item|Product|Project/,
         Qty: () => { return Mock.mock('@integer(20, 10000)') }
       },
       {
         Site: /QAT/,
         SupplyCode: SupplyCode,
-        SupplyName: () => { return Mock.mock('@title(3, 5)') },
         CountType: /Item|Product|Project/,
         Qty: () => { return Mock.mock('@integer(20, 10000)') }
       },
       {
         Site: /CIN/,
         SupplyCode: SupplyCode,
-        SupplyName: () => { return Mock.mock('@title(3, 5)') },
         CountType: /Item|Product|Project/,
         Qty: () => { return Mock.mock('@integer(20, 10000)') }
       }

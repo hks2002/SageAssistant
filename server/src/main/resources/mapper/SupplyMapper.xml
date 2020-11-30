@@ -151,7 +151,7 @@
 	        PORDERP.PJT_0 AS ProjectNO,
 	        PORDERP.ITMREF_0 AS PN,
 	        PORDERP.ITMDES_0 AS Description,
-	        IIF(PORDERQ.LINOCNDAT_0='1900-01-01',null,PORDERQ.LINOCNDAT_0) AS AckDate,
+	        IIF(PORDERQ.LINOCNDAT_0='1753-01-01',null,PORDERQ.LINOCNDAT_0) AS AckDate,
 	        PORDERQ.EXTRCPDAT_0 AS ExpectDate,
 	        PORDER.ORDDAT_0 AS OrderDate,
 			PORDERQ.PTHNUM_0 AS ReceiptNO,
@@ -167,7 +167,7 @@
 			ON PORDERQ.POHNUM_0 = RECEIPTD.POHNUM_0 AND PORDERQ.POPLIN_0 = RECEIPTD.POPLIN_0
 	    WHERE PORDERQ.PTHNUM_0 !=''
 		    AND PORDER.BPSNUM_0=#{SupplyCode}
-		    AND (PORDER.ORDDAT_0 BETWEEN CONVERT(datetime, #{DateFrom},120) AND CONVERT(datetime, #{DateTo},120) )
+		    AND (RECEIPTD.RCPDAT_0 BETWEEN CONVERT(datetime, #{DateFrom},120) AND CONVERT(datetime, #{DateTo},120) )
 		ORDER BY RECEIPTD.RCPDAT_0 ASC
 	</select>
 	<select id="supplyDelayHistory" parameterType="String" resultType="sageassistant.model.SupplyDelayHistory">
@@ -178,7 +178,7 @@
 	        PORDERP.PJT_0 AS ProjectNO,
 	        PORDERP.ITMREF_0 AS PN,
 	        PORDERP.ITMDES_0 AS Description,
-	        IIF(PORDERQ.LINOCNDAT_0='1900-01-01',null,PORDERQ.LINOCNDAT_0) AS AckDate,
+	        IIF(PORDERQ.LINOCNDAT_0='1753-01-01',null,PORDERQ.LINOCNDAT_0) AS AckDate,
 	        PORDERQ.EXTRCPDAT_0 AS ExpectDate,
 	        PORDER.ORDDAT_0 AS OrderDate,
 			PORDERQ.PTHNUM_0 AS ReceiptNO,
@@ -196,7 +196,7 @@
 			ON PORDERQ.POHNUM_0 = RECEIPTD.POHNUM_0 AND PORDERQ.POPLIN_0 = RECEIPTD.POPLIN_0
 	    WHERE PORDERQ.PTHNUM_0 = ''
 		    AND PORDER.BPSNUM_0=#{SupplyCode}
-		    AND (PORDER.ORDDAT_0 BETWEEN CONVERT(datetime, #{DateFrom},120) AND CONVERT(datetime, #{DateTo},120) )
+		    AND (PORDERQ.EXTRCPDAT_0 BETWEEN CONVERT(datetime, #{DateFrom},120) AND CONVERT(datetime, #{DateTo},120) )
 		ORDER BY PORDERQ.EXTRCPDAT_0 ASC
 	</select>
 	<select id="supplyOpenItems" parameterType="String" resultType="sageassistant.model.SupplyOpenItems">
@@ -207,7 +207,7 @@
 	        PORDERP.PJT_0 AS ProjectNO,
 	        PORDERP.ITMREF_0 AS PN,
 	        PORDERP.ITMDES_0 AS Description,
-	        IIF(PORDERQ.LINOCNDAT_0='1900-01-01',null,PORDERQ.LINOCNDAT_0) AS AckDate,
+	        IIF(PORDERQ.LINOCNDAT_0='1753-01-01',null,PORDERQ.LINOCNDAT_0) AS AckDate,
 	        PORDERQ.EXTRCPDAT_0 AS ExpectDate,
 	        PORDER.ORDDAT_0 AS OrderDate,
 			PORDERQ.PTHNUM_0 AS ReceiptNO,

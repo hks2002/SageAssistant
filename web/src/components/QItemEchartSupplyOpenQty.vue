@@ -39,7 +39,6 @@ export default {
       dimensions: [
         'Site',
         'SupplyCode',
-        'SupplyName',
         'CountType',
         'Qty'
       ]

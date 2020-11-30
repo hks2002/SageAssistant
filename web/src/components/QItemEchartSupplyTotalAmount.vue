@@ -41,7 +41,6 @@ export default {
       dimensions: [
         'Site',
         'SupplyCode',
-        'SupplyName',
         'Amount',
         'Currency',
         'USD',

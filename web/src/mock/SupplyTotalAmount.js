@@ -14,7 +14,6 @@ Mock.mock(RegExp('^(/Data/SupplyTotalAmount)' + '.*'), options => {
       {
         Site: /ZHU/,
         SupplyCode: SupplyCode,
-        SupplyName: () => { return Mock.mock('@title(3, 5)') },
         Currency: /(RMB|USD|EUR|HKD)/,
         'Amount|1000-2000': 1,
         'USD|1000-20000': 1,
@@ -22,7 +21,6 @@ Mock.mock(RegExp('^(/Data/SupplyTotalAmount)' + '.*'), options => {
       }, {
         Site: /HKG/,
         SupplyCode: SupplyCode,
-        SupplyName: () => { return Mock.mock('@title(3, 5)') },
         Currency: /(RMB|USD|EUR|HKD)/,
         'Amount|1000-2000': 1,
         'USD|1000-20000': 1,
@@ -30,7 +28,6 @@ Mock.mock(RegExp('^(/Data/SupplyTotalAmount)' + '.*'), options => {
       }, {
         Site: /TLS/,
         SupplyCode: SupplyCode,
-        SupplyName: () => { return Mock.mock('@title(3, 5)') },
         Currency: /(RMB|USD|EUR|HKD)/,
         'Amount|1000-2000': 1,
         'USD|1000-20000': 1,
@@ -38,7 +35,6 @@ Mock.mock(RegExp('^(/Data/SupplyTotalAmount)' + '.*'), options => {
       }, {
         Site: /SGP/,
         SupplyCode: SupplyCode,
-        SupplyName: () => { return Mock.mock('@title(3, 5)') },
         Currency: /(RMB|USD|EUR|HKD)/,
         'Amount|1000-2000': 1,
         'USD|1000-20000': 1,
@@ -46,7 +42,6 @@ Mock.mock(RegExp('^(/Data/SupplyTotalAmount)' + '.*'), options => {
       }, {
         Site: /MIA/,
         SupplyCode: SupplyCode,
-        SupplyName: () => { return Mock.mock('@title(3, 5)') },
         Currency: /(RMB|USD|EUR|HKD)/,
         'Amount|1000-2000': 1,
         'USD|1000-20000': 1,

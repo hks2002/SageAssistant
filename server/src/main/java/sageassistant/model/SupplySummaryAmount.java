@@ -12,7 +12,6 @@ public class SupplySummaryAmount implements Serializable {
 
 	private String Site;
 	private String SupplyCode;
-	private String SupplyName;
 	private String Currency;
 	private float Amount;
 	private float Rate;
@@ -29,12 +28,6 @@ public class SupplySummaryAmount implements Serializable {
 	}
 	public void setSite(String site) {
 		Site = site;
-	}
-	public String getSupplyName() {
-		return SupplyName;
-	}
-	public void setSupplyName(String supplyName) {
-		SupplyName = supplyName;
 	}
 	public String getCurrency() {
 		return Currency;
