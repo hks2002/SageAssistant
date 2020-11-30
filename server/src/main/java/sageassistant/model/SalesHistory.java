@@ -22,6 +22,7 @@ public class SalesHistory implements Serializable {
 	private Date OrderDate;
 	private Float USD;
 	private Float Rate;
+	private String TradeTerm;
 
 	public String getSalesSite() {
 		return SalesSite;
@@ -109,6 +110,14 @@ public class SalesHistory implements Serializable {
 
 	public void setRate(Float rate) {
 		Rate = rate;
+	}
+
+	public String getTradeTerm() {
+		return TradeTerm;
+	}
+
+	public void setTradeTerm(String tradeTerm) {
+		TradeTerm = tradeTerm;
 	}
 
 	@Override

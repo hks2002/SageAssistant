@@ -25,6 +25,7 @@ public class QuoteHistory implements Serializable {
 	private String QuoteNO;
 	private Float USD;
 	private Float Rate;
+	private String TradeTerm;
 
 	public Integer getOrderFlag() {
 		return OrderFlag;
@@ -128,6 +129,14 @@ public class QuoteHistory implements Serializable {
 
 	public void setRate(Float rate) {
 		Rate = rate;
+	}
+
+	public String getTradeTerm() {
+		return TradeTerm;
+	}
+
+	public void setTradeTerm(String tradeTerm) {
+		TradeTerm = tradeTerm;
 	}
 
 	@Override

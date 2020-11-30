@@ -49,6 +49,7 @@ export default {
         'NetPrice',
         'USD',
         'Rate',
+        'TradeTerm',
         'CustomerCode',
         'CustomerName'
       ],
@@ -59,16 +60,17 @@ export default {
     doUpdate (pnRoot) {
       this.$axios.get('/Data/SalesHistory?PnRoot=' + pnRoot)
         .then((response) => {
-          console.info('[axios] ' + response.status + ' ' + response.statusText + ' ' + response.config.url)
+          console.debug('[axios] ' + response.status + ' ' + response.statusText + ' ' + response.config.url)
           console.debug(JSON.stringify(response.data))
 
           this.data = response.data
           const len = this.data.length
           if (len >= 20) {
             this.dataZoomStartValue = this.data[len - 20].OrderDate
-          } else {
+          } else if (len > 0) {
             this.dataZoomStartValue = this.data[0].OrderDate
-          }
+          } else { }
+
           this.lengend = _uniq(_map(this.data, 'SalesSite'))
           this.dataByLengend = _groupBy(this.data, 'SalesSite')
           _forEach(this.dataByLengend, (value, index, array) => {

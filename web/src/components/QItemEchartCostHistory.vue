@@ -76,9 +76,10 @@ export default {
           const len = this.data.length
           if (len >= 20) {
             this.dataZoomStartValue = this.data[len - 20].OrderDate
-          } else {
+          } else if (len > 0) {
             this.dataZoomStartValue = this.data[0].OrderDate
-          }
+          } else { }
+
           this.dataBySiteProject = _groupBy(this.data, function (n) { return n.PurchaseSite + n.ProjectNO })
           _forEach(this.dataBySiteProject, (value, index, array) => {
             this.dataSumBySiteProject.push({
@@ -168,7 +169,7 @@ export default {
         },
         legend: { left: 10, top: 20 },
         grid: [
-          { left: '5%', right: '5%' }
+          { left: '5%', right: '25%' }
         ],
         toolbox: {
           feature: {
