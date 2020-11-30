@@ -25,84 +25,108 @@ public class SupplyDelayHistory implements Serializable {
 	private Date OrderDate;
 	private String ReceiptNO;
 	private Date ReceiptDate;
-	
+	private int DaysDelay;
+
 	public String getSite() {
 		return Site;
 	}
+
 	public void setSite(String site) {
 		Site = site;
 	}
+
 	public String getSupplyCode() {
 		return SupplyCode;
 	}
+
 	public void setSupplyCode(String supplyCode) {
 		SupplyCode = supplyCode;
 	}
+
 	public String getPurchaseNO() {
 		return PurchaseNO;
 	}
+
 	public void setPurchaseNO(String purchaseNO) {
 		PurchaseNO = purchaseNO;
 	}
+
 	public String getProjectNO() {
 		return ProjectNO;
 	}
+
 	public void setProjectNO(String projectNO) {
 		ProjectNO = projectNO;
 	}
+
 	public String getPN() {
 		return PN;
 	}
+
 	public void setPN(String pN) {
 		PN = pN;
 	}
+
 	public String getDescription() {
 		return Description;
 	}
+
 	public void setDescription(String description) {
 		Description = description;
 	}
+
 	public Date getAckDate() {
 		return AckDate;
 	}
+
 	public void setAckDate(Date ackDate) {
 		AckDate = ackDate;
 	}
+
 	public Date getExpectDate() {
 		return ExpectDate;
 	}
+
 	public void setExpectDate(Date expectDate) {
 		ExpectDate = expectDate;
 	}
+
 	public Date getOrderDate() {
 		return OrderDate;
 	}
+
 	public void setOrderDate(Date orderDate) {
 		OrderDate = orderDate;
 	}
+
 	public String getReceiptNO() {
 		return ReceiptNO;
 	}
+
 	public void setReceiptNO(String receiptNO) {
 		ReceiptNO = receiptNO;
 	}
+
 	public Date getReceiptDate() {
 		return ReceiptDate;
 	}
+
 	public void setReceiptDate(Date receiptDate) {
 		ReceiptDate = receiptDate;
 	}
-	public int getDateNeed() {
-		return DateNeed;
+
+	public int getDaysDelay() {
+		return DaysDelay;
 	}
-	public void setDateNeed(int dateNeed) {
-		DateNeed = dateNeed;
+
+	public void setDaysDelay(int daysDelay) {
+		DaysDelay = daysDelay;
 	}
-	private int DateNeed;
-	
+
 	@Override
 	public String toString() {
 		return JSON.toJSONString(this, SerializeConfig.globalInstance, new SerializeFilter[] { new PascalNameFilter() },
 				"yyyy-MM-dd", JSON.DEFAULT_GENERATE_FEATURE);
 	}
+
 }

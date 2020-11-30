@@ -8,7 +8,7 @@ import com.alibaba.fastjson.serializer.PascalNameFilter;
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.serializer.SerializeFilter;
 
-public class SupplyOpenLines implements Serializable {
+public class SupplyOpenItems implements Serializable {
 	/**
 	 * 
 	 */
@@ -25,6 +25,7 @@ public class SupplyOpenLines implements Serializable {
 	private Date OrderDate;
 	private String ReceiptNO;
 	private Date ReceiptDate;
+	private int DaysDelay;
 	
 	public String getSite() {
 		return Site;
@@ -97,6 +98,12 @@ public class SupplyOpenLines implements Serializable {
 	}
 	public void setDateNeed(int dateNeed) {
 		DateNeed = dateNeed;
+	}
+	public int getDaysDelay() {
+		return DaysDelay;
+	}
+	public void setDaysDelay(int daysDelay) {
+		DaysDelay = daysDelay;
 	}
 	private int DateNeed;
 	

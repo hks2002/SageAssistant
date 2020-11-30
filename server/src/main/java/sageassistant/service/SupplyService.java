@@ -16,8 +16,9 @@ import com.github.pagehelper.PageHelper;
 import sageassistant.dao.SupplyMapper;
 import sageassistant.model.SupplyDelayHistory;
 import sageassistant.model.SupplyDeliveryHistory;
+import sageassistant.model.SupplyDetails;
 import sageassistant.model.SupplyName;
-import sageassistant.model.SupplyOpenLines;
+import sageassistant.model.SupplyOpenItems;
 import sageassistant.model.SupplySummaryAmount;
 import sageassistant.model.SupplySummaryQty;
 import sageassistant.utils.Utils;
@@ -43,8 +44,8 @@ public class SupplyService {
 		return listOri;
 	}
 
-	public List<SupplySummaryAmount> supplyTotalAmount(String SupplyCode) {
-		List<SupplySummaryAmount> listPage = supplyMapper.supplyTotalAmount(SupplyCode);
+	public List<SupplySummaryAmount> supplyTotalAmount(String SupplyCode, String DateFrom, String DateTo) {
+		List<SupplySummaryAmount> listPage = supplyMapper.supplyTotalAmount(SupplyCode, DateFrom, DateTo);
 
 		// PageHelper override toString, added page info, here output clean list
 		List<SupplySummaryAmount> listOri = new ArrayList<>();
@@ -67,16 +68,34 @@ public class SupplyService {
 		return listOri;
 	}
 
-	public List<SupplySummaryQty> supplyTotalProjectQty(@Param("SupplyCode") String SupplyCode){
-		return supplyMapper.supplyTotalProjectQty(SupplyCode);
+	public List<SupplySummaryQty> supplyTotalProjectQty(@Param("SupplyCode") String SupplyCode, String DateFrom, String DateTo) {
+		return supplyMapper.supplyTotalProjectQty(SupplyCode, DateFrom, DateTo);
 	}
 	
-	public List<SupplySummaryQty> supplyTotalLineQty(@Param("SupplyCode") String SupplyCode){
-		return supplyMapper.supplyTotalLineQty(SupplyCode);
+	public List<SupplySummaryQty> supplyTotalItemQty(@Param("SupplyCode") String SupplyCode, String DateFrom, String DateTo) {
+		return supplyMapper.supplyTotalItemQty(SupplyCode, DateFrom, DateTo);
 	}
 	
-	public List<SupplySummaryQty> supplyTotalProductQty(@Param("SupplyCode") String SupplyCode){
-		return supplyMapper.supplyTotalProductQty(SupplyCode);
+	public List<SupplySummaryQty> supplyTotalProductQty(@Param("SupplyCode") String SupplyCode, String DateFrom, String DateTo) {
+		return supplyMapper.supplyTotalProductQty(SupplyCode, DateFrom, DateTo);
+	}
+	
+	public List<SupplySummaryQty> supplyTotalQty(@Param("SupplyCode") String SupplyCode, String DateFrom, String DateTo) {
+		List<SupplySummaryQty> listProject = supplyMapper.supplyTotalProjectQty(SupplyCode, DateFrom, DateTo);
+		List<SupplySummaryQty> listProduct = supplyMapper.supplyTotalProductQty(SupplyCode, DateFrom, DateTo);
+		List<SupplySummaryQty> listItem = supplyMapper.supplyTotalItemQty(SupplyCode, DateFrom, DateTo);
+
+		List<SupplySummaryQty> listAll = new ArrayList<>();
+
+		for (SupplySummaryQty o : listProject) {
+			listAll.add(o);
+		}
+		for (SupplySummaryQty o : listProduct) {
+			listAll.add(o);
+		}for (SupplySummaryQty o : listItem) {
+			listAll.add(o);
+		}
+		return listAll;
 	}
 	
 	public List<SupplySummaryAmount> supplyOpenAmount(String SupplyCode) {
@@ -107,23 +126,45 @@ public class SupplyService {
 		return supplyMapper.supplyOpenProjectQty(SupplyCode);
 	}
 	
-	public List<SupplySummaryQty> supplyOpenLineQty(@Param("SupplyCode") String SupplyCode){
-		return supplyMapper.supplyOpenLineQty(SupplyCode);
+	public List<SupplySummaryQty> supplyOpenItemQty(@Param("SupplyCode") String SupplyCode){
+		return supplyMapper.supplyOpenItemQty(SupplyCode);
 	}
 	
 	public List<SupplySummaryQty> supplyOpenProductQty(@Param("SupplyCode") String SupplyCode){
 		return supplyMapper.supplyOpenProductQty(SupplyCode);
 	}
 	
-	public List<SupplyDeliveryHistory> supplyDeliveryHistory(@Param("SupplyCode") String SupplyCode, @Param("YearCount") int YearCount){
-		return supplyMapper.supplyDeliveryHistory(SupplyCode, -YearCount);
+	public List<SupplySummaryQty> supplyOpenQty(@Param("SupplyCode") String SupplyCode){
+		List<SupplySummaryQty> listProject = supplyMapper.supplyOpenProjectQty(SupplyCode);
+		List<SupplySummaryQty> listProduct = supplyMapper.supplyOpenProductQty(SupplyCode);
+		List<SupplySummaryQty> listItem = supplyMapper.supplyOpenItemQty(SupplyCode);
+
+		List<SupplySummaryQty> listAll = new ArrayList<>();
+
+		for (SupplySummaryQty o : listProject) {
+			listAll.add(o);
+		}
+		for (SupplySummaryQty o : listProduct) {
+			listAll.add(o);
+		}for (SupplySummaryQty o : listItem) {
+			listAll.add(o);
+		}
+		return listAll;
 	}
 	
-	public List<SupplyDelayHistory> supplyDelayHistory(@Param("SupplyCode") String SupplyCode, @Param("YearCount") int YearCount){
-		return supplyMapper.supplyDelayHistory(SupplyCode, -YearCount);
+	public List<SupplyDeliveryHistory> supplyDeliveryHistory(@Param("SupplyCode") String SupplyCode, String DateFrom, String DateTo) {
+		return supplyMapper.supplyDeliveryHistory(SupplyCode, DateFrom, DateTo);
 	}
 	
-	public List<SupplyOpenLines> supplyOpenLines(@Param("SupplyCode") String SupplyCode){
-		return supplyMapper.supplyOpenLines(SupplyCode);
+	public List<SupplyDelayHistory> supplyDelayHistory(@Param("SupplyCode") String SupplyCode, String DateFrom, String DateTo) {
+		return supplyMapper.supplyDelayHistory(SupplyCode, DateFrom, DateTo);
+	}
+	
+	public List<SupplyOpenItems> supplyOpenItems(@Param("SupplyCode") String SupplyCode){
+		return supplyMapper.supplyOpenItems(SupplyCode);
+	}
+	
+	public SupplyDetails supplyDetails(@Param("SupplyCode") String SupplyCode){
+		return supplyMapper.supplyDetailsByCode(SupplyCode);
 	}
 }
