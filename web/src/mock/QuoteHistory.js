@@ -25,6 +25,7 @@ Mock.mock(RegExp('^(/Data/QuoteHistory)' + '.*'), options => {
         QuoteNO: /(H|Z|S|T|M)DC[0-9]{6}/,
         'USD|1000-2000': 1,
         'Rate|6-9': 1,
+        TradeTerm: /(DDU|CFR|FOB|DAF|CIP|EXW|DAP)/,
         SalesSite: /(ZHU|HKG|SGP|TLS|MIA)/
       }
     ]

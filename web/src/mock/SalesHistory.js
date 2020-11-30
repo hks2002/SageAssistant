@@ -23,6 +23,7 @@ Mock.mock(RegExp('^(/Data/SalesHistory)' + '.*'), options => {
         'Qty|1-100': 1,
         'Rate|6-9': 1,
         'USD|1000-2000': 1,
+        TradeTerm: /(DDU|CFR|FOB|DAF|CIP|EXW|DAP)/,
         SalesSite: /(ZHU|HKG|SGP|TLS|MIA)/
       }
     ]
