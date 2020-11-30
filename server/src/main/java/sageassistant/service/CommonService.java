@@ -17,6 +17,9 @@ public class CommonService {
 		for (Sites o : commonMapper.getAllSites() ) {
 			s += "\"" + o.getSite()+"\",";
 		}
+		if (commonMapper.getAllSites().size()>0) {
+			s = s.substring(0, s.lastIndexOf(','));
+		}
 		s += "]";
 		return s;
 	}

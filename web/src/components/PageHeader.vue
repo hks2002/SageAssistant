@@ -47,6 +47,10 @@
 <script>
 import { setCookie, getCookie } from '../js/CookieTool.js'
 import { date } from 'quasar'
+if (process.env.DEV) {
+  require('../mock/Sites')
+}
+
 export default {
   name: 'PageHeader',
   data () {
@@ -54,7 +58,7 @@ export default {
       noformattedString: this.formatedNow(),
       activePage: 'Home',
       site: 'ZHU',
-      siteList: ['ZHU', 'HKG', 'TLS', 'SGP', 'MIA']
+      siteList: []
     }
   },
   methods: {
@@ -68,7 +72,21 @@ export default {
   },
   mounted () {
     // setInterval(this.formatedNow, 1000)
+    this.$axios.get('/Data/Sites')
+      .then((response) => {
+        console.debug('[axios] ' + response.status + ' ' + response.statusText + ' ' + response.config.url)
+        console.debug(JSON.stringify(response.data))
 
+        this.siteList = response.data
+      })
+      .catch((e) => {
+        this.$q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Loading Sites Failed!',
+          icon: 'fas fa-exclamation-triangle'
+        })
+      })
     // update site if have cookie
     const cookieSite = getCookie('site')
     if (cookieSite) {
