@@ -29,7 +29,7 @@
       </q-menu>
     </q-btn>
 
-    <q-btn v-if="pn != '' "
+    <q-btn v-if="pn"
            icon="fas fa-file-medical"
            color="teal"
            class="q-mr-sm"
@@ -171,7 +171,7 @@ export default {
   watch: {
     pn: {
       handler (newVal, oldVal) {
-        console.debug(oldVal + ' --> ' + newVal)
+        console.debug(oldVal + ' xxxxxxxxxxxxxxxxxxxxxxx--> ' + newVal)
 
         if (newVal) {
           this.doUpdate(newVal)

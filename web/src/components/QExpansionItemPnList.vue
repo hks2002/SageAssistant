@@ -1,10 +1,6 @@
 <template>
-  <q-expansion-item v-if="pnsInFamily[0]"
-                    expand-separator
-                    class="relative-position">
-    <!-- template here is the v-slot start -->
-    <template v-slot:header
-              class="relative-position">
+  <q-list>
+    <q-item v-if="pnsInFamily.length>0">
       <q-item-section :class="labClass(pnsInFamily[0].Status)">
         <q-item-label style="font-weight:bolder; font-size:25px">
           {{pnsInFamily[0].PN}}
@@ -25,11 +21,10 @@
                    v-if="pnsInFamily[0].Status === 1">Active</q-badge>
         </q-item-label>
       </q-item-section>
-      <q-inner-loading :showing="showLoadingPN">
-        <q-spinner-ios size="50px"
-                       color="primary" />
-      </q-inner-loading>
-    </template>
+   </q-item>
+  <q-expansion-item v-if="pnsInFamily.length>1"
+                    expand-separator
+                    class="relative-position">
     <!-- template here is the v-slot end -->
     <!-- template here is the expand item start -->
     <template v-for="(Pn,index) in pnsInFamily">
@@ -50,12 +45,17 @@
           <q-item-label style="font-size:18px">{{Pn.Cat}}</q-item-label>
           <q-item-label>
             <q-badge color="purple"
-                     v-if="Pn.Status === 1 && index>0">Active</q-badge>
+                     v-if="Pn.Status === 1">Active</q-badge>
           </q-item-label>
         </q-item-section>
       </q-item>
     </template>
   </q-expansion-item>
+  <q-inner-loading :showing="showLoadingPN">
+    <q-spinner-ios size="50px"
+                    color="primary" />
+  </q-inner-loading>
+  </q-list>
 </template>
 
 <script>
