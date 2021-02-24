@@ -9,7 +9,7 @@
                 skip-hijack />
     <q-bar class="fit flex-center">
       <div class="footer">
-        <span class="q-pa-ms">Powered by Quasar v{{ $q.version }} & Spring boot {{ springBootVersion }}</span>
+        <span class="q-pa-ms">Powered by Quasar {{ $q.version }} & ECharts {{ eChartsVersion }} & Spring boot {{ springBootVersion }}</span>
       </div>
     </q-bar>
   </q-footer>
@@ -19,12 +19,14 @@
 if (process.env.DEV) {
   require('../mock/SrvInfo.js')
 }
+var packageInfo = require('../../package.json')
 
 export default {
   name: 'PageFooter',
   data () {
     return {
-      springBootVersion: ''
+      springBootVersion: '',
+      eChartsVersion: packageInfo.dependencies.echarts.substring(1)
     }
   },
   methods: {
