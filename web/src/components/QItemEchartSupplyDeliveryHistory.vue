@@ -15,7 +15,6 @@ require('echarts/lib/component/dataZoom')
 require('echarts/lib/component/legend')
 require('echarts/lib/component/title')
 
-import { EchartColors } from '../js/EchartColors'
 import { jsonToExcel, jsonToTable, jsonToMultLine } from '../js/jsonTool'
 import { date } from 'quasar'
 
@@ -133,7 +132,6 @@ export default {
 
     setEchart () {
       this.eChart.setOption({
-        color: EchartColors,
         title: {
           text: 'Delivery History(' + this.dateFrom + '-->' + this.dateTo + ')',
           subtext: '',
