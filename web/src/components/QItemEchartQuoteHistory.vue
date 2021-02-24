@@ -141,7 +141,7 @@ export default {
             }
           },
           symbolSize: function (data) {
-            console.debug(data.OrderNO.length)
+            // console.debug(data.OrderNO.length)
             // don't compair length to 0, maybe " "
             return data.OrderNO.length > 3 ? 12 : 4
           },
