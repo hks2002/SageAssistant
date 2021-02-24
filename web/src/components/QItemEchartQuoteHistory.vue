@@ -9,6 +9,7 @@ if (process.env.DEV) {
 }
 
 const echarts = require('echarts/lib/echarts')
+require('echarts/lib/component/grid')
 require('echarts/lib/chart/pie')
 require('echarts/lib/chart/line')
 require('echarts/lib/component/tooltip')
@@ -17,7 +18,6 @@ require('echarts/lib/component/dataZoom')
 require('echarts/lib/component/legend')
 require('echarts/lib/component/title')
 
-import { EchartColors } from '../js/EchartColors'
 import { jsonToExcel, jsonToTable, jsonToMultLine } from '../js/jsonTool'
 import { date } from 'quasar'
 
@@ -161,7 +161,7 @@ export default {
         type: 'pie',
         datasetIndex: this.dataset.length - 1,
         center: ['88%', '50%'],
-        radius: [0, '50%'],
+        radius: [0, '30%'],
         label: {
           formatter: '{@SalesSite} \nQty:{@Qty}\n{d}%'
         },
@@ -190,7 +190,9 @@ export default {
 
     setEchart () {
       this.eChart.setOption({
-        color: EchartColors,
+        textStyle: {
+          fontSize: 10
+        },
         title: {
           text: 'Quote History',
           subtext: 'Currency Rate Data From State Administration of Foreign Exchange',
@@ -220,7 +222,7 @@ export default {
           }
         },
         tooltip: {
-          position: 'right'
+          confine: true
         },
         dataset: this.dataset,
         dataZoom: [{
@@ -233,7 +235,16 @@ export default {
           type: 'inside'
         }],
         xAxis: {
-          type: 'time'
+          type: 'time',
+          splitLine: {
+            show: true
+          },
+          axisLabel: {
+            show: true,
+            showMaxLabel: true,
+            showMinLabel: true,
+            formatter: '{MM}-{dd}\n{yyyy}'
+          }
         },
         yAxis: {
           gridIndex: 0,

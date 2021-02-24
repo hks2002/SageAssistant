@@ -7,6 +7,7 @@
       <q-item-section class="col-auto text-h6 text-weight-bold q-pr-md" no-wrap>{{supplyInfo.SupplyName0}}</q-item-section>
       <q-item-section class="col-auto text-h6 text-weight-bold q-pr-md" no-wrap v-if="supplyInfo.SupplyName1">{{supplyInfo.SupplyName1}}</q-item-section>
     </q-item>
+    <q-separator />
     <q-item style="padding:0px">
       <q-icon name="fas fa-phone" class="q-pr-md q-pt-xs" color="teal" />
       <q-item-section class="col-auto q-pr-md text-subtitle1" v-if="supplyInfo.Tel0">{{supplyInfo.Tel0}}</q-item-section>
@@ -18,6 +19,7 @@
       <q-icon name="fas fa-fax" v-if="supplyInfo.Fax0" class="q-pr-md q-pt-xs" color="teal" />
       <q-item-section class="col-auto text-subtitle1 q-pr-md" v-if="supplyInfo.Fax0">{{supplyInfo.Fax0}}</q-item-section>
     </q-item>
+    <q-separator />
     <q-item style="padding:0px">
           <q-icon name="fas fa-envelope" class="q-pr-md q-pt-xs" color="teal" />
           <q-item-section v-if="supplyInfo.Email0" class="col-auto text-subtitle1 q-pr-md">{{supplyInfo.Email0}}</q-item-section>
@@ -26,12 +28,14 @@
           <q-item-section v-if="supplyInfo.Email3" class="col-auto text-subtitle1 q-pr-md">{{supplyInfo.Email3}}</q-item-section>
           <q-item-section v-if="supplyInfo.Email4" class="col-auto text-subtitle1 q-pr-md">{{supplyInfo.Email4}}</q-item-section>
     </q-item>
+    <q-separator />
     <q-item style="padding:0px">
       <q-icon name="fas fa-map-marker" class="q-pr-md q-pt-xs" color="teal" />
       <q-item-section class="text-subtitle1 q-pr-md">{{supplyInfo.Address}} {{supplyInfo.Contry}} {{supplyInfo.State}} {{supplyInfo.City}}</q-item-section>
       <q-item-section v-if="supplyInfo.Address0" class="col-auto text-subtitle1 q-pr-md" >{{supplyInfo.Address0}}</q-item-section>
       <q-item-section v-if="supplyInfo.Address1" class="col-auto text-subtitle1 q-pr-md" >{{supplyInfo.Address1}}</q-item-section>
       </q-item>
+    <q-separator />
   <q-inner-loading :showing="showLoading">
     <q-spinner-ios size="50px"
                     color="primary" />
