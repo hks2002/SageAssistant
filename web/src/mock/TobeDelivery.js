@@ -1,7 +1,7 @@
 import Mock from 'mockjs'
 
 Mock.setup({
-  timeout: '1000-3000'
+  timeout: '100-1000'
 })
 
 Mock.mock(RegExp('^(/Data/TobeDelivery)' + '.*'), options => {
@@ -19,7 +19,7 @@ Mock.mock(RegExp('^(/Data/TobeDelivery)' + '.*'), options => {
         CustomerName: () => { return Mock.mock('@sentence(3, 5)') },
         Currency: /(RMB|USD|EUR|HKD)/,
         'NetPrice|1000-2000': 1,
-        'RMB|10-200000': 1,
+        'USD|10-200000': 1,
         'Rate|6-9': 1,
         OrderDate: () => { return Mock.mock('@date("yyyy-MM-dd")') },
         RequestDate: () => { return Mock.mock('@date("yyyy-MM-dd")') }

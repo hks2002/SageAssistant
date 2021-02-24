@@ -16,7 +16,6 @@ require('echarts/lib/component/dataZoom')
 require('echarts/lib/component/legend')
 require('echarts/lib/component/title')
 
-import { EchartColors } from '../js/EchartColors'
 import { jsonToExcel, jsonToTable, jsonToMultLine } from '../js/jsonTool'
 import { date } from 'quasar'
 
@@ -131,7 +130,7 @@ export default {
           },
           encode: {
             x: 'OrderDate',
-            y: 'Days'
+            y: 'ProjectNO'
           }
         }
       })
@@ -139,7 +138,6 @@ export default {
 
     setEchart () {
       this.eChart.setOption({
-        color: EchartColors,
         title: {
           text: 'Order Line to be Deal With',
           left: 'center'
@@ -171,11 +169,8 @@ export default {
           minInterval: 3600 * 24 * 1000 // 最小刻度1天
         },
         yAxis: [{
-          type: 'value',
-          // min: 10,
-          axisLabel: {
-            formatter: '{value}\nDay'
-          }
+          type: 'category',
+          show: false
         }],
         dataZoom: [{
           type: 'slider',

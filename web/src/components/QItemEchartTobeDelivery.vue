@@ -16,7 +16,6 @@ require('echarts/lib/component/dataZoom')
 require('echarts/lib/component/legend')
 require('echarts/lib/component/title')
 
-import { EchartColors } from '../js/EchartColors'
 import { jsonToExcel, jsonToTable, jsonToMultLine } from '../js/jsonTool'
 import { date } from 'quasar'
 
@@ -48,7 +47,7 @@ export default {
         'CustomerName',
         'Currency',
         'NetPrice',
-        'RMB',
+        'USD',
         'Rate',
         'OrderDate',
         'RequestDate',
@@ -131,11 +130,11 @@ export default {
             }
           },
           symbolSize: function (data) {
-            return Math.pow(Math.sqrt(data.RMB), 1 / 3) * Math.E
+            return Math.pow(Math.sqrt(data.USD), 1 / 3) * Math.E
           },
           encode: {
             x: 'RequestDate',
-            y: 'DaysLeft'
+            y: 'ProjectNO'
           }
         }
       })
@@ -143,7 +142,6 @@ export default {
 
     setEchart () {
       this.eChart.setOption({
-        color: EchartColors,
         title: {
           text: 'Production to be Delivery',
           subtext: 'Currency Rate Data From State Administration of Foreign Exchange',
@@ -176,11 +174,8 @@ export default {
           minInterval: 3600 * 24 * 1000 // 最小刻度1天
         },
         yAxis: [{
-          type: 'value',
-          // min: 10,
-          axisLabel: {
-            formatter: '{value}\nDay'
-          }
+          type: 'category',
+          show: false
         }],
         dataZoom: [{
           type: 'slider',

@@ -1,7 +1,7 @@
 import Mock from 'mockjs'
 
 Mock.setup({
-  timeout: '1000-3000'
+  timeout: '100-1000'
 })
 
 Mock.mock(RegExp('^(/Data/TobeDealWithOrderLine)' + '.*'), options => {

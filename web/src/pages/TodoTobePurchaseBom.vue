@@ -2,7 +2,7 @@
   <div>
     <q-tabs-route-tab-todo-list />
     <q-item-echart-tobe-purchase-bom :site="site"
-                                     style="padding:0px; height:800px;" />
+                                     style="padding:0px; height:600px;" />
   </div>
 </template>
 
