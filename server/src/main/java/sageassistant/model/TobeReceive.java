@@ -21,7 +21,7 @@ public class TobeReceive implements Serializable {
 	private String Description;
 	private Float NetPrice;
 	private String Currency;
-	private Float RMB;
+	private Float USD;
 	private Float Rate;
 	private Date OrderDate;
 	private Date AckDate;
@@ -80,9 +80,6 @@ public class TobeReceive implements Serializable {
 		return Rate;
 	}
 
-	public Float getRMB() {
-		return RMB;
-	}
 
 	public String getUnit() {
 		return Unit;
@@ -148,10 +145,6 @@ public class TobeReceive implements Serializable {
 		Rate = rate;
 	}
 
-	public void setRMB(Float rMB) {
-		RMB = rMB;
-	}
-
 	public void setUnit(String unit) {
 		Unit = unit;
 	}
@@ -164,9 +157,18 @@ public class TobeReceive implements Serializable {
 		VendorName = vendorName;
 	}
 
+	public Float getUSD() {
+		return USD;
+	}
+
+	public void setUSD(Float uSD) {
+		USD = uSD;
+	}
+	
 	@Override
 	public String toString() {
 		return JSON.toJSONString(this, SerializeConfig.globalInstance, new SerializeFilter[] { new PascalNameFilter() },
 				"yyyy-MM-dd", JSON.DEFAULT_GENERATE_FEATURE);
 	}
+
 }

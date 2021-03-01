@@ -123,7 +123,6 @@ public class ReportService {
 				}
 				
 				InvoicePay = rptMapper.findInvoicePayByInvoiceNO(InvoiceNO);
-				
 				CRJavaHelper.passPOJO(reportClientDocument, list, "sageassistant.model.RptInvoice", "");
 				CRJavaHelper.passPOJO(reportClientDocument, InvoicePay, "sageassistant.model.RptInvoicePay", "Pay");
 
@@ -244,6 +243,13 @@ public class ReportService {
 				response.getWriter().write("<H1>Report " + report + "not support yet!</H1>");
 			}
 
+			/* Change Author */
+			reportClientDocument.getReportDocument().getSummaryInfo().setAuthor("SageAssistant");
+			
+
+			// Show Chinese font
+			response.setCharacterEncoding("GB2312");
+			
 			/* Do report action */
 			if ("showPdf".equals(action)) {
 				CRJavaHelper.exportPDF(reportClientDocument, response, false);
@@ -255,9 +261,6 @@ public class ReportService {
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				response.getWriter().write("Only support showPdf,exportPdf,exportWord");
 			}
-			
-			/* Change Author */
-			reportClientDocument.getReportDocument().getSummaryInfo().setAuthor("SageAssistant");
 			
 			/* Close report */
 			reportClientDocument.close();

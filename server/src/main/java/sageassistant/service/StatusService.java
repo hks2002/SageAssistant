@@ -33,7 +33,7 @@ public class StatusService {
 		List<TobeDelivery> listOri = new ArrayList<>();
 
 		for (TobeDelivery o : listPage) {
-			String key=o.getCurrency()+"RMB"+Utils.formatDate(o.getOrderDate());
+			String key=o.getCurrency()+"USD"+Utils.formatDate(o.getOrderDate());
 			log.debug("key:"+key);
 			try {
 				o.setRate(Float.parseFloat(CurrencyService.cache.get(key)));
@@ -43,7 +43,7 @@ public class StatusService {
 			} catch (ExecutionException e) {
 				log.error(e.getMessage());
 			}
-			o.setRMB(o.getNetPrice()*o.getRate());
+			o.setUSD(o.getNetPrice()*o.getRate());
 			listOri.add(o);
 		}
 
@@ -58,7 +58,7 @@ public class StatusService {
 		List<TobeReceive> listOri = new ArrayList<>();
 
 		for (TobeReceive o : listPage) {
-			String key=o.getCurrency()+"RMB"+Utils.formatDate(o.getOrderDate());
+			String key=o.getCurrency()+"USD"+Utils.formatDate(o.getOrderDate());
 			log.debug("key:"+key);
 			try {
 				o.setRate(Float.parseFloat(CurrencyService.cache.get(key)));
@@ -68,7 +68,7 @@ public class StatusService {
 			} catch (ExecutionException e) {
 				log.error(e.getMessage());
 			}
-			o.setRMB(o.getNetPrice()*o.getRate());
+			o.setUSD(o.getNetPrice()*o.getRate());
 				listOri.add(o);
 		}
 

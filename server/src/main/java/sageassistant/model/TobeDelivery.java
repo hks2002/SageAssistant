@@ -20,7 +20,7 @@ public class TobeDelivery implements Serializable {
 	private String CustomerName;
 	private String Currency;
 	private Float NetPrice;
-	private Float RMB;
+	private Float USD;
 	private Float Rate;
 	private Date OrderDate;
 	private Date RequestDate;
@@ -73,8 +73,8 @@ public class TobeDelivery implements Serializable {
 		return RequestDate;
 	}
 
-	public Float getRMB() {
-		return RMB;
+	public Float getUSD() {
+		return USD;
 	}
 
 	public void setCurrency(String currency) {
@@ -125,8 +125,8 @@ public class TobeDelivery implements Serializable {
 		RequestDate = requestDate;
 	}
 
-	public void setRMB(Float rMB) {
-		RMB = rMB;
+	public void setUSD(Float uSD) {
+		USD = uSD;
 	}
 
 	@Override
