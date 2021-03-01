@@ -11,12 +11,12 @@
 ![Report](./Report.png)
 
 ### Server install&config
-1. install Oracle Jre Environment
-2. install fonts as requried
-
+1. install Oracle Jre Environment (java 8 or later) 
+  (suggest download rpm, and using ```rpm -ivh ******.rpm``` to install it)
 ```Crystal report doesn't support OpenJDK, it cannot found fonts when export pdf. So, please make sure you are using Oracle Jre runtime, and install the fonts first, if you plan to deploy it to Linux.```
-
-3. install tomcat/nginx
+2. install fonts as requried
+3. install tomcat/nginx (tomcat 9 or later)
+ (suggest download rpm, and using ```rpm -ivh ******.rpm``` to install it)
 4. copy SageAssistantSrv.war to path ```tomcat-*/webapps```
 5. copy web/dist/spa/* to ```nginx/html/``` 
 6. mount windows share foler in linux ```mount -t cifs -o user=user,password=password //server/sharename /mnt/mnt/Manual``` ```mount -t cifs -o user=user,password=password //server/sharename /mnt/mnt/Drawing```
@@ -68,3 +68,5 @@
     // total size limit per one request
     spring.servlet.multipart.max-request-size= 500MB
     ```
+11. if chinese text can't display in pdf, please configure /ect/locale.conf
+    ```LANG=zh_CN.UTF-8```
