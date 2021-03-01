@@ -3,7 +3,7 @@
 	the config -->
 <Configuration status="OFF">
 	<Properties>
-		<Property name="LOG_HOME">../logs</Property>
+		<Property name="LOG_HOME">/var/log/SageAssistant</Property>
 		<Property name="patternCosole">%d{HH:mm:ss.SSS} [%-5level] [%c{36}] %msg%n</Property>
 		<Property name="patternFile">%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] [%c{36}] %msg%n</Property>
 	</Properties>
