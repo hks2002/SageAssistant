@@ -40,7 +40,7 @@ public class AttachmentService {
 
 		if (!Utils.isSererAtZhuhai()) {
 			response.setStatus(403);
-			return "{\"result\":\"Server doesn't support this action!\"}";
+			return "Server doesn't support this action!";
 		}
 		
 		String attachmentPath = Utils.isWin() ? attachmentPathWindows : attachmentPathLinux;
@@ -66,11 +66,11 @@ public class AttachmentService {
 			bytes = uploadfile.getBytes();
 			Files.write(path, bytes);
 
-			return "{\"result\":\"OK\"}";
+			return "Upload file with success!";
 		} catch (IOException e) {
 			log.error("[Upload] " + e.toString());
 			response.setStatus(500);
-			return "{\"result\":\"Not OK\"}";
+			return "Upload file failed!";
 		}
 
 	}
@@ -78,7 +78,7 @@ public class AttachmentService {
 	public String handleFileDelete(String file,HttpServletResponse response) {
 		if (!Utils.isSererAtZhuhai()) {
 			response.setStatus(403);
-			return "{\"result\":\"Server doesn't support this action!\"}";
+			return "Server doesn't support this action!";
 		}
 		
 		String attachmentPath = Utils.isWin() ? attachmentPathWindows : attachmentPathLinux;
@@ -87,11 +87,11 @@ public class AttachmentService {
 		try {
 			Files.delete(path);
 			log.info("[Delete] " + path);
-			return "{\"result\":\"OK\"}";
+			return "Delete file with success!";
 		} catch (IOException e) {
 			log.error("[Delete] " + e.toString());
 			response.setStatus(500);
-			return "{\"result\":\"Not OK\"}";
+			return "Delete file failed!";
 		}
 	}
 	

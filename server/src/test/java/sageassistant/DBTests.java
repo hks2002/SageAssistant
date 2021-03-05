@@ -22,7 +22,7 @@ public class DBTests {
 	 public void speedTest() {
 		long start = System.currentTimeMillis();
 		logger.info("Start ...");
-		for (int i=0; i<100; i++) {
+		for (int i=0; i<10; i++) {
 			List<PnRootPn> listPage = pnMapper.findPnByLike("956A10%");
 			logger.info(listPage.toString());
 		}
