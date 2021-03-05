@@ -44,8 +44,8 @@ public class UtilsTests {
 	}
 	
 	@Test
-	public void testIsSererAtZhuhai() {
-		Assertions.assertTrue(Utils.isSererAtZhuhai());
+	public void testIsServerAtZhuhai() {
+		Assertions.assertTrue(Utils.isServerAtZhuhai());
 	}
 	
 	@Test

@@ -38,7 +38,7 @@ public class AttachmentService {
 	
 	public String handleFileUpload(String pn, String cat, final MultipartFile uploadfile, HttpServletResponse response) {
 
-		if (!Utils.isSererAtZhuhai()) {
+		if (!Utils.isServerAtZhuhai()) {
 			response.setStatus(403);
 			return "Server doesn't support this action!";
 		}
@@ -76,7 +76,7 @@ public class AttachmentService {
 	}
 	
 	public String handleFileDelete(String file,HttpServletResponse response) {
-		if (!Utils.isSererAtZhuhai()) {
+		if (!Utils.isServerAtZhuhai()) {
 			response.setStatus(403);
 			return "Server doesn't support this action!";
 		}
@@ -100,7 +100,7 @@ public class AttachmentService {
 			return "[]";
 		}
 
-		if (!Utils.isSererAtZhuhai()) {
+		if (!Utils.isServerAtZhuhai()) {
 			List<Attachment> listAttachment=attachmentMapper.getAttachment(pn);
 			List<Attachment> listOri = new ArrayList<>();
 			for (Attachment o : listAttachment) {

@@ -107,7 +107,7 @@ public class Utils {
 
 	}
 
-	public static Boolean isSererAtZhuhai() {
+	public static Boolean isServerAtZhuhai() {
 		InetAddress addr;
 		try {
 			addr = InetAddress.getLocalHost();
