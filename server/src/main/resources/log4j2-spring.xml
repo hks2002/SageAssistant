@@ -9,13 +9,14 @@
 	</Properties>
 	<Appenders>
 		<Console name="Console" target="SYSTEM_OUT">
+			<ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
 			<PatternLayout>
 				<Pattern>${patternCosole}</Pattern>
 			</PatternLayout>
-			<ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
 		</Console>
-		<RollingFile name="File" fileName="${LOG_HOME}/sageassistant.log"
+		<RollingFile name="RollingFile" fileName="${LOG_HOME}/sageassistant.log"
 			filePattern="${LOG_HOME}/sageassistant.%d{yyyy-MM-dd}.log" append="true">
+			<ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
 			<PatternLayout>
 				<Pattern>${patternFile}</Pattern>
 			</PatternLayout>
@@ -32,10 +33,13 @@
 			</DefaultRolloverStrategy>
 		</RollingFile>
 	</Appenders>
-	<Loggers name="com.crystaldecisions.reports.formulas.Evaluator">
-		<Root level="info">
-			<AppenderRef ref="Console" level="info" />
-			<AppenderRef ref="File" level="error" />
+	<Loggers>
+		<Root level="INFO">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="RollingFile" />
 		</Root>
+		<!-- Logger name="com.crystaldecisions" level="warn" additivity="false">
+	      <AppenderRef ref="Console"/>
+	    </Logger-->
 	</Loggers>
 </Configuration>
