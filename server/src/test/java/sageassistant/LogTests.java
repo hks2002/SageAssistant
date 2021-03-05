@@ -11,8 +11,9 @@ public class LogTests {
 	 
 	@Test
 	 public void log4j2Test() {
+		 logger.debug("debug");
 		 logger.info("info");
-		 logger.error("error");
 		 logger.warn("warn");
+		 logger.error("error");
 	 }
 }
