@@ -10,18 +10,18 @@ import com.alibaba.fastjson.serializer.SerializeFilter;
 public class Attachment implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private String Pn;
+	private String PN;
 	private String DocType;
 	private String Path;
 	private String File;
 	private String Cat;
 
 	public String getPn() {
-		return Pn;
+		return PN;
 	}
 
 	public void setPn(String pn) {
-		Pn = pn;
+		PN = pn;
 	}
 
 	public String getDocType() {

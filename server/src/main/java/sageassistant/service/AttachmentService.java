@@ -104,21 +104,33 @@ public class AttachmentService {
 			List<Attachment> listAttachment=attachmentMapper.getAttachment(pn);
 			List<Attachment> listOri = new ArrayList<>();
 			for (Attachment o : listAttachment) {
-				Path path = Paths.get(o.getPath(), "");
-				o.setFile(path.getFileName().toString());
 				
 				// make the url with server path
 				String pathStd = o.getPath();
 				pathStd=pathStd.replace("\\", "/");
-				if (pathStd.startsWith("%")) {
-					pathStd="file://srvdata01/" + pathStd.substring(1);
-				} else if (pathStd.startsWith("//")) {
-					pathStd="file:" + pathStd;
-				} else {
-					pathStd="file://srvdata01/";
-				}
-				o.setPath(pathStd);
 				
+				Path path = Paths.get(pathStd, "");
+				o.setFile(path.getFileName().toString());
+				
+				// stand path is /File/docs_sagex3/*
+				if (pathStd.startsWith("%")) {
+					if (pathStd.toLowerCase().contains("docs_sagex3")) {
+						pathStd="/File/" + pathStd.substring(1);
+					} else {
+						pathStd="/File/docs_sagex3/" + pathStd.substring(1);
+					}
+				} else if (pathStd.startsWith("//")) {
+					if (pathStd.toLowerCase().startsWith("//srvdata01/docs_sagex3")) {
+						pathStd= "/File/" + pathStd.substring(12);
+					} else if (pathStd.toLowerCase().startsWith("//192.168.10.47/docs_sagex3")) {
+						pathStd= "/File/" + pathStd.substring(16);
+					}
+					
+				} else {
+					pathStd="/File/docs_sagex3/";
+				}
+				
+				o.setPath(pathStd);
 				listOri.add(o);
 			}
 			return listOri.toString();
