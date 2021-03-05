@@ -4,15 +4,17 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import sageassistant.utils.Utils;
 
+@SpringBootTest
 public class UtilsTests {
-	private static final Logger log = LoggerFactory.getLogger(UtilsTests.class);
+	private static final Logger log = LogManager.getLogger(UtilsTests.class);
 	
 	@Test
 	public void testReadFileContent() {
@@ -42,6 +44,11 @@ public class UtilsTests {
 	}
 	
 	@Test
+	public void testIsSererAtZhuhai() {
+		Assertions.assertTrue(Utils.isSererAtZhuhai());
+	}
+	
+	@Test
 	public void testFindFiles() {
 		String fpath = Thread.currentThread().getContextClassLoader().getResource("sql").getPath();
 		Assertions.assertEquals(Utils.findFiles(fpath + "/XXXX").length,0);
@@ -53,29 +60,33 @@ public class UtilsTests {
 	
 	@Test
 	public void testMakeShortPn() {
-		log.debug(Utils.makeShortPn("98A1234567890G01P01NQ_D_-"));
-		Assertions.assertEquals(Utils.makeShortPn("98A1234567890G01P01NQ_D"),"98A12345678NQ_D");
+		Assertions.assertEquals(Utils.makeShortPn("98A1234567890_CPD_P-11_D"),"98A12345678_D");
 		
-		log.debug(Utils.makeShortPn("9C12345G01P01NQ_D_-"));
-		Assertions.assertEquals(Utils.makeShortPn("9C12345G01P01NQ_D_-"),"9C12345NQ_D");
+		Assertions.assertEquals(Utils.makeShortPn("98A1234567890_CPD-11_D"),"98A12345678_D");
 		
-		log.debug(Utils.makeShortPn("856A1234567890G01P01NQ_D_-"));
-		Assertions.assertEquals(Utils.makeShortPn("856A1234567890G01P01NQ_D"),"856A1234NQ_D");
+		Assertions.assertEquals(Utils.makeShortPn("98A1234567890G01P01_NQ_D_-"),"98A12345678_D");
 		
-		log.debug(Utils.makeShortPn("RRT123456G01P01NQ-1_A_-"));
-		Assertions.assertEquals(Utils.makeShortPn("RRT123456G01P01NQ-1_A_-"),"RRT123456NQ-1_A");
+		Assertions.assertEquals(Utils.makeShortPn("98A1234567890G01P01NQ_D_-"),"98A12345678_D");
 		
-		log.debug(Utils.makeShortPn("HU12345G01P01NQ-1_A_-"));
-		Assertions.assertEquals(Utils.makeShortPn("HU12345G01P01NQ-1_A_-"),"HU12345NQ-1_A");
+		Assertions.assertEquals(Utils.makeShortPn("9C12345G01P01NQ_D_-"),"9C12345_D");
 		
-		log.debug(Utils.makeShortPn("330A12345678G01P01NQ_A_-"));
-		Assertions.assertEquals(Utils.makeShortPn("330A12345678G01P01NQ_A_-"),"330A123456NQ_A");
+		Assertions.assertEquals(Utils.makeShortPn("9C12345-67G01P01NQ_D_-"),"9C12345-67_D");
 		
-		log.debug(Utils.makeShortPn("9401M01G01P01NQ_A_-"));
-		Assertions.assertEquals(Utils.makeShortPn("9401M01G01P01NQ_A_-"),"9401M01NQ_A");
+		Assertions.assertEquals(Utils.makeShortPn("9C12345G01P01NQ-11_D_-"),"9C12345_D");
 		
-		log.debug(Utils.makeShortPn("A12345-1_A_-"));
+		Assertions.assertEquals(Utils.makeShortPn("856A1234567890G01P01NQ_D"),"856A1234_D");
+		
+		Assertions.assertEquals(Utils.makeShortPn("RRT123456G01P01NQ_A_-"),"RRT123456_A");
+		
+		Assertions.assertEquals(Utils.makeShortPn("HU12345G01P01NQ_A_-"),"HU12345_A");
+		
+		Assertions.assertEquals(Utils.makeShortPn("330A12345678G01P01NQ_A_-"),"330A123456_A");
+		
+		Assertions.assertEquals(Utils.makeShortPn("9401M01G01P01NQ_A_-"),"9401M01_A");
+		
 		Assertions.assertEquals(Utils.makeShortPn("A12345-1_A_-"),"A12345_A");
+		
+		Assertions.assertEquals(Utils.makeShortPn("956A1001_QU_A"),"956A1001_A");
 	}
 	
 	@Test
