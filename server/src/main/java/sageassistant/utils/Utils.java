@@ -136,7 +136,9 @@ public class Utils {
 		String newPn = pn.replaceAll("(\\\\|\\*|\\/|\\?)", "-");
 		log.debug("[makeShortPn00] " + newPn);
 		// remove _-|__-- at tail
-		newPn = newPn.replaceAll("(.*?)(_*-*)$", "$1");
+		newPn = newPn.replaceAll("_+", "_");
+		newPn = newPn.replaceAll("-+", "-");
+		newPn = newPn.replaceAll("(.*?)(_-)$", "$1");
 		log.debug("[makeShortPn01] " + newPn);
 		// remove _DRAFT|_QU|_NQ|_NQD|_CPD_PRT anywhere
 		newPn = newPn.replaceAll("(.*)(_DRAFT|_QU|_NQD|_NQ|_CPD|_PRT)(.*)", "$1$3");
