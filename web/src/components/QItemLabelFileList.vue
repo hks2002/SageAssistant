@@ -11,12 +11,16 @@
                floating>D</q-badge>
       <q-badge v-else-if="file.Cat==='Manual'"
                floating>M</q-badge>
+      <q-badge v-else-if="file.Cat==='Certificate'"
+                     floating>C</q-badge>
       <q-badge v-else
                floating>?</q-badge>
       <q-tooltip v-if="file.Cat==='Drawing'"
                  floating>Drawing:{{file.File}}</q-tooltip>
       <q-tooltip v-else-if="file.Cat==='Manual'"
                  floating>Manual:{{file.File}}</q-tooltip>
+      <q-tooltip v-else-if="file.Cat==='Certificate'"
+                 floating>Certificate:{{file.File}}</q-tooltip>
       <q-tooltip v-else
                  floating>Unknown Category:{{file.File}}</q-tooltip>
       <q-menu touch-position
@@ -130,6 +134,12 @@ export default {
       console.log(path)
       this.$axios.get('/Data/FileDelete?Path=' + path)
         .then((response) => {
+          this.$q.notify({
+            color: 'green',
+            position: 'top',
+            message: response.data,
+            icon: 'fas fa-check'
+          })
         })
         .catch((e) => {
           console.error(e)

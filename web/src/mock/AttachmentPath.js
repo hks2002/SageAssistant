@@ -22,3 +22,7 @@ Mock.mock(RegExp('^(/Data/AttachmentPath)' + '.*'), options => {
 
   return list.data
 })
+
+Mock.mock(RegExp('^(/Data/FileDelete)' + '.*'), options => {
+  return 'Delete with Success!'
+})
