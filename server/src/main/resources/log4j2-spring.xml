@@ -38,8 +38,17 @@
 			<AppenderRef ref="Console" />
 			<AppenderRef ref="RollingFile" />
 		</Root>
-		<!-- Logger name="com.crystaldecisions" level="warn" additivity="false">
-	      <AppenderRef ref="Console"/>
-	    </Logger-->
+		<Logger name="com.crystaldecisions" level="WARN" additivity="false">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="RollingFile" />
+		</Logger>
+		<Logger name="com.crystaldecisions12" level="WARN" additivity="false">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="RollingFile" />
+		</Logger>
+		<Logger name="com.businessobjects" level="WARN" additivity="false">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="RollingFile" />
+		</Logger>
 	</Loggers>
 </Configuration>
