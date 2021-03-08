@@ -164,10 +164,10 @@ public class Utils {
 		log.debug("[makeShortPn08] " + newPn);
 
 		///////////////////////////////////////////////////////////////////////////////
-		// 9[7|8|9][ADFSLV] + 8 bit
+		// 9[7|8|9][ADFGKSLV] + 8 bit
 		// remove -00, _P-00
-		newPn = newPn.replaceAll("^([9][7|8|9][ADFSLV])(\\d{8})\\d*(.*)", "$1$2$3");
-		newPn = newPn.replaceAll("^([9][7|8|9][ADFSLV])(\\d{8})((-[0-9|A-Z]{0,2})|(_P-\\d{1,3}))?(.*)", "$1$2$6");
+		newPn = newPn.replaceAll("^([9][7|8|9][ADFGKSLV])(\\d{8})\\d*(.*)", "$1$2$3");
+		newPn = newPn.replaceAll("^([9][7|8|9][ADFGKSLV])(\\d{8})((-[0-9|A-Z]{0,2})|(_P-\\d{1,3}))?(.*)", "$1$2$6");
 		log.debug("[makeShortPn09] " + newPn);
 
 		// 856A|956A + 4 bit
