@@ -25,6 +25,7 @@ import sageassistant.model.TobeDealWithOrderLine;
 import sageassistant.model.TobeDelivery;
 import sageassistant.model.TobePurchaseBom;
 import sageassistant.model.TobeReceive;
+import sageassistant.utils.Utils;
 
 
 @SpringBootTest
@@ -41,7 +42,8 @@ class MapperTests {
 	void testPnRootPn() {
 		PageHelper.startPage(1,50);
 		List<PnRootPn> list = pnMapper.findPnByLike("956A%");
-		
+
+		log.info(list.toString());
 		for (PnRootPn o : list) {
 			log.info(o.toString());	
         }
@@ -50,8 +52,17 @@ class MapperTests {
 		
 		log.info("Pages:"+pageInfo.getPages());
 		log.info("Total:"+pageInfo.getTotal());
-		
 		Assert.assertEquals(pageInfo.getSize(),50);
+		
+	}
+	
+	@Test
+	void testListString(){
+		List<PnRootPn> listOri = pnMapper.findPnByLike("956A1001%");
+		
+		PageHelper.startPage(1,50);
+		List<PnRootPn> listPage = pnMapper.findPnByLike("956A1001%");
+		Assert.assertEquals(listOri.toString(), Utils.listToString(listPage));
 		
 	}
 	

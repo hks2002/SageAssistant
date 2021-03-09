@@ -34,21 +34,11 @@ public class SupplyService {
 		PageHelper.startPage(1, count);
 		List<SupplyName> listPage = supplyMapper.supplyByCodeOrName("%" + cond + "%");
 
-		// PageHelper override toString, added page info, here output clean list
-		List<SupplyName> listOri = new ArrayList<>();
-
-		for (SupplyName o : listPage) {
-			listOri.add(o);
-		}
-
-		return listOri;
+		return listPage;
 	}
 
 	public List<SupplySummaryAmount> supplyTotalAmount(String SupplyCode, String DateFrom, String DateTo) {
 		List<SupplySummaryAmount> listPage = supplyMapper.supplyTotalAmount(SupplyCode, DateFrom, DateTo);
-
-		// PageHelper override toString, added page info, here output clean list
-		List<SupplySummaryAmount> listOri = new ArrayList<>();
 
 		for (SupplySummaryAmount o : listPage) {
 			String key=o.getCurrency()+"USD"+Utils.formatDate(new Date());
@@ -62,10 +52,9 @@ public class SupplyService {
 				log.error(e.getMessage());
 			}
 			o.setUSD(o.getAmount()*o.getRate());
-			listOri.add(o);
 		}
 
-		return listOri;
+		return listPage;
 	}
 
 	public List<SupplySummaryQty> supplyTotalProjectQty(@Param("SupplyCode") String SupplyCode, String DateFrom, String DateTo) {
@@ -101,9 +90,6 @@ public class SupplyService {
 	public List<SupplySummaryAmount> supplyOpenAmount(String SupplyCode) {
 		List<SupplySummaryAmount> listPage = supplyMapper.supplyOpenAmount(SupplyCode);
 
-		// PageHelper override toString, added page info, here output clean list
-		List<SupplySummaryAmount> listOri = new ArrayList<>();
-
 		for (SupplySummaryAmount o : listPage) {
 			String key=o.getCurrency()+"USD"+Utils.formatDate(new Date());
 			log.debug("key:"+key);
@@ -116,10 +102,9 @@ public class SupplyService {
 				log.error(e.getMessage());
 			}
 			o.setUSD(o.getAmount()*o.getRate());
-			listOri.add(o);
 		}
 
-		return listOri;
+		return listPage;
 	}
 	
 	public List<SupplySummaryQty> supplyOpenProjectQty(@Param("SupplyCode") String SupplyCode){

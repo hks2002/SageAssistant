@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -102,7 +101,6 @@ public class AttachmentService {
 
 		if (!Utils.isServerAtZhuhai()) {
 			List<Attachment> listAttachment=attachmentMapper.getAttachment(pn);
-			List<Attachment> listOri = new ArrayList<>();
 			for (Attachment o : listAttachment) {
 				
 				// make the url with server path
@@ -131,9 +129,8 @@ public class AttachmentService {
 				}
 				
 				o.setPath(pathStd);
-				listOri.add(o);
 			}
-			return listOri.toString();
+			return listAttachment.toString();
 			
 		} else { // Zhuhai
 			// change / \ * ? to -

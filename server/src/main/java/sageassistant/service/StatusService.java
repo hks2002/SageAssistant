@@ -1,6 +1,5 @@
 package sageassistant.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -29,9 +28,6 @@ public class StatusService {
 		PageHelper.startPage(1, count);
 		List<TobeDelivery> listPage = statusMapper.findTobeDeliveryBySite(site);
 
-		// PageHelper override toString, added page info, here output clean list
-		List<TobeDelivery> listOri = new ArrayList<>();
-
 		for (TobeDelivery o : listPage) {
 			String key=o.getCurrency()+"USD"+Utils.formatDate(o.getOrderDate());
 			log.debug("key:"+key);
@@ -44,18 +40,14 @@ public class StatusService {
 				log.error(e.getMessage());
 			}
 			o.setUSD(o.getNetPrice()*o.getRate());
-			listOri.add(o);
 		}
 
-		return listOri;
+		return listPage;
 	}
 	
 	public List<TobeReceive> findTobeReceiveBySite(String site, Integer count) {
 		PageHelper.startPage(1, count);
 		List<TobeReceive> listPage = statusMapper.findTobeReceiveBySite(site);
-
-		// PageHelper override toString, added page info, here output clean list
-		List<TobeReceive> listOri = new ArrayList<>();
 
 		for (TobeReceive o : listPage) {
 			String key=o.getCurrency()+"USD"+Utils.formatDate(o.getOrderDate());
@@ -69,38 +61,23 @@ public class StatusService {
 				log.error(e.getMessage());
 			}
 			o.setUSD(o.getNetPrice()*o.getRate());
-				listOri.add(o);
 		}
 
-		return listOri;
+		return listPage;
 	}
 	
 	public List<TobeDealWithOrderLine> findTobeDealWithOrderLineBySite(String site, Integer count) {
 		PageHelper.startPage(1, count);
 		List<TobeDealWithOrderLine> listPage = statusMapper.findTobeDealWithOrderLineBySite(site);
 
-		// PageHelper override toString, added page info, here output clean list
-		List<TobeDealWithOrderLine> listOri = new ArrayList<>();
-
-		for (TobeDealWithOrderLine o : listPage) {
-			listOri.add(o);
-		}
-
-		return listOri;
+		return listPage;
 	}
 	
 	public List<TobePurchaseBom> findTobePurchaseBomBySite(String site, Integer count) {
 		PageHelper.startPage(1, count);
 		List<TobePurchaseBom> listPage = statusMapper.findTobePurchaseBomBySite(site);
 
-		// PageHelper override toString, added page info, here output clean list
-		List<TobePurchaseBom> listOri = new ArrayList<>();
-
-		for (TobePurchaseBom o : listPage) {
-			listOri.add(o);
-		}
-
-		return listOri;
+		return listPage;
 	}
 
 }

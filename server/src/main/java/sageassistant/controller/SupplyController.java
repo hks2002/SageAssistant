@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import sageassistant.service.SupplyService;
+import sageassistant.utils.Utils;
 
 @CrossOrigin
 @RestController
@@ -23,7 +24,7 @@ public class SupplyController {
 	public String getSupplyName(
 			@RequestParam(value = "SupplyCodeOrName", required = false, defaultValue = "%%") String SupplyCodeOrName,
 			@RequestParam(value = "Count", required = false, defaultValue = "50") Integer count) {
-		return supplyService.supplyByCodeOrName(SupplyCodeOrName, count).toString();
+		return Utils.listToString(supplyService.supplyByCodeOrName(SupplyCodeOrName, count));
 	}
 
 	@GetMapping("/Data/SupplyDetails")
@@ -37,7 +38,7 @@ public class SupplyController {
 			@RequestParam(value = "SupplyCode", required = false, defaultValue = "NULL") String SupplyCode,
 			@RequestParam(value = "DateFrom", required = false, defaultValue = "2000-01-01") String DateFrom,
 			@RequestParam(value = "DateTo", required = false, defaultValue = "2099-12-31") String DateTo) {
-		return supplyService.supplyTotalAmount(SupplyCode, DateFrom, DateTo).toString();
+		return Utils.listToString(supplyService.supplyTotalAmount(SupplyCode, DateFrom, DateTo));
 	}
 
 	@GetMapping("/Data/SupplyTotalProjectQty")
@@ -45,7 +46,7 @@ public class SupplyController {
 			@RequestParam(value = "SupplyCode", required = false, defaultValue = "NULL") String SupplyCode,
 			@RequestParam(value = "DateFrom", required = false, defaultValue = "2000-01-01") String DateFrom,
 			@RequestParam(value = "DateTo", required = false, defaultValue = "2099-12-31") String DateTo) {
-		return supplyService.supplyTotalProjectQty(SupplyCode, DateFrom, DateTo).toString();
+		return Utils.listToString(supplyService.supplyTotalProjectQty(SupplyCode, DateFrom, DateTo));
 	}
 
 	@GetMapping("/Data/SupplyTotalItemQty")
@@ -53,7 +54,7 @@ public class SupplyController {
 			@RequestParam(value = "SupplyCode", required = false, defaultValue = "NULL") String SupplyCode,
 			@RequestParam(value = "DateFrom", required = false, defaultValue = "2000-01-01") String DateFrom,
 			@RequestParam(value = "DateTo", required = false, defaultValue = "2099-12-31") String DateTo) {
-		return supplyService.supplyTotalItemQty(SupplyCode, DateFrom, DateTo).toString();
+		return Utils.listToString(supplyService.supplyTotalItemQty(SupplyCode, DateFrom, DateTo));
 	}
 	
 	@GetMapping("/Data/SupplyTotalQty")
@@ -75,31 +76,31 @@ public class SupplyController {
 	@GetMapping("/Data/SupplyOpenAmount")
 	public String getSupplyOpenAmount(
 			@RequestParam(value = "SupplyCode", required = false, defaultValue = "NULL") String SupplyCode) {
-		return supplyService.supplyOpenAmount(SupplyCode).toString();
+		return Utils.listToString(supplyService.supplyOpenAmount(SupplyCode));
 	}
 
 	@GetMapping("/Data/SupplyOpenProjectQty")
 	public String getSupplyOpenProjectQty(
 			@RequestParam(value = "SupplyCode", required = false, defaultValue = "NULL") String SupplyCode) {
-		return supplyService.supplyOpenProjectQty(SupplyCode).toString();
+		return Utils.listToString(supplyService.supplyOpenProjectQty(SupplyCode));
 	}
 
 	@GetMapping("/Data/SupplyOpenItemQty")
 	public String getSupplyOpenItemQty(
 			@RequestParam(value = "SupplyCode", required = false, defaultValue = "NULL") String SupplyCode) {
-		return supplyService.supplyOpenItemQty(SupplyCode).toString();
+		return Utils.listToString(supplyService.supplyOpenItemQty(SupplyCode));
 	}
 
 	@GetMapping("/Data/SupplyOpenQty")
 	public String getSupplyOpenQty(
 			@RequestParam(value = "SupplyCode", required = false, defaultValue = "NULL") String SupplyCode) {
-		return supplyService.supplyOpenQty(SupplyCode).toString();
+		return Utils.listToString(supplyService.supplyOpenQty(SupplyCode));
 	}
 	
 	@GetMapping("/Data/SupplyOpenProductQty")
 	public String getSupplyOpenProductQty(
 			@RequestParam(value = "SupplyCode", required = false, defaultValue = "NULL") String SupplyCode) {
-		return supplyService.supplyOpenProductQty(SupplyCode).toString();
+		return Utils.listToString(supplyService.supplyOpenProductQty(SupplyCode));
 	}
 
 	@GetMapping("/Data/SupplyDeliveryHistory")
@@ -107,7 +108,7 @@ public class SupplyController {
 			@RequestParam(value = "SupplyCode", required = false, defaultValue = "NULL") String SupplyCode,
 			@RequestParam(value = "DateFrom", required = false, defaultValue = "2000-01-01") String DateFrom,
 			@RequestParam(value = "DateTo", required = false, defaultValue = "2099-12-31") String DateTo) {
-		return supplyService.supplyDeliveryHistory(SupplyCode, DateFrom, DateTo).toString();
+		return Utils.listToString(supplyService.supplyDeliveryHistory(SupplyCode, DateFrom, DateTo));
 	}
 
 	@GetMapping("/Data/SupplyDelayHistory")
@@ -115,12 +116,12 @@ public class SupplyController {
 			@RequestParam(value = "SupplyCode", required = false, defaultValue = "NULL") String SupplyCode,
 			@RequestParam(value = "DateFrom", required = false, defaultValue = "2000-01-01") String DateFrom,
 			@RequestParam(value = "DateTo", required = false, defaultValue = "2099-12-31") String DateTo) {
-		return supplyService.supplyDelayHistory(SupplyCode, DateFrom, DateTo).toString();
+		return Utils.listToString(supplyService.supplyDelayHistory(SupplyCode, DateFrom, DateTo));
 	}
 
 	@GetMapping("/Data/SupplyOpenItems")
 	public String getSupplyOpenItems(
 			@RequestParam(value = "SupplyCode", required = false, defaultValue = "NULL") String SupplyCode) {
-		return supplyService.supplyOpenItems(SupplyCode).toString();
+		return Utils.listToString(supplyService.supplyOpenItems(SupplyCode));
 	}
 }

@@ -34,42 +34,21 @@ public class PnService {
 		PageHelper.startPage(1, count);
 		List<PnRootPn> listPage = pnMapper.findPnByLike(cond + "%");
 
-		// PageHelper override toString, added page info, here output clean list
-		List<PnRootPn> listOri = new ArrayList<>();
-
-		for (PnRootPn o : listPage) {
-			listOri.add(o);
-		}
-
-		return listOri;
+		return listPage;
 	}
 
 	public List<PnRootPn> findPnByEndWith(String cond, Integer count) {
 		PageHelper.startPage(1, count);
 		List<PnRootPn> listPage = pnMapper.findPnByLike("%" + cond);
 
-		// PageHelper override toString, added page info, here output clean list
-		List<PnRootPn> listOri = new ArrayList<>();
-
-		for (PnRootPn o : listPage) {
-			listOri.add(o);
-		}
-
-		return listOri;
+		return listPage;
 	}
 
 	public List<PnRootPn> findPnByContains(String cond, Integer count) {
 		PageHelper.startPage(1, count);
 		List<PnRootPn> listPage = pnMapper.findPnByLike("%" + cond + "%");
 
-		// PageHelper override toString, added page info, here output clean list
-		List<PnRootPn> listOri = new ArrayList<>();
-
-		for (PnRootPn o : listPage) {
-			listOri.add(o);
-		}
-
-		return listOri;
+		return listPage;
 	}
 
 	public List<PnDetails> findAllPnByPnRoot(String pnRoot) {
@@ -78,11 +57,7 @@ public class PnService {
 
 	public List<SalesHistory> findSalesHistoryByPnRoot(String pnRoot, Integer count) {
 		PageHelper.startPage(1, count);
-
 		List<SalesHistory> listPage = (ArrayList<SalesHistory>)pnMapper.findSalesHistoryByPnRoot(pnRoot);
-
-		// PageHelper override toString, added page info, here output clean list
-		List<SalesHistory> listOri = new ArrayList<>();
 
 		for (SalesHistory o : listPage) {
 			String key=o.getCurrency()+"USD"+Utils.formatDate(o.getOrderDate());
@@ -96,19 +71,14 @@ public class PnService {
 				log.error(e.getMessage());
 			}
 			o.setUSD(o.getNetPrice()*o.getRate());
-			listOri.add(o);
 		}
 
-		return listOri;
+		return listPage;
 	}
 	
 	public List<QuoteHistory> findQuoteHistoryByPnRoot(String pnRoot, Integer count) {
 		PageHelper.startPage(1, count);
-
 		List<QuoteHistory> listPage = pnMapper.findQuoteHistoryByPnRoot(pnRoot);
-
-		// PageHelper override toString, added page info, here output clean list
-		List<QuoteHistory> listOri = new ArrayList<>();
 
 		for (QuoteHistory o : listPage) {
 			String key=o.getCurrency()+"USD"+Utils.formatDate(o.getQuoteDate());
@@ -122,20 +92,14 @@ public class PnService {
 				log.error(e.getMessage());
 			}
 			o.setUSD(o.getNetPrice()*o.getRate());
-			listOri.add(o);
 		}
 
-		return listOri;
+		return listPage;
 	}
 	
 	public List<CostHistory> findCostHistoryByPnRoot(String pnRoot, Integer count) {
 		PageHelper.startPage(1, count);
-
 		List<CostHistory> listPage = pnMapper.findCostHistoryByPnRoot(pnRoot);
-
-		// PageHelper override toString, added page info, here output clean list
-		List<CostHistory> listOri = new ArrayList<>();
-
 		
 		for (CostHistory o : listPage) {
 			String key=o.getCurrency()+"USD"+Utils.formatDate(o.getOrderDate());
@@ -149,11 +113,10 @@ public class PnService {
 				log.error(e.getMessage());
 			}
 			o.setUSD(o.getNetPrice()*o.getRate());
-			listOri.add(o);
 		}
-        // one project maybe purchase line with different currency
+		// one project maybe purchase line with different currency
 		
-		return listOri;
+		return listPage;
 	}
 	
 	public List<DeliveryDuration> findDeliveryDurationByPnRoot(@Param("pnRoot") String pnRoot){

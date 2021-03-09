@@ -208,4 +208,11 @@ public class Utils {
 		}
 		return newPn;
 	}
+	
+	// Page{count=true, pageNum=1, pageSize=50, startRow=0, endRow=50, total=13346, pages=267, reasonable=true, pageSizeZero=false}[{},{}]
+	// [{},{}]
+	public static String listToString(List<?> list) {
+		return list.toString().replaceAll("(Page\\{.*?\\})(.*)","$2");
+	}
+
 }
