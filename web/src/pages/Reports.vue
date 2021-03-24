@@ -254,7 +254,37 @@
                  icon="fas fa-file-word" />
         </q-item-section>
       </q-item>
-
+      <q-item>
+        <q-item-section avatar>
+          <q-avatar color="primary"
+                    text-color="white">
+            S
+          </q-avatar>
+        </q-item-section>
+        <q-item-section>
+          <q-input label="Site&CustomerCode"
+                   v-model="SiteAndBPCode"
+                   outlined
+                   clearable
+                   hint="e.g.:ZHU00870 OR ZHU"
+                   :hide-hint="true"
+                   input-class="text-uppercase"
+                   class="q-pa-xs">
+          </q-input>
+        </q-item-section>
+        <q-item-section side>
+          <q-btn text-color="orange-10"
+                 dense
+                 @click="showSOA"
+                 icon="fas fa-file-pdf" />
+        </q-item-section>
+        <q-item-section side>
+          <q-btn text-color="indigo-7"
+                 dense
+                 @click="exportWordSOA"
+                 icon="fas fa-file-word" />
+        </q-item-section>
+      </q-item>
     </div>
     <q-dialog v-model="showAlert">
       <q-card>
@@ -302,6 +332,7 @@ export default {
       ReceiptNO: '',
       PurchaseSiteVendorCodeDuration: '',
       ProjectOrWorkOrderNO: '',
+      SiteAndBPCode: '',
       UrlShow: 'about:blank',
       UrlExport: 'about:blank',
       showAlert: false
@@ -418,6 +449,16 @@ export default {
         this.UrlShow = 'about:blank'
       }
     },
+    showSOA: function (value) {
+      if (this.validateSOA()) {
+        if (this.UrlShow === this.UrlSOA) {
+          return
+        }
+        this.UrlShow = this.UrlSOA
+      } else {
+        this.UrlShow = 'about:blank'
+      }
+    },
     exportWordCOC: function () {
       if (this.validateCOC()) {
         this.UrlExport = this.UrlCOC.replace('showPdf', 'exportWord')
@@ -470,6 +511,13 @@ export default {
     exportWordWO: function () {
       if (this.validateWO()) {
         this.UrlExport = this.UrlWorkOrder.replace('showPdf', 'exportWord')
+      } else {
+        this.UrlExport = 'about:blank'
+      }
+    },
+    exportWordSOA: function () {
+      if (this.validateSOA()) {
+        this.UrlExport = this.UrlSOA.replace('showPdf', 'exportWord')
       } else {
         this.UrlExport = 'about:blank'
       }
@@ -559,6 +607,20 @@ export default {
         this.showAlert = true
         return false
       }
+    },
+    validateSOA: function () {
+      var reg1 = /^[A-Z]{3}$/
+      var reg2 = /^[A-Z]{3}[\d]{5}$/
+      if (this.SiteAndBPCode && this.SiteAndBPCode.length === 3 &&
+        reg1.test(this.SiteAndBPCode.toUpperCase())) {
+        return true
+      } else if (this.SiteAndBPCode && this.SiteAndBPCode.length === 8 &&
+        reg2.test(this.SiteAndBPCode.toUpperCase())) {
+        return true
+      } else {
+        this.showAlert = true
+        return false
+      }
     }
   },
   computed: {
@@ -585,6 +647,9 @@ export default {
     },
     UrlWorkOrder: function () {
       return '/Report/WorkOrder/showPdf?ProjectOrWorkOrderNO=' + this.ProjectOrWorkOrderNO.toUpperCase()
+    },
+    UrlSOA: function () {
+      return '/Report/SOA/showPdf?SiteAndBPCode=' + this.SiteAndBPCode.toUpperCase()
     }
   }
 }
