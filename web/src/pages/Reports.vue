@@ -649,7 +649,7 @@ export default {
       return '/Report/WorkOrder/showPdf?ProjectOrWorkOrderNO=' + this.ProjectOrWorkOrderNO.toUpperCase()
     },
     UrlSOA: function () {
-      return '/Report/SOA/showPdf?SiteAndBPCode=' + this.SiteAndBPCode.toUpperCase()
+      return '/Report/SOA/showPdf?Site=' + this.SiteAndBPCode.slice(0, 3).toUpperCase() + '&BPCode=' + this.SiteAndBPCode.slice(3, 8).toUpperCase()
     }
   }
 }
