@@ -15,6 +15,7 @@ import sageassistant.model.RptInvoicePay;
 import sageassistant.model.RptPurchase;
 import sageassistant.model.RptPurchaseTax;
 import sageassistant.model.RptReceipt;
+import sageassistant.model.RptSOA;
 import sageassistant.model.RptWorkOrder;
 import sageassistant.model.RptWorkOrderComp;
 import sageassistant.model.RptWorkOrderOpestt;
@@ -54,4 +55,5 @@ public interface RptMapper {
 	
 	List<RptReceipt> findReceiptByPurchaseSiteVenderCodeDuration(@Param("PurchaseSite") String PurchaseSite, @Param("VendorCode") String VendorCode, @Param("StartDay") String StartDay, @Param("EndDay") String EndDay);
 
+	List<RptSOA> findSOABySiteAndBPCode(@Param("Site") String Site, @Param("BPCode") String BPCode);
 }

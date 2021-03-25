@@ -238,6 +238,23 @@ public class ReportService {
 
 				reportClientDocument.getReportDocument().getSummaryInfo().setTitle(ProjectOrWorkOrderNO);
 				break;
+			case "SOA":
+				reportClientDocument.open("reports/SOA.rpt", 0);
+
+				String Site = request.getParameter("Site");
+				String BPCode = request.getParameter("BPCode");
+				list = rptMapper.findSOABySiteAndBPCode(Site, BPCode);
+				
+				log.info(list);
+				if (list.size() == 0) {
+					response.getWriter().write("<H1>Site:" + Site + " for Customer:" + BPCode + " not found!</H1>");
+					return;
+				}
+				
+				CRJavaHelper.passPOJO(reportClientDocument, list, "sageassistant.model.RptSOA", "");
+
+				reportClientDocument.getReportDocument().getSummaryInfo().setTitle("SOA-"+ Site + BPCode);
+				break;
 			default:
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				response.getWriter().write("<H1>Report " + report + "not support yet!</H1>");
