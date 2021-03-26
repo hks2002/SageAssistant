@@ -14,14 +14,15 @@
                    v-model="COCProj"
                    outlined
                    clearable
-                   hint="e.g.: ZCC190001-1 or ZCC190001-11 or ZDSRP190001"
+                   hint="e.g.: ZCC190001-1 or ZCC190001-11 or ZREP2019001 or ZDSRP190001"
                    :hide-hint="true"
                    input-class="text-uppercase"
+                   @keydown="checkInputKey($event,'showCOC')"
                    class="q-pa-xs">
           </q-input>
         </q-item-section>
         <q-item-section side>
-          <q-btn text-color="orange-10"
+          <q-btn ref="showCOC" text-color="orange-10"
                  dense
                  @click="showCOC"
                  icon="fas fa-file-pdf" />
@@ -49,11 +50,12 @@
                    hint="e.g.: ZBL190001"
                    :hide-hint="true"
                    input-class="text-uppercase"
+                   @keydown="checkInputKey($event,'showDelivery')"
                    class="q-pa-xs">
           </q-input>
         </q-item-section>
         <q-item-section side>
-          <q-btn text-color="orange-10"
+          <q-btn ref="showDelivery" text-color="orange-10"
                  dense
                  @click="showDelivery"
                  icon="fas fa-file-pdf" />
@@ -81,11 +83,12 @@
                    hint="e.g.: ZFC1901001 or ZPC190001"
                    :hide-hint="true"
                    input-class="text-uppercase"
+                   @keydown="checkInputKey($event,'showInvoice')"
                    class="q-pa-xs">
           </q-input>
         </q-item-section>
         <q-item-section side>
-          <q-btn text-color="orange-10"
+          <q-btn ref="showInvoice" text-color="orange-10"
                  dense
                  @click="showInvoice"
                  icon="fas fa-file-pdf" />
@@ -97,7 +100,8 @@
                  icon="fas fa-file-word" />
         </q-item-section>
       </q-item>
-            <q-item>
+
+      <q-item>
         <q-item-section avatar>
           <q-avatar color="primary"
                     text-color="white">
@@ -112,11 +116,12 @@
                    hint="e.g.: ZCC180020 or customer order"
                    :hide-hint="true"
                    input-class="text-uppercase"
+                   @keydown="checkInputKey($event,'showInvoice2')"
                    class="q-pa-xs">
           </q-input>
         </q-item-section>
         <q-item-section side>
-          <q-btn text-color="orange-10"
+          <q-btn ref="showInvoice2" text-color="orange-10"
                  dense
                  @click="showInvoice2"
                  icon="fas fa-file-pdf" />
@@ -143,13 +148,14 @@
                    hint="e.g.: ZCF1901001"
                    :hide-hint="true"
                    input-class="text-uppercase"
+                   @keydown="checkInputKey($event,'showPO')"
                    class="q-pa-xs">
             <q-checkbox v-model="POtax"
                         label="Tax" />
           </q-input>
         </q-item-section>
         <q-item-section side>
-          <q-btn text-color="orange-10"
+          <q-btn ref="showPO" text-color="orange-10"
                  dense
                  @click="showPO"
                  icon="fas fa-file-pdf" />
@@ -176,11 +182,12 @@
                    hint="e.g.: ZRA1900607"
                    :hide-hint="true"
                    input-class="text-uppercase"
+                   @keydown="checkInputKey($event,'showReceipt')"
                    class="q-pa-xs">
           </q-input>
         </q-item-section>
         <q-item-section side>
-          <q-btn text-color="orange-10"
+          <q-btn ref="showReceipt" text-color="orange-10"
                  dense
                  @click="showReceipt"
                  icon="fas fa-file-pdf" />
@@ -207,11 +214,12 @@
                    hint="e.g.:ZHU-20715-20201001-20201031"
                    :hide-hint="true"
                    input-class="text-uppercase"
+                   @keydown="checkInputKey($event,'showReceipt2')"
                    class="q-pa-xs">
           </q-input>
         </q-item-section>
         <q-item-section side>
-          <q-btn text-color="orange-10"
+          <q-btn ref="showReceipt2" text-color="orange-10"
                  dense
                  @click="showReceipt2"
                  icon="fas fa-file-pdf" />
@@ -238,11 +246,12 @@
                    hint="e.g.:HCC200033-1 OR ZOF1901001"
                    :hide-hint="true"
                    input-class="text-uppercase"
+                   @keydown="checkInputKey($event,'showWO')"
                    class="q-pa-xs">
           </q-input>
         </q-item-section>
         <q-item-section side>
-          <q-btn text-color="orange-10"
+          <q-btn ref="showWO" text-color="orange-10"
                  dense
                  @click="showWO"
                  icon="fas fa-file-pdf" />
@@ -269,11 +278,13 @@
                    hint="e.g.:ZHU00870 OR ZHU"
                    :hide-hint="true"
                    input-class="text-uppercase"
+                   @keydown="checkInputKey($event,'showSOA')"
                    class="q-pa-xs">
           </q-input>
         </q-item-section>
         <q-item-section side>
-          <q-btn text-color="orange-10"
+          <q-btn ref="showSOA"
+                 text-color="orange-10"
                  dense
                  @click="showSOA"
                  icon="fas fa-file-pdf" />
@@ -339,6 +350,15 @@ export default {
     }
   },
   methods: {
+    onLoad: function () {
+      this.$q.loading.hide()
+    },
+    checkInputKey: function (event, method) {
+      if (event.keyCode === 13) {
+        this.$refs[method].click()
+        return false
+      }
+    },
     showCOC: function (value) {
       if (this.validateCOC()) {
         if (this.UrlShow === this.UrlCOC) {
@@ -522,13 +542,18 @@ export default {
         this.UrlExport = 'about:blank'
       }
     },
-    onLoad: function () {
-      this.$q.loading.hide()
-    },
     validateCOC: function () {
-      if (this.COCProj &&
-        (this.COCProj.length === 11 || this.COCProj.length === 12) &&
-        (this.COCProj.slice(1, 3).toUpperCase() === 'CC' || this.COCProj.slice(1, 5).toUpperCase() === 'DSRP')) {
+      var reg1 = /^[A-Z]CC[\d]{1}-[\d]{1,3}$/
+      var reg2 = /^[A-Z]DSR[P|C][\d]{6}$/
+      var reg3 = /^[A-Z]REP[\d]{7}$/
+      var reg4 = /^[A-Z]RCL[\d]{7}$/
+      if (reg1.test(this.DeliveryNO.toUpperCase())) {
+        return true
+      } else if (reg2.test(this.DeliveryNO.toUpperCase())) {
+        return true
+      } else if (reg3.test(this.DeliveryNO.toUpperCase())) {
+        return true
+      } else if (reg4.test(this.DeliveryNO.toUpperCase())) {
         return true
       } else {
         this.showAlert = true
@@ -536,8 +561,8 @@ export default {
       }
     },
     validateDelivery: function () {
-      if (this.DeliveryNO && this.DeliveryNO.length === 9 &&
-        this.DeliveryNO.slice(1, 3).toUpperCase() === 'BL') {
+      var reg1 = /^[A-Z]BL[\d]{6}$/
+      if (reg1.test(this.DeliveryNO.toUpperCase())) {
         return true
       } else {
         this.showAlert = true
@@ -545,9 +570,11 @@ export default {
       }
     },
     validateInvoice: function () {
-      if (this.InvoiceNO &&
-        (this.InvoiceNO.length === 10 || this.InvoiceNO.length === 9) &&
-        (this.InvoiceNO.slice(1, 3).toUpperCase() === 'FC' || this.InvoiceNO.slice(1, 3).toUpperCase() === 'PC')) {
+      var reg1 = /^[A-Z]FC[\d]{7}$/
+      var reg2 = /^[A-Z]PC[\d]{6}$/
+      if (reg1.test(this.InvoiceNO.toUpperCase())) {
+        return true
+      } else if (reg2.test(this.InvoiceNO.toUpperCase())) {
         return true
       } else {
         this.showAlert = true
@@ -563,9 +590,8 @@ export default {
       }
     },
     validatePO: function () {
-      if (this.PurchaseNO &&
-        this.PurchaseNO.length === 10 &&
-        this.PurchaseNO.slice(1, 3).toUpperCase() === 'CF') {
+      var reg1 = /^[A-Z]CF[\d]{7}$/
+      if (reg1.test(this.ReceiptNO.toUpperCase())) {
         return true
       } else {
         this.showAlert = true
@@ -573,9 +599,8 @@ export default {
       }
     },
     validateReceipt: function () {
-      if (this.ReceiptNO &&
-        this.ReceiptNO.length === 10 &&
-        this.ReceiptNO.slice(1, 3).toUpperCase() === 'RA') {
+      var reg1 = /^[A-Z]RA[\d]{7}$/
+      if (reg1.test(this.ReceiptNO.toUpperCase())) {
         return true
       } else {
         this.showAlert = true
@@ -583,11 +608,8 @@ export default {
       }
     },
     validateReceipt2: function () {
-      if (this.PurchaseSiteVendorCodeDuration &&
-        this.PurchaseSiteVendorCodeDuration.length === 27 &&
-        this.PurchaseSiteVendorCodeDuration.slice(3, 4) === '-' &&
-        this.PurchaseSiteVendorCodeDuration.slice(9, 10) === '-' &&
-        this.PurchaseSiteVendorCodeDuration.slice(18, 19) === '-') {
+      var reg1 = /^[A-Z]{3}-[\d]{5}-[\d]{8}-[\d]{8}$/
+      if (reg1.test(this.PurchaseSiteVendorCodeDuration.toUpperCase())) {
         return true
       } else {
         this.showAlert = true
@@ -595,13 +617,11 @@ export default {
       }
     },
     validateWO: function () {
-      if (this.ProjectOrWorkOrderNO && this.ProjectOrWorkOrderNO.length === 11 &&
-        this.ProjectOrWorkOrderNO.slice(1, 3).toUpperCase() === 'OF') {
+      var reg1 = /^[A-Z]OF[\d]{8}$/
+      var reg2 = /^[A-Z]CC[\d]{6}-[\d]{1,3}$/
+      if (reg1.test(this.ProjectOrWorkOrderNO.toUpperCase())) {
         return true
-      } else if (this.ProjectOrWorkOrderNO && this.ProjectOrWorkOrderNO.length >= 11 &&
-        this.ProjectOrWorkOrderNO.length <= 13 &&
-        this.ProjectOrWorkOrderNO.slice(1, 3).toUpperCase() === 'CC' &&
-        this.ProjectOrWorkOrderNO.slice(9, 10).toUpperCase() === '-') {
+      } else if (reg2.test(this.ProjectOrWorkOrderNO.toUpperCase())) {
         return true
       } else {
         this.showAlert = true
@@ -611,11 +631,9 @@ export default {
     validateSOA: function () {
       var reg1 = /^[A-Z]{3}$/
       var reg2 = /^[A-Z]{3}[\d]{5}$/
-      if (this.SiteAndBPCode && this.SiteAndBPCode.length === 3 &&
-        reg1.test(this.SiteAndBPCode.toUpperCase())) {
+      if (reg1.test(this.SiteAndBPCode.toUpperCase())) {
         return true
-      } else if (this.SiteAndBPCode && this.SiteAndBPCode.length === 8 &&
-        reg2.test(this.SiteAndBPCode.toUpperCase())) {
+      } else if (reg2.test(this.SiteAndBPCode.toUpperCase())) {
         return true
       } else {
         this.showAlert = true
