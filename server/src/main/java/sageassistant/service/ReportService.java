@@ -20,6 +20,7 @@ import sageassistant.dao.RptMapper;
 import sageassistant.model.RptCOC;
 import sageassistant.model.RptCOCLot;
 import sageassistant.model.RptCOCSerial;
+import sageassistant.model.RptInvoicePackage;
 import sageassistant.model.RptInvoicePay;
 import sageassistant.model.RptPurchaseTax;
 import sageassistant.model.RptWorkOrder;
@@ -59,6 +60,7 @@ public class ReportService {
 		String MfgNO = null;
 		String PN = null;
 		List<?> list = null;
+		List<RptInvoicePackage> InvoicePackage=null;
 		List<RptInvoicePay> InvoicePay=null;
 		
 		String report = request.getServletPath().split("/")[2];
@@ -121,9 +123,10 @@ public class ReportService {
 					response.getWriter().write("<H1>InvoiceNO:" + InvoiceNO + " not found!</H1>");
 					return;
 				}
-				
 				InvoicePay = rptMapper.findInvoicePayByInvoiceNO(InvoiceNO);
+				InvoicePackage = rptMapper.findInvoicePackageByInvoiceNO(InvoiceNO);
 				CRJavaHelper.passPOJO(reportClientDocument, list, "sageassistant.model.RptInvoice", "");
+				CRJavaHelper.passPOJO(reportClientDocument, InvoicePackage, "sageassistant.model.RptInvoicePackage", "Package");
 				CRJavaHelper.passPOJO(reportClientDocument, InvoicePay, "sageassistant.model.RptInvoicePay", "Pay");
 
 				reportClientDocument.getReportDocument().getSummaryInfo().setTitle(InvoiceNO);
