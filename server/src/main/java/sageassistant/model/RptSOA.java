@@ -11,7 +11,6 @@ public class RptSOA {
 	private String Site;
 	private String Customer;
 	private String Name0;
-	private String Name1;
 	private String CustRef;
 	private Float OrderTotal;
 	private String OrderNO;
@@ -48,14 +47,6 @@ public class RptSOA {
 
 	public void setName0(String name0) {
 		Name0 = name0;
-	}
-
-	public String getName1() {
-		return Name1;
-	}
-
-	public void setName1(String name1) {
-		Name1 = name1;
 	}
 
 	public String getCustRef() {
