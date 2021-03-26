@@ -21,6 +21,7 @@ public class RptCOC {
 	private String BPCORD_0;
 	private String SOHTYP_0;
 	private String CUSORDREF_0;
+	private String YSOH_ITEM_0;
 	private String YSOH_PJT_0;
 	private String YSOQ_BPCPN_0;
 	private String YAUTREN_0;
@@ -162,6 +163,14 @@ public class RptCOC {
 
 	public String getYSOH_PJT_0() {
 		return this.YSOH_PJT_0;
+	}
+
+	public String getYSOH_ITEM_0() {
+		return YSOH_ITEM_0;
+	}
+
+	public void setYSOH_ITEM_0(String ySOH_ITEM_0) {
+		YSOH_ITEM_0 = ySOH_ITEM_0;
 	}
 
 	public void setYSOQ_BPCPN_0(String YSOQ_BPCPN_0) {
