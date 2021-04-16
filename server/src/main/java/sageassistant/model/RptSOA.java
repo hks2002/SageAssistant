@@ -12,7 +12,6 @@ public class RptSOA {
 	private String Customer;
 	private String Name0;
 	private String CustRef;
-	private Float OrderTotal;
 	private String OrderNO;
 	private String InvoiceNO;
 	private String Currency;
@@ -20,10 +19,7 @@ public class RptSOA {
 	private Date InvoiceDate;
 	private Date DueDate;
 	private Integer Delay;
-	private String Description;
-	private Float PaidFC;
-	private Float PrePaidCC;
-	private Float PrePaidCCLine;
+	private Float Paid;
 
 	public String getSite() {
 		return Site;
@@ -55,14 +51,6 @@ public class RptSOA {
 
 	public void setCustRef(String custRef) {
 		CustRef = custRef;
-	}
-
-	public Float getOrderTotal() {
-		return OrderTotal;
-	}
-
-	public void setOrderTotal(Float orderTotal) {
-		OrderTotal = orderTotal;
 	}
 
 	public String getOrderNO() {
@@ -121,36 +109,12 @@ public class RptSOA {
 		Delay = delay;
 	}
 
-	public String getDescription() {
-		return Description;
+	public Float getPaid() {
+		return Paid;
 	}
 
-	public void setDescription(String description) {
-		Description = description;
-	}
-
-	public Float getPaidFC() {
-		return PaidFC;
-	}
-
-	public void setPaidFC(Float paidFC) {
-		PaidFC = paidFC;
-	}
-
-	public Float getPrePaidCC() {
-		return PrePaidCC;
-	}
-
-	public void setPrePaidCC(Float prePaidCC) {
-		PrePaidCC = prePaidCC;
-	}
-
-	public Float getPrePaidCCLine() {
-		return PrePaidCCLine;
-	}
-
-	public void setPrePaidCCLine(Float prePaidCCLine) {
-		PrePaidCCLine = prePaidCCLine;
+	public void setPaid(Float paid) {
+		Paid = paid;
 	}
 
 	@Override

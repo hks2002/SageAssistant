@@ -543,17 +543,17 @@ export default {
       }
     },
     validateCOC: function () {
-      var reg1 = /^[A-Z]CC[\d]{1}-[\d]{1,3}$/
+      var reg1 = /^[A-Z]CC[\d]{6}-[\d]{1,3}$/
       var reg2 = /^[A-Z]DSR[P|C][\d]{6}$/
-      var reg3 = /^[A-Z]REP[\d]{7}$/
-      var reg4 = /^[A-Z]RCL[\d]{7}$/
-      if (reg1.test(this.DeliveryNO.toUpperCase())) {
+      var reg3 = /^[A-Z]REP[\d]{7}-[\d]{1,3}$/
+      var reg4 = /^[A-Z]RCL[\d]{7}-[\d]{1,3}$/
+      if (reg1.test(this.COCProj.toUpperCase())) {
         return true
-      } else if (reg2.test(this.DeliveryNO.toUpperCase())) {
+      } else if (reg2.test(this.COCProj.toUpperCase())) {
         return true
-      } else if (reg3.test(this.DeliveryNO.toUpperCase())) {
+      } else if (reg3.test(this.COCProj.toUpperCase())) {
         return true
-      } else if (reg4.test(this.DeliveryNO.toUpperCase())) {
+      } else if (reg4.test(this.COCProj.toUpperCase())) {
         return true
       } else {
         this.showAlert = true
