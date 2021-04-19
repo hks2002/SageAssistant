@@ -591,7 +591,7 @@ export default {
     },
     validatePO: function () {
       var reg1 = /^[A-Z]CF[\d]{7}$/
-      if (reg1.test(this.ReceiptNO.toUpperCase())) {
+      if (reg1.test(this.PurchaseNO.toUpperCase())) {
         return true
       } else {
         this.showAlert = true
