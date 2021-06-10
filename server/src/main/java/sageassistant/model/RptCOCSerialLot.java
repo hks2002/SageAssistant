@@ -5,15 +5,25 @@ import com.alibaba.fastjson.serializer.PascalNameFilter;
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.serializer.SerializeFilter;
 
-public class RptCOCLot {
-	String LOT_0;
+public class RptCOCSerialLot {
 
-	public String getLOT_0() {
-		return LOT_0;
+	private String Type;
+	private String SERLOT;
+	
+	public String getType() {
+		return Type;
 	}
 
-	public void setLOT_0(String lOT_0) {
-		LOT_0 = lOT_0;
+	public void setType(String type) {
+		Type = type;
+	}
+
+	public String getSERLOT() {
+		return SERLOT;
+	}
+
+	public void setSERLOT(String sERLOT) {
+		SERLOT = sERLOT;
 	}
 	
 	@Override
@@ -21,4 +31,6 @@ public class RptCOCLot {
 		return JSON.toJSONString(this, SerializeConfig.globalInstance, new SerializeFilter[] { new PascalNameFilter() },
 				"yyyy-MM-dd", JSON.DEFAULT_GENERATE_FEATURE);
 	}
+
+
 }

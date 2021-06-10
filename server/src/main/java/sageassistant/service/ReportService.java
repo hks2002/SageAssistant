@@ -18,8 +18,7 @@ import com.crystaldecisions.sdk.occa.report.lib.ReportSDKExceptionBase;
 
 import sageassistant.dao.RptMapper;
 import sageassistant.model.RptCOC;
-import sageassistant.model.RptCOCLot;
-import sageassistant.model.RptCOCSerial;
+import sageassistant.model.RptCOCSerialLot;
 import sageassistant.model.RptInvoicePackage;
 import sageassistant.model.RptInvoicePay;
 import sageassistant.model.RptPurchaseTax;
@@ -83,21 +82,10 @@ public class ReportService {
 
 				PN = ((RptCOC) list.get(0)).getITMREF_0();
 
-				List<RptCOCSerial> COCSer = rptMapper.findCOCSerialByProjectNOAndPn(ProjectNO, PN);
-				List<RptCOCLot> COCLot = rptMapper.findCOCLotByProjectNOAndPn(ProjectNO, PN);
-
-				String StringSer = "";
-				for (int i = 1, l = COCSer.size(); i < l; i++) {
-					StringSer = ";" + StringSer + COCSer.get(i).getSERNUM_0();
-					COCSer.remove(i);
-				}
-				if (COCSer.size() >= 1) {
-					COCSer.get(0).setSERNUM_0(COCSer.get(0).getSERNUM_0() + StringSer);
-				}
+				List<RptCOCSerialLot> COCSerLot = rptMapper.findCOCSerialLotByProjectNOAndPn(ProjectNO, PN);
 
 				CRJavaHelper.passPOJO(reportClientDocument, list, "sageassistant.model.RptCOC", "");
-				CRJavaHelper.passPOJO(reportClientDocument, COCSer, "sageassistant.model.RptCOCSerial", "Serial");
-				CRJavaHelper.passPOJO(reportClientDocument, COCLot, "sageassistant.model.RptCOCLot", "Lot");
+				CRJavaHelper.passPOJO(reportClientDocument, COCSerLot, "sageassistant.model.RptCOCSerialLot", "Serial");
 
 				reportClientDocument.getReportDocument().getSummaryInfo().setTitle("COC" + ProjectNO);
 				break;
@@ -268,7 +256,7 @@ public class ReportService {
 			
 
 			// Show Chinese font
-			response.setCharacterEncoding("GB2312");
+			// response.setCharacterEncoding("UTF-8");
 			
 			/* Do report action */
 			if ("showPdf".equals(action)) {

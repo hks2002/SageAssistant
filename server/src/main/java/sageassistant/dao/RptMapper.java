@@ -6,8 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import sageassistant.model.RptCOC;
-import sageassistant.model.RptCOCLot;
-import sageassistant.model.RptCOCSerial;
+import sageassistant.model.RptCOCSerialLot;
 import sageassistant.model.RptDelivery;
 import sageassistant.model.RptInvoice;
 import sageassistant.model.RptInvoice2;
@@ -26,9 +25,7 @@ import sageassistant.model.RptWorkOrderSfichsui;
 public interface RptMapper {
 	List<RptCOC> findCOCByProjectNO(@Param("ProjectNO") String ProjectNO);
 
-	List<RptCOCSerial> findCOCSerialByProjectNOAndPn(@Param("ProjectNO") String ProjectNO, @Param("PN") String PN);
-
-	List<RptCOCLot> findCOCLotByProjectNOAndPn(@Param("ProjectNO") String ProjectNO, @Param("PN") String PN);
+	List<RptCOCSerialLot> findCOCSerialLotByProjectNOAndPn(@Param("ProjectNO") String ProjectNO, @Param("PN") String PN);
 
 	List<RptPurchase> findPurchaseByPurchaseNO(@Param("PurchaseNO") String PurchaseNO);
 
