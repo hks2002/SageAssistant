@@ -72,7 +72,8 @@ public class ReportService {
 			switch (report) {
 			case "COC":
 				reportClientDocument.open("reports/COC.rpt", 0);
-
+				log.info(reportClientDocument.getSubreportController().getSubreportNames().toString());
+				
 				ProjectNO = request.getParameter("ProjectNO");
 				list = rptMapper.findCOCByProjectNO(ProjectNO);
 				if (list.size() == 0) {
@@ -85,7 +86,7 @@ public class ReportService {
 				List<RptCOCSerialLot> COCSerLot = rptMapper.findCOCSerialLotByProjectNOAndPn(ProjectNO, PN);
 
 				CRJavaHelper.passPOJO(reportClientDocument, list, "sageassistant.model.RptCOC", "");
-				CRJavaHelper.passPOJO(reportClientDocument, COCSerLot, "sageassistant.model.RptCOCSerialLot", "Serial");
+				CRJavaHelper.passPOJO(reportClientDocument, COCSerLot, "sageassistant.model.RptCOCSerialLot", "SerialLot.rpt");
 
 				reportClientDocument.getReportDocument().getSummaryInfo().setTitle("COC" + ProjectNO);
 				break;
