@@ -20,6 +20,7 @@ public class RptSOA {
 	private Date DueDate;
 	private Integer Delay;
 	private Float Paid;
+	private Float PaidSO;
 
 	public String getSite() {
 		return Site;
@@ -115,6 +116,15 @@ public class RptSOA {
 
 	public void setPaid(Float paid) {
 		Paid = paid;
+	}
+
+
+	public Float getPaidSO() {
+		return PaidSO;
+	}
+
+	public void setPaidSO(Float paidSO) {
+		PaidSO = paidSO;
 	}
 
 	@Override
