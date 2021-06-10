@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="sageassistant.dao.SupplyMapper">
+<mapper namespace="sageassistant.dao.SupplierMapper">
     <!--Open L2 Cache under Names pace: 1 Hour-->
     <cache eviction="LRU" flushInterval="3600000" readOnly="true" size="1024"/>
-    <select id="supplyByCodeOrName" parameterType="String" resultType="sageassistant.model.SupplyName">
+    <select id="supplyByCodeOrName" parameterType="String" resultType="sageassistant.model.SupplierName">
 	    SELECT 
-	        BPARTNER.BPRNUM_0 AS SupplyCode,
-	        BPARTNER.BPRNAM_0+BPARTNER.BPRNAM_1 AS SupplyName
+	        BPARTNER.BPRNUM_0 AS SupplierCode,
+	        BPARTNER.BPRNAM_0+BPARTNER.BPRNAM_1 AS SupplierName
 	    FROM EXPLOIT.BPARTNER AS BPARTNER
 			INNER JOIN EXPLOIT.BPSUPPLIER AS BPSUPPLIER
 				ON BPARTNER.BPRNUM_0 = BPSUPPLIER.BPSNUM_0
-		WHERE BPARTNER.BPRNUM_0 LIKE #{SupplyCodeOrName} OR BPARTNER.BPRNAM_0 LIKE #{SupplyCodeOrName} OR BPARTNER.BPRNAM_1 LIKE #{SupplyCodeOrName}
+		WHERE BPARTNER.BPRNUM_0 LIKE #{SupplierCodeOrName} OR BPARTNER.BPRNAM_0 LIKE #{SupplierCodeOrName} OR BPARTNER.BPRNAM_1 LIKE #{SupplierCodeOrName}
 			ORDER BY BPRNUM_0 ASC
     </select>
-     <select id="supplyDetailsByCode" parameterType="String" resultType="sageassistant.model.SupplyDetails">
+     <select id="supplyDetailsByCode" parameterType="String" resultType="sageassistant.model.SupplierDetails">
 	    SELECT 
-		    BPARTNER.BPRNUM_0 AS SupplyCode,
-		    BPARTNER.BPRNAM_0 AS SupplyName0,
-		    BPARTNER.BPRNAM_1 AS SupplyName1,
+		    BPARTNER.BPRNUM_0 AS SupplierCode,
+		    BPARTNER.BPRNAM_0 AS SupplierName0,
+		    BPARTNER.BPRNAM_1 AS SupplierName1,
 			BPADDRESS.BPAADDLIG_0 AS Address0,
 			BPADDRESS.BPAADDLIG_1 AS Address1,
 			BPADDRESS.POSCOD_0 AS PostCode,
@@ -41,68 +41,68 @@
 		FROM EXPLOIT.BPARTNER AS BPARTNER
 		   LEFT JOIN EXPLOIT.BPADDRESS AS BPADDRESS
 		     ON BPARTNER.BPRNUM_0 = BPADDRESS.BPANUM_0
-		WHERE BPARTNER.BPRNUM_0 LIKE #{SupplyCode}
+		WHERE BPARTNER.BPRNUM_0 LIKE #{SupplierCode}
     </select>
-    <select id="supplyTotalAmount" parameterType="String" resultType="sageassistant.model.SupplySummaryAmount">
+    <select id="supplyTotalAmount" parameterType="String" resultType="sageassistant.model.SupplierSummaryAmount">
         SELECT DISTINCT
 			POHFCY_0 AS Site,
-			BPSNUM_0 AS SupplyCode,
+			BPSNUM_0 AS SupplierCode,
 			CUR_0 AS Currency,
 			SUM(TOTLINATI_0) OVER (PARTITION BY PORDER.POHFCY_0, PORDER.BPSNUM_0, CUR_0 ) AS Amount
 		FROM EXPLOIT.PORDER AS PORDER
-		WHERE BPSNUM_0=#{SupplyCode}
+		WHERE BPSNUM_0=#{SupplierCode}
 		      AND (PORDER.ORDDAT_0 BETWEEN CONVERT(datetime, #{DateFrom},120) AND CONVERT(datetime, #{DateTo},120) )
     </select>
-    <select id="supplyTotalProjectQty" parameterType="String" resultType="sageassistant.model.SupplySummaryQty">
+    <select id="supplyTotalProjectQty" parameterType="String" resultType="sageassistant.model.SupplierSummaryQty">
         SELECT DISTINCT
 			PORDER.POHFCY_0 AS Site,
-			PORDER.BPSNUM_0 AS SupplyCode,
+			PORDER.BPSNUM_0 AS SupplierCode,
 			'Project' AS CountType,
 			COUNT(DISTINCT PORDERP.PJT_0) AS Qty
 		FROM EXPLOIT.PORDER AS PORDER
 			LEFT JOIN EXPLOIT.PORDERP AS PORDERP
 			    ON PORDER.POHNUM_0=PORDERP.POHNUM_0
-		WHERE PORDER.BPSNUM_0=#{SupplyCode}
+		WHERE PORDER.BPSNUM_0=#{SupplierCode}
 		      AND (PORDER.ORDDAT_0 BETWEEN CONVERT(datetime, #{DateFrom},120) AND CONVERT(datetime, #{DateTo},120) )
 		GROUP BY PORDER.POHFCY_0,PORDER.BPSNUM_0
     </select>
-    <select id="supplyTotalItemQty" parameterType="String" resultType="sageassistant.model.SupplySummaryQty">
+    <select id="supplyTotalItemQty" parameterType="String" resultType="sageassistant.model.SupplierSummaryQty">
         SELECT DISTINCT
 			PORDER.POHFCY_0 AS Site,
-			PORDER.BPSNUM_0 AS SupplyCode,
+			PORDER.BPSNUM_0 AS SupplierCode,
 			'Item' AS CountType,
 			SUM(PORDER.LINNBR_0) OVER (PARTITION BY POHFCY_0, BPSNUM_0) AS Qty
 		FROM EXPLOIT.PORDER AS PORDER
-		WHERE PORDER.BPSNUM_0=#{SupplyCode}
+		WHERE PORDER.BPSNUM_0=#{SupplierCode}
 		      AND (PORDER.ORDDAT_0 BETWEEN CONVERT(datetime, #{DateFrom},120) AND CONVERT(datetime, #{DateTo},120) )
     </select>
-    <select id="supplyTotalProductQty" parameterType="String" resultType="sageassistant.model.SupplySummaryQty">
+    <select id="supplyTotalProductQty" parameterType="String" resultType="sageassistant.model.SupplierSummaryQty">
         SELECT DISTINCT
 			PORDER.POHFCY_0 AS Site,
-			PORDER.BPSNUM_0 AS SupplyCode,
+			PORDER.BPSNUM_0 AS SupplierCode,
 			'Product' AS CountType,
 			SUM(PORDER.TOTLINQTY_0) OVER (PARTITION BY POHFCY_0, BPSNUM_0) AS Qty
 		FROM EXPLOIT.PORDER AS PORDER
-		WHERE BPSNUM_0=#{SupplyCode}
+		WHERE BPSNUM_0=#{SupplierCode}
 		      AND (PORDER.ORDDAT_0 BETWEEN CONVERT(datetime, #{DateFrom},120) AND CONVERT(datetime, #{DateTo},120) )
     </select>
-    <select id="supplyOpenAmount" parameterType="String" resultType="sageassistant.model.SupplySummaryAmount">
+    <select id="supplyOpenAmount" parameterType="String" resultType="sageassistant.model.SupplierSummaryAmount">
         SELECT DISTINCT 
             PORDER.POHFCY_0 AS Site,
 			PORDER.CUR_0 AS Currency,
-	        PORDER.BPSNUM_0 AS SupplyCode,
+	        PORDER.BPSNUM_0 AS SupplierCode,
 			SUM(PORDERQ.LINATIAMT_0) OVER (PARTITION BY PORDER.POHFCY_0, PORDER.BPSNUM_0, PORDER.CUR_0 ) AS Amount
 	    FROM  EXPLOIT.PORDERQ AS PORDERQ
 	        LEFT JOIN EXPLOIT.PORDER AS PORDER
 	        	ON PORDERQ.POHNUM_0=PORDER.POHNUM_0
 	    WHERE PORDERQ.LINCLEFLG_0 != 2
 		    AND PORDERQ.PTHNUM_0 =''
-		    AND PORDER.BPSNUM_0=#{SupplyCode}
+		    AND PORDER.BPSNUM_0=#{SupplierCode}
 	</select>
-	<select id="supplyOpenProjectQty" parameterType="String" resultType="sageassistant.model.SupplySummaryQty">
+	<select id="supplyOpenProjectQty" parameterType="String" resultType="sageassistant.model.SupplierSummaryQty">
         SELECT DISTINCT 
             PORDER.POHFCY_0 AS Site,
-	        PORDER.BPSNUM_0 AS SupplyCode,
+	        PORDER.BPSNUM_0 AS SupplierCode,
 			'Project' AS CountType,
 			COUNT(DISTINCT PORDERP.PJT_0) AS Qty
 	    FROM  EXPLOIT.PORDERQ AS PORDERQ
@@ -113,13 +113,13 @@
 	               AND PORDERQ.POPLIN_0 = PORDERP.POPLIN_0
 	    WHERE PORDERQ.LINCLEFLG_0 != 2
 		    AND PORDERQ.PTHNUM_0 =''
-		    AND PORDER.BPSNUM_0=#{SupplyCode}
+		    AND PORDER.BPSNUM_0=#{SupplierCode}
 		GROUP BY PORDER.POHFCY_0,PORDER.BPSNUM_0
 	</select>
-	<select id="supplyOpenItemQty" parameterType="String" resultType="sageassistant.model.SupplySummaryQty">
+	<select id="supplyOpenItemQty" parameterType="String" resultType="sageassistant.model.SupplierSummaryQty">
         SELECT DISTINCT 
             PORDER.POHFCY_0 AS Site,
-	        PORDER.BPSNUM_0 AS SupplyCode,
+	        PORDER.BPSNUM_0 AS SupplierCode,
 			'Item' AS CountType,
 			COUNT(DISTINCT PORDERQ.ROWID) AS Qty
 	    FROM  EXPLOIT.PORDERQ AS PORDERQ
@@ -127,13 +127,13 @@
 	        ON PORDERQ.POHNUM_0=PORDER.POHNUM_0
 	    WHERE PORDERQ.LINCLEFLG_0 != 2
 		    AND PORDERQ.PTHNUM_0 =''
-		    AND PORDER.BPSNUM_0=#{SupplyCode}
+		    AND PORDER.BPSNUM_0=#{SupplierCode}
 		GROUP BY PORDER.POHFCY_0,PORDER.BPSNUM_0
 	</select>
-	<select id="supplyOpenProductQty" parameterType="String" resultType="sageassistant.model.SupplySummaryQty">
+	<select id="supplyOpenProductQty" parameterType="String" resultType="sageassistant.model.SupplierSummaryQty">
         SELECT DISTINCT 
             PORDER.POHFCY_0 AS Site,
-	        PORDER.BPSNUM_0 AS SupplyCode,
+	        PORDER.BPSNUM_0 AS SupplierCode,
 			'Product' AS CountType,
 			SUM(PORDERQ.QTYUOM_0) OVER (PARTITION BY PORDER.POHFCY_0, PORDER.BPSNUM_0) AS Qty
 	    FROM  EXPLOIT.PORDERQ AS PORDERQ
@@ -141,12 +141,12 @@
 	        ON PORDERQ.POHNUM_0=PORDER.POHNUM_0
 	    WHERE PORDERQ.LINCLEFLG_0 != 2
 		    AND PORDERQ.PTHNUM_0 =''
-		    AND PORDER.BPSNUM_0=#{SupplyCode}
+		    AND PORDER.BPSNUM_0=#{SupplierCode}
 	</select>
-	<select id="supplyDeliveryHistory" parameterType="String" resultType="sageassistant.model.SupplyDeliveryHistory">
+	<select id="supplyDeliveryHistory" parameterType="String" resultType="sageassistant.model.SupplierDeliveryHistory">
 	    SELECT DISTINCT 
 	        PORDERQ.PRHFCY_0 AS Site,
-	        PORDER.BPSNUM_0 AS SupplyCode,
+	        PORDER.BPSNUM_0 AS SupplierCode,
 	        PORDERP.POHNUM_0 AS PurchaseNO,
 	        PORDERP.PJT_0 AS ProjectNO,
 	        PORDERP.ITMREF_0 AS PN,
@@ -166,14 +166,14 @@
 			LEFT JOIN EXPLOIT.PRECEIPTD AS RECEIPTD
 			ON PORDERQ.POHNUM_0 = RECEIPTD.POHNUM_0 AND PORDERQ.POPLIN_0 = RECEIPTD.POPLIN_0
 	    WHERE PORDERQ.PTHNUM_0 !=''
-		    AND PORDER.BPSNUM_0=#{SupplyCode}
+		    AND PORDER.BPSNUM_0=#{SupplierCode}
 		    AND (RECEIPTD.RCPDAT_0 BETWEEN CONVERT(datetime, #{DateFrom},120) AND CONVERT(datetime, #{DateTo},120) )
 		ORDER BY RECEIPTD.RCPDAT_0 ASC
 	</select>
-	<select id="supplyDelayHistory" parameterType="String" resultType="sageassistant.model.SupplyDelayHistory">
+	<select id="supplyDelayHistory" parameterType="String" resultType="sageassistant.model.SupplierDelayHistory">
 	    SELECT DISTINCT 
 	        PORDERQ.PRHFCY_0 AS Site,
-	        PORDER.BPSNUM_0 AS SupplyCode,
+	        PORDER.BPSNUM_0 AS SupplierCode,
 	        PORDERP.POHNUM_0 AS PurchaseNO,
 	        PORDERP.PJT_0 AS ProjectNO,
 	        PORDERP.ITMREF_0 AS PN,
@@ -195,14 +195,14 @@
 			LEFT JOIN EXPLOIT.PRECEIPTD AS RECEIPTD
 			ON PORDERQ.POHNUM_0 = RECEIPTD.POHNUM_0 AND PORDERQ.POPLIN_0 = RECEIPTD.POPLIN_0
 	    WHERE PORDERQ.PTHNUM_0 = ''
-		    AND PORDER.BPSNUM_0=#{SupplyCode}
+		    AND PORDER.BPSNUM_0=#{SupplierCode}
 		    AND (PORDERQ.EXTRCPDAT_0 BETWEEN CONVERT(datetime, #{DateFrom},120) AND CONVERT(datetime, #{DateTo},120) )
 		ORDER BY PORDERQ.EXTRCPDAT_0 ASC
 	</select>
-	<select id="supplyOpenItems" parameterType="String" resultType="sageassistant.model.SupplyOpenItems">
+	<select id="supplyOpenItems" parameterType="String" resultType="sageassistant.model.SupplierOpenItems">
 	    SELECT DISTINCT 
 	        PORDERQ.PRHFCY_0 AS Site,
-	        PORDER.BPSNUM_0 AS SupplyCode,
+	        PORDER.BPSNUM_0 AS SupplierCode,
 	        PORDERP.POHNUM_0 AS PurchaseNO,
 	        PORDERP.PJT_0 AS ProjectNO,
 	        PORDERP.ITMREF_0 AS PN,
@@ -225,7 +225,13 @@
 			ON PORDERQ.POHNUM_0 = RECEIPTD.POHNUM_0 AND PORDERQ.POPLIN_0 = RECEIPTD.POPLIN_0
 	    WHERE PORDERQ.LINCLEFLG_0 != 2
 		    AND PORDERQ.PTHNUM_0 =''
-		    AND PORDER.BPSNUM_0=#{SupplyCode}
+		    AND PORDER.BPSNUM_0=#{SupplierCode}
 		ORDER BY PORDERQ.EXTRCPDAT_0 ASC
+	</select>
+	<select id="purchaseDate" parameterType="String" resultType="String">
+	    SELECT DISTINCT
+	        PORDER.ORDDAT_0 AS OrderDate
+	    FROM  EXPLOIT.PORDER AS PORDER
+	    WHERE PORDER.POHNUM_0=#{PurchaseNO}
 	</select>
 </mapper>
