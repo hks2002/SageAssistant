@@ -10,6 +10,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.crystaldecisions.sdk.occa.report.application.ReportClientDocument;
+import com.crystaldecisions.sdk.occa.report.lib.ReportSDKException;
+
 import sageassistant.utils.Utils;
 
 @SpringBootTest
@@ -99,4 +102,6 @@ public class UtilsTests {
 		log.debug("diff:"+diff);
 		Assertions.assertEquals(diff, 59);
 	}
+	
+	
 }

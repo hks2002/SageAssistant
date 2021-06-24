@@ -89,6 +89,7 @@ public class RptInvoice {
 	private String TEXT_SOH_DEB;
 	private String SERNUM_0;
 	private String LOT_0;
+	private String PTE_0;
 	
 	public String getFCY_0() {
 		return FCY_0;
@@ -577,6 +578,12 @@ public class RptInvoice {
 		LOT_0 = lOT_0;
 	}
 	
+	public String getPTE_0() {
+		return PTE_0;
+	}
+	public void setPTE_0(String pTE_0) {
+		PTE_0 = pTE_0;
+	}
 	@Override
 	public String toString() {
 		return JSON.toJSONString(this, SerializeConfig.globalInstance, new SerializeFilter[] { new PascalNameFilter() },
