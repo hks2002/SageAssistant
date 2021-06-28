@@ -1,6 +1,6 @@
 {
   "name": "web",
-  "version": "1.3.2.0422112136",
+  "version": "0.3.2.0628161822",
   "description": "An Assistant for Sage",
   "productName": "SageAssistantWeb",
   "author": "Robert Huang<r.huang@dedienne-aero.com><56649783@qq.com>",
@@ -10,23 +10,17 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "@lottiefiles/lottie-player": "^1.0.3",
-    "@quasar/app": "^2.2.4",
     "@quasar/cli": "^1.1.3",
-    "@quasar/extras": "^1.10.4",
+    "@quasar/extras": "^1.9.17",
     "axios": "^0.21.1",
     "core-js": "^3.9.0",
     "echarts": "^5.0.2",
     "font-awesome-v5-icons": "^1.1.2",
-    "lodash": "^4.17.20",
     "mockjs": "^1.1.0",
-    "mockjs2": "^1.0.8",
-    "overlayscrollbars": "^1.13.0",
-    "overlayscrollbars-vue": "^0.2.2",
-    "perfect-scrollbar": "^1.5.0",
-    "quasar": "^1.15.10"
+    "quasar": "^1.15.4"
   },
   "devDependencies": {
+    "@quasar/app": "^2.1.15",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.20.0",
     "eslint-config-standard": "^16.0.2",

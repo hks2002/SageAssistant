@@ -1,87 +1,48 @@
+
 const routes = [
   {
     path: '/',
-    name: '/',
-    component: () => import('layouts/DefaultLayout.vue'),
-    children: [
-      {
-        path: ''
-      }
-    ]
+    component: () => import('layouts/MyLayout.vue'),
+    children: [{ path: '', component: () => import('pages/Index.vue') }]
   },
-  /*   {
-    path: '/result/success',
-    name: '/result/success',
-    component: () => import('layouts/DefaultLayout.vue'),
-    children: [
-      {
-        path: '',
-        component: () => import('pages/result/Success')
-      }
+  {
+    path: '/Todo',
+    component: () => import('layouts/MyLayout.vue'),
+    children: [{ path: '', component: () => import('pages/TodoTobeDelivery.vue') },
+      { path: 'Delivery', component: () => import('pages/TodoTobeDelivery.vue') },
+      { path: 'Receive', component: () => import('pages/TodoTobeReceive.vue') },
+      { path: 'NewOrder', component: () => import('pages/TodoTobeDealWithOrderLine.vue') },
+      { path: 'NewBom', component: () => import('pages/TodoTobePurchaseBom.vue') }
     ]
   },
   {
-    path: '/result/fail',
-    name: '/result/fail',
-    component: () => import('layouts/DefaultLayout.vue'),
-    children: [
-      {
-        path: '',
-        component: () => import('pages/result/Fail')
-      }
-    ]
+    path: '/Products',
+    component: () => import('layouts/MyLayout.vue'),
+    children: [{ path: '', component: () => import('pages/Products.vue') }]
   },
   {
-    path: '/exception/403',
-    name: '/exception/403',
-    component: () => import('layouts/DefaultLayout.vue'),
-    children: [
-      {
-        path: '',
-        component: () => import('pages//exception/403')
-      }
-    ]
+    path: '/Supplies',
+    component: () => import('layouts/MyLayout.vue'),
+    children: [{ path: '', component: () => import('pages/Supplies.vue') }]
   },
   {
-    path: '/exception/404',
-    name: '/exception/404',
-    component: () => import('layouts/DefaultLayout.vue'),
-    children: [
-      {
-        path: '',
-        component: () => import('pages//exception/404')
-      }
-    ]
+    path: '/Reports',
+    component: () => import('layouts/MyLayout.vue'),
+    children: [{ path: '', component: () => import('pages/Reports.vue') }]
   },
   {
-    path: '/exception/500',
-    name: '/exception/500',
-    component: () => import('layouts/DefaultLayout.vue'),
-    children: [
-      {
-        path: '',
-        component: () => import('pages//exception/500')
-      }
-    ]
-  },
-  {
-    path: '/user/login',
-    name: '/user/login',
-    component: () => import('layouts/UserLayout.vue'),
-    children: [
-      {
-        path: '',
-        component: () => import('pages/user/Login.vue')
-      }
-    ]
-  },
-  */
-  // Always leave this as last one,
-  // but you can also remove it
-  {
-    path: '*',
-    component: () => import('src/pages/Error404.vue')
+    path: '/About',
+    component: () => import('layouts/MyLayout.vue'),
+    children: [{ path: '', component: () => import('pages/About.vue') }]
   }
 ]
+
+// Always leave this as last one
+if (process.env.MODE !== 'ssr') {
+  routes.push({
+    path: '*',
+    component: () => import('pages/Error404.vue')
+  })
+}
 
 export default routes
