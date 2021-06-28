@@ -1,0 +1,149 @@
+<!--  -->
+<template>
+  <q-header elevated>
+    <q-toolbar>
+      <q-btn
+        flat
+        dense
+        round
+        icon="fas fa-outdent"
+        aria-label="Menu"
+        @click="toggleLeftDrawer"
+      />
+      <q-btn
+        v-show="$q.screen.gt.xs"
+        dense
+        flat
+        round
+        size="sm"
+        class="q-mr-xs"
+      >
+        <q-avatar>
+          <img
+            src="/imgs/logo.svg"
+            style="background-color: white"
+          >
+        </q-avatar>
+      </q-btn>
+      <q-toolbar-title>Sage Assistant{{$route.path}}</q-toolbar-title>
+
+      <div class="q-gutter-xs q-ml-sm row items-center no-wrap">
+        <q-btn
+          type="a"
+          target="_blank"
+          size="sm"
+          dense
+          round
+          href="https://srvsyr01"
+        >
+          <q-avatar size="sm">
+            <img src="https://srvsyr01/favicon.ico">
+            <q-tooltip v-if="$q.screen.gt.sm">
+              {{sageInfo}}
+            </q-tooltip>
+          </q-avatar>
+        </q-btn>
+        <q-btn
+          round
+          dense
+          size="sm"
+          icon="fas fa-question-circle"
+          @click="showHelp"
+        >
+          <q-tooltip>{{ $t("Help") }}</q-tooltip>
+        </q-btn>
+        <q-btn
+          dense
+          round
+          size="sm"
+          icon="fas fa-bell"
+        >
+          <q-badge
+            v-if="totalInformCount>0"
+            color="negative"
+            style="padding: 2px 4px"
+            title-color="white"
+            floating
+          >
+            {{ totalInformCount }}
+          </q-badge>
+        </q-btn>
+        <span>{{ userInfo }}</span>
+        <q-btn
+          dense
+          flat
+          size="sm"
+          icon="fas fa-sign-out-alt"
+          @click="doLogout"
+        >
+          <q-tooltip>{{ $t("Exit") }}</q-tooltip>
+        </q-btn>
+      </div>
+    </q-toolbar>
+  </q-header>
+</template>
+
+<script>
+import { defineComponent, ref, onMounted } from 'vue'
+import { useQuasar } from 'quasar'
+import { useRouter } from 'vue-router'
+import { infoDialog } from 'assets/common'
+import { ebus } from 'boot/ebus'
+import { getToken, removeToken, getLoginData } from 'assets/storage'
+import { axios } from 'boot/axios'
+
+export default defineComponent({
+  name: 'PageHeader',
+
+  components: {
+
+  },
+
+  setup() {
+    const $q = useQuasar()
+    const $router = useRouter()
+
+    const userInfo = ref('Your name')
+    const sageInfo = ref('Sage')
+    const totalInformCount = ref(0)
+
+    const toggleLeftDrawer = () => {
+      ebus.emit('toggleLeftDrawer')
+    }
+
+    const showHelp = () => {
+      infoDialog('In Developping')
+    }
+
+    const doLogout = () => {
+      removeToken()
+      $router.push('/Login')
+    }
+
+    onMounted(() => {
+      console.debug('onMounted PageHeader')
+      const loginData = getLoginData()
+      if (loginData) {
+        userInfo.value = loginData.userInfo
+        sageInfo.value = loginData.sageInfo
+      }
+    })
+
+    if (!getToken()) {
+      if (!process.env.DEV) {
+        $router.replace('/Login')
+      }
+    }
+
+    return {
+      userInfo,
+      sageInfo,
+      totalInformCount,
+      toggleLeftDrawer,
+      showHelp,
+      doLogout
+    }
+  }
+})
+</script>
+<style lang="scss" scoped></style>
