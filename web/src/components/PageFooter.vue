@@ -17,9 +17,9 @@
 
 <script>
 if (process.env.DEV) {
-  require('../mock/SrvInfo.js')
+  require('mock/SrvInfo.js')
 }
-var packageInfo = require('../../package.json')
+var packageInfo = require('app/package.json')
 
 export default {
   name: 'PageFooter',

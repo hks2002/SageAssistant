@@ -1,5 +1,6 @@
 // Configuration for your app
 // https://quasar.dev/quasar-cli/quasar-conf-js
+const path = require('path')
 const fs = require('fs')
 const moment = require('moment')
 
@@ -8,7 +9,7 @@ module.exports = function (ctx) {
     // app boot file (/src/boot)
     // --> boot files are part of 'main.js'
     // https://quasar.dev/quasar-cli/cli-documentation/boot-files
-    boot: ['axios'],
+    boot: ['main'],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
     css: ['app.sass'],
@@ -44,7 +45,16 @@ module.exports = function (ctx) {
       directives: [],
 
       // Quasar plugins
-      plugins: ['Notify', 'Loading']
+      plugins: [
+        'Cookies',
+        'Dialog',
+        'Loading',
+        'Notify',
+        'LoadingBar',
+        'LocalStorage',
+        'SessionStorage',
+        'Meta'
+      ]
     },
 
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ie
@@ -56,17 +66,10 @@ module.exports = function (ctx) {
       vueRouterMode: 'hash', // available values: 'hash', 'history'
       showProgress: true,
       gzip: true,
-      analyze: true,
+      analyze: false,
       beforeDev () {
-        let pkg = fs.readFileSync('package.json')
-        const timeStamp = moment().format('MMDDHHmmss')
-        pkg = JSON.parse(pkg)
-        pkg.version = pkg.version.replace(/^(\d+\.\d+\.\d+)(\S*)/, '$1')
-        pkg.version = pkg.version + '.' + timeStamp
-        fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2))
-        console.log('update version with timestamp ---->' + pkg.version)
       },
-      beforeBuild () {
+      afterBuild () {
         let pkg = fs.readFileSync('package.json')
         const timeStamp = moment().format('MMDDHHmmss')
         pkg = JSON.parse(pkg)
@@ -74,7 +77,7 @@ module.exports = function (ctx) {
         pkg.version = pkg.version.replace(/^(\d+\.\d+\.\d+)(\S*)/, '$1')
         pkg.version = pkg.version + '.' + timeStamp
 
-        console.log('update version with timestamp: ' + pkg.version)
+        console.log('\u001b[35m Update package to ' + pkg.version + '\u001b[0m')
         fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2))
       },
       uglifyOptions: {
@@ -89,6 +92,24 @@ module.exports = function (ctx) {
 
       // https://quasar.dev/quasar-cli/cli-documentation/handling-webpack
       extendWebpack (cfg) {
+        cfg.resolve.alias = {
+          // The existing alias
+          // src --> /src
+          // app --> /
+          // components --> /src/components
+          // layouts --> /src/layouts
+          // pages --> /src/pages
+          // assets --> /src/assets
+          // boot --> /src/boot
+          ...cfg.resolve.alias, // This adds the existing alias
+
+          // Add your own alias like this
+          '@': path.resolve(__dirname, './src'),
+          mock: path.resolve(__dirname, './src/mock'),
+          utils: path.resolve(__dirname, './src/utils'),
+          statics: path.resolve(__dirname, './src/statics')
+        }
+
         cfg.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
@@ -110,7 +131,7 @@ module.exports = function (ctx) {
 
     // animations: 'all', // --- includes all animations
     // https://quasar.dev/options/animations
-    animations: [],
+    animations: 'all',
 
     // https://quasar.dev/quasar-cli/developing-ssr/configuring-ssr
     ssr: {

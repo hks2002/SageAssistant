@@ -11,7 +11,7 @@
              aria-label="Home"
              class="q-mr-sm">
         <q-avatar>
-          <img src="~assets/logo.svg" />
+          <img src="statics/icons/logo.svg" />
         </q-avatar>
       </q-btn>
       <q-tabs class="q-pa-xs bg-primary text-white"
@@ -45,10 +45,10 @@
 </template>
 
 <script>
-import { setCookie, getCookie } from '../js/CookieTool.js'
+import { setCookie, getCookie } from 'assets/js/CookieTool.js'
 import { date } from 'quasar'
 if (process.env.DEV) {
-  require('../mock/Sites')
+  require('mock/Sites')
 }
 
 export default {
