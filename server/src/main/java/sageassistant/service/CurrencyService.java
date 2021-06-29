@@ -91,10 +91,13 @@ public class CurrencyService {
 		}
 
 		String Sour = key.substring(0, 3);
+		if (Sour.equals("CNY")) {
+			Sour="RMB";
+		}
 		String Dest = key.substring(3, 6);
 		String Date = key.substring(6, 16);
 
-		if (Sour.equals(Dest)) {
+		if (Sour.equals(Dest) ) {
 			return "1";
 		}
 

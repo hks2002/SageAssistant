@@ -23,8 +23,6 @@ public class SupplierOpenItems implements Serializable {
 	private Date AckDate;
 	private Date ExpectDate;
 	private Date OrderDate;
-	private String ReceiptNO;
-	private Date ReceiptDate;
 	private int DaysDelay;
 	
 	public String getSite() {
@@ -80,18 +78,6 @@ public class SupplierOpenItems implements Serializable {
 	}
 	public void setOrderDate(Date orderDate) {
 		OrderDate = orderDate;
-	}
-	public String getReceiptNO() {
-		return ReceiptNO;
-	}
-	public void setReceiptNO(String receiptNO) {
-		ReceiptNO = receiptNO;
-	}
-	public Date getReceiptDate() {
-		return ReceiptDate;
-	}
-	public void setReceiptDate(Date receiptDate) {
-		ReceiptDate = receiptDate;
 	}
 	public int getDateNeed() {
 		return DateNeed;

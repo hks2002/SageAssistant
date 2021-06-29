@@ -12,6 +12,7 @@ public class PnDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	private Integer ROWID;
 	private String PNROOT;
 	private String PN;
 	private String Cat;
@@ -22,6 +23,14 @@ public class PnDetails implements Serializable {
 	private String Desc3;
 	private Integer Status;
 	private Date CreateDate;
+
+	public Integer getROWID() {
+		return ROWID;
+	}
+
+	public void setROWID(Integer rOWID) {
+		ROWID = rOWID;
+	}
 
 	public String getPNROOT() {
 		return PNROOT;

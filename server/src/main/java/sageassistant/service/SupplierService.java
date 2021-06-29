@@ -149,7 +149,7 @@ public class SupplierService {
 		return supplierMapper.supplierOpenItems(SupplierCode);
 	}
 	
-	public SupplierDetails supplierDetails(@Param("SupplierCode") String SupplierCode){
+	public List<SupplierDetails> supplierDetails(@Param("SupplierCode") String SupplierCode){
 		return supplierMapper.supplierDetailsByCode(SupplierCode);
 	}
 	

@@ -17,7 +17,7 @@ import sageassistant.model.SupplierSummaryQty;
 @Mapper
 public interface SupplierMapper {
 	List<SupplierName> supplierByCodeOrName(@Param("SupplierCodeOrName") String SupplierCodeOrName);
-	SupplierDetails supplierDetailsByCode(@Param("SupplierCode") String SupplierCode);
+	List<SupplierDetails> supplierDetailsByCode(@Param("SupplierCode") String SupplierCode);
 	List<SupplierSummaryAmount> supplierTotalAmount(@Param("SupplierCode") String SupplierCode, @Param("DateFrom") String DateFrom, @Param("DateTo") String DateTo);
 	List<SupplierSummaryQty> supplierTotalProjectQty(@Param("SupplierCode") String SupplierCode, @Param("DateFrom") String DateFrom, @Param("DateTo") String DateTo);
 	List<SupplierSummaryQty> supplierTotalItemQty(@Param("SupplierCode") String SupplierCode, @Param("DateFrom") String DateFrom, @Param("DateTo") String DateTo);

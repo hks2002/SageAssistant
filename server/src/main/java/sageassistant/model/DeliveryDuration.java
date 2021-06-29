@@ -1,6 +1,7 @@
 package sageassistant.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.PascalNameFilter;
@@ -12,9 +13,10 @@ public class DeliveryDuration implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String SalesSite;
-	private Integer Min;
-	private Integer Avg;
-	private Integer Max;
+	private String PN;
+	private Date OrderDate;
+	private Date ShipDate;
+	private Integer Duration;
 
 	public String getSalesSite() {
 		return SalesSite;
@@ -24,28 +26,36 @@ public class DeliveryDuration implements Serializable {
 		SalesSite = salesSite;
 	}
 
-	public Integer getMin() {
-		return Min;
+	public String getPN() {
+		return PN;
 	}
 
-	public void setMin(Integer min) {
-		Min = min;
+	public void setPN(String pN) {
+		PN = pN;
 	}
 
-	public Integer getAvg() {
-		return Avg;
+	public Date getOrderDate() {
+		return OrderDate;
 	}
 
-	public void setAvg(Integer avg) {
-		Avg = avg;
+	public void setOrderDate(Date orderDate) {
+		OrderDate = orderDate;
 	}
 
-	public Integer getMax() {
-		return Max;
+	public Date getShipDate() {
+		return ShipDate;
 	}
 
-	public void setMax(Integer max) {
-		Max = max;
+	public void setShipDate(Date shipDate) {
+		ShipDate = shipDate;
+	}
+
+	public Integer getDuration() {
+		return Duration;
+	}
+
+	public void setDuration(Integer duration) {
+		Duration = duration;
 	}
 
 	@Override
