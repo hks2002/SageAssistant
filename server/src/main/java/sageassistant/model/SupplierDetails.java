@@ -33,27 +33,27 @@ public class SupplierDetails implements Serializable {
 	private String Email4;
 	private String Website;
 
-	public String getSupplyCode() {
+	public String getSupplierCode() {
 		return SupplierCode;
 	}
 
-	public void setSupplyCode(String supplierCode) {
+	public void setSupplierCode(String supplierCode) {
 		SupplierCode = supplierCode;
 	}
 
-	public String getSupplyName0() {
+	public String getSupplierName0() {
 		return SupplierName0;
 	}
 
-	public void setSupplyName0(String supplierName0) {
+	public void setSupplierName0(String supplierName0) {
 		SupplierName0 = supplierName0;
 	}
 
-	public String getSupplyName1() {
+	public String getSupplierName1() {
 		return SupplierName1;
 	}
 
-	public void setSupplyName1(String supplierName1) {
+	public void setSupplierName1(String supplierName1) {
 		SupplierName1 = supplierName1;
 	}
 

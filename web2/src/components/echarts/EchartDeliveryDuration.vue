@@ -31,7 +31,8 @@ import {
   defaultTooltip,
   defaultToolbox,
   defaultLegend,
-  defaultLineSerial
+  defaultLineSerial,
+  defaultXAxisTime
 } from 'assets/echartsCfg.js'
 
 export default defineComponent({
@@ -48,8 +49,8 @@ export default defineComponent({
     let data = []
     let lengend = []
     let dataByLengend = []
-    const dataset = []
-    const series = []
+    let dataset = []
+    let series = []
     const dimensions = ['SalesSite', 'PN', 'OrderDate', 'ShipDate', 'Duration']
     const showLoading = ref(false)
 
@@ -73,11 +74,11 @@ export default defineComponent({
     const prepareData = () => {
       lengend = _uniq(_map(data, 'SalesSite'))
       dataByLengend = _groupBy(data, 'SalesSite')
+      dataset = []
+      series = []
 
       _forEach(lengend, (value, index) => {
-        // dataset
         dataset[index] = { source: dataByLengend[value] }
-        // series
         series[index] = defaultLineSerial(index, value, '{@Duration}', dimensions, 'ShipDate', 'Duration')
       })
     }
@@ -92,18 +93,25 @@ export default defineComponent({
         tooltip: defaultTooltip,
         legend: defaultLegend,
         toolbox: defaultToolbox(dimensions, data, t('Delivery Duration')),
-        xAxis: {
-          type: 'time'
-        },
+        xAxis: defaultXAxisTime,
         yAxis: {
           type: 'value',
+          min: 0,
+          max: function (value) {
+            if (isNaN(value.max)) {
+              return 90
+            } else {
+              return null
+            }
+          },
+          minInterval: 1,
           axisLabel: {
             formatter: '{value}'
           }
         },
         dataset: dataset,
         series: series
-      })
+      }, true)
     }
 
     onMounted(() => {

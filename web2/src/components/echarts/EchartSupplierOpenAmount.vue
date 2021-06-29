@@ -49,8 +49,8 @@ export default defineComponent({
     let lengend = []
     let dataByLengend = []
     let sites = []
-    const dataset = []
-    const series = []
+    let dataset = []
+    let series = []
     const dimensions = [
       'Site',
       'SupplierCode',
@@ -82,6 +82,8 @@ export default defineComponent({
       lengend = _uniq(_map(data, 'Currency'))
       dataByLengend = _groupBy(data, 'Currency')
       sites = _uniq(_map(data, 'Site'))
+      dataset = []
+      series = []
 
       _forEach(lengend, (value, index) => {
         dataset[index] = { source: dataByLengend[value] }
@@ -114,7 +116,7 @@ export default defineComponent({
         },
         dataset: dataset,
         series: series
-      })
+      }, true)
     }
 
     onMounted(() => {

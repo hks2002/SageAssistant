@@ -25,6 +25,8 @@ import {
   defaultToolbox,
   defaultLegend,
   defaultDataZoom,
+  defaultXAxisTime,
+  mergerOption,
   jsonToMultLine
 } from 'assets/echartsCfg.js'
 
@@ -48,8 +50,8 @@ export default defineComponent({
     let data = []
     let lengend = []
     let dataByLengend = []
-    const dataset = []
-    const series = []
+    let dataset = []
+    let series = []
     const dimensions = [
       'Site',
       'SupplierCode',
@@ -86,6 +88,8 @@ export default defineComponent({
     const prepareData = () => {
       lengend = _uniq(_map(data, 'Site'))
       dataByLengend = _groupBy(data, 'Site')
+      dataset = []
+      series = []
 
       _forEach(lengend, (value, index) => {
         // dataset
@@ -104,7 +108,7 @@ export default defineComponent({
           },
           dimensions: dimensions,
           encode: {
-            x: 'ReceiptDate',
+            x: 'ExpectDate',
             y: 'DaysDelay'
           }
         }
@@ -123,15 +127,21 @@ export default defineComponent({
         toolbox: defaultToolbox(dimensions, data, t('Delay History') + '(' + props.dateFrom + '-->' + props.dateTo + ')'),
         tooltip: defaultTooltip,
         dataZoom: defaultDataZoom(),
-        xAxis: {
-          type: 'time',
-          name: 'Except'
-        },
+        xAxis: mergerOption(defaultXAxisTime, { name: 'Except' }),
         yAxis: {
+          min: 0,
+          max: function (value) {
+            if (isNaN(value.max)) {
+              return 90
+            } else {
+              return null
+            }
+          },
+          minInterval: 1
         },
         dataset: dataset,
         series: series
-      })
+      }, true)
     }
 
     onMounted(() => {

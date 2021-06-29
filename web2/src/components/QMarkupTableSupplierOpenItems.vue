@@ -3,6 +3,7 @@
     dense
     class="q-pa-sm"
     v-if="supplierOpenItems.length>0"
+    style="height:250px"
   >
     <thead>
       <tr>
@@ -14,7 +15,7 @@
             class="bg-teal text-white shadow-2"
             rowspan="13"
           >
-            <q-toolbar-title class="text-left">OpenItems(All)
+            <q-toolbar-title class="text-left">OpenItems(All-{{supplierOpenItems.length}})
             </q-toolbar-title>
           </q-toolbar>
         </th>
@@ -30,8 +31,6 @@
         <th class="text-center">AckDate</th>
         <th class="text-center">ExpectDate</th>
         <th class="text-center">OrderDate</th>
-        <th>ReceiptNO</th>
-        <th class="text-center">ReceiptDate</th>
         <th class="text-center">DaysDelay</th>
       </tr>
     </thead>
@@ -50,8 +49,6 @@
         <td class="text-center">{{item.AckDate}}</td>
         <td class="text-center">{{item.ExpectDate}}</td>
         <td class="text-center">{{item.OrderDate}}</td>
-        <td>{{item.ReceiptNO}}</td>
-        <td class="text-center">{{item.ReceiptDate}}</td>
         <td class="text-center">{{item.DaysDelay}}</td>
       </tr>
     </tbody>

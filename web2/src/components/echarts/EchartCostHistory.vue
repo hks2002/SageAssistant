@@ -52,9 +52,9 @@ export default defineComponent({
     let lengend = []
     let dataByLengend = []
     let dataBySiteProject = []
-    const dataSumBySiteProject = []
-    const dataset = []
-    const series = []
+    let dataSumBySiteProject = []
+    let dataset = []
+    let series = []
     const dimensions = [
       'PurchaseSite',
       'ProjectNO',
@@ -105,6 +105,9 @@ export default defineComponent({
       } else if (len > 0) {
         dataZoomStartValue = _get(data[0], 'OrderDate')
       }
+      dataSumBySiteProject = []
+      dataset = []
+      series = []
 
       dataBySiteProject = _groupBy(data, function (n) { return _get(n, 'PurchaseSite') + _get(n, 'ProjectNO') })
       _forEach(dataBySiteProject, (value, index, array) => {
@@ -120,9 +123,7 @@ export default defineComponent({
       dataByLengend = _groupBy(dataSumBySiteProject, 'PurchaseSite')
 
       _forEach(lengend, (value, index) => {
-        // dataset
         dataset[index] = { source: dataByLengend[value] }
-        // series
         series[index] = defaultLineSerial(index, value, '{@USD} USD', miniDemensions, 'OrderDate', 'USD')
       })
     }
@@ -146,7 +147,7 @@ export default defineComponent({
         yAxis: defaultYAxisUSD,
         dataset: dataset,
         series: series
-      })
+      }, true)
     }
 
     onMounted(() => {

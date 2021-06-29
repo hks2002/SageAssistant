@@ -88,6 +88,15 @@ const defaultXAxisTime = {
 }
 
 const defaultYAxisUSD = {
+  min: 0,
+  max: function (value) {
+    if (isNaN(value.max)) {
+      return 1000
+    } else {
+      return null
+    }
+  },
+  minInterval: 100,
   axisLabel: {
     formatter: '{value}\nUSD'
   }
@@ -117,6 +126,7 @@ const defaultToolbox = function (headers, data, title) {
   return {
     feature: {
       dataView: {
+        title: '',
         optionToContent: () => jsonToTable(headers, data, title)
       },
       myTool: {

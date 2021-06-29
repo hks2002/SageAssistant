@@ -15,7 +15,7 @@
     :option-value="optionValue"
     v-model="model"
     :options="options"
-    @input-value="inputVal"
+    @update:model-value="inputVal"
     @filter="filterFnAutoselect"
     @filter-abort="abortFilterFn"
   >
@@ -77,7 +77,7 @@ export default defineComponent({
   setup(props, ctx) {
     const model = ref('')
     // Bug? Must initial enough spaces
-    const options = ref([{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}])
+    const options = ref([{ PN: '', PNROOT: '' }, { PN: '', PNROOT: '' }, { PN: '', PNROOT: '' }, { PN: '', PNROOT: '' }, { PN: '', PNROOT: '' }, { PN: '', PNROOT: '' }, { PN: '', PNROOT: '' }, { PN: '', PNROOT: '' }, { PN: '', PNROOT: '' }, { PN: '', PNROOT: '' }])
 
     const filterFnAutoselect = (val, update, abort) => {
       // This event before input event, call abort() at any time if you can't retrieve data somehow
@@ -95,6 +95,7 @@ export default defineComponent({
         (ref) => {
           // Callback to call at the end after the update has been fully processed by QSelect
           // "ref" is the Vue reference to the QSelect
+          //
           axios.get(props.dataUrl + val.toUpperCase())
             .then((response) => {
               options.value = response.data
@@ -123,20 +124,11 @@ export default defineComponent({
     }
 
     const abortFilterFn = () => {
-      // console.log('delayed filter aborted')
+      console.log('delayed filter aborted')
     }
 
-    // don't send emit signal at here
-    // each input keydown trrigle it
-    const inputVal = (val) => {
-      console.debug('inputVal:' + val)
-      console.debug('modelVal:' + model.value)
-      if (val.length < props.minQueryLen) {
-        return
-      }
-
-      // after manual select the option, it will be equal
-      if (val === model.value && props.emitTo) {
+    const inputVal = () => {
+      if (props.emitTo) {
         console.debug('emit...')
         ebus.emit(props.emitTo, model.value)
       }

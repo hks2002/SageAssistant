@@ -35,11 +35,11 @@ public class SupplierDeliveryHistory implements Serializable {
 		Site = site;
 	}
 
-	public String getSupplyCode() {
+	public String getSupplierCode() {
 		return SupplierCode;
 	}
 
-	public void setSupplyCode(String supplyCode) {
+	public void setSupplierCode(String supplyCode) {
 		SupplierCode = supplyCode;
 	}
 
@@ -128,5 +128,5 @@ public class SupplierDeliveryHistory implements Serializable {
 		return JSON.toJSONString(this, SerializeConfig.globalInstance, new SerializeFilter[] { new PascalNameFilter() },
 				"yyyy-MM-dd", JSON.DEFAULT_GENERATE_FEATURE);
 	}
-
+	// , SerializerFeature.WriteMapNullValue
 }

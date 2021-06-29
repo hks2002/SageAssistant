@@ -35,12 +35,12 @@ public class SupplierDelayHistory implements Serializable {
 		Site = site;
 	}
 
-	public String getSupplyCode() {
+	public String getSupplierCode() {
 		return SupplierCode;
 	}
 
-	public void setSupplyCode(String supplyCode) {
-		SupplierCode = supplyCode;
+	public void setSupplierCode(String supplierCode) {
+		SupplierCode = supplierCode;
 	}
 
 	public String getPurchaseNO() {

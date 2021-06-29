@@ -6,15 +6,16 @@
     <cache eviction="LRU" flushInterval="3600000" readOnly="true" size="1024"/>
     <select id="findPnByLike" parameterType="String" resultType="sageassistant.model.PnRootPn">
         SELECT DISTINCT
-		    XITM_RACIN_0 AS PNROOT,
+		    IIF(XITM_RACIN_0=' ',ITMREF_0,XITM_RACIN_0) AS PNROOT,
 		    ITMREF_0 AS PN
 		FROM ITMMASTER
 		WHERE ITMREF_0 LIKE #{pnOrPnRoot}
-		    or XITM_RACIN_0 LIKE #{pnOrPnRoot}
+		    OR XITM_RACIN_0 LIKE #{pnOrPnRoot}
 		ORDER BY XITM_RACIN_0 ASC, ITMREF_0 DESC
     </select>    
     <select id="findAllPnByPnRoot" parameterType="String" resultType="sageassistant.model.PnDetails">
         SELECT
+            ROWID,
 		    ITMREF_0 AS PN,
 		    XITM_RACIN_0 AS PNROOT,
 		    TSICOD_0 AS Cat,
@@ -106,9 +107,10 @@
      </select>
      <select id="findDeliveryDurationByPnRoot" parameterType="String" resultType="sageassistant.model.DeliveryDuration">
 		SELECT SORDERP.SALFCY_0 AS SalesSite,
-		    MIN(DateDiff(day, SORDER.ORDDAT_0,SORDER.SHIDAT_0)) AS MIN,
-		    AVG(DateDiff(day, SORDER.ORDDAT_0,SORDER.SHIDAT_0)) AS AVG,
-		    MAX(DateDiff(day, SORDER.ORDDAT_0,SORDER.SHIDAT_0)) AS MAX
+				ITMMASTER.ITMREF_0 AS PN,
+				SORDER.ORDDAT_0 AS OrderDate,
+				SORDER.SHIDAT_0 AS ShipDate,
+				DateDiff(day, SORDER.ORDDAT_0,SORDER.SHIDAT_0) AS Duration
 		FROM SORDER
 		    LEFT JOIN SORDERP
 		    ON SORDERP.SOHNUM_0=SORDER.SOHNUM_0
@@ -117,7 +119,6 @@
 		WHERE 
 		    ITMMASTER.XITM_RACIN_0=#{pnRoot}
 		    AND DateDiff(day, SORDER.ORDDAT_0,SORDER.SHIDAT_0) != 0
-		GROUP BY SORDERP.SALFCY_0
      </select>
      <select id="findStockInfoByPnRoot" parameterType="String" resultType="sageassistant.model.StockInfo">
 	    SELECT 

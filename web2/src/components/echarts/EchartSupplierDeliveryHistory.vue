@@ -25,6 +25,8 @@ import {
   defaultToolbox,
   defaultLegend,
   defaultDataZoom,
+  defaultXAxisTime,
+  mergerOption,
   jsonToMultLine
 } from 'assets/echartsCfg.js'
 
@@ -48,11 +50,11 @@ export default defineComponent({
     let data = []
     let lengend = []
     let dataByLengend = []
-    const dataset = []
-    const series = []
+    let dataset = []
+    let series = []
     const dimensions = [
       'Site',
-      'SupplyCode',
+      'SupplierCode',
       'PurchaseNO',
       'ProjectNO',
       'PN',
@@ -86,6 +88,8 @@ export default defineComponent({
     const prepareData = () => {
       lengend = _uniq(_map(data, 'Site'))
       dataByLengend = _groupBy(data, 'Site')
+      dataset = []
+      series = []
 
       _forEach(lengend, (value, index) => {
         // dataset
@@ -113,7 +117,7 @@ export default defineComponent({
             y: 'DaysNeed'
           }
         }
-      })
+      }, true)
     }
 
     const setEchart = () => {
@@ -128,11 +132,17 @@ export default defineComponent({
         toolbox: defaultToolbox(dimensions, data, t('Delivery History') + '(' + props.dateFrom + '-->' + props.dateTo + ')'),
         tooltip: defaultTooltip,
         dataZoom: defaultDataZoom(),
-        xAxis: {
-          type: 'time',
-          name: 'Receipt'
-        },
+        xAxis: mergerOption(defaultXAxisTime, { name: 'Receipt' }),
         yAxis: {
+          min: 0,
+          max: function (value) {
+            if (isNaN(value.max)) {
+              return 90
+            } else {
+              return null
+            }
+          },
+          minInterval: 1
         },
         dataset: dataset,
         series: series

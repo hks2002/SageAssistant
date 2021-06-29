@@ -26,7 +26,7 @@ Mock.mock(RegExp('^(/Data/SupplierDetails)' + '.*'), options => {
   const SupplierCode = getQueryParameter(options, 'SupplierCode')
   // list = {data:[{},{}]}
   const list = Mock.mock({
-    'data|1': [
+    'data|1-2': [
       {
         SupplierCode: SupplierCode,
         SupplierName0: () => { return Mock.mock('@title(3, 5)') },
@@ -179,8 +179,6 @@ Mock.mock(RegExp('^(/Data/SupplierOpenItems)' + '.*'), options => {
         AckDate: () => { return Mock.mock('@date("yyyy-MM-dd")') },
         ExpectDate: () => { return Mock.mock('@date("yyyy-MM-dd")') },
         OrderDate: () => { return Mock.mock('@date("yyyy-MM-dd")') },
-        ReceiptNO: /(H|Z|S|T|M)RA[0-9]{6}/,
-        ReceiptDate: () => { return Mock.mock('@date("yyyy-MM-dd")') },
         DaysDelay: () => { return Mock.mock('@integer(20, 365)') }
       }
     ]

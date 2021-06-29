@@ -107,7 +107,9 @@ export default defineComponent({
     }
 
     // event handing
-    ebus.on('searchPn', (PNROOT) => { update(PNROOT) })
+    ebus.on('searchPn', (PNROOT) => {
+      update(PNROOT)
+    })
     onBeforeUnmount(() => { ebus.off('searchPn') })
 
     // return them to vue template

@@ -52,9 +52,9 @@ export default defineComponent({
     let data = []
     let lengend = []
     let dataByLengend = []
-    const dataCountedByLengend = []
-    const dataset = []
-    const series = []
+    let dataCountedByLengend = []
+    let dataset = []
+    let series = []
     const dimensions = [
       'SalesSite',
       'OrderNO',
@@ -99,6 +99,9 @@ export default defineComponent({
 
       lengend = _uniq(_map(data, 'SalesSite'))
       dataByLengend = _groupBy(data, 'SalesSite')
+      dataCountedByLengend = []
+      dataset = []
+      series = []
 
       _forEach(dataByLengend, (value, index, array) => {
         const o = {}
@@ -108,9 +111,7 @@ export default defineComponent({
       })
 
       _forEach(lengend, (value, index) => {
-        // dataset
         dataset[index] = { source: dataByLengend[value] }
-        // series
         series[index] = defaultLineSerial(index, value, '{@NetPrice} {@Currency}', dimensions, 'OrderDate', 'USD')
       })
 
@@ -139,7 +140,7 @@ export default defineComponent({
         yAxis: defaultYAxisUSD,
         dataset: dataset,
         series: series
-      })
+      }, true)
     }
 
     const resizeEchart = () => {

@@ -49,8 +49,8 @@ export default defineComponent({
     let lengend = []
     let dataByLengend = []
     let sites = []
-    const dataset = []
-    const series = []
+    let dataset = []
+    let series = []
     const dimensions = [
       'Site',
       'SupplierCode',
@@ -59,10 +59,10 @@ export default defineComponent({
     ]
     const showLoading = ref(false)
 
-    const doUpdate = (code) => {
+    const doUpdate = (code, dateFrom, dateTo) => {
       showLoading.value = true
 
-      axios.get('/Data/SupplierOpenQty?SupplierCode=' + code)
+      axios.get('/Data/SupplierOpenQty?SupplierCode=' + code + '&DateFrom=' + dateFrom + '&DateTo=' + dateTo)
         .then((response) => {
           data = response.data
           prepareData()
@@ -80,11 +80,11 @@ export default defineComponent({
       lengend = _uniq(_map(data, 'CountType'))
       dataByLengend = _groupBy(data, 'CountType')
       sites = _uniq(_map(data, 'Site'))
+      dataset = []
+      series = []
 
       _forEach(lengend, (value, index) => {
-        // dataset
         dataset[index] = { source: dataByLengend[value] }
-        // series
         series[index] = defaultBarSerial(index, value, '{@Qty}', dimensions, 'Site', 'Qty')
       })
     }
@@ -106,13 +106,22 @@ export default defineComponent({
         },
         yAxis: {
           type: 'value',
+          min: 0,
+          max: function (value) {
+            if (isNaN(value.max)) {
+              return 10
+            } else {
+              return null
+            }
+          },
+          minInterval: 1,
           axisLabel: {
             formatter: '{value}'
           }
         },
         dataset: dataset,
         series: series
-      })
+      }, true)
     }
 
     onMounted(() => {
@@ -129,7 +138,7 @@ export default defineComponent({
       // newAndold[0]:new
       console.debug('watch:' + newAndold[1] + ' ---> ' + newAndold[0])
       if (newAndold[0][0]) {
-        doUpdate()
+        doUpdate(props.supplierCode, props.dateFrom, props.dateTo)
       }
     })
 

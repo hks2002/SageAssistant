@@ -49,8 +49,8 @@ export default defineComponent({
     let lengend = []
     let dataByLengend = []
     let bars = []
-    const dataset = []
-    const series = []
+    let dataset = []
+    let series = []
     const dimensions = ['PN', 'StockSite', 'Qty']
     const showLoading = ref(false)
 
@@ -75,11 +75,11 @@ export default defineComponent({
       bars = _uniq(_map(data, 'StockSite'))
       lengend = _uniq(_map(data, 'PN'))
       dataByLengend = _groupBy(data, 'PN')
+      dataset = []
+      series = []
 
       _forEach(lengend, (value, index) => {
-        // dataset
         dataset[index] = { source: dataByLengend[value] }
-        // series
         series[index] = defaultBarStackedSerial(index, value, '{@Qty}', dimensions, 'StockSite', 'Qty')
       })
     }
@@ -100,13 +100,22 @@ export default defineComponent({
         },
         yAxis: {
           type: 'value',
+          min: 0,
+          max: function (value) {
+            if (isNaN(value.max)) {
+              return 10
+            } else {
+              return null
+            }
+          },
+          minInterval: 1,
           axisLabel: {
             formatter: '{value}'
           }
         },
         dataset: dataset,
         series: series
-      })
+      }, true)
     }
 
     onMounted(() => {

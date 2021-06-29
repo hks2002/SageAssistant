@@ -9,11 +9,11 @@
         </q-item-label>
       </q-item-section>
     </q-item>
-    <template v-for="(Pn,index) in pnsInFamily">
-      <q-item
-        v-if="index>0"
-        :key="Pn.ROWID"
-      >
+    <template
+      v-for="Pn in pnsInFamily"
+      :key="Pn.ROWID"
+    >
+      <q-item>
         <q-item-section
           :class="labClass(Pn.Status)"
           style="padding:0px"
