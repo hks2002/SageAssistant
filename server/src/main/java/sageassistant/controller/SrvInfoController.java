@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONArray;
+
 @CrossOrigin
 @RestController
 public class SrvInfoController {	 
@@ -37,11 +39,11 @@ public class SrvInfoController {
 	
 	@GetMapping("/Data/SrvProjectDependencies")
 	public String getDependencies() {
-		String rtn = "";
-		rtn = dependencies.replace("Dependency", "");
-		rtn = rtn.replaceAll("=", ":");
-		rtn = rtn.replaceAll(":([^,}]+)", ":\"$1\"");
-	
-		return rtn;
+		String str = "";
+		str = dependencies.replace("Dependency", "");
+		str = str.replaceAll("=", ":");
+		str = str.replaceAll(":([^,}]+)", ":\"$1\"");
+		JSONArray json = JSONArray.parseArray(str);
+		return json.toString();
 	}
 }
