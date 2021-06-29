@@ -17,6 +17,9 @@ public class SrvInfoController {
 	 @Value("${spring.boot.version}")
 	 private String springBootVersion;
 	 
+	 @Value("${project.dependencies}")
+	 private String dependencies;
+	 
 	@GetMapping("/Data/SrvVersion")
 	public String getVersion() {
 	 return version;
@@ -30,5 +33,15 @@ public class SrvInfoController {
 	@GetMapping("/Data/SrvInfo")
 	public String getInfo() {
 		return "{\"name\":\"" + name + "\",\"version\":\"" + version+ "\",\"springBootVersion\":\"" + springBootVersion + "\"}";
+	}
+	
+	@GetMapping("/Data/SrvProjectDependencies")
+	public String getDependencies() {
+		String rtn = "";
+		rtn = dependencies.replace("Dependency", "");
+		rtn = rtn.replaceAll("=", ":");
+		rtn = rtn.replaceAll(":([^,}]+)", ":\"$1\"");
+	
+		return rtn;
 	}
 }

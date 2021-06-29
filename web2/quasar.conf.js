@@ -141,6 +141,9 @@ module.exports = configure(function (ctx) {
       // the nginx service <port> must <same> to srvsyr01
       // otherwise you will receive some forbideen result.
       proxy: {
+        '/Data': {
+          target: 'http://sageassistant-zhu'
+        }
       }
     },
 
