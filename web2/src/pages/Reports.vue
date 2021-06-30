@@ -34,18 +34,6 @@
             @click="showPdf('SA', 'sage')"
           />
         </q-item-section>
-        <q-item-section side>
-          <a
-            :download="OrderNO4SA.toUpperCase() + '.pdf'"
-            :href="UrlShow"
-          >
-            <q-btn
-              dense
-              text-color="light-green-7"
-              icon="fas fa-download"
-            />
-          </a>
-        </q-item-section>
       </q-item>
 
       <q-item>
@@ -141,18 +129,6 @@
             @click="showPdf('Delivery', 'sage')"
           />
         </q-item-section>
-        <q-item-section side>
-          <a
-            :download="DeliveryNO.toUpperCase() + '.pdf'"
-            :href="UrlShow"
-          >
-            <q-btn
-              text-color="light-green-7"
-              dense
-              icon="fas fa-download"
-            />
-          </a>
-        </q-item-section>
       </q-item>
 
       <q-item>
@@ -204,18 +180,6 @@
             icon="fas fa-file-pdf"
             @click="showPdf('Invoice', 'sage')"
           />
-        </q-item-section>
-        <q-item-section side>
-          <a
-            :download="InvoiceNO.toUpperCase() + '.pdf'"
-            :href="UrlShow"
-          >
-            <q-btn
-              text-color="light-green-7"
-              dense
-              icon="fas fa-download"
-            />
-          </a>
         </q-item-section>
       </q-item>
 
@@ -606,7 +570,7 @@ export default defineComponent({
       $q.loadingBar.start()
 
       if (fromWhere === 'sage') {
-        UrlShow.value = await getSageUrl(rpt, val)
+        UrlShow.value = await getSageUrl(rpt, val) + '?disposition=inline&filename=' + val + '.pdf'
       } else {
         UrlShow.value = getSageAssistantUrl(rpt, 'showPdf')
       }
