@@ -27,6 +27,22 @@
         </q-item-section>
         <q-item-section side>
           <q-btn
+            dense
+            flat
+            disable
+            icon="fas fa-file-pdf"
+          />
+        </q-item-section>
+        <q-item-section side>
+          <q-btn
+            dense
+            flat
+            disable
+            icon="fas fa-file-word"
+          />
+        </q-item-section>
+        <q-item-section side>
+          <q-btn
             id="showSA"
             text-color="light-green-7"
             dense
@@ -75,6 +91,14 @@
             dense
             icon="fas fa-file-word"
             @click="exportWord('COC')"
+          />
+        </q-item-section>
+        <q-item-section side>
+          <q-btn
+            dense
+            flat
+            disable
+            icon="fas fa-file-pdf"
           />
         </q-item-section>
       </q-item>
@@ -225,6 +249,14 @@
             @click="exportWord('Invoice2')"
           />
         </q-item-section>
+        <q-item-section side>
+          <q-btn
+            dense
+            flat
+            disable
+            icon="fas fa-file-pdf"
+          />
+        </q-item-section>
       </q-item>
 
       <q-item>
@@ -272,6 +304,14 @@
             @click="exportWord('Receipt')"
           />
         </q-item-section>
+        <q-item-section side>
+          <q-btn
+            dense
+            flat
+            disable
+            icon="fas fa-file-pdf"
+          />
+        </q-item-section>
       </q-item>
 
       <q-item>
@@ -313,6 +353,14 @@
             dense
             icon="fas fa-file-word"
             @click="exportWord('Receipt')"
+          />
+        </q-item-section>
+        <q-item-section side>
+          <q-btn
+            dense
+            flat
+            disable
+            icon="fas fa-file-pdf"
           />
         </q-item-section>
       </q-item>
@@ -358,6 +406,14 @@
             @click="exportWord('Receipt2')"
           />
         </q-item-section>
+        <q-item-section side>
+          <q-btn
+            dense
+            flat
+            disable
+            icon="fas fa-file-pdf"
+          />
+        </q-item-section>
       </q-item>
 
       <q-item>
@@ -401,6 +457,14 @@
             @click="exportWord('WorkOrder')"
           />
         </q-item-section>
+        <q-item-section side>
+          <q-btn
+            dense
+            flat
+            disable
+            icon="fas fa-file-pdf"
+          />
+        </q-item-section>
       </q-item>
 
       <q-item>
@@ -442,6 +506,14 @@
             dense
             icon="fas fa-file-word"
             @click="exportWord('SOA')"
+          />
+        </q-item-section>
+        <q-item-section side>
+          <q-btn
+            dense
+            flat
+            disable
+            icon="fas fa-file-pdf"
           />
         </q-item-section>
       </q-item>
@@ -663,7 +735,8 @@ export default defineComponent({
         spinnerColor: 'indigo-7'
       })
       const reportUrl = await getSageReportUrl(printUUID)
-      if (regException.test(reportUrl)) {
+      return reportUrl
+    /*  if (regException.test(reportUrl)) {
         return reportUrl
       }
 
@@ -673,6 +746,7 @@ export default defineComponent({
         spinnerColor: 'indigo-10'
       })
       return await pdfUrltoDataUri(reportUrl)
+      */
     }
 
     const onLoad = () => {
