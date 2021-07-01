@@ -23,7 +23,9 @@
       <div class="col-3">
         <q-input
           v-model="dateFrom"
-          type="date"
+          debounce="1000"
+          mask="date"
+          :rules="['date']"
           :label="$t('From')"
           class="q-pr-md"
         />
@@ -31,7 +33,9 @@
       <div class="col-3">
         <q-input
           v-model="dateTo"
-          type="date"
+          debounce="1000"
+          mask="date"
+          :rules="['date']"
           :label="$t('To')"
           class="q-pl-md"
         />
@@ -55,42 +59,42 @@
         :supplierCode="supplierCode"
         :dateFrom="dateFrom"
         :dateTo="dateTo"
-        style="padding:0px; height:250px;"
+        style="padding:0px; height:200px;"
         class="col-6"
       />
       <echart-supplier-open-amount
         :supplierCode="supplierCode"
         :dateFrom="dateFrom"
         :dateTo="dateTo"
-        style="padding:0px; height:250px;"
+        style="padding:0px; height:200px;"
         class="col-6"
       />
       <echart-supplier-total-qty
         :supplierCode="supplierCode"
         :dateFrom="dateFrom"
         :dateTo="dateTo"
-        style="padding:0px; height:250px;"
+        style="padding:0px; height:200px;"
         class="col-6"
       />
       <echart-supplier-total-amount
         :supplierCode="supplierCode"
         :dateFrom="dateFrom"
         :dateTo="dateTo"
-        style="padding:0px; height:250px;"
+        style="padding:0px; height:200px;"
         class="col-6"
       />
       <echart-supplier-delivery-history
         :supplierCode="supplierCode"
         :dateFrom="dateFrom"
         :dateTo="dateTo"
-        style="padding:0px; height:250px;"
+        style="padding:0px; height:200px;"
         class="col-6"
       />
       <echart-supplier-delay-history
         :supplierCode="supplierCode"
         :dateFrom="dateFrom"
         :dateTo="dateTo"
-        style="padding:0px; height:250px;"
+        style="padding:0px; height:200px;"
         class="col-6"
       />
     </q-list>
@@ -143,6 +147,10 @@ export default defineComponent({
     ebus.emit('closeLeftDrawer')
     ebus.emit('activePage', 'Suppliers')
 
+    const ddd = (val) => {
+      return false
+    }
+
     const update = (Code) => {
       supplierCode.value = Code
     }
@@ -155,7 +163,8 @@ export default defineComponent({
     return {
       supplierCode,
       dateFrom,
-      dateTo
+      dateTo,
+      ddd
     }
   }
 })

@@ -196,6 +196,7 @@
 			ON PORDERQ.POHNUM_0 = RECEIPTD.POHNUM_0 AND PORDERQ.POPLIN_0 = RECEIPTD.POPLIN_0
 	    WHERE PORDER.BPSNUM_0=#{SupplierCode}
 		    AND (PORDERQ.EXTRCPDAT_0 BETWEEN CONVERT(datetime, #{DateFrom},120) AND CONVERT(datetime, #{DateTo},120) )
+		    AND (RECEIPTD.RCPDAT_0 - PORDERQ.EXTRCPDAT_0 >0 OR RECEIPTD.RCPDAT_0 IS NULL)
 		ORDER BY PORDERQ.EXTRCPDAT_0 ASC
 	</select>
 	<select id="supplierOpenItems" parameterType="String" resultType="sageassistant.model.SupplierOpenItems">

@@ -123,7 +123,7 @@ export default defineComponent({
       console.debug('onMounted EchartSupplierOpenAmount')
       eChart = echarts.init(document.getElementById('EchartSupplierOpenAmount'))
       if (props.supplierCode) {
-        doUpdate(props.supplierCode, props.dateFrom, props.dateTo)
+        doUpdate()
       }
     })
 

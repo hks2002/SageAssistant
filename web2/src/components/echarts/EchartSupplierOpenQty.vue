@@ -59,10 +59,10 @@ export default defineComponent({
     ]
     const showLoading = ref(false)
 
-    const doUpdate = (code, dateFrom, dateTo) => {
+    const doUpdate = () => {
       showLoading.value = true
 
-      axios.get('/Data/SupplierOpenQty?SupplierCode=' + code + '&DateFrom=' + dateFrom + '&DateTo=' + dateTo)
+      axios.get('/Data/SupplierOpenQty?SupplierCode=' + props.supplierCode)
         .then((response) => {
           data = response.data
           prepareData()
@@ -128,7 +128,7 @@ export default defineComponent({
       console.debug('onMounted EchartSupplierOpenQty')
       eChart = echarts.init(document.getElementById('EchartSupplierOpenQty'))
       if (props.supplierCode) {
-        doUpdate(props.supplierCode, props.dateFrom, props.dateTo)
+        doUpdate()
       }
     })
 
@@ -138,7 +138,7 @@ export default defineComponent({
       // newAndold[0]:new
       console.debug('watch:' + newAndold[1] + ' ---> ' + newAndold[0])
       if (newAndold[0][0]) {
-        doUpdate(props.supplierCode, props.dateFrom, props.dateTo)
+        doUpdate()
       }
     })
 

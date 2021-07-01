@@ -15,6 +15,7 @@
 
 <script>
 import { defineComponent, onMounted, ref, watch } from 'vue'
+import { date } from 'quasar'
 import { notifyError } from 'assets/common'
 import { useI18n } from 'vue-i18n'
 import { axios } from 'boot/axios'
@@ -69,6 +70,9 @@ export default defineComponent({
     const showLoading = ref(false)
 
     const doUpdate = () => {
+      if (!date.isValid(props.dateFrom) || !date.isValid(props.dateTo)) {
+        return
+      }
       showLoading.value = true
 
       axios.get('/Data/SupplierDeliveryHistory?SupplierCode=' + props.supplierCode + '&DateFrom=' + props.dateFrom + '&DateTo=' + props.dateTo)

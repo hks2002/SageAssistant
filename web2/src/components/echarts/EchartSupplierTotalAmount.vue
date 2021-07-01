@@ -15,6 +15,7 @@
 
 <script>
 import { defineComponent, onMounted, ref, watch } from 'vue'
+import { date } from 'quasar'
 import { notifyError } from 'assets/common'
 import { useI18n } from 'vue-i18n'
 import { axios } from 'boot/axios'
@@ -62,6 +63,10 @@ export default defineComponent({
     const showLoading = ref(false)
 
     const doUpdate = () => {
+      if (!date.isValid(props.dateFrom) || !date.isValid(props.dateTo)) {
+        return
+      }
+
       showLoading.value = true
 
       axios.get('/Data/SupplierTotalAmount?SupplierCode=' + props.supplierCode + '&DateFrom=' + props.dateFrom + '&DateTo=' + props.dateTo)
@@ -123,7 +128,7 @@ export default defineComponent({
       console.debug('onMounted EchartSupplierTotalAmount')
       eChart = echarts.init(document.getElementById('EchartSupplierTotalAmount'))
       if (props.supplierCode) {
-        doUpdate(props.supplierCode, props.dateFrom, props.dateTo)
+        doUpdate()
       }
     })
 
@@ -133,7 +138,7 @@ export default defineComponent({
       console.debug('watch:' + oldVal1 + ' ---> ' + newVal1)
       console.debug('watch:' + oldVal2 + ' ---> ' + newVal2)
       if (newVal0) {
-        doUpdate(props.supplierCode, props.dateFrom, props.dateTo)
+        doUpdate()
       }
     })
 
