@@ -50,17 +50,17 @@
 
       <echart-sales-history
         :pnRoot="pnRoot"
-        style="padding:0px; height:350px;"
+        style="padding:0px; height:300px;"
         class="col-12"
       />
       <echart-quote-history
         :pnRoot="pnRoot"
-        style="padding:0px; height:350px;"
+        style="padding:0px; height:300px;"
         class="col-12"
       />
       <echart-cost-history
         :pnRoot="pnRoot"
-        style="padding:0px; height:350px;"
+        style="padding:0px; height:300px;"
         class="col-12"
       />
     </q-list>

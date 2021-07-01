@@ -32,7 +32,8 @@ import _merge from 'lodash/merge'
 import _get from 'lodash/get'
 
 import { jsonToExcel, jsonToTable, jsonToMultLine } from 'assets/dataUtils.js'
-import { date } from 'quasar'
+import { Dialog, date } from 'quasar'
+
 // --------------------------------- default setting ------------------------------
 const defaultSeriesColor = [
   '#40a9ff',
@@ -125,14 +126,40 @@ const defaultDataZoom = function (startValue) {
 const defaultToolbox = function (headers, data, title) {
   return {
     feature: {
-      dataView: {
-        title: '',
-        optionToContent: () => jsonToTable(headers, data, title)
+      //  use viewData instead.
+      // dataView: {
+      //  title: 'xx',
+      //  optionToContent: () => jsonToTable(headers, data, title)
+      // },
+      dataZoom: {
+        show: true
       },
       myTool: {
         show: true,
-        title: 'Downlaod Data',
-        icon: 'path://M4.7,22.9L29.3,45.5L54.7,23.4M4.6,43.6L4.6,58L53.8,58L53.8,43.6M29.2,45.1L29.2,0',
+        title: 'View',
+        icon: 'path://M17.5,17.3H33 M17.5,17.3H33 M45.4,29.5h-28 M11.5,2v56H51V14.8L38.4,2H11.5z M38.4,2.2v12.7H51 M45.4,41.7h-28',
+        onclick: () => {
+          Dialog.create({
+            message: jsonToTable(headers, data, title),
+            html: true,
+            fullWidth: true,
+            fullHeight: true
+          }).onOk(() => {
+            // console.log('OK')
+          }).onCancel(() => {
+            // console.log('Cancel')
+          }).onDismiss(() => {
+            // console.log('I am triggered on both OK and Cancel')
+          })
+        }
+      },
+      saveAsImage: {
+        show: true
+      },
+      myTool2: {
+        show: true,
+        title: 'Downlaod',
+        icon: 'path://M4.7,22.9L29.3,45.5L54.7,23.4M4.6,43.6L4.6,58L53.8,58L53.8,43.6M29.2,45.1L29.2,0M4.7,35.9L29.3,45.5L54.7,35.4',
         onclick: () => {
           const timeStamp = Date.now()
           const formattedString = date.formatDate(timeStamp, 'YYYY-MM-DD')
