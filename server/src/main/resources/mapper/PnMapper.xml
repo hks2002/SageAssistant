@@ -5,31 +5,34 @@
     <!--Open L2 Cache under Names pace: 1 Hour-->
     <cache eviction="LRU" flushInterval="3600000" readOnly="true" size="1024"/>
     <select id="findPnByLike" parameterType="String" resultType="sageassistant.model.PnRootPn">
-        SELECT DISTINCT
-		    IIF(XITM_RACIN_0=' ',ITMREF_0,XITM_RACIN_0) AS PNROOT,
-		    ITMREF_0 AS PN
+		SELECT DISTINCT
+		    ITMMASTER.ITMREF_0 AS PNROOT,
+		    ECCSTA.ITMREF_0 + '_' + ECCSTA.ECCVALMAJ_0 AS PN
 		FROM ITMMASTER
-		WHERE ITMREF_0 LIKE #{pnOrPnRoot}
-		    OR XITM_RACIN_0 LIKE #{pnOrPnRoot}
-		ORDER BY XITM_RACIN_0 ASC, ITMREF_0 DESC
-    </select>    
+		LEFT JOIN ECCSTA
+		     ON ITMMASTER.ITMREF_0 = ECCSTA.ITMREF_0
+		WHERE ITMMASTER.ITMREF_0 LIKE #{pnOrPnRoot} 
+				OR (ECCSTA.ITMREF_0 + '_' + ECCSTA.ECCVALMAJ_0 LIKE #{pnOrPnRoot})
+		ORDER BY ITMMASTER.ITMREF_0 DESC, PN
+    </select>
     <select id="findAllPnByPnRoot" parameterType="String" resultType="sageassistant.model.PnDetails">
-        SELECT
-            ROWID,
-		    ITMREF_0 AS PN,
-		    XITM_RACIN_0 AS PNROOT,
-		    TSICOD_0 AS Cat,
-		    XITM_IND_0 AS Version,
-		    YITM_SUP_0 AS WC,
-		    ITMDES1_0 AS Desc1,
-		    ITMDES2_0 AS Desc2,
-		    ITMDES3_0 AS Desc3,
-		    ITMSTA_0 AS Status,
-		    CREDAT_0 AS CreateDate
+		SELECT
+			row_number() OVER (ORDER BY ECCSTA.ZECCREVMAJ_0 DESC) AS ROWID,
+			ITMMASTER.ITMREF_0 AS PNROOT,
+			IIF(ITMMASTER.ECCFLG_0=2, ITMMASTER.ITMREF_0 + '_' + ECCSTA.ECCVALMAJ_0, ITMMASTER.ITMREF_0) AS PN,
+			ITMMASTER.TSICOD_0 AS Cat,
+			ECCSTA.ECCVALMAJ_0 AS Version,
+			ITMMASTER.ITMDES1_0 AS Desc1,
+			ITMMASTER.ITMDES2_0 AS Desc2,
+			ITMMASTER.ITMDES3_0 AS Desc3,
+			ITMMASTER.YITM_COMSTA_0 AS Comment,
+			IIF(ECCSTA.EXNFLG_0=2, 5, ITMMASTER.ITMSTA_0) AS Status,
+		    ITMMASTER.CREDAT_0 AS CreateDate
 		FROM ITMMASTER
-		WHERE XITM_RACIN_0 = #{pnRoot}
-		ORDER BY XITM_IND_0 DESC, YITM_SUP_0 DESC, PN DESC
-    </select>    
+		LEFT JOIN ECCSTA
+		     ON ITMMASTER.ITMREF_0 = ECCSTA.ITMREF_0
+		WHERE ITMMASTER.ITMREF_0 = #{pnRoot}
+    </select>
     <select id="findSalesHistoryByPnRoot" parameterType="String" resultType="sageassistant.model.SalesHistory">
        SELECT
 		    SORDERP.SALFCY_0 AS SalesSite,
@@ -52,7 +55,7 @@
 		LEFT JOIN ITMMASTER
 		    ON SORDERP.ITMREF_0 = ITMMASTER.ITMREF_0
 		WHERE
-		     SORDERP.NETPRI_0 > 0   AND ITMMASTER.XITM_RACIN_0 = #{pnRoot}
+		     SORDERP.NETPRI_0 > 0   AND ITMMASTER.ITMREF_0 = #{pnRoot}
 		ORDER BY OrderDate ASC
     </select>  
     <select id="findQuoteHistoryByPnRoot" parameterType="String" resultType="sageassistant.model.QuoteHistory">
@@ -75,7 +78,7 @@
 		LEFT JOIN ITMMASTER
 		    ON SQUOTED.ITMREF_0=ITMMASTER.ITMREF_0
 		WHERE 
-		    SQUOTED.NETPRI_0 > 0   AND ITMMASTER.XITM_RACIN_0 = #{pnRoot}
+		    SQUOTED.NETPRI_0 > 0   AND ITMMASTER.ITMREF_0 = #{pnRoot}
 		ORDER BY QuoteDate ASC
      </select>
      <select id="findCostHistoryByPnRoot" parameterType="String" resultType="sageassistant.model.CostHistory">
@@ -102,7 +105,7 @@
 					  ON PORDER.POHNUM_0 = PORDERP.POHNUM_0
 			    LEFT JOIN ITMMASTER
 				      ON ITMMASTER.ITMREF_0 = SORDERQ.ITMREF_0
-			WHERE ITMMASTER.XITM_RACIN_0 = #{pnRoot} AND PORDERP.NETPRI_0 > 0
+			WHERE ITMMASTER.ITMREF_0 = #{pnRoot} AND PORDERP.NETPRI_0 > 0
 			ORDER BY OrderDate ASC
      </select>
      <select id="findDeliveryDurationByPnRoot" parameterType="String" resultType="sageassistant.model.DeliveryDuration">
@@ -117,7 +120,7 @@
 		    LEFT JOIN ITMMASTER
 		    ON SORDERP.ITMREF_0=ITMMASTER.ITMREF_0
 		WHERE 
-		    ITMMASTER.XITM_RACIN_0=#{pnRoot}
+		    ITMMASTER.ITMREF_0=#{pnRoot}
 		    AND DateDiff(day, SORDER.ORDDAT_0,SORDER.SHIDAT_0) != 0
      </select>
      <select id="findStockInfoByPnRoot" parameterType="String" resultType="sageassistant.model.StockInfo">
@@ -129,34 +132,39 @@
 		    LEFT JOIN EXPLOIT.ITMMASTER
 		    ON ITMMASTER.ITMREF_0=STOCK.ITMREF_0
 		WHERE 
-		    ITMMASTER.XITM_RACIN_0=#{pnRoot}
+		    ITMMASTER.ITMREF_0=#{pnRoot}
 		GROUP BY STOCK.STOFCY_0,
 		         STOCK.ITMREF_0
       </select>
       
       <select id="findObseletPnBySite" parameterType="String" resultType="sageassistant.model.PnStatus">
         SELECT
-		   ITMMASTER.ITMREF_0 AS PN,
+		   IIF(ITMMASTER.ECCFLG_0=2, ITMMASTER.ITMREF_0 + '_' + ECCSTA.ECCVALMAJ_0, ITMMASTER.ITMREF_0) AS PN,
 		   ITMMASTER.ITMDES1_0 AS Desc1,
 		   ITMMASTER.ITMDES2_0 AS Desc2,
 		   ITMMASTER.ITMDES3_0 AS Desc3,
-		   (CASE WHEN ITMMASTER.ITMSTA_0 =1 THEN 'Active' 
+		   IIF(ECCSTA.EXNFLG_0=2,
+		    'Obsolete',
+			(CASE WHEN ITMMASTER.ITMSTA_0 =1 THEN 'Active' 
 			WHEN ITMMASTER.ITMSTA_0 =2 THEN 'InDevelopment'
 			WHEN ITMMASTER.ITMSTA_0 =3 THEN 'OnShortage'
 			WHEN ITMMASTER.ITMSTA_0 =4 THEN 'NotRenewed'
 			WHEN ITMMASTER.ITMSTA_0 =5 THEN 'Obsolete'
 			WHEN ITMMASTER.ITMSTA_0 =6 THEN 'NotUsable' 
-			ELSE 'UNK' END) AS PNStatus,
+			ELSE 'UNK' END)) AS PNStatus,
 			ITMMASTER.YITM_SUP_0 AS WC,
 			SORDERQ.YSOH_PJT_0 AS ProjectNO,
-			 SORDER.BPCORD_0 AS CustomerCode,
-	        SORDER.BPCNAM_0 AS CustomerName
+			SORDER.BPCORD_0 AS CustomerCode,
+			SORDER.BPCNAM_0 AS CustomerName
 		FROM EXPLOIT.SORDERQ AS SORDERQ
-		   LEFT JOIN EXPLOIT.ITMMASTER AS ITMMASTER
-	        ON ITMMASTER.ITMREF_0 = SORDERQ.ITMREF_0
 			 LEFT JOIN EXPLOIT.SORDER
-	         ON SORDERQ.SOHNUM_0 = SORDER.SOHNUM_0 
+				ON SORDERQ.SOHNUM_0 = SORDER.SOHNUM_0 
+			LEFT JOIN EXPLOIT.ECCSTA AS ECCSTA
+			     ON SORDERQ.ITMREF_0 = ECCSTA.ITMREF_0
+				 AND SORDERQ.ECCVALMAJ_0 = ECCSTA.ECCVALMAJ_0
+			LEFT JOIN EXPLOIT.ITMMASTER AS ITMMASTER
+				ON ITMMASTER.ITMREF_0 = SORDERQ.ITMREF_0
 		WHERE 
-		  SORDERQ.SOQSTA_0 != 3 AND (ITMMASTER.ITMSTA_0 !=1 OR ITMMASTER.YITM_SUP_0 ='NQ') AND  SORDERQ.SALFCY_0=#{site}
+		  SORDERQ.SOQSTA_0 != 3 AND SORDERQ.SALFCY_0 = #{site}
     </select> 
 </mapper>

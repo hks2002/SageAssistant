@@ -13,8 +13,7 @@ public class RptWorkOrder {
 	private String ITMDES1_0;
 	private String ITMDES2_0;
 	private String ITMDES3_0;
-	private String XITM_RACIN_0;
-	private String XITM_IND_0;
+	private String ECCVALMAJ_0;
 	private Byte SERMGTCOD_0;
 	private Byte LOTMGTCOD_0;
 	private String MFGFCY_0;
@@ -56,21 +55,6 @@ public class RptWorkOrder {
 	}
 	public String getITMDES3_0() {
 		return ITMDES3_0;
-	}
-	public void setITMDES3_0(String iTMDES3_0) {
-		ITMDES3_0 = iTMDES3_0;
-	}
-	public String getXITM_RACIN_0() {
-		return XITM_RACIN_0;
-	}
-	public void setXITM_RACIN_0(String xITM_RACIN_0) {
-		XITM_RACIN_0 = xITM_RACIN_0;
-	}
-	public String getXITM_IND_0() {
-		return XITM_IND_0;
-	}
-	public void setXITM_IND_0(String xITM_IND_0) {
-		XITM_IND_0 = xITM_IND_0;
 	}
 	public Byte getSERMGTCOD_0() {
 		return SERMGTCOD_0;
@@ -161,5 +145,11 @@ public class RptWorkOrder {
 	public String toString() {
 		return JSON.toJSONString(this, SerializeConfig.globalInstance, new SerializeFilter[] { new PascalNameFilter() },
 				"yyyy-MM-dd", JSON.DEFAULT_GENERATE_FEATURE);
+	}
+	public String getECCVALMAJ_0() {
+		return ECCVALMAJ_0;
+	}
+	public void setECCVALMAJ_0(String eCCVALMAJ_0) {
+		ECCVALMAJ_0 = eCCVALMAJ_0;
 	}
 }

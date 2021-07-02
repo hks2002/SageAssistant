@@ -17,7 +17,7 @@ public class PnDetails implements Serializable {
 	private String PN;
 	private String Cat;
 	private String Version;
-	private String WC;
+	private String Comment;
 	private String Desc1;
 	private String Desc2;
 	private String Desc3;
@@ -64,12 +64,12 @@ public class PnDetails implements Serializable {
 		Version = version;
 	}
 
-	public String getWC() {
-		return WC;
+	public String getComment() {
+		return Comment;
 	}
 
-	public void setWC(String wC) {
-		WC = wC;
+	public void setComment(String wC) {
+		Comment = wC;
 	}
 
 	public String getDesc1() {
