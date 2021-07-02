@@ -33,9 +33,7 @@ public class RptCOC {
 	private String ITMDES_0;
 	private String ITMDES2_0;
 	private String ITMDES3_0;
-	private String XITM_IND_0;
-	private String XITM_RACIN_0;
-	private String YITM_SUP_0;
+	private String ECCVALMAJ_0;
 
 	public void setSOHNUM_0(String SOHNUM_0) {
 		this.SOHNUM_0 = SOHNUM_0;
@@ -253,28 +251,12 @@ public class RptCOC {
 		return this.ITMDES3_0;
 	}
 
-	public void setXITM_IND_0(String XITM_IND_0) {
-		this.XITM_IND_0 = XITM_IND_0;
+	public String getECCVALMAJ_0() {
+		return ECCVALMAJ_0;
 	}
 
-	public String getXITM_IND_0() {
-		return this.XITM_IND_0;
-	}
-
-	public void setXITM_RACIN_0(String XITM_RACIN_0) {
-		this.XITM_RACIN_0 = XITM_RACIN_0;
-	}
-
-	public String getXITM_RACIN_0() {
-		return this.XITM_RACIN_0;
-	}
-
-	public void setYITM_SUP_0(String YITM_SUP_0) {
-		this.YITM_SUP_0 = YITM_SUP_0;
-	}
-
-	public String getYITM_SUP_0() {
-		return this.YITM_SUP_0;
+	public void setECCVALMAJ_0(String eCCVALMAJ_0) {
+		ECCVALMAJ_0 = eCCVALMAJ_0;
 	}
 
 	@Override

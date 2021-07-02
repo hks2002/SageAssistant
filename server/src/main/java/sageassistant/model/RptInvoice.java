@@ -43,6 +43,7 @@ public class RptInvoice {
 	private String SDHNUM_0;
 	private String SDDLIN_0;
 	private String ITMREF_0;
+	private String ECCVALMAJ_0;
 	private String ITMDES_0;
 	private String ITMDES2_0;
 	private Float QTY_0;
@@ -56,10 +57,7 @@ public class RptInvoice {
 	private Integer YSOH_ITEM_0;
 	private String BPTNAM_0;
 	private String CUSREF_0;
-	private String XITM_IND_0;
 	private String YITM_OTAN_0;
-	private String YITM_SUP_0;
-	private String XITM_RACIN_0;
 	private String SOHNUM_0;
 	private Date ORDDAT_0;
 	private String CUSORDREF_0;
@@ -379,29 +377,11 @@ public class RptInvoice {
 	public void setCUSREF_0(String cUSREF_0) {
 		CUSREF_0 = cUSREF_0;
 	}
-	public String getXITM_IND_0() {
-		return XITM_IND_0;
-	}
-	public void setXITM_IND_0(String xITM_IND_0) {
-		XITM_IND_0 = xITM_IND_0;
-	}
 	public String getYITM_OTAN_0() {
 		return YITM_OTAN_0;
 	}
 	public void setYITM_OTAN_0(String yITM_OTAN_0) {
 		YITM_OTAN_0 = yITM_OTAN_0;
-	}
-	public String getYITM_SUP_0() {
-		return YITM_SUP_0;
-	}
-	public void setYITM_SUP_0(String yITM_SUP_0) {
-		YITM_SUP_0 = yITM_SUP_0;
-	}
-	public String getXITM_RACIN_0() {
-		return XITM_RACIN_0;
-	}
-	public void setXITM_RACIN_0(String xITM_RACIN_0) {
-		XITM_RACIN_0 = xITM_RACIN_0;
 	}
 	public String getSOHNUM_0() {
 		return SOHNUM_0;
@@ -588,6 +568,12 @@ public class RptInvoice {
 	public String toString() {
 		return JSON.toJSONString(this, SerializeConfig.globalInstance, new SerializeFilter[] { new PascalNameFilter() },
 				"yyyy-MM-dd", JSON.DEFAULT_GENERATE_FEATURE);
+	}
+	public String getECCVALMAJ_0() {
+		return ECCVALMAJ_0;
+	}
+	public void setECCVALMAJ_0(String eCCVALMAJ_0) {
+		ECCVALMAJ_0 = eCCVALMAJ_0;
 	}
 	
 }

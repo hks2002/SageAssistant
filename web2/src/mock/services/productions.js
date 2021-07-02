@@ -41,7 +41,7 @@ Mock.mock(RegExp('^(/Data/PNsInFamily)' + '.*'), options => {
         PN: () => { return PnRoot + '_' + Mock.mock('@character("ABCDEFG")') },
         Cat: /(P|C|S)000[1-5]/,
         Version: /[A-Z]/,
-        WC: /[A-Z][A-Z]/,
+        Comment: /[A-Z][A-Z]/,
         Desc1: () => { return Mock.mock('@sentence(3, 5)') },
         Desc2: () => { return Mock.mock('@sentence(3, 5)') },
         Desc3: () => { return Mock.mock('@sentence(3, 5)') },

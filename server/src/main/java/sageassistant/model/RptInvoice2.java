@@ -43,6 +43,7 @@ public class RptInvoice2 {
 	private String SDHNUM_0;
 	private String SDDLIN_0;
 	private String ITMREF_0;
+	private String ECCVALMAJ_0;
 	private String ITMDES_0;
 	private String ITMDES2_0;
 	private Float QTY_0;
@@ -51,33 +52,7 @@ public class RptInvoice2 {
 	private Double AMTTAXLIN_0;
 	private Double AMTTATLIN_0;
 	private Double AMTNOTLIN_0;
-	private Double RATTAXLIN_0;
-	
-	public Double getAMTTAXLIN_0() {
-		return AMTTAXLIN_0;
-	}
-	public void setAMTTAXLIN_0(Double aMTTAXLIN_0) {
-		AMTTAXLIN_0 = aMTTAXLIN_0;
-	}
-	public Double getAMTTATLIN_0() {
-		return AMTTATLIN_0;
-	}
-	public void setAMTTATLIN_0(Double aMTTATLIN_0) {
-		AMTTATLIN_0 = aMTTATLIN_0;
-	}
-	public Double getAMTNOTLIN_0() {
-		return AMTNOTLIN_0;
-	}
-	public void setAMTNOTLIN_0(Double aMTNOTLIN_0) {
-		AMTNOTLIN_0 = aMTNOTLIN_0;
-	}
-	public Double getRATTAXLIN_0() {
-		return RATTAXLIN_0;
-	}
-	public void setRATTAXLIN_0(Double rATTAXLIN_0) {
-		RATTAXLIN_0 = rATTAXLIN_0;
-	}
-
+	private Double RATTAXLIN_0;	
 	private String BPIEECNUM_0;
 	private String EECICT_0;
 	private String ICTCTY_0;
@@ -86,10 +61,7 @@ public class RptInvoice2 {
 	private Integer YSOH_ITEM_0;
 	private String BPTNAM_0;
 	private String CUSREF_0;
-	private String XITM_IND_0;
 	private String YITM_OTAN_0;
-	private String YITM_SUP_0;
-	private String XITM_RACIN_0;
 	private String SOHNUM_0;
 	private Date ORDDAT_0;
 	private String CUSORDREF_0;
@@ -120,6 +92,31 @@ public class RptInvoice2 {
 	private String SERNUM_0;
 	private String LOT_0;
 	
+
+	public Double getAMTTAXLIN_0() {
+		return AMTTAXLIN_0;
+	}
+	public void setAMTTAXLIN_0(Double aMTTAXLIN_0) {
+		AMTTAXLIN_0 = aMTTAXLIN_0;
+	}
+	public Double getAMTTATLIN_0() {
+		return AMTTATLIN_0;
+	}
+	public void setAMTTATLIN_0(Double aMTTATLIN_0) {
+		AMTTATLIN_0 = aMTTATLIN_0;
+	}
+	public Double getAMTNOTLIN_0() {
+		return AMTNOTLIN_0;
+	}
+	public void setAMTNOTLIN_0(Double aMTNOTLIN_0) {
+		AMTNOTLIN_0 = aMTNOTLIN_0;
+	}
+	public Double getRATTAXLIN_0() {
+		return RATTAXLIN_0;
+	}
+	public void setRATTAXLIN_0(Double rATTAXLIN_0) {
+		RATTAXLIN_0 = rATTAXLIN_0;
+	}
 	public String getFCY_0() {
 		return FCY_0;
 	}
@@ -330,6 +327,12 @@ public class RptInvoice2 {
 	public void setITMREF_0(String iTMREF_0) {
 		ITMREF_0 = iTMREF_0;
 	}
+	public String getECCVALMAJ_0() {
+		return ECCVALMAJ_0;
+	}
+	public void setECCVALMAJ_0(String eCCVALMAJ_0) {
+		ECCVALMAJ_0 = eCCVALMAJ_0;
+	}
 	public String getITMDES_0() {
 		return ITMDES_0;
 	}
@@ -407,30 +410,6 @@ public class RptInvoice2 {
 	}
 	public void setCUSREF_0(String cUSREF_0) {
 		CUSREF_0 = cUSREF_0;
-	}
-	public String getXITM_IND_0() {
-		return XITM_IND_0;
-	}
-	public void setXITM_IND_0(String xITM_IND_0) {
-		XITM_IND_0 = xITM_IND_0;
-	}
-	public String getYITM_OTAN_0() {
-		return YITM_OTAN_0;
-	}
-	public void setYITM_OTAN_0(String yITM_OTAN_0) {
-		YITM_OTAN_0 = yITM_OTAN_0;
-	}
-	public String getYITM_SUP_0() {
-		return YITM_SUP_0;
-	}
-	public void setYITM_SUP_0(String yITM_SUP_0) {
-		YITM_SUP_0 = yITM_SUP_0;
-	}
-	public String getXITM_RACIN_0() {
-		return XITM_RACIN_0;
-	}
-	public void setXITM_RACIN_0(String xITM_RACIN_0) {
-		XITM_RACIN_0 = xITM_RACIN_0;
 	}
 	public String getSOHNUM_0() {
 		return SOHNUM_0;
@@ -607,6 +586,12 @@ public class RptInvoice2 {
 		LOT_0 = lOT_0;
 	}
 	
+	public String getYITM_OTAN_0() {
+		return YITM_OTAN_0;
+	}
+	public void setYITM_OTAN_0(String yITM_OTAN_0) {
+		YITM_OTAN_0 = yITM_OTAN_0;
+	}
 	@Override
 	public String toString() {
 		return JSON.toJSONString(this, SerializeConfig.globalInstance, new SerializeFilter[] { new PascalNameFilter() },

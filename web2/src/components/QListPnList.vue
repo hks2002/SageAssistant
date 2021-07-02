@@ -19,9 +19,10 @@
           style="padding:0px"
         >
           <q-item-label style="font-weight:bolder; font-size:25px">{{Pn.PN}}</q-item-label>
-          <q-item-label>{{Pn.Desc1}}</q-item-label>
-          <q-item-label>{{Pn.Desc2}}</q-item-label>
-          <q-item-label>{{Pn.Desc3}}</q-item-label>
+          <q-item-label v-if="Pn.Desc1">{{Pn.Desc1}}</q-item-label>
+          <q-item-label v-if="Pn.Desc2">{{Pn.Desc2}}</q-item-label>
+          <q-item-label v-if="Pn.Desc3">{{Pn.Desc3}}</q-item-label>
+          <q-item-label v-if="Pn.Comment">{{Pn.Comment}}</q-item-label>
           <q-item-label-file-list :pn="Pn.PN" />
         </q-item-section>
         <q-item-section
