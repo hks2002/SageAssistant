@@ -167,6 +167,9 @@ export default defineComponent({
         { headers: { authorization: auth } }
       ).then(
         (response) => {
+          setToken(auth)
+          fetchLoginData()
+          $router.push('/')
         },
         (error) => {
           removeToken()
@@ -176,10 +179,6 @@ export default defineComponent({
         loading.value = false
         $q.loadingBar.stop()
       })
-
-      setToken(auth)
-      await fetchLoginData()
-      $router.push('/')
     }
 
     const fetchLoginData = async () => {
