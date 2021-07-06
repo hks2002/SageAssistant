@@ -18,7 +18,7 @@
         size="sm"
         class="q-mr-xs"
       >
-        <q-avatar>
+        <q-avatar dense>
           <img
             src="/imgs/logo.svg"
             style="background-color: white"
@@ -26,8 +26,14 @@
         </q-avatar>
       </q-btn>
       <q-toolbar-title>Sage Assistant{{$route.path}}</q-toolbar-title>
-
       <div class="q-gutter-xs q-ml-sm row items-center no-wrap">
+        <q-select
+          dense
+          v-model="site"
+          @update:model-value="setCookieSite"
+          :options="siteList"
+        >
+        </q-select>
         <q-btn
           type="a"
           target="_blank"
@@ -87,9 +93,9 @@
 import { defineComponent, ref, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
-import { infoDialog } from 'assets/common'
+import { infoDialog, notifyError } from 'assets/common'
 import { ebus } from 'boot/ebus'
-import { getToken, removeToken, getLoginData } from 'assets/storage'
+import { getToken, removeToken, getLoginData, getCookies, setCookies } from 'assets/storage'
 import { axios } from 'boot/axios'
 
 export default defineComponent({
@@ -103,12 +109,19 @@ export default defineComponent({
     const $q = useQuasar()
     const $router = useRouter()
 
+    const site = ref('ZHU')
+    const siteList = ref([])
     const userInfo = ref('Your name')
     const sageInfo = ref('Sage')
     const totalInformCount = ref(0)
 
     const toggleLeftDrawer = () => {
       ebus.emit('toggleLeftDrawer')
+    }
+
+    const setCookieSite = () => {
+      setCookies('site', site.value, 3600 * 24 * 7)
+      ebus.emit('changeSite', site.value)
     }
 
     const showHelp = () => {
@@ -120,14 +133,15 @@ export default defineComponent({
       $router.push('/Login')
     }
 
-    onMounted(() => {
-      console.debug('onMounted PageHeader')
-      const loginData = getLoginData()
-      if (loginData) {
-        userInfo.value = loginData.userInfo
-        sageInfo.value = loginData.sageInfo
-      }
-    })
+    const loginData = getLoginData()
+    if (loginData) {
+      userInfo.value = loginData.userInfo
+      sageInfo.value = loginData.sageInfo
+    }
+
+    if (getCookies('site')) {
+      site.value = getCookies('site')
+    }
 
     if (!getToken()) {
       if (!process.env.DEV) {
@@ -135,7 +149,28 @@ export default defineComponent({
       }
     }
 
+    onMounted(() => {
+      console.debug('onMounted PageHeader')
+      // update site if have cookie
+      const cookieSite = getCookies('site')
+
+      if (cookieSite) {
+        site.value = cookieSite
+      }
+
+      axios.get('/Data/Sites')
+        .then((response) => {
+          siteList.value = response.data
+        })
+        .catch((e) => {
+          notifyError('Loading Sites Failed!')
+        })
+    })
+
     return {
+      site,
+      siteList,
+      setCookieSite,
       userInfo,
       sageInfo,
       totalInformCount,
@@ -146,4 +181,11 @@ export default defineComponent({
   }
 })
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss">
+.q-field__native>span {
+    color: white
+}
+.q-field__append {
+  color: white;
+}
+</style>

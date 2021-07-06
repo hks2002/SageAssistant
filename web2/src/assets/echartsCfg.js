@@ -229,6 +229,28 @@ const defaultBarSerial = function (index, value, labelFormatter, dimensions, enc
   }
 }
 
+const defaultScatterSerial = function (index, value, labelFormatter, dimensions, encodeX, encodeY) {
+  return {
+    type: 'scatter',
+    datasetIndex: index,
+    name: value,
+    label: {
+      show: true,
+      position: 'bottom',
+      formatter: labelFormatter
+    },
+    tooltip: {
+      trigger: 'item',
+      formatter: (params, ticket, callback) => jsonToMultLine(dimensions, params.data)
+    },
+    dimensions: dimensions,
+    encode: {
+      x: encodeX,
+      y: encodeY
+    }
+  }
+}
+
 const defaultBarStackedSerial = function (index, value, labelFormatter, dimensions, encodeX, encodeY) {
   return mergerOption(defaultBarSerial(index, value, labelFormatter, dimensions, encodeX, encodeY), { stack: 'total' })
 }
@@ -278,6 +300,7 @@ export {
   AttachedPieSerial,
   defaultBarSerial,
   defaultBarStackedSerial,
+  defaultScatterSerial,
   mergerOption,
   jsonToMultLine
 }

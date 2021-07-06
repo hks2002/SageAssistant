@@ -1,7 +1,7 @@
 <template>
   <q-item>
     <div
-      id="EchartSalesHistory"
+      id="EchartTodoReceive"
       style="height:100%; width:100%"
     />
     <q-inner-loading :showing="showLoading">
@@ -15,6 +15,7 @@
 
 <script>
 import { defineComponent, onMounted, ref, watch } from 'vue'
+import { date } from 'quasar'
 import { notifyError } from 'assets/common'
 import { useI18n } from 'vue-i18n'
 import { axios } from 'boot/axios'
@@ -22,29 +23,23 @@ import { axios } from 'boot/axios'
 import {
   echarts,
   defaultXAxisTime,
-  defaultYAxisUSD,
   defaultTooltip,
-  defaultDataZoom,
   defaultToolbox,
   defaultLegend,
-  defaultLineSerial,
-  AttachedPieSerial
+  defaultScatterSerial
 } from 'assets/echartsCfg.js'
 
 import _groupBy from 'lodash/groupBy'
 import _forEach from 'lodash/forEach'
-import _sumBy from 'lodash/sumBy'
-import _uniq from 'lodash/uniq'
+import _sortBy from 'lodash/sortBy'
 import _map from 'lodash/map'
-import _get from 'lodash/get'
+import _uniq from 'lodash/uniq'
 
 export default defineComponent({
-  name: 'QItemEchartSalesHistory',
-
+  name: 'EchartTodoReceive',
   props: {
-    pnRoot: String
+    site: String
   },
-
   setup (props, ctx) {
     const { t } = useI18n({ useScope: 'global' })
 
@@ -52,30 +47,34 @@ export default defineComponent({
     let data = []
     let lengend = []
     let dataByLengend = []
-    let dataCountedByLengend = []
     let dataset = []
     let series = []
     const dimensions = [
-      'SalesSite',
-      'OrderNO',
-      'OrderDate',
+      'ProjectNO',
+      'PurchaseNO',
+      'Line',
+      'VendorCode',
+      'VendorName',
       'PN',
       'Qty',
-      'Currency',
+      'Unit',
+      'Description',
       'NetPrice',
+      'Currency',
       'USD',
       'Rate',
-      'TradeTerm',
-      'CustomerCode',
-      'CustomerName'
+      'AckDate',
+      'ExpectDate',
+      'OrderDate',
+      'CreateUser',
+      'DaysLeft'
     ]
-    let dataZoomStartValue = '1900-01-01'
     const showLoading = ref(false)
 
     const doUpdate = () => {
       showLoading.value = true
 
-      axios.get('/Data/SalesHistory?PnRoot=' + props.pnRoot)
+      axios.get('/Data/TobeReceive?site=' + props.site)
         .then((response) => {
           data = response.data
           prepareData()
@@ -83,80 +82,70 @@ export default defineComponent({
         })
         .catch((e) => {
           console.error(e)
-          notifyError(t('Loading Sales History Failed!'))
+          notifyError(t('Loading TobeReceive Failed!'))
         }).finally(() => {
           showLoading.value = false
         })
     }
-
     const prepareData = () => {
-      const len = data.length
-      if (len >= 20) {
-        dataZoomStartValue = _get(data[len - 20], 'OrderDate')
-      } else if (len > 0) {
-        dataZoomStartValue = _get(data[0], 'OrderDate')
-      }
-
-      lengend = _uniq(_map(data, 'SalesSite'))
-      dataByLengend = _groupBy(data, 'SalesSite')
-      dataCountedByLengend = []
+      const newDate = new Date()
+      data.forEach((row) => {
+        row.DaysLeft = date.getDateDiff(row.ExpectDate, newDate, 'days')
+      })
+      data = _sortBy(data, ['DaysLeft'])
+      lengend = _uniq(_map(data, 'CreateUser'))
+      dataByLengend = _groupBy(data, 'CreateUser')
       dataset = []
       series = []
 
-      _forEach(dataByLengend, (value, index, array) => {
-        const o = {}
-        Object.defineProperty(o, 'SalesSite', { enumerable: true, value: _get(value[0], 'SalesSite') })
-        Object.defineProperty(o, 'Qty', { enumerable: true, value: _sumBy(value, 'Qty') })
-        dataCountedByLengend.push(o)
-      })
-
       _forEach(lengend, (value, index) => {
         dataset[index] = { source: dataByLengend[value] }
-        series[index] = defaultLineSerial(index, value, '{@NetPrice} {@Currency}', dimensions, 'OrderDate', 'USD')
+        series[index] = defaultScatterSerial(index, value, '{@ProjectNO}', dimensions, 'ExpectDate', 'ProjectNO')
       })
-
-      // add pie
-      dataset.push({ source: dataCountedByLengend })
-      const seriesBySite = AttachedPieSerial(dataset.length - 1, '{@SalesSite} \nQty:{@Qty}\n{d}%', ['SalesSite', 'Qty'], 'SalesSite', 'Qty')
-      series.push(seriesBySite)
     }
 
     const setEchart = () => {
       // data is ready,set echart option
       eChart.setOption({
         title: {
-          text: t('Sales History'),
-          subtext: t('Currency Rate Data From State Administration of Foreign Exchange'),
+          text: t('BOM to be Receive for ') + props.site,
           left: 'center'
         },
         legend: defaultLegend,
-        grid: [
-          { left: '5%', right: '25%' }
-        ],
-        toolbox: defaultToolbox(dimensions, data, t('Sales History')),
+        toolbox: defaultToolbox(dimensions, data, t('BOM to be Receive for ') + props.site),
         tooltip: defaultTooltip,
-        dataZoom: defaultDataZoom(dataZoomStartValue),
         xAxis: defaultXAxisTime,
-        yAxis: defaultYAxisUSD,
+        grid: [
+          { left: '5%', right: '5%' }
+        ],
+        yAxis: [{
+          type: 'category',
+          show: false
+        }],
+        dataZoom: [{
+          type: 'slider',
+          xAxisIndex: [0],
+          height: 15
+        },
+        {
+          type: 'slider',
+          yAxisIndex: [0]
+        }],
         dataset: dataset,
         series: series
       }, true)
     }
 
-    const resizeEchart = () => {
-      eChart.resize()
-    }
-
     onMounted(() => {
-      console.debug('onMounted EchartSalesHistory')
-      eChart = echarts.init(document.getElementById('EchartSalesHistory'))
-      if (props.pnRoot) {
+      console.debug('onMounted EchartTodoReceive')
+      eChart = echarts.init(document.getElementById('EchartTodoReceive'))
+      if (props.site) {
         doUpdate()
       }
     })
 
     // Don't use watchEffect, it run before Mounted.
-    watch(() => [props.pnRoot], (...newAndold) => {
+    watch(() => [props.site], (...newAndold) => {
       // newAndold[1]:old
       // newAndold[0]:new
       console.debug('watch:' + newAndold[1] + ' ---> ' + newAndold[0])
@@ -164,7 +153,6 @@ export default defineComponent({
         doUpdate()
       }
     })
-
     return {
       showLoading
     }

@@ -29,7 +29,7 @@ const menus = [
     icon: 'fas fa-tasks',
     link: '/Todo',
     split: false,
-    enable: false
+    enable: true
   },
   {
     title: 'Productions',
