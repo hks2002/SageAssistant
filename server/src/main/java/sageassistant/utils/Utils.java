@@ -50,6 +50,9 @@ public class Utils {
 
 	public static String formatDate(Date date) {
 		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		if (date== null) {
+			return "";
+		}
 		return formatter.format(date);
 	}
 
