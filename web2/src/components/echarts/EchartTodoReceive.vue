@@ -108,11 +108,11 @@ export default defineComponent({
       // data is ready,set echart option
       eChart.setOption({
         title: {
-          text: t('BOM to be Receive for ') + props.site,
+          text: t('BOM to be received for ') + props.site,
           left: 'center'
         },
         legend: defaultLegend,
-        toolbox: defaultToolbox(dimensions, data, t('BOM to be Receive for ') + props.site),
+        toolbox: defaultToolbox(dimensions, data, t('BOM to be received for ') + props.site),
         tooltip: defaultTooltip,
         xAxis: defaultXAxisTime,
         grid: [
@@ -138,7 +138,9 @@ export default defineComponent({
 
     onMounted(() => {
       console.debug('onMounted EchartTodoReceive')
+      echarts.init(document.getElementById('EchartTodoReceive')).dispose()
       eChart = echarts.init(document.getElementById('EchartTodoReceive'))
+
       if (props.site) {
         doUpdate()
       }

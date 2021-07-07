@@ -1,5 +1,5 @@
 <template>
-  <q-page>
+  <q-page :key="timer">
     <q-tabs
       v-model="tab"
       dense
@@ -82,10 +82,14 @@ import { useQuasar } from 'quasar'
 import { getCookies } from 'assets/storage'
 import { ebus } from 'boot/ebus'
 
-import EchartTodoDelivery from 'src/components/echarts/EchartTodoDelivery.vue'
-import EchartTodoReceive from 'src/components/echarts/EchartTodoReceive.vue'
-import EchartTodoPurchaseBom from 'src/components/echarts/EchartTodoPurchaseBom.vue'
-import EchartTodoDealWithOrderLine from 'src/components/echarts/EchartTodoDealWithOrderLine.vue'
+import EchartTodoDelivery from 'components/echarts/EchartTodoDelivery.vue'
+import EchartTodoReceive from 'components/echarts/EchartTodoReceive.vue'
+import EchartTodoPurchaseBom from 'components/echarts/EchartTodoPurchaseBom.vue'
+import EchartTodoDealWithOrderLine from 'components/echarts/EchartTodoDealWithOrderLine.vue'
+
+import {
+  echarts
+} from 'assets/echartsCfg.js'
 
 export default defineComponent({
   name: 'Todo',
@@ -116,7 +120,8 @@ export default defineComponent({
     return {
       tab,
       tabHeight: 'padding:0px; height:' + contentHeight + 'px',
-      site
+      site,
+      timer: new Date().getTime()
     }
   }
 })

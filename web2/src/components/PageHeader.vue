@@ -109,7 +109,7 @@ export default defineComponent({
     const $q = useQuasar()
     const $router = useRouter()
 
-    const site = ref('ZHU')
+    const site = ref('')
     const siteList = ref([])
     const userInfo = ref('Your name')
     const sageInfo = ref('Sage')
@@ -141,6 +141,9 @@ export default defineComponent({
 
     if (getCookies('site')) {
       site.value = getCookies('site')
+    } else {
+      site.value = 'ZHU'
+      setCookieSite()
     }
 
     if (!getToken()) {
@@ -151,12 +154,6 @@ export default defineComponent({
 
     onMounted(() => {
       console.debug('onMounted PageHeader')
-      // update site if have cookie
-      const cookieSite = getCookies('site')
-
-      if (cookieSite) {
-        site.value = cookieSite
-      }
 
       axios.get('/Data/Sites')
         .then((response) => {

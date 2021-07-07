@@ -106,11 +106,11 @@ export default defineComponent({
       // data is ready,set echart option
       eChart.setOption({
         title: {
-          text: t('BOM to be Purchase for ') + props.site,
+          text: t('BOM to be purchased for ') + props.site,
           left: 'center'
         },
         legend: defaultLegend,
-        toolbox: defaultToolbox(dimensions, data, t('BOM to be Purchase for ') + props.site),
+        toolbox: defaultToolbox(dimensions, data, t('BOM to be purchased for ') + props.site),
         tooltip: defaultTooltip,
         xAxis: defaultXAxisTime,
         grid: [
@@ -136,7 +136,9 @@ export default defineComponent({
 
     onMounted(() => {
       console.debug('onMounted EchartTodoPurchaseBom')
+      echarts.init(document.getElementById('EchartTodoPurchaseBom')).dispose()
       eChart = echarts.init(document.getElementById('EchartTodoPurchaseBom'))
+
       if (props.site) {
         doUpdate()
       }

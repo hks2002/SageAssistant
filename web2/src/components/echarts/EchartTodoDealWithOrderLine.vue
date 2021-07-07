@@ -104,11 +104,11 @@ export default defineComponent({
       // data is ready,set echart option
       eChart.setOption({
         title: {
-          text: t('Order Line Pending for ') + props.site,
+          text: t('New order line pending for ') + props.site,
           left: 'center'
         },
         legend: defaultLegend,
-        toolbox: defaultToolbox(dimensions, data, t('Order Line Pending for ') + props.site),
+        toolbox: defaultToolbox(dimensions, data, t('New order line pending for ') + props.site),
         tooltip: defaultTooltip,
         xAxis: defaultXAxisTime,
         grid: [
@@ -134,7 +134,9 @@ export default defineComponent({
 
     onMounted(() => {
       console.debug('onMounted EchartTodoDealWithOrderLine')
+      echarts.init(document.getElementById('EchartTodoDealWithOrderLine')).dispose()
       eChart = echarts.init(document.getElementById('EchartTodoDealWithOrderLine'))
+
       if (props.site) {
         doUpdate()
       }

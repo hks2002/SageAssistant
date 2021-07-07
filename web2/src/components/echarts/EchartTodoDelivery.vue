@@ -104,11 +104,11 @@ export default defineComponent({
       // data is ready,set echart option
       eChart.setOption({
         title: {
-          text: t('Production to be Delivery for ') + props.site,
+          text: t('Production to be delivered for ') + props.site,
           left: 'center'
         },
         legend: defaultLegend,
-        toolbox: defaultToolbox(dimensions, data, t('Production to be Delivery for ') + props.site),
+        toolbox: defaultToolbox(dimensions, data, t('Production to be delivered for ') + props.site),
         tooltip: defaultTooltip,
         xAxis: defaultXAxisTime,
         grid: [
@@ -134,7 +134,9 @@ export default defineComponent({
 
     onMounted(() => {
       console.debug('onMounted EchartTodoDelivery')
+      echarts.init(document.getElementById('EchartTodoDelivery')).dispose()
       eChart = echarts.init(document.getElementById('EchartTodoDelivery'))
+
       if (props.site) {
         doUpdate()
       }
