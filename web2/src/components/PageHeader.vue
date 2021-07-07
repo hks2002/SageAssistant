@@ -90,7 +90,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted } from 'vue'
+import { defineComponent, ref, onBeforeUnmount, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 import { infoDialog, notifyError } from 'assets/common'
@@ -133,11 +133,15 @@ export default defineComponent({
       $router.push('/Login')
     }
 
-    const loginData = getLoginData()
-    if (loginData) {
-      userInfo.value = loginData.userInfo
-      sageInfo.value = loginData.sageInfo
+    const updateLoginData = () => {
+      const loginData = getLoginData()
+      if (loginData) {
+        userInfo.value = loginData.userInfo
+        sageInfo.value = loginData.sageInfo
+      }
     }
+
+    updateLoginData()
 
     if (getCookies('site')) {
       site.value = getCookies('site')
@@ -163,6 +167,12 @@ export default defineComponent({
           notifyError('Loading Sites Failed!')
         })
     })
+
+    // event handing
+    ebus.on('updateLoginData', () => {
+      updateLoginData()
+    })
+    onBeforeUnmount(() => { ebus.off('updateLoginData') })
 
     return {
       site,

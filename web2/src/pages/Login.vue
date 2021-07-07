@@ -99,6 +99,7 @@
 import { defineComponent, ref, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
+import { ebus } from 'boot/ebus'
 import { axios } from 'boot/axios'
 import '@lottiefiles/lottie-player'
 import { setToken, removeToken, setLoginData } from 'assets/storage'
@@ -196,6 +197,7 @@ export default defineComponent({
           loginData.locale = response.data.selectedLocale.code
           loginData.localeDesc = response.data.selectedLocale.description
           setLoginData(loginData)
+          ebus.emit('updateLoginData')
         },
         (error) => {
           console.debug(error)
