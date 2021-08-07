@@ -217,8 +217,17 @@ public class Utils {
 	public static String listToString(List<?> list) {
 		return list.toString().replaceAll("(Page\\{.*?\\})(.*)","$2");
 	}
-	public static String stringRemovePageInfo(String str) {
-		return str.replaceAll("(Page\\{.*?\\})(.*)","$2");
+	
+	public static String list2String(List<String> list) {
+		String s="[";
+		for (String o : list ) {
+			s += "\"" + o+"\",";
+		}
+		if (list.size()>0) {
+			s = s.substring(0, s.lastIndexOf(','));
+		}
+		s += "]";
+		return s;
 	}
 
 }

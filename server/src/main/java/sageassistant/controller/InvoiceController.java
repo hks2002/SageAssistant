@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import sageassistant.service.InvoiceService;
-import sageassistant.utils.Utils;
 
 @CrossOrigin
 @RestController
@@ -18,8 +17,8 @@ public class InvoiceController {
 	@GetMapping("/Data/InvoiceNO")
 	public String getInvoiceNO(
 			@RequestParam(value = "InvoiceNO", required = false, defaultValue = "%%") String InvoiceNO,
-			@RequestParam(value = "Count", required = false, defaultValue = "50") Integer count) {
-		return  Utils.stringRemovePageInfo(invoiceService.findInvoiceNOByInvoiceNO(InvoiceNO, count).toString());
+			@RequestParam(value = "Count", required = false, defaultValue = "10") Integer count) {
+		return  invoiceService.findInvoiceNOByInvoiceNO(InvoiceNO, count);
 	}
 	
 	@GetMapping("/Data/InvoiceHeader")
