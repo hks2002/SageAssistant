@@ -159,7 +159,7 @@ public class UpdaterService {
 	// @Scheduled(initialDelay = 1000, fixedRate = Long.MAX_VALUE) // 5秒后仅执行一次	
 	@Scheduled(initialDelay = 1000, fixedDelay = 60000) // 执行完上一次后，60秒再继续执行
 	public void updateFapiao() {
-		log.info("读取发票数据>>>>>>>>>>");
+		log.debug("读取发票数据>>>>>>>>>>");
 		File fapiaoPath = new File(getFapiaoPath());
 
 		for (File file : fapiaoPath.listFiles()) {
@@ -172,7 +172,7 @@ public class UpdaterService {
 				};
 			}
 		}
-		log.info("读取发票数据<<<<<<<<<<");
+		log.debug("读取发票数据<<<<<<<<<<");
 	}
 
 }
