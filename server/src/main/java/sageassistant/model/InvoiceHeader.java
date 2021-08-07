@@ -22,7 +22,7 @@ public class InvoiceHeader implements Serializable {
 	private Float AmountTaxInclude;
 	private Float AmountTaxNotInclude;
 	private Float AmountTax;
-	private Float TaxRate;
+	private Float CurrRate;
 
 	public String getFacility() {
 		return Facility;
@@ -104,12 +104,12 @@ public class InvoiceHeader implements Serializable {
 		AmountTax = amountTax;
 	}
 
-	public Float getTaxRate() {
-		return TaxRate;
+	public Float getCurrRate() {
+		return CurrRate;
 	}
 
-	public void setTaxRate(Float taxRate) {
-		TaxRate = taxRate;
+	public void setTaxRate(Float currRate) {
+		CurrRate = currRate;
 	}
 
 	@Override

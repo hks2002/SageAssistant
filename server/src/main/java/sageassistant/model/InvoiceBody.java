@@ -14,6 +14,7 @@ public class InvoiceBody implements Serializable {
 	private Integer Line;
 	private String PN;
 	private String Description;
+	private Integer Qty;
 	private String Unit;
 	private Float NetPrice;
 	private Float AmountNoTax;
@@ -43,6 +44,14 @@ public class InvoiceBody implements Serializable {
 
 	public void setDescription(String description) {
 		Description = description;
+	}
+
+	public Integer getQty() {
+		return Qty;
+	}
+
+	public void setQty(Integer qty) {
+		Qty = qty;
 	}
 
 	public String getUnit() {
