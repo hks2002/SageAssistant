@@ -4,7 +4,7 @@
 <mapper namespace="sageassistant.dao.InvoiceMapper">
 	<cache eviction="LRU" flushInterval="3600000" readOnly="true" size="1024"/>
 	<select id="findInvoiceNOByInvoiceNO"
-		resultType="String">
+		resultType="java.lang.String">
 		SELECT DISTINCT
 			SINVOICE.NUM_0 AS InvoiceNO
 		FROM
@@ -22,7 +22,7 @@
 			SINVOICE.AMTATI_0 AS AmountTaxInclude,
 			SINVOICE.AMTNOT_0 AS AmountTaxNotInclude,
 			SINVOICE.AMTTAX_0 AS AmountTax,
-			SINVOICE.RATMLT_0 AS TaxRate,
+			SINVOICE.RATMLT_0 AS CurrRate,
 			SINVOICE.YFAPIAO_0 AS FaPiao,
 			SINVOICE.BPR_0 + ' '+ SINVOICE.BPRNAM_0 + ' '+ SINVOICE.BPRNAM_1 As Customer,
 			SINVOICE.POSCOD_0 + ' '+ SINVOICE.CRY_0 + ' '+ SINVOICE.CRYNAM_0 + ' '+ SINVOICE.SAT_0 + ' '+ SINVOICE.CTY_0 +' '+  SINVOICE.BPAADDLIG_0 + ' '+ SINVOICE.BPAADDLIG_1 + ' '+ SINVOICE.BPAADDLIG_2 AS Address
