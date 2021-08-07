@@ -134,7 +134,9 @@ public class HeaderDao {
 		try {
 			String sql = "select * from header"
 				+ " where 1=1"
-				+ " and fphm = '" + fphm + "'";
+				+ " and fphm = '" + fphm + "'"
+				+ " order by lbdm desc"
+				+ " limit 1 ";
 			List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
 			
 			for (int i = 0; i < list.size(); i++) {
