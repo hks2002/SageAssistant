@@ -11,8 +11,6 @@
     input-style="font-weight:bolder;font-size:25px;"
     popup-content-style="font-weight:bold;font-size:25px"
     :label="label"
-    :option-label="optionLabel"
-    :option-value="optionValue"
     v-model="model"
     :options="options"
     @update:model-value="inputVal"
@@ -37,22 +35,9 @@ import { axios } from 'boot/axios'
 import _findIndex from 'lodash/findIndex'
 
 export default defineComponent({
-  name: 'QSelectInput',
+  name: 'QSelectInputSimple',
 
   props: {
-    optionLabel: {
-      type: String,
-      required: true
-    },
-    optionValue: {
-      type: String,
-      required: true
-    },
-    defaultValue: {
-      type: String,
-      default: '',
-      required: false
-    },
     dataUrl: {
       type: String,
       required: true
@@ -61,7 +46,11 @@ export default defineComponent({
       type: String,
       required: true
     },
-
+    defaultValue: {
+      type: String,
+      default: '',
+      required: false
+    },
     label: {
       type: String,
       default: 'label',
@@ -82,7 +71,7 @@ export default defineComponent({
   setup(props, ctx) {
     const model = ref(props.defaultValue)
     // Bug? Must initial enough spaces
-    const options = ref([{ PN: '', PNROOT: '' }, { PN: '', PNROOT: '' }, { PN: '', PNROOT: '' }, { PN: '', PNROOT: '' }, { PN: '', PNROOT: '' }, { PN: '', PNROOT: '' }, { PN: '', PNROOT: '' }, { PN: '', PNROOT: '' }, { PN: '', PNROOT: '' }, { PN: '', PNROOT: '' }])
+    const options = ref([])
 
     const filterFnAutoselect = (val, update, abort) => {
       // This event before input event, call abort() at any time if you can't retrieve data somehow
@@ -148,6 +137,7 @@ export default defineComponent({
         model.value = newAndold[0]
       }
     })
+
     return {
       model,
       options,

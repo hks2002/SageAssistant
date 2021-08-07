@@ -142,7 +142,7 @@ module.exports = configure(function (ctx) {
       // otherwise you will receive some forbideen result.
       proxy: {
         '/Data': {
-          target: 'http://sageassistant-zhu'
+          target: 'http://sageassistant-zhu/'
         }
       }
     },

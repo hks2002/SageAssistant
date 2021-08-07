@@ -32,6 +32,11 @@ const routes = [
     children: [{ path: '', component: () => import('pages/Todo.vue') }]
   },
   {
+    path: '/Finance',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/Finance.vue') }]
+  },
+  {
     path: '/Reports',
     name: '/Reports',
     component: () => import('layouts/MainLayout.vue'),

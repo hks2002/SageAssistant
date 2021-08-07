@@ -80,12 +80,12 @@ const menus = [
     enable: false
   },
   {
-    title: 'Financial',
+    title: 'Finance',
     caption: '',
     icon: 'fas fa-dollar-sign',
-    link: '/Financial',
+    link: '/Finance',
     split: false,
-    enable: false
+    enable: true
   },
   {
     title: 'Reports',
