@@ -9,6 +9,7 @@ import fapiao.dao.BodyDao;
 import fapiao.dao.HeaderDao;
 import fapiao.model.Body;
 import fapiao.model.Header;
+import fapiao.utils.Utils;
 
 @Service
 public class FapiaoService {
@@ -38,15 +39,15 @@ public class FapiaoService {
 		return bodyDao.getBody(Fphm);
 	}
 	
-	public List<String> getLbdm(String Lbdm) {
-		return headerDao.getLbdm(Lbdm);
+	public String getLbdm(String Lbdm) {
+		return Utils.list2String(headerDao.getLbdm(Lbdm));
 	}
 	
-	public List<String> getFphm(String Lbdm, String Fphm) {
-		return headerDao.getFphm(Lbdm, Fphm);
+	public String getFphm(String Lbdm, String Fphm) {
+		return Utils.list2String(headerDao.getFphm(Lbdm, Fphm));
 	}
 	
-	public List<String> getFphm(String Fphm) {
-		return headerDao.getFphm(Fphm);
+	public String getFphm(String Fphm) {
+		return Utils.list2String(headerDao.getFphm(Fphm));
 	}
 }
