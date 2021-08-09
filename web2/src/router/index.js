@@ -1,6 +1,7 @@
 import { route } from 'quasar/wrappers'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
 import routes from './routes'
+import { getToken } from 'assets/storage'
 
 /*
  * If not building with SSR mode, you can
@@ -25,6 +26,18 @@ export default route(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.MODE === 'ssr' ? void 0 : process.env.VUE_ROUTER_BASE)
   })
-
+  /*
+  Router.beforeEach((to, from, next) => {
+    // if page is Login, allowed it always.
+    if (to.path === '/Login') return next()
+    else {
+      if (!process.env.DEV && !getToken()) {
+        return next('/Login')
+      } else {
+        return next()
+      }
+    }
+  })
+  */
   return Router
 })

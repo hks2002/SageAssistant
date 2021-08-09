@@ -90,7 +90,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, onBeforeUnmount, onMounted } from 'vue'
+import { defineComponent, ref, onBeforeUnmount, onBeforeMount, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 import { infoDialog, notifyError } from 'assets/common'
@@ -104,7 +104,6 @@ export default defineComponent({
   components: {
 
   },
-
   setup() {
     const $q = useQuasar()
     const $router = useRouter()
@@ -148,12 +147,6 @@ export default defineComponent({
     } else {
       site.value = 'ZHU'
       setCookieSite()
-    }
-
-    if (!getToken()) {
-      if (!process.env.DEV) {
-        $router.replace('/Login')
-      }
     }
 
     onMounted(() => {
