@@ -16,6 +16,9 @@ public class InvoiceHeader implements Serializable {
 	private String Currency;
 	private String InvoiceNO;
 	private Date CreateDate;
+	private String CreateUser;
+	private String Note;
+	private String InvoiceStatus;
 	private String FaPiao;
 	private String Customer;
 	private String Address;
@@ -54,6 +57,30 @@ public class InvoiceHeader implements Serializable {
 
 	public void setCreateDate(Date createDate) {
 		CreateDate = createDate;
+	}
+
+	public String getCreateUser() {
+		return CreateUser;
+	}
+
+	public void setCreateUser(String createUser) {
+		CreateUser = createUser;
+	}
+
+	public String getNote() {
+		return Note;
+	}
+
+	public void setNote(String note) {
+		Note = note;
+	}
+
+	public String getInvoiceStatus() {
+		return InvoiceStatus;
+	}
+
+	public void setInvoiceStatus(String invoiceStatus) {
+		InvoiceStatus = invoiceStatus;
 	}
 
 	public String getFaPiao() {
