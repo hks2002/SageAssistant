@@ -41,7 +41,7 @@ Mock.mock(RegExp('^(/Fapiao/Header)' + '.*'), options => {
   const fphm = getQueryParameter(options, 'fphm')
   // list = {data:[{}]}
   const list = Mock.mock({
-    'data|1': [
+    'data|1-2': [
       {
         rowid: 1,
         fpzl: /(专用发票|普通发票)/,

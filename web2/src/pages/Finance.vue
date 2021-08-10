@@ -47,10 +47,10 @@
               <q-list dense>
                 <q-item v-ripple>
                   <q-item-section>
-                    Fapiao
+                    CreateUser
                   </q-item-section>
                   <q-item-section>
-                    {{InvoiceHeader.FaPiao}}
+                    {{InvoiceHeader.CreateUser}}
                   </q-item-section>
                   <q-item-section>
                     CreateDate
@@ -58,8 +58,20 @@
                   <q-item-section>
                     {{InvoiceHeader.CreateDate}}
                   </q-item-section>
+                  <q-item-section>
+                    Status
+                  </q-item-section>
+                  <q-item-section>
+                    {{InvoiceHeader.InvoiceStatus}}
+                  </q-item-section>
                 </q-item>
                 <q-item v-ripple>
+                  <q-item-section>
+                    Fapiao
+                  </q-item-section>
+                  <q-item-section>
+                    {{InvoiceHeader.FaPiao}}
+                  </q-item-section>
                   <q-item-section>
                     Currency
                   </q-item-section>
@@ -94,6 +106,12 @@
                   </q-item-section>
                 </q-item>
                 <q-item>
+                  <q-item-section side>
+                    Note
+                  </q-item-section>
+                  <q-item-section>
+                    {{InvoiceHeader.Note}}
+                  </q-item-section>
                 </q-item>
               </q-list>
 
@@ -216,7 +234,7 @@
                     开票日期
                   </q-item-section>
                   <q-item-section>
-                    {{FapiaoHeader.kprq}}
+                    {{FapiaoHeader.kprq.split(' ')[0]}}
                   </q-item-section>
                   <q-item-section>
                     发票状态
@@ -437,6 +455,7 @@
 import { defineComponent, ref, onBeforeUnmount, toRaw } from 'vue'
 import { useQuasar } from 'quasar'
 import { axios } from 'boot/axios'
+import { notifyError } from 'assets/common'
 import { getCookies } from 'assets/storage'
 import { ebus } from 'boot/ebus'
 import QSelectInput from 'components/QSelectInputSimple.vue'
@@ -491,7 +510,10 @@ export default defineComponent({
       Facility: '',
       Currency: '',
       InvoiceNO: '',
+      InvoiceStatus: '',
       CreateDate: '',
+      CreateUser: '',
+      Note: '',
       FaPiao: '',
       Customer: '',
       Address: '',
@@ -529,7 +551,12 @@ export default defineComponent({
 
       axios.get(url)
         .then((response) => {
-          FapiaoHeader.value = response.data
+          // Fapiao aways be array, even on recorder
+          if (response.data.length > 0) {
+            FapiaoHeader.value = response.data[0] // Only one
+            // fapiao is retrived by fphm only, get the result lbdm to show it.
+            Lbdm.value = FapiaoHeader.value.lbdm
+          }
         })
         .catch((e) => {
           console.error(e)
@@ -565,6 +592,9 @@ export default defineComponent({
         .then((response) => {
           InvoiceHeader.value = response.data
           Fphm.value = InvoiceHeader.value.FaPiao
+          // lbdm value need get from query fapiao header, then show it.
+          doUpdateFapiaoHeader(true)
+          doUpdateFapiaoBody(true)
         })
         .catch((e) => {
           console.error(e)
@@ -656,8 +686,6 @@ export default defineComponent({
       if (InvoiceNO.value) {
         doUpdateInvoiceHeader()
         doUpdateInvoiceBody()
-        doUpdateFapiaoHeader(true)
-        doUpdateFapiaoBody(true)
       }
     })
     onBeforeUnmount(() => { ebus.off('searchInvoiceNO') })
@@ -677,7 +705,7 @@ export default defineComponent({
       }
     })
     onBeforeUnmount(() => { ebus.off('searchFapiaoFphm') })
-
+    doUpdateFapiaoHeader(true)
     return {
       tab,
       timer: new Date().getTime(),

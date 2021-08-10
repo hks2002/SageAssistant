@@ -135,14 +135,13 @@ module.exports = configure(function (ctx) {
       https: false,
       port: 8080,
       open: false, // opens browser window automatically
-
       // ****sage service disallow some request, don't use it here****
       // please use in nignx to provide, both proxy this devServer and srysyr01
       // the nginx service <port> must <same> to srvsyr01
       // otherwise you will receive some forbideen result.
       proxy: {
-        '/Data': {
-          target: 'http://sageassistant-zhu/'
+        '/Fapiao': {
+          target: 'http://sageassistant-zhu/Fapiao'
         }
       }
     },
