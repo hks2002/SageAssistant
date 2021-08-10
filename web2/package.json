@@ -1,6 +1,6 @@
 {
   "name": "web",
-  "version": "2.1.0.0807124400",
+  "version": "2.1.0809103546.0810130608",
   "description": "An Assistant for Sage",
   "productName": "SageAssistantWeb",
   "author": "Robert Huang<r.huang@dedienne-aero.com><56649783@qq.com>",
@@ -31,7 +31,7 @@
     "eslint-plugin-import": "^2.19.1",
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-promise": "^5.1.0",
-    "eslint-plugin-vue": "^7.0.0",
+    "eslint-plugin-vue": "^7.15.1",
     "eslint-webpack-plugin": "^2.4.0",
     "mockjs": "^1.1.0"
   },

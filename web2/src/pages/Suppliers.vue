@@ -45,10 +45,7 @@
       :supplierCode="supplierCode"
       v-if="supplierCode"
     />
-    <q-list
-      class="row"
-      style="padding:0px; height:200px;"
-    >
+    <q-list class="row">
       <q-markup-table-supplier-open-items
         :supplierCode="supplierCode"
         :dateFrom="dateFrom"

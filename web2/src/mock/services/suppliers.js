@@ -168,7 +168,7 @@ Mock.mock(RegExp('^(/Data/SupplierOpenItems)' + '.*'), options => {
   const SupplierCode = getQueryParameter(options, 'SupplierCode')
   // list = {data:[{},{}]}
   const list = Mock.mock({
-    'data|1-5': [
+    'data|1-50': [
       {
         Site: /ZHU|HKG|TLS|SGP|MIA|CIN|QAT/,
         SupplierCode: SupplierCode,

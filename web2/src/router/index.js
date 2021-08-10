@@ -26,7 +26,7 @@ export default route(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.MODE === 'ssr' ? void 0 : process.env.VUE_ROUTER_BASE)
   })
-  /*
+
   Router.beforeEach((to, from, next) => {
     // if page is Login, allowed it always.
     if (to.path === '/Login') return next()
@@ -38,6 +38,6 @@ export default route(function (/* { store, ssrContext } */) {
       }
     }
   })
-  */
+
   return Router
 })

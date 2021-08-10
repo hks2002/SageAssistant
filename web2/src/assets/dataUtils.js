@@ -1,12 +1,16 @@
 const _keys = require('lodash/keys')
 
 const jsonToTable = function (headers, jsonData, title) {
-  let table = '<div class="q-table--dense"><table style="width:100%;text-align:center" class="q-table"><caption style="font-size:28px">' + title + '</caption>'
-  table += '<tr>'
+  let table = '<div class="q-markup-table q-table__container q-table__card q-table--horizontal-separator q-table--dense q-table--no-wrap q-pr-sm q-pl-sm"><table class="q-table">'
+  table += '<thead style="position: sticky; top: 0px; z-index: 1;">'
+  table += '<tr><th colspan="' + headers.length + '" style="padding: 0px;">'
+  table += '<div class="q-toolbar row no-wrap items-center bg-teal text-white shadow-2"><div class="q-toolbar__title ellipsis">' + title + '</div></div>'
+  table += '</th></tr>'
+  table += '<tr class="bg-primary text-white text-left">'
   for (let i = 0, l = headers.length; i < l; i++) {
-    table += '<th style="background:#00B0F0;color:white">' + headers[i] + '</th>'
+    table += '<th>' + headers[i] + '</th>'
   }
-  table += '</tr>'
+  table += '</tr></thead><tbody>'
   for (let i2 = 0, l2 = jsonData.length; i2 < l2; i2++) {
     table += '<tr>'
     for (let i3 = 0, l3 = headers.length; i3 < l3; i3++) {
@@ -14,7 +18,7 @@ const jsonToTable = function (headers, jsonData, title) {
     }
     table += '</tr>'
   }
-  table += '</table><div>'
+  table += '</tbody></table><div>'
   return table
 }
 

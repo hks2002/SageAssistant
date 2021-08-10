@@ -1,33 +1,36 @@
 <template>
   <q-markup-table
     dense
-    class="q-pa-sm"
+    class="q-pr-sm q-pl-sm"
     v-if="supplierOpenItems.length>0"
     style="height:250px"
   >
-    <thead>
+    <thead style="position:sticky;top:0px;z-index:1">
       <tr>
         <th
-          colspan="13"
+          colspan="11"
           style="padding:0px"
         >
-          <q-toolbar
-            class="bg-teal text-white shadow-2"
-            rowspan="13"
-          >
+          <q-toolbar class="bg-teal text-white shadow-2">
             <q-toolbar-title class="text-left">OpenItems(All-{{supplierOpenItems.length}})
+              <q-btn
+                dense
+                flat
+                icon="fas fa-download"
+                @click="download()"
+              />
             </q-toolbar-title>
           </q-toolbar>
         </th>
       </tr>
       <tr class="bg-primary text-white">
         <th class="text-center text-caption">#</th>
-        <th>Site</th>
-        <th>SupplierCode</th>
-        <th>PurchaseNO</th>
-        <th>ProjectNO</th>
-        <th>PN</th>
-        <th>Description</th>
+        <th class="text-left">Site</th>
+        <th class="text-left">SupplierCode</th>
+        <th class="text-left">PurchaseNO</th>
+        <th class="text-left">ProjectNO</th>
+        <th class="text-left">PN</th>
+        <th class="text-left">Description</th>
         <th class="text-center">AckDate</th>
         <th class="text-center">ExpectDate</th>
         <th class="text-center">OrderDate</th>
@@ -59,6 +62,7 @@
 import { defineComponent, onMounted, ref, watch } from 'vue'
 import { notifyError } from 'assets/common'
 import { axios } from 'boot/axios'
+import { jsonToExcel } from 'assets/dataUtils'
 
 export default defineComponent({
   name: 'QMarkupTableSupplierOpenItems',
@@ -87,6 +91,10 @@ export default defineComponent({
           showLoading.value = false
         })
     }
+    const download = () => {
+      const header = ['Site', 'SupplierCode', 'PurchaseNO', 'ProjectNO', 'PN', 'Description', 'AckDate', 'ExpectDate', 'OrderDate', 'DaysDelay']
+      jsonToExcel(header, supplierOpenItems.value, props.supplierCode + '-OpenItems')
+    }
 
     onMounted(() => {
       console.debug('onMounted SupplierOpenItems')
@@ -107,7 +115,8 @@ export default defineComponent({
 
     return {
       supplierOpenItems,
-      showLoading
+      showLoading,
+      download
     }
   }
 })
