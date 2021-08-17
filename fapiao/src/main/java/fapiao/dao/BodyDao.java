@@ -124,9 +124,7 @@ public class BodyDao {
 		try {
 			String sql = "select * from body"
 				+ " where 1=1"
-				+ " and fphm = '" + fphm + "'"
-				+ " order by lbdm desc"
-				+ " limit 1 ";
+				+ " and fphm = '" + fphm + "'";
 			List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
 			
 			for (int i = 0; i < list.size(); i++) {
