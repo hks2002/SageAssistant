@@ -21,14 +21,24 @@ public class InvoiceController {
 		return  invoiceService.findInvoiceNOByInvoiceNO(InvoiceNO, count);
 	}
 	
-	@GetMapping("/Data/InvoiceHeader")
+	@GetMapping("/Data/InvoiceHeaderByInvoiceNO")
 	public String getInvoiceHeader(
 			@RequestParam(value = "InvoiceNO", required = false, defaultValue = "%%") String InvoiceNO) {
 		return invoiceService.findInvoiceHeaderByInvoiceNO(InvoiceNO).toString();
 	}
-	@GetMapping("/Data/InvoiceBody")
+	@GetMapping("/Data/InvoiceBodyByInvoiceNO")
 	public String getInvoiceBody(
 			@RequestParam(value = "InvoiceNO", required = false, defaultValue = "%%") String InvoiceNO) {
 		return invoiceService.findInvoiceBodyByInvoiceNO(InvoiceNO).toString();
+	}
+	@GetMapping("/Data/InvoiceHeaderByFaPiao")
+	public String getInvoiceHeaderByFaPiao(
+			@RequestParam(value = "ByFaPiao", required = false, defaultValue = "%%") String FaPiao) {
+		return invoiceService.findInvoiceHeaderByFaPiao(FaPiao).toString();
+	}
+	@GetMapping("/Data/InvoiceBodyByFaPiao")
+	public String getInvoiceBodyByFaPiao(
+			@RequestParam(value = "ByFaPiao", required = false, defaultValue = "%%") String FaPiao) {
+		return invoiceService.findInvoiceBodyByFaPiao(FaPiao).toString();
 	}
 }

@@ -1,7 +1,6 @@
 package sageassistant.model;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.PascalNameFilter;
@@ -15,7 +14,7 @@ public class InvoiceHeader implements Serializable {
 	private String Facility;
 	private String Currency;
 	private String InvoiceNO;
-	private Date CreateDate;
+	private String CreateDate;
 	private String CreateUser;
 	private String Note;
 	private String InvoiceStatus;
@@ -51,11 +50,11 @@ public class InvoiceHeader implements Serializable {
 		InvoiceNO = invoiceNO;
 	}
 
-	public Date getCreateDate() {
+	public String getCreateDate() {
 		return CreateDate;
 	}
 
-	public void setCreateDate(Date createDate) {
+	public void setCreateDate(String createDate) {
 		CreateDate = createDate;
 	}
 
@@ -135,7 +134,7 @@ public class InvoiceHeader implements Serializable {
 		return CurrRate;
 	}
 
-	public void setTaxRate(Float currRate) {
+	public void setCurrRate(Float currRate) {
 		CurrRate = currRate;
 	}
 
