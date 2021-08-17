@@ -41,6 +41,7 @@
         <echart-todo-delivery
           :site="site"
           :style="tabHeight"
+          v-show="isAuthorised('GESPOH') || isAuthorised('GESSOH')"
         />
       </q-tab-panel>
 
@@ -51,6 +52,7 @@
         <echart-todo-receive
           :site="site"
           :style="tabHeight"
+          v-show="isAuthorised('GESPOH') || isAuthorised('GESSOH')"
         />
       </q-tab-panel>
 
@@ -61,6 +63,7 @@
         <echart-todo-deal-with-order-line
           :site="site"
           :style="tabHeight"
+          v-show="isAuthorised('GESPOH') || isAuthorised('GESSOH')"
         />
       </q-tab-panel>
       <q-tab-panel
@@ -70,6 +73,7 @@
         <echart-todo-purchase-bom
           :site="site"
           :style="tabHeight"
+          v-show="isAuthorised('GESPOH') || isAuthorised('GESSOH')"
         />
       </q-tab-panel>
     </q-tab-panels>
@@ -81,15 +85,12 @@ import { defineComponent, ref, onBeforeUnmount } from 'vue'
 import { useQuasar } from 'quasar'
 import { getCookies } from 'assets/storage'
 import { ebus } from 'boot/ebus'
+import { isAuthorised } from 'assets/auth'
 
 import EchartTodoDelivery from 'components/echarts/EchartTodoDelivery.vue'
 import EchartTodoReceive from 'components/echarts/EchartTodoReceive.vue'
 import EchartTodoPurchaseBom from 'components/echarts/EchartTodoPurchaseBom.vue'
 import EchartTodoDealWithOrderLine from 'components/echarts/EchartTodoDealWithOrderLine.vue'
-
-import {
-  echarts
-} from 'assets/echartsCfg.js'
 
 export default defineComponent({
   name: 'Todo',
@@ -121,7 +122,8 @@ export default defineComponent({
       tab,
       tabHeight: 'padding:0px; height:' + contentHeight + 'px',
       site,
-      timer: new Date().getTime()
+      timer: new Date().getTime(),
+      isAuthorised
     }
   }
 })

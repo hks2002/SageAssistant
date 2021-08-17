@@ -19,6 +19,7 @@
         :label="$t('Search Your Suppliers (Code or Name)')"
         popup-content-class="text-secondary"
         class="col-6 q-pr-md"
+        :disable="!isAuthorised('GESPOH')"
       />
       <div class="col-3">
         <q-input
@@ -28,6 +29,7 @@
           :rules="['date']"
           :label="$t('From')"
           class="q-pr-md"
+          :disable="!isAuthorised('GESPOH')"
         />
       </div>
       <div class="col-3">
@@ -38,6 +40,7 @@
           :rules="['date']"
           :label="$t('To')"
           class="q-pl-md"
+          :disable="!isAuthorised('GESPOH')"
         />
       </div>
     </div>
@@ -51,6 +54,7 @@
         :dateFrom="dateFrom"
         :dateTo="dateTo"
         class="col-12"
+        v-show="isAuthorised('GESPOH')"
       />
       <echart-supplier-open-qty
         :supplierCode="supplierCode"
@@ -58,6 +62,7 @@
         :dateTo="dateTo"
         style="padding:0px; height:200px;"
         class="col-6"
+        v-show="isAuthorised('GESPOH')"
       />
       <echart-supplier-open-amount
         :supplierCode="supplierCode"
@@ -65,6 +70,7 @@
         :dateTo="dateTo"
         style="padding:0px; height:200px;"
         class="col-6"
+        v-show="isAuthorised('GESPOH')"
       />
       <echart-supplier-total-qty
         :supplierCode="supplierCode"
@@ -72,6 +78,7 @@
         :dateTo="dateTo"
         style="padding:0px; height:200px;"
         class="col-6"
+        v-show="isAuthorised('GESPOH')"
       />
       <echart-supplier-total-amount
         :supplierCode="supplierCode"
@@ -79,6 +86,7 @@
         :dateTo="dateTo"
         style="padding:0px; height:200px;"
         class="col-6"
+        v-show="isAuthorised('GESPOH')"
       />
       <echart-supplier-delivery-history
         :supplierCode="supplierCode"
@@ -86,6 +94,7 @@
         :dateTo="dateTo"
         style="padding:0px; height:200px;"
         class="col-6"
+        v-show="isAuthorised('GESPOH')"
       />
       <echart-supplier-delay-history
         :supplierCode="supplierCode"
@@ -93,6 +102,7 @@
         :dateTo="dateTo"
         style="padding:0px; height:200px;"
         class="col-6"
+        v-show="isAuthorised('GESPOH')"
       />
     </q-list>
   </q-page>
@@ -102,6 +112,7 @@
 import { defineComponent, ref, onBeforeUnmount } from 'vue'
 import { useQuasar, date } from 'quasar'
 
+import { isAuthorised } from 'assets/auth'
 import { ebus } from 'boot/ebus'
 import '@lottiefiles/lottie-player'
 
@@ -158,6 +169,7 @@ export default defineComponent({
 
     // return them to vue template
     return {
+      isAuthorised,
       supplierCode,
       dateFrom,
       dateTo,

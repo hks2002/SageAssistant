@@ -16,6 +16,16 @@ export function getCookies (key) {
 }
 // Cookies
 
+// SessionStorage
+export function setSessionStorage (key, val) {
+  SessionStorage.set(key, val)
+}
+
+export function getSessionStorage (key) {
+  return SessionStorage.getItem(key)
+}
+// SessionStorage
+
 // SessionStorage loginData
 export function setLoginData(val) {
   SessionStorage.set(storageKey.loginData, val)
@@ -57,6 +67,8 @@ export default {
   getToken,
   setToken,
   removeToken,
+  setSessionStorage,
+  getSessionStorage,
   getAll,
   getAllKeys
 }

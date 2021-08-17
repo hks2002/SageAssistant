@@ -18,6 +18,7 @@
       :label="$t('Search Your Productions')"
       popup-content-class="text-secondary"
       class="q-ml-md q-mr-md"
+      :disable="!isAuthorised('GESITM')"
     />
     <q-list
       class="row"
@@ -36,6 +37,7 @@
           <echart-inventory-stock
             :pnRoot="pnRoot"
             style="padding:0px; height:200px;"
+            v-show="isAuthorised('CONSSDE')"
           />
         </q-card>
       </div>
@@ -44,6 +46,7 @@
           <echart-delivery-duration
             :pnRoot="pnRoot"
             style="padding:0px; height:200px;"
+            v-show="isAuthorised('GESSDH')"
           />
         </q-card>
       </div>
@@ -52,16 +55,19 @@
         :pnRoot="pnRoot"
         style="padding:0px; height:300px;"
         class="col-12"
+        v-show="isAuthorised('GESSOH')"
       />
       <echart-quote-history
         :pnRoot="pnRoot"
         style="padding:0px; height:300px;"
         class="col-12"
+        v-show="isAuthorised('GESSQH')"
       />
       <echart-cost-history
         :pnRoot="pnRoot"
         style="padding:0px; height:300px;"
         class="col-12"
+        v-show="isAuthorised('GESPOH')"
       />
     </q-list>
   </q-page>
@@ -71,6 +77,7 @@
 import { defineComponent, ref, onBeforeUnmount } from 'vue'
 import { useQuasar } from 'quasar'
 import { ebus } from 'boot/ebus'
+import { isAuthorised } from 'assets/auth'
 import '@lottiefiles/lottie-player'
 
 import QSelectInput from 'components/QSelectInput.vue'
@@ -114,6 +121,7 @@ export default defineComponent({
 
     // return them to vue template
     return {
+      isAuthorised,
       pnRoot
     }
   }

@@ -103,6 +103,7 @@ import { ebus } from 'boot/ebus'
 import { axios } from 'boot/axios'
 import '@lottiefiles/lottie-player'
 import { setToken, removeToken, setLoginData } from 'assets/storage'
+import { setAuthority } from 'assets/auth'
 
 export default defineComponent({
   name: 'Login',
@@ -170,6 +171,7 @@ export default defineComponent({
         (response) => {
           setToken(auth)
           fetchLoginData()
+          fetchAuthorityData()
           $router.push('/')
         },
         (error) => {
@@ -198,6 +200,20 @@ export default defineComponent({
           loginData.localeDesc = response.data.selectedLocale.description
           setLoginData(loginData)
           ebus.emit('updateLoginData')
+        },
+        (error) => {
+          console.debug(error)
+        }
+      )
+    }
+
+    const fetchAuthorityData = async () => {
+      await axios.post(
+        '/api1/syracuse/collaboration/syracuse/pages(\'x3.erp.EXPLOIT.home.$navigation\')',
+        {}
+      ).then(
+        (response) => {
+          setAuthority(response.data)
         },
         (error) => {
           console.debug(error)
