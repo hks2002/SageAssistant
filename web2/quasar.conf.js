@@ -92,7 +92,7 @@ module.exports = configure(function (ctx) {
         const timeStamp = moment().format('MMDDHHmmss')
         pkg = JSON.parse(pkg)
 
-        pkg.version = pkg.version.replace(/^(\d+\.\d+\.\d+)(\S*)/, '$1')
+        pkg.version = pkg.version.replace(/^(\d+\.\d+)(\S*)/, '$1')
         pkg.version = pkg.version + '.' + timeStamp
 
         console.log(
