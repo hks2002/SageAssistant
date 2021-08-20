@@ -208,7 +208,7 @@ export default defineComponent({
     }
 
     const fetchAuthorityData = async () => {
-      await axios.post(
+      await axios.get(
         '/api1/syracuse/collaboration/syracuse/pages(\'x3.erp.EXPLOIT.home.$navigation\')',
         {}
       ).then(
