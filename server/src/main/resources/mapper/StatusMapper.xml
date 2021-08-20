@@ -6,7 +6,7 @@
     <select id="findTobeDeliveryBySite" parameterType="String" resultType="sageassistant.model.TobeDelivery">
 		SELECT DISTINCT
 			SORDERQ.YSOH_PJT_0 AS ProjectNO,
-			SORDERQ.POHNUM_0 AS OrderNO,
+			SORDERQ.SOHNUM_0 AS OrderNO,
 			(CASE WHEN SORDERQ.YSOQ_STA_0 =1 THEN SORDER.SOHTYP_0 + '-Methods' 
 			WHEN SORDERQ.YSOQ_STA_0 =2 THEN SORDER.SOHTYP_0 + '-InteralProd'
 			WHEN SORDERQ.YSOQ_STA_0 =3 THEN SORDER.SOHTYP_0 + '-ExternalProd'
