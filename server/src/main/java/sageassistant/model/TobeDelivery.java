@@ -12,6 +12,7 @@ public class TobeDelivery implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String ProjectNO;
+	private String OrderNO;
 	private String OrderType;
 	private String PN;
 	private Integer Qty;
@@ -24,6 +25,8 @@ public class TobeDelivery implements Serializable {
 	private Float Rate;
 	private Date OrderDate;
 	private Date RequestDate;
+	private Date PlanedDate;
+	
 
 	public String getCurrency() {
 		return Currency;
@@ -51,6 +54,14 @@ public class TobeDelivery implements Serializable {
 
 	public String getOrderType() {
 		return OrderType;
+	}
+
+	public String getOrderNO() {
+		return OrderNO;
+	}
+
+	public void setOrderNO(String orderNO) {
+		OrderNO = orderNO;
 	}
 
 	public String getPN() {
@@ -133,5 +144,13 @@ public class TobeDelivery implements Serializable {
 	public String toString() {
 		return JSON.toJSONString(this, SerializeConfig.globalInstance, new SerializeFilter[] { new PascalNameFilter() },
 				"yyyy-MM-dd", JSON.DEFAULT_GENERATE_FEATURE);
+	}
+
+	public Date getPlanedDate() {
+		return PlanedDate;
+	}
+
+	public void setPlanedDate(Date planedDate) {
+		PlanedDate = planedDate;
 	}
 }
