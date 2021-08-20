@@ -8,7 +8,16 @@
       loop
       style="width: 600px; height: 600px; z-index: -1;"
       class="fixed-center"
-      v-if="!supplierCode"
+      v-if="!supplierCode && isAuthorised('GESPOH')"
+    />
+    <lottie-player
+      src="/json/403.json"
+      background="transparent"
+      autoplay
+      loop
+      style="width: 600px; height: 600px; z-index: -1;"
+      class="fixed-center"
+      v-if="!isAuthorised('GESPOH')"
     />
     <div class="row  q-ml-md q-mr-md">
       <q-select-input

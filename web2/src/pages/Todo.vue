@@ -41,8 +41,9 @@
         <echart-todo-delivery
           :site="site"
           :style="tabHeight"
-          v-show="isAuthorised('GESPOH') || isAuthorised('GESSOH')"
+          v-if="isAuthorised('GESPOH') || isAuthorised('GESSOH')"
         />
+        <error-403 v-else />
       </q-tab-panel>
 
       <q-tab-panel
@@ -52,8 +53,9 @@
         <echart-todo-receive
           :site="site"
           :style="tabHeight"
-          v-show="isAuthorised('GESPOH') || isAuthorised('GESSOH')"
+          v-if="isAuthorised('GESPOH') || isAuthorised('GESSOH')"
         />
+        <error-403 v-else />
       </q-tab-panel>
 
       <q-tab-panel
@@ -63,8 +65,9 @@
         <echart-todo-deal-with-order-line
           :site="site"
           :style="tabHeight"
-          v-show="isAuthorised('GESPOH') || isAuthorised('GESSOH')"
+          v-if="isAuthorised('GESPOH') || isAuthorised('GESSOH')"
         />
+        <error-403 v-else />
       </q-tab-panel>
       <q-tab-panel
         name="NewBom"
@@ -73,8 +76,9 @@
         <echart-todo-purchase-bom
           :site="site"
           :style="tabHeight"
-          v-show="isAuthorised('GESPOH') || isAuthorised('GESSOH')"
+          v-if="isAuthorised('GESPOH') || isAuthorised('GESSOH')"
         />
+        <error-403 v-else />
       </q-tab-panel>
     </q-tab-panels>
   </q-page>
@@ -91,6 +95,7 @@ import EchartTodoDelivery from 'components/echarts/EchartTodoDelivery.vue'
 import EchartTodoReceive from 'components/echarts/EchartTodoReceive.vue'
 import EchartTodoPurchaseBom from 'components/echarts/EchartTodoPurchaseBom.vue'
 import EchartTodoDealWithOrderLine from 'components/echarts/EchartTodoDealWithOrderLine.vue'
+import Error403 from 'pages/Error403.vue'
 
 export default defineComponent({
   name: 'Todo',
@@ -99,7 +104,8 @@ export default defineComponent({
     EchartTodoDelivery,
     EchartTodoReceive,
     EchartTodoPurchaseBom,
-    EchartTodoDealWithOrderLine
+    EchartTodoDealWithOrderLine,
+    Error403
   },
 
   setup() {

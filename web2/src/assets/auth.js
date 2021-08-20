@@ -1,5 +1,6 @@
 
 import { setSessionStorage, getSessionStorage } from 'assets/storage'
+import _indexOf from 'lodash/indexOf'
 
 export function setAuthority (json) {
   const str = JSON.stringify(json)
@@ -19,12 +20,12 @@ export function isAuthorised (fun) {
     return true
   }
   const authorizations = getSessionStorage('authorizations')
-  for (auth in authorizations) {
-    if (fun === auth) {
-      return true
-    }
+  const index = _indexOf(authorizations, fun)
+  if (index > -1) {
+    return true
+  } else {
+    return false
   }
-  return false
 }
 
 export default {

@@ -8,7 +8,16 @@
       loop
       style="width: 600px; height: 600px; z-index: -1;"
       class="fixed-center"
-      v-if="!pnRoot"
+      v-if="!pnRoot && isAuthorised('GESITM')"
+    />
+    <lottie-player
+      src="/json/403.json"
+      background="transparent"
+      autoplay
+      loop
+      style="width: 600px; height: 600px; z-index: -1;"
+      class="fixed-center"
+      v-if="!isAuthorised('GESITM')"
     />
     <q-select-input
       option-label="PN"
