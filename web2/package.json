@@ -1,6 +1,6 @@
 {
   "name": "web",
-  "version": "2.1.0810131417",
+  "version": "2.2.0820131820",
   "description": "An Assistant for Sage",
   "productName": "SageAssistantWeb",
   "author": "Robert Huang<r.huang@dedienne-aero.com><56649783@qq.com>",
@@ -12,7 +12,7 @@
   "dependencies": {
     "@lottiefiles/lottie-player": "^1.0.3",
     "@quasar/cli": "^1.2.1",
-    "@quasar/extras": "^1.10.8",
+    "@quasar/extras": "^1.10.11",
     "@types/echarts": "^4.9.7",
     "axios": "^0.21.1",
     "core-js": "^3.10.2",
