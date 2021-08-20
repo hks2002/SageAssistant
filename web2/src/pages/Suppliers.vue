@@ -116,7 +116,7 @@ import { isAuthorised } from 'assets/auth'
 import { ebus } from 'boot/ebus'
 import '@lottiefiles/lottie-player'
 
-import QSelectInput from 'components/QSelectInput.vue'
+import QSelectInput from 'src/components/QSelectInput.vue'
 import QCardSupplierInfo from 'src/components/QCardSupplierInfo.vue'
 import QMarkupTableSupplierOpenItems from 'src/components/QMarkupTableSupplierOpenItems.vue'
 import EchartSupplierOpenQty from 'src/components/echarts/EchartSupplierOpenQty.vue'

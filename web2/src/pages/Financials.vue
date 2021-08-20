@@ -13,6 +13,10 @@
         name="Fapiao"
         label="Fapiao"
       />
+      <q-tab
+        name="Profit"
+        label="Profit"
+      />
     </q-tabs>
 
     <q-separator />
@@ -26,8 +30,13 @@
         name="Fapiao"
         style="padding:0px"
       >
-        <page-fapiao />
-
+        <page-fapiao v-show="isAuthorised('GESSIH')" />
+      </q-tab-panel>
+      <q-tab-panel
+        name="Profit"
+        style="padding:0px"
+      >
+        <page-fapiao v-show="isAuthorised('CONSBAL')" />
       </q-tab-panel>
     </q-tab-panels>
   </q-page>
@@ -36,10 +45,11 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import { ebus } from 'boot/ebus'
-import PageFapiao from 'src/components/PageFapiao.vue'
+import { isAuthorised } from 'assets/auth'
+import PageFapiao from 'src/components/pages/PageFapiao.vue'
 
 export default defineComponent({
-  name: 'Finance',
+  name: 'Financials',
 
   components: {
     PageFapiao
@@ -53,7 +63,8 @@ export default defineComponent({
 
     return {
       tab,
-      timer: new Date().getTime()
+      timer: new Date().getTime(),
+      isAuthorised
     }
   }
 })

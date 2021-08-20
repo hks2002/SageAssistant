@@ -30,9 +30,9 @@
 <script>
 import { defineComponent, ref, onBeforeUnmount, onMounted } from 'vue'
 import { ebus } from 'src/boot/ebus'
-import Menus from 'components/Menus.vue'
-import PageFooter from 'components/PageFooter.vue'
-import PageHeader from 'components/PageHeader.vue'
+import Menus from 'src/components/Menus.vue'
+import PageFooter from 'src/components/PageFooter.vue'
+import PageHeader from 'src/components/PageHeader.vue'
 
 export default defineComponent({
   name: 'MainLayout',

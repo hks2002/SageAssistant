@@ -80,7 +80,7 @@ import { ebus } from 'boot/ebus'
 import { isAuthorised } from 'assets/auth'
 import '@lottiefiles/lottie-player'
 
-import QSelectInput from 'components/QSelectInput.vue'
+import QSelectInput from 'src/components/QSelectInput.vue'
 import EchartSalesHistory from 'src/components/echarts/EchartSalesHistory.vue'
 import EchartQuoteHistory from 'src/components/echarts/EchartQuoteHistory.vue'
 import EchartCostHistory from 'src/components/echarts/EchartCostHistory.vue'
@@ -89,7 +89,7 @@ import EchartDeliveryDuration from 'src/components/echarts/EchartDeliveryDuratio
 import QListPnList from 'src/components/QListPnList.vue'
 
 export default defineComponent({
-  name: 'Productions',
+  name: 'Products',
 
   components: {
     QSelectInput,
@@ -107,7 +107,7 @@ export default defineComponent({
 
     $q.loadingBar.stop()
     ebus.emit('closeLeftDrawer')
-    ebus.emit('activePage', 'Productions')
+    ebus.emit('activePage', 'Products')
 
     const update = (newPNROOT) => {
       pnRoot.value = newPNROOT

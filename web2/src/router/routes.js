@@ -32,9 +32,9 @@ const routes = [
     children: [{ path: '', component: () => import('pages/Todo.vue') }]
   },
   {
-    path: '/Finance',
+    path: '/Financials',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/Finance.vue') }]
+    children: [{ path: '', component: () => import('src/pages/Financials.vue') }]
   },
   {
     path: '/Reports',
@@ -48,13 +48,13 @@ const routes = [
     ]
   },
   {
-    path: '/Productions',
-    name: '/Productions',
+    path: '/Products',
+    name: '/Products',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {
         path: '',
-        component: () => import('pages/Productions.vue')
+        component: () => import('pages/Products.vue')
       }
     ]
   },

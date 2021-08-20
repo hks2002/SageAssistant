@@ -32,10 +32,10 @@ const menus = [
     enable: true
   },
   {
-    title: 'Productions',
+    title: 'Products',
     caption: '',
     icon: 'fas fa-cubes',
-    link: '/Productions',
+    link: '/Products',
     split: false,
     enable: true
   },
@@ -80,10 +80,10 @@ const menus = [
     enable: false
   },
   {
-    title: 'Finance',
+    title: 'Financials',
     caption: '',
     icon: 'fas fa-dollar-sign',
-    link: '/Finance',
+    link: '/Financials',
     split: false,
     enable: true
   },
