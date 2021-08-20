@@ -51,6 +51,7 @@ export default defineComponent({
     let series = []
     const dimensions = [
       'ProjectNO',
+      'OrderNO',
       'OrderType',
       'PN',
       'Qty',
@@ -63,6 +64,7 @@ export default defineComponent({
       'Rate',
       'OrderDate',
       'RequestDate',
+      'PlanedDate',
       'DaysLeft'
     ]
     const showLoading = ref(false)
@@ -86,7 +88,9 @@ export default defineComponent({
     const prepareData = () => {
       const newDate = new Date()
       data.forEach((row) => {
-        row.DaysLeft = date.getDateDiff(row.RequestDate, newDate, 'days')
+        const requestDate = new Date(row.RequestDate)
+        const planedDate = new Date(row.PlanedDate)
+        row.DaysLeft = date.getDateDiff(Math.min(requestDate, planedDate), newDate, 'days')
       })
       data = _sortBy(data, ['DaysLeft'])
       lengend = _uniq(_map(data, 'OrderType'))
@@ -104,11 +108,11 @@ export default defineComponent({
       // data is ready,set echart option
       eChart.setOption({
         title: {
-          text: t('Production to be delivered for ') + props.site,
+          text: t('Products to be delivered to customers by ') + props.site,
           left: 'center'
         },
         legend: defaultLegend,
-        toolbox: defaultToolbox(dimensions, data, t('Production to be delivered for ') + props.site),
+        toolbox: defaultToolbox(dimensions, data, t('Products to be delivered to customers by ') + props.site),
         tooltip: defaultTooltip,
         xAxis: defaultXAxisTime,
         grid: [

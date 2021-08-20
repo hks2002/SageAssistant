@@ -32,6 +32,7 @@ Mock.mock(RegExp('^(/Data/TobeDelivery)' + '.*'), options => {
     'data|1-100': [
       {
         ProjectNO: /(Z|H|S|T|M)CC\d{6}-\d{1,2}/,
+        OrderNO: /(Z|H|S|T|M)CC\d{6}/,
         OrderType: /(NOR|REP|PRS|RCL)/,
         PN: /([A-Z]){6}/,
         'Qty|1-100': 1,
@@ -43,7 +44,8 @@ Mock.mock(RegExp('^(/Data/TobeDelivery)' + '.*'), options => {
         'USD|10-200000': 1,
         'Rate|6-9': 1,
         OrderDate: () => { return Mock.mock('@date("yyyy-MM-dd")') },
-        RequestDate: () => { return Mock.mock('@date("yyyy-MM-dd")') }
+        RequestDate: () => { return Mock.mock('@date("yyyy-MM-dd")') },
+        PlanedDate: () => { return Mock.mock('@date("yyyy-MM-dd")') }
       }
     ]
   })

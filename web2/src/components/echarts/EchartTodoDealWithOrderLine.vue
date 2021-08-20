@@ -104,11 +104,11 @@ export default defineComponent({
       // data is ready,set echart option
       eChart.setOption({
         title: {
-          text: t('New order line pending for ') + props.site,
+          text: t('New order line without purchasing or without workorder at ') + props.site,
           left: 'center'
         },
         legend: defaultLegend,
-        toolbox: defaultToolbox(dimensions, data, t('New order line pending for ') + props.site),
+        toolbox: defaultToolbox(dimensions, data, t('New order line without purchasing or without workorder at ') + props.site),
         tooltip: defaultTooltip,
         xAxis: defaultXAxisTime,
         grid: [
