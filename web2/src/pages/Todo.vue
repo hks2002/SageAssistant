@@ -25,6 +25,10 @@
         name="NewBom"
         label="NewBom"
       />
+      <q-tab
+        name="Orphan-WO"
+        label="Orphan-WO"
+      />
     </q-tabs>
 
     <q-separator />
@@ -80,6 +84,17 @@
         />
         <error-403 v-else />
       </q-tab-panel>
+      <q-tab-panel
+        name="Orphan-WO"
+        style="padding:0px"
+      >
+        <echart-todo-closed-w-o
+          :site="site"
+          :style="tabHeight"
+          v-if="isAuthorised('GESMFG')"
+        />
+        <error-403 v-else />
+      </q-tab-panel>
     </q-tab-panels>
   </q-page>
 </template>
@@ -95,6 +110,7 @@ import EchartTodoDelivery from 'components/echarts/EchartTodoDelivery.vue'
 import EchartTodoReceive from 'components/echarts/EchartTodoReceive.vue'
 import EchartTodoPurchaseBom from 'components/echarts/EchartTodoPurchaseBom.vue'
 import EchartTodoDealWithOrderLine from 'components/echarts/EchartTodoDealWithOrderLine.vue'
+import EchartTodoClosedWO from 'components/echarts/EchartTodoClosedWO.vue'
 import Error403 from 'pages/Error403.vue'
 
 export default defineComponent({
@@ -105,6 +121,7 @@ export default defineComponent({
     EchartTodoReceive,
     EchartTodoPurchaseBom,
     EchartTodoDealWithOrderLine,
+    EchartTodoClosedWO,
     Error403
   },
 

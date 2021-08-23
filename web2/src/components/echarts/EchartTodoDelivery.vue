@@ -108,11 +108,11 @@ export default defineComponent({
       // data is ready,set echart option
       eChart.setOption({
         title: {
-          text: t('Products to be delivered to customers by ') + props.site,
+          text: t('Products to be deliveried to customers by ') + props.site,
           left: 'center'
         },
         legend: defaultLegend,
-        toolbox: defaultToolbox(dimensions, data, t('Products to be delivered to customers by ') + props.site),
+        toolbox: defaultToolbox(dimensions, data, t('Products to be deliveried to customers by ') + props.site),
         tooltip: defaultTooltip,
         xAxis: defaultXAxisTime,
         grid: [

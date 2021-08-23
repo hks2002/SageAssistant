@@ -35,5 +35,10 @@ public class SatusController {
 	public String getTobePurchaseBom(@RequestParam(value = "site", required = false, defaultValue = "ZHU") String site) {
 		return Utils.listToString(statusService.findTobePurchaseBomBySite(site, 0));
 	}
+	
+	@GetMapping("/Data/TobeClosedWO")
+	public String getTobeClosedWO(@RequestParam(value = "site", required = false, defaultValue = "ZHU") String site) {
+		return Utils.listToString(statusService.findTobeClosedWOBySite(site, 0));
+	}
 
 }

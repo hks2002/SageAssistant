@@ -1,7 +1,7 @@
 <template>
   <q-item>
     <div
-      id="EchartTodoPurchaseBom"
+      id="EchartTodoClosedWO"
       style="height:100%; width:100%"
     />
     <q-inner-loading :showing="showLoading">
@@ -36,7 +36,7 @@ import _map from 'lodash/map'
 import _uniq from 'lodash/uniq'
 
 export default defineComponent({
-  name: 'EchartTodoPurchaseBom',
+  name: 'EchartTodoClosedWO',
   props: {
     site: String
   },
@@ -51,27 +51,23 @@ export default defineComponent({
     let series = []
     const dimensions = [
       'ProjectNO',
-      'OrderType',
+      'OrderNO',
       'WorkOrderNO',
-      'BomSeq',
+      'WOStatus',
+      'ProductionStatus',
+      'OrderType',
       'CustomerCode',
       'CustomerName',
-      'ForPN',
       'PN',
-      'Description',
       'Qty',
-      'ShortQty',
-      'AllQty',
-      'Unit',
-      'CreateDate',
-      'Days'
+      'OrderDate'
     ]
     const showLoading = ref(false)
 
     const doUpdate = () => {
       showLoading.value = true
 
-      axios.get('/Data/TobePurchaseBom?site=' + props.site)
+      axios.get('/Data/TobeClosedWO?site=' + props.site)
         .then((response) => {
           data = response.data
           prepareData()
@@ -79,26 +75,21 @@ export default defineComponent({
         })
         .catch((e) => {
           console.error(e)
-          notifyError(t('Loading TobePurchaseBom Failed!'))
+          notifyError(t('Loading TobeClosedWO Failed!'))
         }).finally(() => {
           showLoading.value = false
         })
     }
     const prepareData = () => {
-      const newDate = new Date()
-      data.forEach((row) => {
-        row.Days = date.getDateDiff(row.CreateDate, newDate, 'days')
-      })
-      data = _sortBy(data, ['Days'], ['desc'])
-
-      lengend = _uniq(_map(data, 'OrderType'))
-      dataByLengend = _groupBy(data, 'OrderType')
+      data = _sortBy(data, ['WorkOrderNO'])
+      lengend = _uniq(_map(data, 'ProductionStatus'))
+      dataByLengend = _groupBy(data, 'ProductionStatus')
       dataset = []
       series = []
 
       _forEach(lengend, (value, index) => {
         dataset[index] = { source: dataByLengend[value] }
-        series[index] = defaultScatterSerial(index, value, '{@ProjectNO}', dimensions, 'CreateDate', 'ProjectNO')
+        series[index] = defaultScatterSerial(index, value, '{@WorkOrderNO}', dimensions, 'OrderDate', 'WorkOrderNO')
       })
     }
 
@@ -106,11 +97,11 @@ export default defineComponent({
       // data is ready,set echart option
       eChart.setOption({
         title: {
-          text: t('BOMs need be purchased based on stock level at ') + props.site,
+          text: t('Sales order line closed but it\'s workorder still open at ') + props.site,
           left: 'center'
         },
         legend: defaultLegend,
-        toolbox: defaultToolbox(dimensions, data, t('BOMs need be purchased based on stock level at ') + props.site),
+        toolbox: defaultToolbox(dimensions, data, t('Sales order line closed but it\'s workorder still open at ') + props.site),
         tooltip: defaultTooltip,
         xAxis: defaultXAxisTime,
         grid: [
@@ -135,9 +126,9 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      console.debug('onMounted EchartTodoPurchaseBom')
-      echarts.init(document.getElementById('EchartTodoPurchaseBom')).dispose()
-      eChart = echarts.init(document.getElementById('EchartTodoPurchaseBom'))
+      console.debug('onMounted EchartTodoClosedWO')
+      echarts.init(document.getElementById('EchartTodoClosedWO')).dispose()
+      eChart = echarts.init(document.getElementById('EchartTodoClosedWO'))
 
       if (props.site) {
         doUpdate()

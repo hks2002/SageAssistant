@@ -106,3 +106,26 @@ Mock.mock(RegExp('^(/Data/TobeReceive)' + '.*'), options => {
   })
   return list.data
 })
+
+Mock.mock(RegExp('^(/Data/TobeClosedWO)' + '.*'), options => {
+  console.debug('\u001b[35m' + '[Mocking] ', 'TobeClosedWO')
+  // list = {data:[{},{}]}
+  const list = Mock.mock({
+    'data|1-100': [
+      {
+        ProjectNO: /(Z|H|S|T|M)CC\d{6}-\d{1,2}/,
+        OrderNO: /(Z|H|S|T|M)CC\d{6}/,
+        WorkOrderNO: /(Z|H|S|T|M)OF\d{6}/,
+        WOStatus: /(Firm|Closed|Planned|Suggested)/,
+        ProductionStatus: /(Pending|Process|Complted|Cancelled)/,
+        OrderType: /(NOR|REP|PRS|RCL)/,
+        CustomerCode: /0000\d{1}/,
+        CustomerName: () => { return Mock.mock('@sentence(3, 5)') },
+        PN: /([A-Z]){6}/,
+        'Qty|1-100': 1,
+        OrderDate: () => { return Mock.mock('@date("yyyy-MM-dd")') }
+      }
+    ]
+  })
+  return list.data
+})
