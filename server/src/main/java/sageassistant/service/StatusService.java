@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.github.pagehelper.PageHelper;
 
 import sageassistant.dao.StatusMapper;
+import sageassistant.model.TobeClosedWO;
 import sageassistant.model.TobeDealWithOrderLine;
 import sageassistant.model.TobeDelivery;
 import sageassistant.model.TobePurchaseBom;
@@ -80,4 +81,10 @@ public class StatusService {
 		return listPage;
 	}
 
+	public List<TobeClosedWO> findTobeClosedWOBySite(String site, Integer count) {
+		PageHelper.startPage(1, count);
+		List<TobeClosedWO> listPage = statusMapper.findTobeClosedWOBySite(site);
+
+		return listPage;
+	}
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import sageassistant.model.TobeClosedWO;
 import sageassistant.model.TobeDealWithOrderLine;
 import sageassistant.model.TobeDelivery;
 import sageassistant.model.TobePurchaseBom;
@@ -16,5 +17,5 @@ public interface StatusMapper {
 	List<TobeReceive> findTobeReceiveBySite(@Param("site") String site);
 	List<TobeDealWithOrderLine> findTobeDealWithOrderLineBySite(@Param("site") String site);
 	List<TobePurchaseBom> findTobePurchaseBomBySite(@Param("site") String site);
-	
+	List<TobeClosedWO> findTobeClosedWOBySite(@Param("site") String site);
 }
