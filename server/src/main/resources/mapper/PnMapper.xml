@@ -123,20 +123,6 @@
 		    ITMMASTER.ITMREF_0=#{pnRoot}
 		    AND DateDiff(day, SORDER.ORDDAT_0,SORDER.SHIDAT_0) != 0
      </select>
-     <select id="findStockInfoByPnRoot" parameterType="String" resultType="sageassistant.model.StockInfo">
-	    SELECT 
-		    STOCK.STOFCY_0 AS StockSite,
-		    STOCK.ITMREF_0 AS PN,
-		    COUNT(STOCK.QTYSTU_0) AS QTY
-		FROM EXPLOIT.STOCK
-		    LEFT JOIN EXPLOIT.ITMMASTER
-		    ON ITMMASTER.ITMREF_0=STOCK.ITMREF_0
-		WHERE 
-		    ITMMASTER.ITMREF_0=#{pnRoot}
-		GROUP BY STOCK.STOFCY_0,
-		         STOCK.ITMREF_0
-      </select>
-      
       <select id="findObseletPnBySite" parameterType="String" resultType="sageassistant.model.PnStatus">
         SELECT
 		   IIF(ITMMASTER.ECCFLG_0=2, ITMMASTER.ITMREF_0 + '_' + ECCSTA.ECCVALMAJ_0, ITMMASTER.ITMREF_0) AS PN,
