@@ -1,0 +1,102 @@
+import Mock from 'mockjs'
+import { orderBy } from 'lodash'
+import _forEach from 'lodash/forEach'
+import { getQueryParameter } from '../mockExt'
+
+Mock.mock(RegExp('^(/Data/InventoryStock)' + '.*'), options => {
+  console.debug('\u001b[35m' + '[Mocking] ', 'InventoryStock')
+
+  const PnRoot = getQueryParameter(options, 'PnRoot')
+
+  // list = {data:[{},{}]}
+  const list = Mock.mock({
+    'data|1-10': [
+      {
+        PN: () => { return PnRoot + '_' + Mock.mock('@character("ABCDEFG")') },
+        StockSite: /(ZHU|HKG|SGP|TLS|MIA)/,
+        'Qty|1-10': 1
+      }
+    ]
+  })
+
+  return list.data
+})
+
+Mock.mock(RegExp('^(/Data/StockSummary)' + '.*'), options => {
+  console.debug('\u001b[35m' + '[Mocking] ', 'StockSummary')
+
+  const Site = getQueryParameter(options, 'site')
+
+  // list = {data:[{},{}]}
+  const list = Mock.mock({
+    'data|1-1000': [
+      {
+        G: /[A-Z]/,
+        A: '',
+        PN: /[0-9A-Z]{5,8}/,
+        Description: () => { return Mock.mock('@title(5, 10)') },
+        'Qty|1-10': 1,
+        Cost: () => { return Mock.mock('@float(60, 10000, 3, 5)') }
+      }
+    ]
+  })
+  _forEach(list.data, (value, index) => {
+    value.A = value.PN.slice(0, 1)
+  })
+
+  return list.data
+})
+
+Mock.mock(RegExp('^(/Data/StockHistory)' + '.*'), options => {
+  console.debug('\u001b[35m' + '[Mocking] ', 'StockHistory')
+
+  const Site = getQueryParameter(options, 'site')
+  const PnOrName = getQueryParameter(options, 'PnOrName')
+  const DateFrom = getQueryParameter(options, 'DateFrom')
+  const DateTo = getQueryParameter(options, 'DateTo')
+
+  // list = {data:[{},{}]}
+  if (DateFrom || DateTo) {
+    const list = Mock.mock({
+      'data|1-2000': [
+        {
+          Location: /[A-Z]MAG\d{2}/,
+          Seq: () => { return Mock.mock('@increment(1000)') },
+          PN: () => { return PnOrName + Mock.mock('@word') },
+          Description: () => { return PnOrName + Mock.mock('@title(3, 5)') },
+          'Qty|1-10': 1,
+          Unit: 'UN',
+          Cost: () => { return Mock.mock('@float(60, 10000, 3, 5)') },
+          ProjectNO: /(H|Z|S|T|M)CC[0-9]{6}-[1-9]{1}/,
+          SourceNO: /(H|Z|S|T|M)CF[0-9]{6}/,
+          SourceLine: () => { return Mock.mock({ 'number|1-100': 100 }).number * 1000 },
+          EntryNO: /(H|Z|S|T|M)RA[0-9]{6}/,
+          EntryLine: () => { return Mock.mock({ 'number|1-100': 100 }).number * 1000 },
+          CreateUser: () => { return Mock.mock('@cname') },
+          CreateDate: () => { return Mock.mock('@date("yyyy-MM-dd")') }
+        }
+      ]
+    })
+    return list.data
+  } else {
+    const list = Mock.mock({
+      'data|1-20': [
+        {
+          Location: /[A-Z]MAG\d{2}/,
+          Seq: () => { return Mock.mock('@increment(1000)') },
+          'Qty|1-10': 1,
+          Cost: () => { return Mock.mock('@float(60, 10000, 3, 5)') },
+          ProjectNO: /(H|Z|S|T|M)CC[0-9]{6}-[1-9]{1}/,
+          SourceNO: /(H|Z|S|T|M)CF[0-9]{6}/,
+          SourceLine: () => { return Mock.mock({ 'number|1-100': 100 }).number * 1000 },
+          EntryNO: /(H|Z|S|T|M)RA[0-9]{6}/,
+          EntryLine: () => { return Mock.mock({ 'number|1-100': 100 }).number * 1000 },
+          CreateUser: () => { return Mock.mock('@cname') },
+          CreateDate: () => { return Mock.mock('@date("yyyy-MM-dd")') }
+        }
+      ]
+    })
+
+    return list.data
+  }
+})

@@ -18,12 +18,12 @@
         label="Receive"
       />
       <q-tab
-        name="NewOrder"
-        label="NewOrder"
+        name="New-Order"
+        label="New-Order"
       />
       <q-tab
-        name="NewBom"
-        label="NewBom"
+        name="Short-Bom"
+        label="Short-Bom"
       />
       <q-tab
         name="Orphan-WO"
@@ -63,7 +63,7 @@
       </q-tab-panel>
 
       <q-tab-panel
-        name="NewOrder"
+        name="New-Order"
         style="padding:0px"
       >
         <echart-todo-deal-with-order-line
@@ -74,7 +74,7 @@
         <error-403 v-else />
       </q-tab-panel>
       <q-tab-panel
-        name="NewBom"
+        name="Short-Bom"
         style="padding:0px"
       >
         <echart-todo-purchase-bom

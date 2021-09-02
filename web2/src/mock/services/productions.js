@@ -160,22 +160,3 @@ Mock.mock(RegExp('^(/Data/DeliveryDuration)' + '.*'), options => {
 
   return list.data
 })
-
-Mock.mock(RegExp('^(/Data/InventoryStock)' + '.*'), options => {
-  console.debug('\u001b[35m' + '[Mocking] ', 'InventoryStock')
-
-  const PnRoot = getQueryParameter(options, 'PnRoot')
-
-  // list = {data:[{},{}]}
-  const list = Mock.mock({
-    'data|1-10': [
-      {
-        PN: () => { return PnRoot + '_' + Mock.mock('@character("ABCDEFG")') },
-        StockSite: /(ZHU|HKG|SGP|TLS|MIA)/,
-        'Qty|1-10': 1
-      }
-    ]
-  })
-
-  return list.data
-})

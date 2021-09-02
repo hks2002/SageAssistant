@@ -40,6 +40,14 @@ const menus = [
     enable: true
   },
   {
+    title: 'Stock',
+    caption: '',
+    icon: 'fas fa-th',
+    link: '/Stock',
+    split: false,
+    enable: true
+  },
+  {
     title: ' Customeres',
     caption: '',
     icon: 'fas fa-people-carry',

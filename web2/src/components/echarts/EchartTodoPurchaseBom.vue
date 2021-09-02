@@ -106,11 +106,11 @@ export default defineComponent({
       // data is ready,set echart option
       eChart.setOption({
         title: {
-          text: t('BOMs need be purchased based on stock level at ') + props.site,
+          text: t('BOMs need to be purchased based on stock level at ') + props.site,
           left: 'center'
         },
         legend: defaultLegend,
-        toolbox: defaultToolbox(dimensions, data, t('BOMs need be purchased based on stock level at ') + props.site),
+        toolbox: defaultToolbox(dimensions, data, t('BOMs need to be purchased based on stock level at ') + props.site),
         tooltip: defaultTooltip,
         xAxis: defaultXAxisTime,
         grid: [

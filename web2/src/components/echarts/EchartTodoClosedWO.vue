@@ -97,11 +97,11 @@ export default defineComponent({
       // data is ready,set echart option
       eChart.setOption({
         title: {
-          text: t('Sales order line closed but it\'s workorder still open at ') + props.site,
+          text: t('Sales order line is closed but it\'s workorder product item is still open at ') + props.site,
           left: 'center'
         },
         legend: defaultLegend,
-        toolbox: defaultToolbox(dimensions, data, t('Sales order line closed but it\'s workorder still open at ') + props.site),
+        toolbox: defaultToolbox(dimensions, data, t('Sales order line is closed but it\'s workorder product item is still open at ') + props.site),
         tooltip: defaultTooltip,
         xAxis: defaultXAxisTime,
         grid: [

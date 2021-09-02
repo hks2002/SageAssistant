@@ -10,12 +10,12 @@
       narrow-indicator
     >
       <q-tab
-        name="Fapiao"
-        label="Fapiao"
+        name="Count"
+        label="Count"
       />
       <q-tab
-        name="Profit"
-        label="Profit"
+        name="History"
+        label="History"
       />
     </q-tabs>
 
@@ -27,17 +27,17 @@
       keep-alive
     >
       <q-tab-panel
-        name="Fapiao"
+        name="Count"
         style="padding:0px"
       >
-        <page-fapiao v-if="isAuthorised('GESSIH')" />
+        <page-stock-summary v-if="isAuthorised('CONSSAR')" />
         <error-403 v-else />
       </q-tab-panel>
       <q-tab-panel
-        name="Profit"
+        name="History"
         style="padding:0px"
       >
-        <page-fapiao v-if="isAuthorised('CONSBAL')" />
+        <page-stock-history v-if="isAuthorised('CONSSAR')" />
         <error-403 v-else />
       </q-tab-panel>
     </q-tab-panels>
@@ -45,25 +45,30 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onBeforeUnmount } from 'vue'
 import { ebus } from 'boot/ebus'
+import { getCookies } from 'assets/storage'
 import { isAuthorised } from 'assets/auth'
-import PageFapiao from 'src/components/PageFapiao.vue'
+import PageStockSummary from 'src/components/PageStockSummary.vue'
+import PageStockHistory from 'src/components/PageStockHistory.vue'
 import Error403 from 'pages/Error403.vue'
 
 export default defineComponent({
-  name: 'Financials',
+  name: 'Stock',
 
   components: {
-    PageFapiao,
+    PageStockSummary,
+    PageStockHistory,
     Error403
   },
 
   setup(props, ctx) {
-    const tab = ref('Fapiao')
+    const tab = ref('Count')
+    const site = ref('')
+    site.value = getCookies('site')
 
     ebus.emit('closeLeftDrawer')
-    ebus.emit('activePage', 'Financials')
+    ebus.emit('activePage', 'Stock')
 
     return {
       tab,

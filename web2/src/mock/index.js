@@ -14,6 +14,7 @@ if (process.env.DEV) {
   require('./services/todo')
   require('./services/fapiao')
   require('./services/invoice')
+  require('./services/stock')
 
   console.debug('\u001b[35m' + '[Mock] ', 'Mounted')
 }

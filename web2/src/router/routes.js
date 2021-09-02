@@ -59,6 +59,17 @@ const routes = [
     ]
   },
   {
+    path: '/Stock',
+    name: '/Stock',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      {
+        path: '',
+        component: () => import('pages/Stock.vue')
+      }
+    ]
+  },
+  {
     path: '/Suppliers',
     name: '/Suppliers',
     component: () => import('layouts/MainLayout.vue'),
