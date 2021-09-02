@@ -16,18 +16,18 @@ import sageassistant.model.SupplierSummaryQty;
 
 @Mapper
 public interface SupplierMapper {
-	List<SupplierName> supplierByCodeOrName(@Param("SupplierCodeOrName") String SupplierCodeOrName);
-	List<SupplierDetails> supplierDetailsByCode(@Param("SupplierCode") String SupplierCode);
-	List<SupplierSummaryAmount> supplierTotalAmount(@Param("SupplierCode") String SupplierCode, @Param("DateFrom") String DateFrom, @Param("DateTo") String DateTo);
-	List<SupplierSummaryQty> supplierTotalProjectQty(@Param("SupplierCode") String SupplierCode, @Param("DateFrom") String DateFrom, @Param("DateTo") String DateTo);
-	List<SupplierSummaryQty> supplierTotalItemQty(@Param("SupplierCode") String SupplierCode, @Param("DateFrom") String DateFrom, @Param("DateTo") String DateTo);
-	List<SupplierSummaryQty> supplierTotalProductQty(@Param("SupplierCode") String SupplierCode, @Param("DateFrom") String DateFrom, @Param("DateTo") String DateTo);
-	List<SupplierSummaryAmount> supplierOpenAmount(@Param("SupplierCode") String SupplierCode);
-	List<SupplierSummaryQty> supplierOpenProjectQty(@Param("SupplierCode") String SupplierCode);
-	List<SupplierSummaryQty> supplierOpenItemQty(@Param("SupplierCode") String SupplierCode);
-	List<SupplierSummaryQty> supplierOpenProductQty(@Param("SupplierCode") String SupplierCode);
-	List<SupplierOpenItems> supplierOpenItems(@Param("SupplierCode") String SupplierCode);
-	List<SupplierDeliveryHistory> supplierDeliveryHistory(@Param("SupplierCode") String SupplierCode, @Param("DateFrom") String DateFrom, @Param("DateTo") String DateTo);
-	List<SupplierDelayHistory> supplierDelayHistory(@Param("SupplierCode") String SupplierCode, @Param("DateFrom") String DateFrom, @Param("DateTo") String DateTo);
-	String purchaseDate(@Param("PurchaseNO") String PurchaseNO);
+	List<SupplierName> findSupplierByCodeOrName(@Param("SupplierCodeOrName") String SupplierCodeOrName);
+	List<SupplierDetails> findSupplierDetailsByCode(@Param("SupplierCode") String SupplierCode);
+	List<SupplierSummaryAmount> findSupplierTotalAmount(@Param("SupplierCode") String SupplierCode, @Param("DateFrom") String DateFrom, @Param("DateTo") String DateTo);
+	List<SupplierSummaryQty> findSupplierTotalProjectQty(@Param("SupplierCode") String SupplierCode, @Param("DateFrom") String DateFrom, @Param("DateTo") String DateTo);
+	List<SupplierSummaryQty> findSupplierTotalItemQty(@Param("SupplierCode") String SupplierCode, @Param("DateFrom") String DateFrom, @Param("DateTo") String DateTo);
+	List<SupplierSummaryQty> findSupplierTotalProductQty(@Param("SupplierCode") String SupplierCode, @Param("DateFrom") String DateFrom, @Param("DateTo") String DateTo);
+	List<SupplierSummaryAmount> findSupplierOpenAmount(@Param("SupplierCode") String SupplierCode);
+	List<SupplierSummaryQty> findSupplierOpenProjectQty(@Param("SupplierCode") String SupplierCode);
+	List<SupplierSummaryQty> findSupplierOpenItemQty(@Param("SupplierCode") String SupplierCode);
+	List<SupplierSummaryQty> findSupplierOpenProductQty(@Param("SupplierCode") String SupplierCode);
+	List<SupplierOpenItems> findSupplierOpenItems(@Param("SupplierCode") String SupplierCode);
+	List<SupplierDeliveryHistory> findSupplierDeliveryHistory(@Param("SupplierCode") String SupplierCode, @Param("DateFrom") String DateFrom, @Param("DateTo") String DateTo);
+	List<SupplierDelayHistory> findSupplierDelayHistory(@Param("SupplierCode") String SupplierCode, @Param("DateFrom") String DateFrom, @Param("DateTo") String DateTo);
+	String findPurchaseDate(@Param("PurchaseNO") String PurchaseNO);
 }

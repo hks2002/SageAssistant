@@ -16,11 +16,11 @@ public class StockService {
 	@Autowired
 	private StockMapper stockMapper;
 
-	public List<StockSummary> stockSummary(@Param("Site") String Site) {
+	public List<StockSummary> getStockSummary(@Param("Site") String Site) {
 		return stockMapper.findStockSummaryBySite(Site);
 	}
 	
-	public List<StockHistory> stockHistory(@Param("Site") String Site, @Param("PnOrName") String PnOrName,  @Param("DateFrom") String DateFrom,  @Param("DateTo") String DateTo) {
+	public List<StockHistory> getStockHistory(@Param("Site") String Site, @Param("PnOrName") String PnOrName,  @Param("DateFrom") String DateFrom,  @Param("DateTo") String DateTo) {
 		return stockMapper.findStockHistoryBySite(Site, PnOrName, DateFrom, DateTo);
 	}
 	
