@@ -22,7 +22,7 @@ public class StockController {
 	@GetMapping("/Data/StockSummary")
 	public String getStockSummary(
 			@RequestParam(value = "site", required = false, defaultValue = "ZHU") String Site) {
-		return stockService.stockSummary(Site).toString();
+		return stockService.getStockSummary(Site).toString();
 	}
 
 	@GetMapping("/Data/StockHistory")
@@ -31,6 +31,6 @@ public class StockController {
 			@RequestParam(value = "PnOrName", required = false, defaultValue = "%%") String PnOrName,
 			@RequestParam(value = "DateFrom", required = false, defaultValue = "2000-01-01") String DateFrom,
 			@RequestParam(value = "DateTo", required = false, defaultValue = "2099-12-31") String DateTo) {
-		return stockService.stockHistory(Site, PnOrName, DateFrom, DateTo).toString();
+		return stockService.getStockHistory(Site, PnOrName, DateFrom, DateTo).toString();
 	}
 }

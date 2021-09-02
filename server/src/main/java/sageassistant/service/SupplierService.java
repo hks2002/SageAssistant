@@ -30,15 +30,15 @@ public class SupplierService {
 	@Autowired
 	private SupplierMapper supplierMapper;
 
-	public List<SupplierName> supplierByCodeOrName(String cond, Integer count) {
+	public List<SupplierName> getSupplierByCodeOrName(String cond, Integer count) {
 		PageHelper.startPage(1, count);
-		List<SupplierName> listPage = supplierMapper.supplierByCodeOrName("%" + cond + "%");
+		List<SupplierName> listPage = supplierMapper.findSupplierByCodeOrName("%" + cond + "%");
 
 		return listPage;
 	}
 
-	public List<SupplierSummaryAmount> supplierTotalAmount(String SupplierCode, String DateFrom, String DateTo) {
-		List<SupplierSummaryAmount> listPage = supplierMapper.supplierTotalAmount(SupplierCode, DateFrom, DateTo);
+	public List<SupplierSummaryAmount> getSupplierTotalAmount(String SupplierCode, String DateFrom, String DateTo) {
+		List<SupplierSummaryAmount> listPage = supplierMapper.findSupplierTotalAmount(SupplierCode, DateFrom, DateTo);
 
 		for (SupplierSummaryAmount o : listPage) {
 			String key=o.getCurrency()+"USD"+Utils.formatDate(new Date());
@@ -57,22 +57,22 @@ public class SupplierService {
 		return listPage;
 	}
 
-	public List<SupplierSummaryQty> supplierTotalProjectQty(@Param("SupplierCode") String SupplierCode, String DateFrom, String DateTo) {
-		return supplierMapper.supplierTotalProjectQty(SupplierCode, DateFrom, DateTo);
+	public List<SupplierSummaryQty> getSupplierTotalProjectQty(@Param("SupplierCode") String SupplierCode, String DateFrom, String DateTo) {
+		return supplierMapper.findSupplierTotalProjectQty(SupplierCode, DateFrom, DateTo);
 	}
 	
-	public List<SupplierSummaryQty> supplierTotalItemQty(@Param("SupplierCode") String SupplierCode, String DateFrom, String DateTo) {
-		return supplierMapper.supplierTotalItemQty(SupplierCode, DateFrom, DateTo);
+	public List<SupplierSummaryQty> getSupplierTotalItemQty(@Param("SupplierCode") String SupplierCode, String DateFrom, String DateTo) {
+		return supplierMapper.findSupplierTotalItemQty(SupplierCode, DateFrom, DateTo);
 	}
 	
-	public List<SupplierSummaryQty> supplierTotalProductQty(@Param("SupplierCode") String SupplierCode, String DateFrom, String DateTo) {
-		return supplierMapper.supplierTotalProductQty(SupplierCode, DateFrom, DateTo);
+	public List<SupplierSummaryQty> getSupplierTotalProductQty(@Param("SupplierCode") String SupplierCode, String DateFrom, String DateTo) {
+		return supplierMapper.findSupplierTotalProductQty(SupplierCode, DateFrom, DateTo);
 	}
 	
-	public List<SupplierSummaryQty> supplierTotalQty(@Param("SupplierCode") String SupplierCode, String DateFrom, String DateTo) {
-		List<SupplierSummaryQty> listProject = supplierMapper.supplierTotalProjectQty(SupplierCode, DateFrom, DateTo);
-		List<SupplierSummaryQty> listProduct = supplierMapper.supplierTotalProductQty(SupplierCode, DateFrom, DateTo);
-		List<SupplierSummaryQty> listItem = supplierMapper.supplierTotalItemQty(SupplierCode, DateFrom, DateTo);
+	public List<SupplierSummaryQty> getSupplierTotalQty(@Param("SupplierCode") String SupplierCode, String DateFrom, String DateTo) {
+		List<SupplierSummaryQty> listProject = supplierMapper.findSupplierTotalProjectQty(SupplierCode, DateFrom, DateTo);
+		List<SupplierSummaryQty> listProduct = supplierMapper.findSupplierTotalProductQty(SupplierCode, DateFrom, DateTo);
+		List<SupplierSummaryQty> listItem = supplierMapper.findSupplierTotalItemQty(SupplierCode, DateFrom, DateTo);
 
 		List<SupplierSummaryQty> listAll = new ArrayList<>();
 
@@ -87,8 +87,8 @@ public class SupplierService {
 		return listAll;
 	}
 	
-	public List<SupplierSummaryAmount> supplierOpenAmount(String SupplierCode) {
-		List<SupplierSummaryAmount> listPage = supplierMapper.supplierOpenAmount(SupplierCode);
+	public List<SupplierSummaryAmount> getSupplierOpenAmount(String SupplierCode) {
+		List<SupplierSummaryAmount> listPage = supplierMapper.findSupplierOpenAmount(SupplierCode);
 
 		for (SupplierSummaryAmount o : listPage) {
 			String key=o.getCurrency()+"USD"+Utils.formatDate(new Date());
@@ -107,22 +107,22 @@ public class SupplierService {
 		return listPage;
 	}
 	
-	public List<SupplierSummaryQty> supplierOpenProjectQty(@Param("SupplierCode") String SupplierCode){
-		return supplierMapper.supplierOpenProjectQty(SupplierCode);
+	public List<SupplierSummaryQty> getSupplierOpenProjectQty(@Param("SupplierCode") String SupplierCode){
+		return supplierMapper.findSupplierOpenProjectQty(SupplierCode);
 	}
 	
-	public List<SupplierSummaryQty> supplierOpenItemQty(@Param("SupplierCode") String SupplierCode){
-		return supplierMapper.supplierOpenItemQty(SupplierCode);
+	public List<SupplierSummaryQty> getSupplierOpenItemQty(@Param("SupplierCode") String SupplierCode){
+		return supplierMapper.findSupplierOpenItemQty(SupplierCode);
 	}
 	
-	public List<SupplierSummaryQty> supplierOpenProductQty(@Param("SupplierCode") String SupplierCode){
-		return supplierMapper.supplierOpenProductQty(SupplierCode);
+	public List<SupplierSummaryQty> getSupplierOpenProductQty(@Param("SupplierCode") String SupplierCode){
+		return supplierMapper.findSupplierOpenProductQty(SupplierCode);
 	}
 	
-	public List<SupplierSummaryQty> supplierOpenQty(@Param("SupplierCode") String SupplierCode){
-		List<SupplierSummaryQty> listProject = supplierMapper.supplierOpenProjectQty(SupplierCode);
-		List<SupplierSummaryQty> listProduct = supplierMapper.supplierOpenProductQty(SupplierCode);
-		List<SupplierSummaryQty> listItem = supplierMapper.supplierOpenItemQty(SupplierCode);
+	public List<SupplierSummaryQty> getSupplierOpenQty(@Param("SupplierCode") String SupplierCode){
+		List<SupplierSummaryQty> listProject = supplierMapper.findSupplierOpenProjectQty(SupplierCode);
+		List<SupplierSummaryQty> listProduct = supplierMapper.findSupplierOpenProductQty(SupplierCode);
+		List<SupplierSummaryQty> listItem = supplierMapper.findSupplierOpenItemQty(SupplierCode);
 
 		List<SupplierSummaryQty> listAll = new ArrayList<>();
 
@@ -137,24 +137,24 @@ public class SupplierService {
 		return listAll;
 	}
 	
-	public List<SupplierDeliveryHistory> supplierDeliveryHistory(@Param("SupplierCode") String SupplierCode, String DateFrom, String DateTo) {
-		return supplierMapper.supplierDeliveryHistory(SupplierCode, DateFrom, DateTo);
+	public List<SupplierDeliveryHistory> getSupplierDeliveryHistory(@Param("SupplierCode") String SupplierCode, String DateFrom, String DateTo) {
+		return supplierMapper.findSupplierDeliveryHistory(SupplierCode, DateFrom, DateTo);
 	}
 	
-	public List<SupplierDelayHistory> supplierDelayHistory(@Param("SupplierCode") String SupplierCode, String DateFrom, String DateTo) {
-		return supplierMapper.supplierDelayHistory(SupplierCode, DateFrom, DateTo);
+	public List<SupplierDelayHistory> getSupplierDelayHistory(@Param("SupplierCode") String SupplierCode, String DateFrom, String DateTo) {
+		return supplierMapper.findSupplierDelayHistory(SupplierCode, DateFrom, DateTo);
 	}
 	
-	public List<SupplierOpenItems> supplierOpenItems(@Param("SupplierCode") String SupplierCode){
-		return supplierMapper.supplierOpenItems(SupplierCode);
+	public List<SupplierOpenItems> getSupplierOpenItems(@Param("SupplierCode") String SupplierCode){
+		return supplierMapper.findSupplierOpenItems(SupplierCode);
 	}
 	
-	public List<SupplierDetails> supplierDetails(@Param("SupplierCode") String SupplierCode){
-		return supplierMapper.supplierDetailsByCode(SupplierCode);
+	public List<SupplierDetails> getSupplierDetails(@Param("SupplierCode") String SupplierCode){
+		return supplierMapper.findSupplierDetailsByCode(SupplierCode);
 	}
 	
-	public String purchaseDate(@Param("PurchaseNO") String PurchaseNO){
-		return supplierMapper.purchaseDate(PurchaseNO);
+	public String getPurchaseDate(@Param("PurchaseNO") String PurchaseNO){
+		return supplierMapper.findPurchaseDate(PurchaseNO);
 	}
 	
 }

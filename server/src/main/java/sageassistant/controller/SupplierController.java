@@ -24,13 +24,13 @@ public class SupplierController {
 	public String getSupplierName(
 			@RequestParam(value = "SupplierCodeOrName", required = false, defaultValue = "%%") String SupplierCodeOrName,
 			@RequestParam(value = "Count", required = false, defaultValue = "50") Integer count) {
-		return Utils.listToString(SupplierService.supplierByCodeOrName(SupplierCodeOrName, count));
+		return Utils.listToString(SupplierService.getSupplierByCodeOrName(SupplierCodeOrName, count));
 	}
 
 	@GetMapping("/Data/SupplierDetails")
 	public String getSupplierDetails(
 			@RequestParam(value = "SupplierCode", required = false, defaultValue = "NULL") String SupplierCode) {
-		return SupplierService.supplierDetails(SupplierCode).toString();
+		return SupplierService.getSupplierDetails(SupplierCode).toString();
 	}
 
 	@GetMapping("/Data/SupplierTotalAmount")
@@ -38,7 +38,7 @@ public class SupplierController {
 			@RequestParam(value = "SupplierCode", required = false, defaultValue = "NULL") String SupplierCode,
 			@RequestParam(value = "DateFrom", required = false, defaultValue = "2000-01-01") String DateFrom,
 			@RequestParam(value = "DateTo", required = false, defaultValue = "2099-12-31") String DateTo) {
-		return Utils.listToString(SupplierService.supplierTotalAmount(SupplierCode, DateFrom, DateTo));
+		return Utils.listToString(SupplierService.getSupplierTotalAmount(SupplierCode, DateFrom, DateTo));
 	}
 
 	@GetMapping("/Data/SupplierTotalProjectQty")
@@ -46,7 +46,7 @@ public class SupplierController {
 			@RequestParam(value = "SupplierCode", required = false, defaultValue = "NULL") String SupplierCode,
 			@RequestParam(value = "DateFrom", required = false, defaultValue = "2000-01-01") String DateFrom,
 			@RequestParam(value = "DateTo", required = false, defaultValue = "2099-12-31") String DateTo) {
-		return Utils.listToString(SupplierService.supplierTotalProjectQty(SupplierCode, DateFrom, DateTo));
+		return Utils.listToString(SupplierService.getSupplierTotalProjectQty(SupplierCode, DateFrom, DateTo));
 	}
 
 	@GetMapping("/Data/SupplierTotalItemQty")
@@ -54,7 +54,7 @@ public class SupplierController {
 			@RequestParam(value = "SupplierCode", required = false, defaultValue = "NULL") String SupplierCode,
 			@RequestParam(value = "DateFrom", required = false, defaultValue = "2000-01-01") String DateFrom,
 			@RequestParam(value = "DateTo", required = false, defaultValue = "2099-12-31") String DateTo) {
-		return Utils.listToString(SupplierService.supplierTotalItemQty(SupplierCode, DateFrom, DateTo));
+		return Utils.listToString(SupplierService.getSupplierTotalItemQty(SupplierCode, DateFrom, DateTo));
 	}
 	
 	@GetMapping("/Data/SupplierTotalQty")
@@ -62,7 +62,7 @@ public class SupplierController {
 			@RequestParam(value = "SupplierCode", required = false, defaultValue = "NULL") String SupplierCode,
 			@RequestParam(value = "DateFrom", required = false, defaultValue = "2000-01-01") String DateFrom,
 			@RequestParam(value = "DateTo", required = false, defaultValue = "2099-12-31") String DateTo) {
-		return SupplierService.supplierTotalQty(SupplierCode, DateFrom, DateTo).toString();
+		return SupplierService.getSupplierTotalQty(SupplierCode, DateFrom, DateTo).toString();
 	}
 	
 	@GetMapping("/Data/SupplierTotalProductQty")
@@ -70,37 +70,37 @@ public class SupplierController {
 			@RequestParam(value = "SupplierCode", required = false, defaultValue = "NULL") String SupplierCode,
 			@RequestParam(value = "DateFrom", required = false, defaultValue = "2000-01-01") String DateFrom,
 			@RequestParam(value = "DateTo", required = false, defaultValue = "2099-12-31") String DateTo) {
-		return SupplierService.supplierTotalProductQty(SupplierCode, DateFrom, DateTo).toString();
+		return SupplierService.getSupplierTotalProductQty(SupplierCode, DateFrom, DateTo).toString();
 	}
 
 	@GetMapping("/Data/SupplierOpenAmount")
 	public String getSupplierOpenAmount(
 			@RequestParam(value = "SupplierCode", required = false, defaultValue = "NULL") String SupplierCode) {
-		return Utils.listToString(SupplierService.supplierOpenAmount(SupplierCode));
+		return Utils.listToString(SupplierService.getSupplierOpenAmount(SupplierCode));
 	}
 
 	@GetMapping("/Data/SupplierOpenProjectQty")
 	public String getSupplierOpenProjectQty(
 			@RequestParam(value = "SupplierCode", required = false, defaultValue = "NULL") String SupplierCode) {
-		return Utils.listToString(SupplierService.supplierOpenProjectQty(SupplierCode));
+		return Utils.listToString(SupplierService.getSupplierOpenProjectQty(SupplierCode));
 	}
 
 	@GetMapping("/Data/SupplierOpenItemQty")
 	public String getSupplierOpenItemQty(
 			@RequestParam(value = "SupplierCode", required = false, defaultValue = "NULL") String SupplierCode) {
-		return Utils.listToString(SupplierService.supplierOpenItemQty(SupplierCode));
+		return Utils.listToString(SupplierService.getSupplierOpenItemQty(SupplierCode));
 	}
 
 	@GetMapping("/Data/SupplierOpenQty")
 	public String getSupplierOpenQty(
 			@RequestParam(value = "SupplierCode", required = false, defaultValue = "NULL") String SupplierCode) {
-		return Utils.listToString(SupplierService.supplierOpenQty(SupplierCode));
+		return Utils.listToString(SupplierService.getSupplierOpenQty(SupplierCode));
 	}
 	
 	@GetMapping("/Data/SupplierOpenProductQty")
 	public String getSupplierOpenProductQty(
 			@RequestParam(value = "SupplierCode", required = false, defaultValue = "NULL") String SupplierCode) {
-		return Utils.listToString(SupplierService.supplierOpenProductQty(SupplierCode));
+		return Utils.listToString(SupplierService.getSupplierOpenProductQty(SupplierCode));
 	}
 
 	@GetMapping("/Data/SupplierDeliveryHistory")
@@ -108,7 +108,7 @@ public class SupplierController {
 			@RequestParam(value = "SupplierCode", required = false, defaultValue = "NULL") String SupplierCode,
 			@RequestParam(value = "DateFrom", required = false, defaultValue = "2000-01-01") String DateFrom,
 			@RequestParam(value = "DateTo", required = false, defaultValue = "2099-12-31") String DateTo) {
-		return Utils.listToString(SupplierService.supplierDeliveryHistory(SupplierCode, DateFrom, DateTo));
+		return Utils.listToString(SupplierService.getSupplierDeliveryHistory(SupplierCode, DateFrom, DateTo));
 	}
 
 	@GetMapping("/Data/SupplierDelayHistory")
@@ -116,19 +116,19 @@ public class SupplierController {
 			@RequestParam(value = "SupplierCode", required = false, defaultValue = "NULL") String SupplierCode,
 			@RequestParam(value = "DateFrom", required = false, defaultValue = "2000-01-01") String DateFrom,
 			@RequestParam(value = "DateTo", required = false, defaultValue = "2099-12-31") String DateTo) {
-		return Utils.listToString(SupplierService.supplierDelayHistory(SupplierCode, DateFrom, DateTo));
+		return Utils.listToString(SupplierService.getSupplierDelayHistory(SupplierCode, DateFrom, DateTo));
 	}
 
 	@GetMapping("/Data/SupplierOpenItems")
 	public String getSupplierOpenItems(
 			@RequestParam(value = "SupplierCode", required = false, defaultValue = "NULL") String SupplierCode) {
-		return Utils.listToString(SupplierService.supplierOpenItems(SupplierCode));
+		return Utils.listToString(SupplierService.getSupplierOpenItems(SupplierCode));
 	}
 	
 	@GetMapping("/Data/PurchaseDate")
 	public String getPurchaseDate(
 			@RequestParam(value = "PurchaseNO", required = true, defaultValue = "NULL") String PurchaseNO) {
-		return SupplierService.purchaseDate(PurchaseNO);
+		return SupplierService.getPurchaseDate(PurchaseNO);
 	}
 
 }
