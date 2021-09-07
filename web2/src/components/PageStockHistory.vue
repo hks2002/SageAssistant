@@ -147,7 +147,12 @@ export default defineComponent({
 
     const download = () => {
       const header = ['Location', 'Seq', 'PN', 'Description', 'Qty', 'Unit', 'Cost', 'ProjectNO', 'SourceNO', 'SourceLine', 'EntryNO', 'EntryLine', 'CreateUser', 'CreateDate']
-      jsonToExcel(header, data.value, site.value + ' Stock History-' + dateFrom.value + '_' + dateTo.value)
+      const strPNData = data.value
+      // PN with #
+      _forEach(strPNData, (value, index) => {
+        value.PN = '#' + value.PN
+      })
+      jsonToExcel(header, strPNData, site.value + ' Stock History-' + dateFrom.value + '_' + dateTo.value)
     }
 
     onMounted(() => {

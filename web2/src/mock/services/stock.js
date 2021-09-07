@@ -3,25 +3,6 @@ import { orderBy } from 'lodash'
 import _forEach from 'lodash/forEach'
 import { getQueryParameter } from '../mockExt'
 
-Mock.mock(RegExp('^(/Data/InventoryStock)' + '.*'), options => {
-  console.debug('\u001b[35m' + '[Mocking] ', 'InventoryStock')
-
-  const PnRoot = getQueryParameter(options, 'PnRoot')
-
-  // list = {data:[{},{}]}
-  const list = Mock.mock({
-    'data|1-10': [
-      {
-        PN: () => { return PnRoot + '_' + Mock.mock('@character("ABCDEFG")') },
-        StockSite: /(ZHU|HKG|SGP|TLS|MIA)/,
-        'Qty|1-10': 1
-      }
-    ]
-  })
-
-  return list.data
-})
-
 Mock.mock(RegExp('^(/Data/StockSummary)' + '.*'), options => {
   console.debug('\u001b[35m' + '[Mocking] ', 'StockSummary')
 
@@ -34,6 +15,7 @@ Mock.mock(RegExp('^(/Data/StockSummary)' + '.*'), options => {
         G: /[A-Z]/,
         A: '',
         PN: /[0-9A-Z]{5,8}/,
+        OptionPN: /(123|456)/,
         Description: () => { return Mock.mock('@title(5, 10)') },
         'Qty|1-10': 1,
         Cost: () => { return Mock.mock('@float(60, 10000, 3, 5)') }

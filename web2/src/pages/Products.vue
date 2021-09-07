@@ -24,7 +24,7 @@
       option-value="PNROOT"
       data-url="/Data/PNHelper?PnOrPnRoot="
       emit-to="searchPn"
-      :label="$t('Search Your Productions')"
+      :label="$t('Search Your Product')"
       popup-content-class="text-secondary"
       class="q-ml-md q-mr-md"
       :disable="!isAuthorised('GESITM')"

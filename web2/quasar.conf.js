@@ -140,8 +140,8 @@ module.exports = configure(function (ctx) {
       // the nginx service <port> must <same> to srvsyr01
       // otherwise you will receive some forbideen result.
       proxy: {
-        '/Fapiao': {
-          target: 'http://sageassistant-zhu/Fapiao'
+        '/Data': {
+          target: 'http://192.168.0.246'
         }
       }
     },

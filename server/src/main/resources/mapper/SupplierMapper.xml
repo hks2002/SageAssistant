@@ -43,7 +43,7 @@
 		     ON BPARTNER.BPRNUM_0 = BPADDRESS.BPANUM_0
 		WHERE BPARTNER.BPRNUM_0 LIKE #{SupplierCode}
     </select>
-    <select id=“findSupplierTotalAmount" parameterType="String" resultType="sageassistant.model.SupplierSummaryAmount">
+    <select id="findSupplierTotalAmount" parameterType="String" resultType="sageassistant.model.SupplierSummaryAmount">
         SELECT DISTINCT
 			POHFCY_0 AS Site,
 			BPSNUM_0 AS SupplierCode,
@@ -53,7 +53,7 @@
 		WHERE BPSNUM_0=#{SupplierCode}
 		      AND (PORDER.ORDDAT_0 BETWEEN CONVERT(datetime, #{DateFrom},120) AND CONVERT(datetime, #{DateTo},120) )
     </select>
-    <select id=“findSupplierTotalProjectQty" parameterType="String" resultType="sageassistant.model.SupplierSummaryQty">
+    <select id="findSupplierTotalProjectQty" parameterType="String" resultType="sageassistant.model.SupplierSummaryQty">
         SELECT DISTINCT
 			PORDER.POHFCY_0 AS Site,
 			PORDER.BPSNUM_0 AS SupplierCode,
@@ -66,7 +66,7 @@
 		      AND (PORDER.ORDDAT_0 BETWEEN CONVERT(datetime, #{DateFrom},120) AND CONVERT(datetime, #{DateTo},120) )
 		GROUP BY PORDER.POHFCY_0,PORDER.BPSNUM_0
     </select>
-    <select id=“findSupplierTotalItemQty" parameterType="String" resultType="sageassistant.model.SupplierSummaryQty">
+    <select id="findSupplierTotalItemQty" parameterType="String" resultType="sageassistant.model.SupplierSummaryQty">
         SELECT DISTINCT
 			PORDER.POHFCY_0 AS Site,
 			PORDER.BPSNUM_0 AS SupplierCode,
@@ -76,7 +76,7 @@
 		WHERE PORDER.BPSNUM_0=#{SupplierCode}
 		      AND (PORDER.ORDDAT_0 BETWEEN CONVERT(datetime, #{DateFrom},120) AND CONVERT(datetime, #{DateTo},120) )
     </select>
-    <select id=“findSupplierTotalProductQty" parameterType="String" resultType="sageassistant.model.SupplierSummaryQty">
+    <select id="findSupplierTotalProductQty" parameterType="String" resultType="sageassistant.model.SupplierSummaryQty">
         SELECT DISTINCT
 			PORDER.POHFCY_0 AS Site,
 			PORDER.BPSNUM_0 AS SupplierCode,
@@ -86,7 +86,7 @@
 		WHERE BPSNUM_0=#{SupplierCode}
 		      AND (PORDER.ORDDAT_0 BETWEEN CONVERT(datetime, #{DateFrom},120) AND CONVERT(datetime, #{DateTo},120) )
     </select>
-    <select id=“findSupplierOpenAmount" parameterType="String" resultType="sageassistant.model.SupplierSummaryAmount">
+    <select id="findSupplierOpenAmount" parameterType="String" resultType="sageassistant.model.SupplierSummaryAmount">
         SELECT DISTINCT 
             PORDER.POHFCY_0 AS Site,
 			PORDER.CUR_0 AS Currency,
@@ -99,7 +99,7 @@
 		    AND PORDERQ.PTHNUM_0 =''
 		    AND PORDER.BPSNUM_0=#{SupplierCode}
 	</select>
-	<select id=“findSupplierOpenProjectQty" parameterType="String" resultType="sageassistant.model.SupplierSummaryQty">
+	<select id="findSupplierOpenProjectQty" parameterType="String" resultType="sageassistant.model.SupplierSummaryQty">
         SELECT DISTINCT 
             PORDER.POHFCY_0 AS Site,
 	        PORDER.BPSNUM_0 AS SupplierCode,
@@ -116,7 +116,7 @@
 		    AND PORDER.BPSNUM_0=#{SupplierCode}
 		GROUP BY PORDER.POHFCY_0,PORDER.BPSNUM_0
 	</select>
-	<select id=“findSupplierOpenItemQty" parameterType="String" resultType="sageassistant.model.SupplierSummaryQty">
+	<select id="findSupplierOpenItemQty" parameterType="String" resultType="sageassistant.model.SupplierSummaryQty">
         SELECT DISTINCT 
             PORDER.POHFCY_0 AS Site,
 	        PORDER.BPSNUM_0 AS SupplierCode,
@@ -130,7 +130,7 @@
 		    AND PORDER.BPSNUM_0=#{SupplierCode}
 		GROUP BY PORDER.POHFCY_0,PORDER.BPSNUM_0
 	</select>
-	<select id=“findSupplierOpenProductQty" parameterType="String" resultType="sageassistant.model.SupplierSummaryQty">
+	<select id="findSupplierOpenProductQty" parameterType="String" resultType="sageassistant.model.SupplierSummaryQty">
         SELECT DISTINCT 
             PORDER.POHFCY_0 AS Site,
 	        PORDER.BPSNUM_0 AS SupplierCode,
@@ -143,7 +143,7 @@
 		    AND PORDERQ.PTHNUM_0 =''
 		    AND PORDER.BPSNUM_0=#{SupplierCode}
 	</select>
-	<select id=“findSupplierDeliveryHistory" parameterType="String" resultType="sageassistant.model.SupplierDeliveryHistory">
+	<select id="findSupplierDeliveryHistory" parameterType="String" resultType="sageassistant.model.SupplierDeliveryHistory">
 	    SELECT DISTINCT 
 	        PORDERQ.PRHFCY_0 AS Site,
 	        PORDER.BPSNUM_0 AS SupplierCode,
@@ -170,7 +170,7 @@
 		    AND (RECEIPTD.RCPDAT_0 BETWEEN CONVERT(datetime, #{DateFrom},120) AND CONVERT(datetime, #{DateTo},120) )
 		ORDER BY RECEIPTD.RCPDAT_0 ASC
 	</select>
-	<select id=“findSupplierDelayHistory" parameterType="String" resultType="sageassistant.model.SupplierDelayHistory">
+	<select id="findSupplierDelayHistory" parameterType="String" resultType="sageassistant.model.SupplierDelayHistory">
 	    SELECT DISTINCT 
 	        PORDERQ.PRHFCY_0 AS Site,
 	        PORDER.BPSNUM_0 AS SupplierCode,
@@ -199,7 +199,7 @@
 		    AND (RECEIPTD.RCPDAT_0 - PORDERQ.EXTRCPDAT_0 >0 OR RECEIPTD.RCPDAT_0 IS NULL)
 		ORDER BY PORDERQ.EXTRCPDAT_0 ASC
 	</select>
-	<select id=“findSupplierOpenItems" parameterType="String" resultType="sageassistant.model.SupplierOpenItems">
+	<select id="findSupplierOpenItems" parameterType="String" resultType="sageassistant.model.SupplierOpenItems">
 	    SELECT DISTINCT 
 	        PORDERQ.PRHFCY_0 AS Site,
 	        PORDER.BPSNUM_0 AS SupplierCode,

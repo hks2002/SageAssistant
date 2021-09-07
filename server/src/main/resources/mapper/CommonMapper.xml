@@ -3,7 +3,8 @@
 
 <mapper namespace="sageassistant.dao.CommonMapper">
  <!--Open L2 Cache under Names pace: 1 Hour-->
-    <select id="getAllSites" parameterType="String" resultType="sageassistant.model.Sites">
+	<cache eviction="LRU" flushInterval="3600000" readOnly="true" size="1024"/>
+    <select id="getAllSites" parameterType="String" resultType="java.lang.String">
         SELECT DISTINCT
 	        FCY_0 AS Site
 	    FROM EXPLOIT.FACILITY
