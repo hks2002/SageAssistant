@@ -19,6 +19,25 @@ public class StockController {
 	@Autowired
 	private StockService stockService;
 
+	@GetMapping("/Data/CheckPN")
+	public String checkPN(
+			@RequestParam(value = "PN", required = false, defaultValue = "--") String PN) {
+		return stockService.checkPN(PN);
+	}
+	
+	@GetMapping("/Data/StockOptionPN")
+	public String findStockOptionPN(
+			@RequestParam(value = "PN", required = false, defaultValue = "--") String PN) {
+		return stockService.findStockOptionPN(PN);
+	}
+	
+	@GetMapping("/Data/StockQty")
+	public String findStockQty(
+			@RequestParam(value = "site", required = false, defaultValue = "ZHU") String Site,
+			@RequestParam(value = "PN", required = false, defaultValue = "--") String PN) {
+		return stockService.findStockQty(Site, PN).toString();
+	}
+	
 	@GetMapping("/Data/StockSummary")
 	public String getStockSummary(
 			@RequestParam(value = "site", required = false, defaultValue = "ZHU") String Site) {

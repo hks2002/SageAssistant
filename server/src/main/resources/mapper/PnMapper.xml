@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="sageassistant.dao.PnMapper">
-    <!--Open L2 Cache under Names pace: 1 Hour-->
-    <cache eviction="LRU" flushInterval="3600000" readOnly="true" size="1024"/>
-    <select id="findPnByLike" parameterType="String" resultType="sageassistant.model.PnRootPn">
+	<!--Open L2 Cache under Names pace: 1 Hour-->
+	<cache eviction="LRU" flushInterval="3600000" readOnly="true" size="1024"/>
+	<select id="findPnByLike" parameterType="String" resultType="sageassistant.model.PnRootPn">
 		SELECT DISTINCT
 		    ITMMASTER.ITMREF_0 AS PNROOT,
 		    ECCSTA.ITMREF_0 + '_' + ECCSTA.ECCVALMAJ_0 AS PN
@@ -14,8 +14,8 @@
 		WHERE ITMMASTER.ITMREF_0 LIKE #{pnOrPnRoot} 
 				OR (ECCSTA.ITMREF_0 + '_' + ECCSTA.ECCVALMAJ_0 LIKE #{pnOrPnRoot})
 		ORDER BY ITMMASTER.ITMREF_0 DESC, PN
-    </select>
-    <select id="findAllPnByPnRoot" parameterType="String" resultType="sageassistant.model.PnDetails">
+	</select>
+	<select id="findAllPnByPnRoot" parameterType="String" resultType="sageassistant.model.PnDetails">
 		SELECT
 			row_number() OVER (ORDER BY ECCSTA.ZECCREVMAJ_0 DESC) AS ROWID,
 			ITMMASTER.ITMREF_0 AS PNROOT,
@@ -32,9 +32,37 @@
 		LEFT JOIN ECCSTA
 		     ON ITMMASTER.ITMREF_0 = ECCSTA.ITMREF_0
 		WHERE ITMMASTER.ITMREF_0 = #{pnRoot}
-    </select>
-    <select id="findSalesHistoryByPnRoot" parameterType="String" resultType="sageassistant.model.SalesHistory">
-       SELECT
+	</select>
+	<select id="findOptionPn" parameterType="String" resultType="java.lang.String">
+		SELECT DISTINCT T0.OptionPN 
+		FROM (
+			SELECT 
+				ITMREFBPS_0 AS OptionPN
+			FROM ITMBPS
+			WHERE 
+				ITMREF_0=#{pnRoot}
+				AND ITMREF_0 !=ITMREFBPS_0
+			UNION
+			SELECT 
+				ITMREF_0 AS OptionPN
+			FROM ITMBPS
+			WHERE 
+				ITMREFBPS_0=#{pnRoot}
+				AND ITMREF_0 !=ITMREFBPS_0
+			UNION
+			SELECT
+				T2.ITMREFBPS_0 AS OptionPN
+			FROM
+				ITMBPS T1
+			INNER JOIN ITMBPS T2
+				ON T1.ITMREF_0 = T2.ITMREF_0
+			WHERE 
+				T1.ITMREFBPS_0 = #{pnRoot}
+				AND T2.ITMREFBPS_0 != #{pnRoot}
+			) T0
+	</select>
+	<select id="findSalesHistoryByPnRoot" parameterType="String" resultType="sageassistant.model.SalesHistory">
+		SELECT
 		    SORDERP.SALFCY_0 AS SalesSite,
 		    SORDERP.SOHNUM_0 AS OrderNO,
 		    SORDER.ORDDAT_0 AS OrderDate,

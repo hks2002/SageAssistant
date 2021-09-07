@@ -15,13 +15,14 @@ import sageassistant.model.SalesHistory;
 import sageassistant.model.StockInfo;
 
 @Mapper
-public interface PnMapper {		
+public interface PnMapper {
 	List<PnRootPn> findPnByLike(@Param("pnOrPnRoot") String pnRootOrPn);
 	List<PnDetails> findAllPnByPnRoot(@Param("pnRoot") String pnRoot);
 	List<SalesHistory> findSalesHistoryByPnRoot(@Param("pnRoot") String pnRoot);
 	List<QuoteHistory> findQuoteHistoryByPnRoot(@Param("pnRoot") String pnRoot);
 	List<CostHistory> findCostHistoryByPnRoot(@Param("pnRoot") String pnRoot);
 	List<DeliveryDuration> findDeliveryDurationByPnRoot(@Param("pnRoot") String pnRoot);
-	List<StockInfo> findStockInfoByPnRoot(@Param("pnRoot") String pnRoot);	
+	List<StockInfo> findStockInfoByPnRoot(@Param("pnRoot") String pnRoot);
 	List<PnStatus> findObseletPnBySite(@Param("site") String site);
+	List<String> findOptionPn(@Param("pnRoot") String pnRoot);
 }
