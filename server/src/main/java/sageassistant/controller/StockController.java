@@ -52,4 +52,5 @@ public class StockController {
 			@RequestParam(value = "DateTo", required = false, defaultValue = "2099-12-31") String DateTo) {
 		return stockService.getStockHistory(Site, PnOrName, DateFrom, DateTo).toString();
 	}
+	
 }

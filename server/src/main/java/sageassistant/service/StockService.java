@@ -1,15 +1,14 @@
 package sageassistant.service;
 
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
-//import org.apache.logging.log4j.LogManager;
-//import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import sageassistant.dao.StockMapper;
 import sageassistant.model.StockHistory;
-import sageassistant.model.StockSummary;
+import sageassistant.model.StockSummary;;
 
 @Service
 public class StockService {
@@ -31,7 +30,7 @@ public class StockService {
 	public Float findStockQty(@Param("Site") String Site, @Param("pnRoot") String pnRoot) {
 		return stockMapper.findStockQty(Site, pnRoot);
 	}
-	
+
 	public List<StockSummary> getStockSummary(@Param("Site") String Site) {
 		return stockMapper.findStockSummaryBySite(Site);
 	}
@@ -39,6 +38,5 @@ public class StockService {
 	public List<StockHistory> getStockHistory(@Param("Site") String Site, @Param("PnOrName") String PnOrName,  @Param("DateFrom") String DateFrom,  @Param("DateTo") String DateTo) {
 		return stockMapper.findStockHistoryBySite(Site, PnOrName, DateFrom, DateTo);
 	}
-	
 	
 }

@@ -13,12 +13,20 @@ public class StockSummary implements Serializable {
 
 	private String G;
 	private String A;
+	private String Location;
 	private String PN;
 	private String Description;
 	private String OptionPN;
 	private Float Qty;
 	private Float Cost;
 
+
+	@Override
+	public String toString() {
+		return JSON.toJSONString(this, SerializeConfig.globalInstance, new SerializeFilter[] { new PascalNameFilter() },
+				"yyyy-MM-dd", JSON.DEFAULT_GENERATE_FEATURE);
+	}
+	
 	public String getG() {
 		return G;
 	}
@@ -76,9 +84,11 @@ public class StockSummary implements Serializable {
 		OptionPN = optionPN;
 	}
 
-	@Override
-	public String toString() {
-		return JSON.toJSONString(this, SerializeConfig.globalInstance, new SerializeFilter[] { new PascalNameFilter() },
-				"yyyy-MM-dd", JSON.DEFAULT_GENERATE_FEATURE);
+	public String getLocation() {
+		return Location;
+	}
+
+	public void setLocation(String location) {
+		Location = location;
 	}
 }
