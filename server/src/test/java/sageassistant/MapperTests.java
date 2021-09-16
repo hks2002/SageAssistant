@@ -14,6 +14,7 @@ import com.github.pagehelper.PageInfo;
 
 import sageassistant.dao.PnMapper;
 import sageassistant.dao.StatusMapper;
+import sageassistant.dao.StockMapper;
 import sageassistant.model.DeliveryDuration;
 import sageassistant.model.PnDetails;
 import sageassistant.model.PnRootPn;
@@ -37,6 +38,9 @@ class MapperTests {
 	
 	@Autowired
     private StatusMapper statusMapper;
+	
+	@Autowired
+	private StockMapper stockMapper;
 		
 	@Test
 	void testPnRootPn() {
@@ -125,10 +129,10 @@ class MapperTests {
 	
 	@Test
 	void testStockInfo()	{
-		List<StockInfo> list = pnMapper.findStockInfoByPnRoot("HLBA-4");
+		List<StockInfo> list = stockMapper.findStockInfoByPnRoot("HLBA-4");
 		
 		for (StockInfo o : list) {
-			log.info(o.toString());	
+			log.info(o.toString());
         }
 	}
 	

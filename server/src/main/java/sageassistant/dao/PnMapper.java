@@ -12,7 +12,6 @@ import sageassistant.model.PnRootPn;
 import sageassistant.model.PnStatus;
 import sageassistant.model.QuoteHistory;
 import sageassistant.model.SalesHistory;
-import sageassistant.model.StockInfo;
 
 @Mapper
 public interface PnMapper {
@@ -22,7 +21,6 @@ public interface PnMapper {
 	List<QuoteHistory> findQuoteHistoryByPnRoot(@Param("pnRoot") String pnRoot);
 	List<CostHistory> findCostHistoryByPnRoot(@Param("pnRoot") String pnRoot);
 	List<DeliveryDuration> findDeliveryDurationByPnRoot(@Param("pnRoot") String pnRoot);
-	List<StockInfo> findStockInfoByPnRoot(@Param("pnRoot") String pnRoot);
 	List<PnStatus> findObseletPnBySite(@Param("site") String site);
 	List<String> findOptionPn(@Param("pnRoot") String pnRoot);
 }

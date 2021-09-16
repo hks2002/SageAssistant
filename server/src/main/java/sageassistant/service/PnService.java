@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.github.pagehelper.PageHelper;
 
 import sageassistant.dao.PnMapper;
+import sageassistant.dao.StockMapper;
 import sageassistant.model.CostHistory;
 import sageassistant.model.DeliveryDuration;
 import sageassistant.model.PnDetails;
@@ -29,6 +30,10 @@ public class PnService {
 	
 	@Autowired
 	private PnMapper pnMapper;
+	
+	@Autowired
+	private StockMapper stockMapper;
+	
 
 	public List<PnRootPn> findPnByStartWith(String cond, Integer count) {
 		PageHelper.startPage(1, count);
@@ -124,7 +129,7 @@ public class PnService {
 	}
 	
 	public List<StockInfo> findStockInfoByPnRoot(@Param("pnRoot") String pnRoot){
-		return pnMapper.findStockInfoByPnRoot(pnRoot);
+		return stockMapper.findStockInfoByPnRoot(pnRoot);
 	}
 	
 	public List<PnStatus> findObseletPnBySite(@Param("site") String site){

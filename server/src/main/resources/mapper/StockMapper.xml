@@ -2,9 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="sageassistant.dao.StockMapper">
-	<!--Open L2 Cache under Names pace: 1 Hour -->
-	<cache eviction="LRU" flushInterval="3600000" readOnly="true"
-		size="1024" />
 	<select id="checkPN" parameterType="String" resultType="java.lang.String">
 		SELECT TOP 1
 			ITMMASTER.ITMREF_0
@@ -69,6 +66,7 @@
 		SELECT DISTINCT
 			LEFT(ITMMASTER.TSICOD_0,1) AS G,
 			LEFT(ITMMASTER.ITMREF_0,1) AS A,
+			STOCK.LOC_0 AS Location,
 			STOCK.ITMREF_0 AS PN,
 			ITMMASTER.ITMDES1_0 + IIF(ITMMASTER.ITMDES2_0!='',' ' +ITMMASTER.ITMDES2_0,'') +IIF(ITMMASTER.ITMDES3_0!='',' ' +ITMMASTER.ITMDES3_0,'')  AS Description,
 			STUFF((SELECT DISTINCT ';' + T0.OptionPN
@@ -146,7 +144,7 @@
 			)
 			</if>
 			AND STOJOU.VCRTYPREG_0 != 17
-		ORDER BY STOJOU.CREDAT_0 ASC
+		ORDER BY STOJOU.CREDAT_0 DESC
 	</select>
 
 </mapper>

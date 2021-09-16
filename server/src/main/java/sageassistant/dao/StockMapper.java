@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import sageassistant.model.StockHistory;
+import sageassistant.model.StockInfo;
 import sageassistant.model.StockSummary;
 
 
@@ -14,6 +15,7 @@ public interface StockMapper {
 	String checkPN(@Param("pnRoot") String pnRoot);
 	String findStockOptionPN(@Param("pnRoot") String pnRoot);
 	Float findStockQty(@Param("Site") String Site, @Param("pnRoot") String pnRoot);
+	List<StockInfo> findStockInfoByPnRoot(@Param("pnRoot") String pnRoot);
 	List<StockSummary> findStockSummaryBySite(@Param("Site") String Site);
 	List<StockHistory> findStockHistoryBySite(@Param("Site") String Site, @Param("PnOrName") String PnOrName, @Param("DateFrom") String DateFrom, @Param("DateTo") String DateTo);
 }
