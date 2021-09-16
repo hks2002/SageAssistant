@@ -17,8 +17,8 @@ public class InvoiceController {
 	@GetMapping("/Data/InvoiceNO")
 	public String getInvoiceNO(
 			@RequestParam(value = "InvoiceNO", required = false, defaultValue = "%%") String InvoiceNO,
-			@RequestParam(value = "Count", required = false, defaultValue = "10") Integer count) {
-		return  invoiceService.findInvoiceNOByInvoiceNO(InvoiceNO, count);
+			@RequestParam(value = "Count", required = false, defaultValue = "10") Integer Count) {
+		return  invoiceService.findInvoiceNOByInvoiceNO(InvoiceNO, Count);
 	}
 	
 	@GetMapping("/Data/InvoiceHeaderByInvoiceNO")

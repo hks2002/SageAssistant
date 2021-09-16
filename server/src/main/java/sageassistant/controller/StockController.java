@@ -33,20 +33,20 @@ public class StockController {
 	
 	@GetMapping("/Data/StockQty")
 	public String findStockQty(
-			@RequestParam(value = "site", required = false, defaultValue = "ZHU") String Site,
+			@RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
 			@RequestParam(value = "PN", required = false, defaultValue = "--") String PN) {
 		return stockService.findStockQty(Site, PN).toString();
 	}
 	
 	@GetMapping("/Data/StockSummary")
 	public String getStockSummary(
-			@RequestParam(value = "site", required = false, defaultValue = "ZHU") String Site) {
+			@RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site) {
 		return stockService.getStockSummary(Site).toString();
 	}
 
 	@GetMapping("/Data/StockHistory")
 	public String getStockHistory(
-			@RequestParam(value = "site", required = false, defaultValue = "ZHU") String Site,
+			@RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
 			@RequestParam(value = "PnOrName", required = false, defaultValue = "%%") String PnOrName,
 			@RequestParam(value = "DateFrom", required = false, defaultValue = "2000-01-01") String DateFrom,
 			@RequestParam(value = "DateTo", required = false, defaultValue = "2099-12-31") String DateTo) {

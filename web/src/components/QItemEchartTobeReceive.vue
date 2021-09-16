@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     doUpdate (site) {
-      this.$axios.get('/Data/TobeReceive?site=' + site)
+      this.$axios.get('/Data/TobeReceive?Site=' + site)
         .then((response) => {
           console.debug('[axios] ' + response.status + ' ' + response.statusText + ' ' + response.config.url)
           console.debug(JSON.stringify(response.data))
