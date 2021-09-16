@@ -63,7 +63,7 @@
               <q-tooltip>
                 {{subitem.Description}}<div v-if="subitem.OptionPN">Option PN:{{subitem.OptionPN}}</div>
               </q-tooltip>
-              <span>{{subitem.PN}}[{{subitem.Qty}}]</span><span v-if="false">{{[subitem.Cost]}}</span>
+              <span>{{subitem.PN}}[{{subitem.Location}}:{{subitem.Qty}}]</span><span v-if="false">{{[subitem.Cost]}}</span>
             </div>
           </div>
         </q-item-section>
@@ -112,7 +112,7 @@ export default defineComponent({
     const PNfilter = ref('')
 
     const doUpdate = () => {
-      axios.get('/Data/StockSummary?site=' + site.value)
+      axios.get('/Data/StockSummary?Site=' + site.value)
         .then((response) => {
           data = response.data
           dataByFirstChar.value = _groupBy(data, 'A')
@@ -151,7 +151,7 @@ export default defineComponent({
     }
 
     const showHistory = (pn) => {
-      axios.get('/Data/StockHistory?site=' + site.value + '&PnOrName=' + pn)
+      axios.get('/Data/StockHistory?Site=' + site.value + '&PnOrName=' + pn)
         .then((response) => {
           const history = response.data
           const header = ['Location', 'Seq', 'Qty', 'Cost', 'ProjectNO', 'SourceNO', 'SourceLine', 'EntryNO', 'EntryLine', 'CreateUser', 'CreateDate']
@@ -179,7 +179,7 @@ export default defineComponent({
     const download = () => {
       const nowTimeStamp = Date.now()
       const nowTime = formatDate(nowTimeStamp, 'YYYY-MM-DD')
-      const header = ['G', 'PN', 'Description', 'OptionPN', 'Qty', 'Cost']
+      const header = ['G', 'Location', 'PN', 'Description', 'OptionPN', 'Qty', 'Cost']
       const strPNData = data
       // PN with #
       _forEach(strPNData, (value, index) => {

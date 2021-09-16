@@ -134,7 +134,7 @@ export default defineComponent({
     const stockHistory = ref([])
 
     const doUpdate = () => {
-      axios.get('/Data/StockHistory?site=' + site.value + '&PnOrName=' + PnOrName.value + '&DateFrom=' + dateFrom.value + '&DateTo=' + dateTo.value)
+      axios.get('/Data/StockHistory?Site=' + site.value + '&PnOrName=' + PnOrName.value + '&DateFrom=' + dateFrom.value + '&DateTo=' + dateTo.value)
         .then((response) => {
           stockHistory.value = response.data
         })

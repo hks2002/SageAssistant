@@ -24,15 +24,15 @@ public class RssController {
 	RssService rssService;
 
 	@GetMapping(path = "/Data/Rss")
-	public Channel rss(@RequestParam(value = "site", required = false, defaultValue = "ZHU") String site,
+	public Channel rss(@RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
 			@RequestParam(value = "type", required = false, defaultValue = "") String type,
 			@RequestParam(value = "range", required = false, defaultValue = "28") Integer range) {
 		Channel channel = new Channel();
 		channel.setFeedType("rss_2.0");
 		if (type.equals("")) {
-			channel.setTitle(site + " All");
+			channel.setTitle(Site + " All");
 		} else {
-			channel.setTitle(site + " " + type);
+			channel.setTitle(Site + " " + type);
 		}
 
 		channel.setDescription("Alert From SageAssistant");
@@ -66,17 +66,17 @@ public class RssController {
 
 		Date postDate = new Date();
 		channel.setPubDate(postDate);
-		channel.setItems(Collections.singletonList(getRssItemBySite(site, type, range)));
+		channel.setItems(Collections.singletonList(getRssItemBySite(Site, type, range)));
 		return channel;
 	}
 
-	private Item getRssItemBySite(String site, String type, Integer range) {
+	private Item getRssItemBySite(String Site, String type, Integer range) {
 		Item item = new Item();
 		Date postDate = new Date();
 		SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
 
 		item.setPubDate(postDate);
-		item.setAuthor(site);
+		item.setAuthor(Site);
 		item.setTitle("Date:" + fmt.format(postDate));
 		item.setLink("http://SageAssistant/#/Todo");
 		Description descr = new Description();
@@ -89,19 +89,19 @@ public class RssController {
 		String tobeReceiveContent = "";
 
 		if (type.equals("") || type.equals("PnStatus")) {
-			pnContent = rssService.checkPnUpdate(site);
+			pnContent = rssService.checkPnUpdate(Site);
 		}
 		if (type.equals("") || type.equals("Delivery")) {
-			tobeDeliveryContent = rssService.checkTobeDelivery(site, range);
+			tobeDeliveryContent = rssService.checkTobeDelivery(Site, range);
 		}
 		if (type.equals("") || type.equals("OrderLine")) {
-			tobeDealWithOrderLineContent = rssService.checkTobeDealWithOrderLine(site);
+			tobeDealWithOrderLineContent = rssService.checkTobeDealWithOrderLine(Site);
 		}
 		if (type.equals("") || type.equals("PurchaseBom")) {
-			tobePurchaseBom = rssService.checkTobePurchaseBom(site);
+			tobePurchaseBom = rssService.checkTobePurchaseBom(Site);
 		}
 		if (type.equals("") || type.equals("Receive")) {
-			tobeReceiveContent = rssService.checkTobeReceive(site, range);
+			tobeReceiveContent = rssService.checkTobeReceive(Site, range);
 		}
 
 		if (!pnContent.equals("")) {

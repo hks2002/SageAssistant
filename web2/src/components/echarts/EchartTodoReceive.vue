@@ -74,7 +74,7 @@ export default defineComponent({
     const doUpdate = () => {
       showLoading.value = true
 
-      axios.get('/Data/TobeReceive?site=' + props.site)
+      axios.get('/Data/TobeReceive?Site=' + props.site)
         .then((response) => {
           data = response.data
           prepareData()

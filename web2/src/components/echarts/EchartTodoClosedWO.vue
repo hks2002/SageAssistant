@@ -67,7 +67,7 @@ export default defineComponent({
     const doUpdate = () => {
       showLoading.value = true
 
-      axios.get('/Data/TobeClosedWO?site=' + props.site)
+      axios.get('/Data/TobeClosedWO?Site=' + props.site)
         .then((response) => {
           data = response.data
           prepareData()

@@ -69,7 +69,7 @@ export default defineComponent({
     const doUpdate = () => {
       showLoading.value = true
 
-      axios.get('/Data/TobeDealWithOrderLine?site=' + props.site)
+      axios.get('/Data/TobeDealWithOrderLine?Site=' + props.site)
         .then((response) => {
           data = response.data
           prepareData()
