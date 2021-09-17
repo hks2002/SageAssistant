@@ -1,5 +1,6 @@
 package sageassistant.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -51,7 +52,7 @@ public class SupplierService {
 			} catch (ExecutionException e) {
 				log.error(e.getMessage());
 			}
-			o.setUSD(o.getAmount()*o.getRate());
+			o.setUSD(o.getAmount().multiply( new BigDecimal(o.getRate())));
 		}
 
 		return listPage;
@@ -101,7 +102,7 @@ public class SupplierService {
 			} catch (ExecutionException e) {
 				log.error(e.getMessage());
 			}
-			o.setUSD(o.getAmount()*o.getRate());
+			o.setUSD(o.getAmount().multiply( new BigDecimal(o.getRate())));
 		}
 
 		return listPage;

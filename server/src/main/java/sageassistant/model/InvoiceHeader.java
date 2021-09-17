@@ -1,6 +1,7 @@
 package sageassistant.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.PascalNameFilter;
@@ -21,9 +22,9 @@ public class InvoiceHeader implements Serializable {
 	private String FaPiao;
 	private String Customer;
 	private String Address;
-	private Float AmountTaxInclude;
-	private Float AmountTaxNotInclude;
-	private Float AmountTax;
+	private BigDecimal AmountTaxInclude;
+	private BigDecimal AmountTaxNotInclude;
+	private BigDecimal AmountTax;
 	private Float CurrRate;
 
 	public String getFacility() {
@@ -106,27 +107,27 @@ public class InvoiceHeader implements Serializable {
 		Address = address;
 	}
 
-	public Float getAmountTaxInclude() {
+	public BigDecimal getAmountTaxInclude() {
 		return AmountTaxInclude;
 	}
 
-	public void setAmountTaxInclude(Float amountTaxInclude) {
+	public void setAmountTaxInclude(BigDecimal amountTaxInclude) {
 		AmountTaxInclude = amountTaxInclude;
 	}
 
-	public Float getAmountTaxNotInclude() {
+	public BigDecimal getAmountTaxNotInclude() {
 		return AmountTaxNotInclude;
 	}
 
-	public void setAmountTaxNotInclude(Float amountTaxNotInclude) {
+	public void setAmountTaxNotInclude(BigDecimal amountTaxNotInclude) {
 		AmountTaxNotInclude = amountTaxNotInclude;
 	}
 
-	public Float getAmountTax() {
+	public BigDecimal getAmountTax() {
 		return AmountTax;
 	}
 
-	public void setAmountTax(Float amountTax) {
+	public void setAmountTax(BigDecimal amountTax) {
 		AmountTax = amountTax;
 	}
 

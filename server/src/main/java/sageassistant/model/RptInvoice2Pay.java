@@ -1,5 +1,6 @@
 package sageassistant.model;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 
 import com.alibaba.fastjson.JSON;
@@ -13,9 +14,9 @@ public class RptInvoice2Pay {
 	private Integer PAMTYP_0;
 	private String PAM_0;
 	private String CUR_0;
-	private Double AMTCUR_0;
-	private Double PAYCUR_0;
-	private Double TMPCUR_0;
+	private BigDecimal AMTCUR_0;
+	private BigDecimal PAYCUR_0;
+	private BigDecimal TMPCUR_0;
 	
 	public String getNUM_0() {
 		return NUM_0;
@@ -47,22 +48,22 @@ public class RptInvoice2Pay {
 	public void setCUR_0(String cUR_0) {
 		CUR_0 = cUR_0;
 	}
-	public Double getAMTCUR_0() {
+	public BigDecimal getAMTCUR_0() {
 		return AMTCUR_0;
 	}
-	public void setAMTCUR_0(Double aMTCUR_0) {
+	public void setAMTCUR_0(BigDecimal aMTCUR_0) {
 		AMTCUR_0 = aMTCUR_0;
 	}
-	public Double getPAYCUR_0() {
+	public BigDecimal getPAYCUR_0() {
 		return PAYCUR_0;
 	}
-	public void setPAYCUR_0(Double pAYCUR_0) {
+	public void setPAYCUR_0(BigDecimal pAYCUR_0) {
 		PAYCUR_0 = pAYCUR_0;
 	}
-	public Double getTMPCUR_0() {
+	public BigDecimal getTMPCUR_0() {
 		return TMPCUR_0;
 	}
-	public void setTMPCUR_0(Double tMPCUR_0) {
+	public void setTMPCUR_0(BigDecimal tMPCUR_0) {
 		TMPCUR_0 = tMPCUR_0;
 	}
 	

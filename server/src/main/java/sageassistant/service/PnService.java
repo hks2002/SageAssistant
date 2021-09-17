@@ -1,5 +1,6 @@
 package sageassistant.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -75,7 +76,7 @@ public class PnService {
 			} catch (ExecutionException e) {
 				log.error(e.getMessage());
 			}
-			o.setUSD(o.getNetPrice()*o.getRate());
+			o.setUSD(o.getNetPrice().multiply( new BigDecimal(o.getRate())));
 		}
 
 		return listPage;
@@ -96,7 +97,7 @@ public class PnService {
 			} catch (ExecutionException e) {
 				log.error(e.getMessage());
 			}
-			o.setUSD(o.getNetPrice()*o.getRate());
+			o.setUSD(o.getNetPrice().multiply( new BigDecimal(o.getRate())));
 		}
 
 		return listPage;
@@ -117,7 +118,7 @@ public class PnService {
 			} catch (ExecutionException e) {
 				log.error(e.getMessage());
 			}
-			o.setUSD(o.getNetPrice()*o.getRate());
+			o.setUSD(o.getNetPrice().multiply( new BigDecimal(o.getRate())));
 		}
 		// one project maybe purchase line with different currency
 		

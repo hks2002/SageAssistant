@@ -1,5 +1,6 @@
 package sageassistant.model;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 
 import com.alibaba.fastjson.JSON;
@@ -42,9 +43,9 @@ public class RptReceipt {
 	private String ITMREF_0;
 	private Float QTYSTU_0;
 	private String STU_0;
-	private Float NETPRI_0;
-	private Float LINAMT_0;
-	private Float LINATIAMT_0;
+	private BigDecimal NETPRI_0;
+	private BigDecimal LINAMT_0;
+	private BigDecimal LINATIAMT_0;
 	private String NETCUR_0;
 	private String PJT_0;
 	private String SOHNUM_0;
@@ -328,27 +329,27 @@ public class RptReceipt {
 		STU_0 = sTU_0;
 	}
 
-	public Float getNETPRI_0() {
+	public BigDecimal getNETPRI_0() {
 		return NETPRI_0;
 	}
 
-	public void setNETPRI_0(Float nETPRI_0) {
+	public void setNETPRI_0(BigDecimal nETPRI_0) {
 		NETPRI_0 = nETPRI_0;
 	}
 
-	public Float getLINAMT_0() {
+	public BigDecimal getLINAMT_0() {
 		return LINAMT_0;
 	}
 
-	public void setLINAMT_0(Float lINAMT_0) {
+	public void setLINAMT_0(BigDecimal lINAMT_0) {
 		LINAMT_0 = lINAMT_0;
 	}
 
-	public Float getLINATIAMT_0() {
+	public BigDecimal getLINATIAMT_0() {
 		return LINATIAMT_0;
 	}
 
-	public void setLINATIAMT_0(Float lINATIAMT_0) {
+	public void setLINATIAMT_0(BigDecimal lINATIAMT_0) {
 		LINATIAMT_0 = lINATIAMT_0;
 	}
 

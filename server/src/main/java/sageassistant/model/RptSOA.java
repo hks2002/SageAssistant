@@ -1,5 +1,6 @@
 package sageassistant.model;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 
 import com.alibaba.fastjson.JSON;
@@ -15,12 +16,12 @@ public class RptSOA {
 	private String OrderNO;
 	private String InvoiceNO;
 	private String Currency;
-	private Float InvoiceValue;
+	private BigDecimal InvoiceValue;
 	private Date InvoiceDate;
 	private Date DueDate;
 	private Integer Delay;
-	private Float Paid;
-	private Float PaidSO;
+	private BigDecimal Paid;
+	private BigDecimal PaidSO;
 
 	public String getSite() {
 		return Site;
@@ -78,11 +79,11 @@ public class RptSOA {
 		Currency = currency;
 	}
 
-	public Float getInvoiceValue() {
+	public BigDecimal getInvoiceValue() {
 		return InvoiceValue;
 	}
 
-	public void setInvoiceValue(Float invoiceValue) {
+	public void setInvoiceValue(BigDecimal invoiceValue) {
 		InvoiceValue = invoiceValue;
 	}
 
@@ -110,20 +111,20 @@ public class RptSOA {
 		Delay = delay;
 	}
 
-	public Float getPaid() {
+	public BigDecimal getPaid() {
 		return Paid;
 	}
 
-	public void setPaid(Float paid) {
+	public void setPaid(BigDecimal paid) {
 		Paid = paid;
 	}
 
 
-	public Float getPaidSO() {
+	public BigDecimal getPaidSO() {
 		return PaidSO;
 	}
 
-	public void setPaidSO(Float paidSO) {
+	public void setPaidSO(BigDecimal paidSO) {
 		PaidSO = paidSO;
 	}
 

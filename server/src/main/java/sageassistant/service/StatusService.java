@@ -1,5 +1,6 @@
 package sageassistant.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -40,7 +41,7 @@ public class StatusService {
 			} catch (ExecutionException e) {
 				log.error(e.getMessage());
 			}
-			o.setUSD(o.getNetPrice()*o.getRate());
+			o.setUSD(o.getNetPrice().multiply( new BigDecimal(o.getRate())));
 		}
 
 		return listPage;
@@ -61,7 +62,7 @@ public class StatusService {
 			} catch (ExecutionException e) {
 				log.error(e.getMessage());
 			}
-			o.setUSD(o.getNetPrice()*o.getRate());
+			o.setUSD(o.getNetPrice().multiply( new BigDecimal(o.getRate())));
 		}
 
 		return listPage;
