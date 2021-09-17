@@ -11,5 +11,5 @@ import sageassistant.model.FinancialBalance;
 public interface FinancialMapper {
 	List<FinancialBalance> findAccoutBalanceForAll(@Param("Site") String Site, @Param("Year") String Year);
 	// AcountNO AcountNOList only one
-	List<FinancialBalance> findAccoutBalanceByAccountNO(@Param("Site") String Site, @Param("Year") String Year, @Param("AccountNO") String AccountNO, @Param("AccountNOs") String[] AccountNOs);
+	List<FinancialBalance> findAccoutBalanceByAccountNO(@Param("Site") String Site, @Param("Year") String Year, @Param("AccountNOs") String[] AccountNOs);
 }

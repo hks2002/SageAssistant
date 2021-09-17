@@ -2,8 +2,8 @@ package sageassistant.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import sageassistant.model.FinancialMonthBalance;
 
 @Service
 public class FinancialService {
-	 private static final Logger log = LogManager.getLogger();
+	 //private static final Logger log = LogManager.getLogger();
 	
 	@Autowired
 	private FinancialMapper financialMapper;
@@ -70,34 +70,34 @@ public class FinancialService {
 				oMonth.setD(o.getD6());
 				break;
 			case "7": 
-				oMonth.setB(o.getB0());
-				oMonth.setC(o.getC0());
-				oMonth.setD(o.getD0());
-				break;
-			case "8": 
 				oMonth.setB(o.getB7());
 				oMonth.setC(o.getC7());
 				oMonth.setD(o.getD7());
 				break;
-			case "9": 
+			case "8": 
 				oMonth.setB(o.getB8());
 				oMonth.setC(o.getC8());
 				oMonth.setD(o.getD8());
 				break;
-			case "10":
+			case "9": 
 				oMonth.setB(o.getB9());
 				oMonth.setC(o.getC9());
 				oMonth.setD(o.getD9());
 				break;
-			case "11": 
+			case "10":
 				oMonth.setB(o.getB10());
 				oMonth.setC(o.getC10());
 				oMonth.setD(o.getD10());
 				break;
-			case "12":
+			case "11": 
 				oMonth.setB(o.getB11());
 				oMonth.setC(o.getC11());
 				oMonth.setD(o.getD11());
+				break;
+			case "12":
+				oMonth.setB(o.getB12());
+				oMonth.setC(o.getC12());
+				oMonth.setD(o.getD12());
 				break;
 			default:
 				oMonth.setB(o.getB12());
@@ -111,15 +111,14 @@ public class FinancialService {
 	}
 	
 	
-	public List<FinancialBalance> getAccoutBalanceForAccountNO(String Site, String Year, String AccountNO, String AccountNOList) {
-		String[] AccountNOs = AccountNOList.split(",");
-		log.info(AccountNOList);
-		return financialMapper.findAccoutBalanceByAccountNO(Site, Year, AccountNO, AccountNOs);
+	public List<FinancialBalance> getAccoutBalanceForAccountNO(String Site, String Year, String AccountNO) {
+		String[] AccountNOs = AccountNO.split(",");
+		return financialMapper.findAccoutBalanceByAccountNO(Site, Year, AccountNOs);
 	}
 	
-	public List<FinancialMonthBalance> getAccoutMonthBalanceForAccountNO(String Site,String Year,String Month, String AccountNO, String AccountNOList) {
-		String[] AccountNOs = AccountNOList.split(",");
-		List<FinancialBalance> list = financialMapper.findAccoutBalanceByAccountNO(Site, Year, AccountNO, AccountNOs);
+	public List<FinancialMonthBalance> getAccoutMonthBalanceForAccountNO(String Site,String Year,String Month, String AccountNO) {
+		String[] AccountNOs = AccountNO.split(",");
+		List<FinancialBalance> list = financialMapper.findAccoutBalanceByAccountNO(Site, Year, AccountNOs);
 		List<FinancialMonthBalance> listMonth = new ArrayList<>();
 		
 		for (FinancialBalance o : list) {
@@ -166,34 +165,34 @@ public class FinancialService {
 				oMonth.setD(o.getD6());
 				break;
 			case "7": 
-				oMonth.setB(o.getB0());
-				oMonth.setC(o.getC0());
-				oMonth.setD(o.getD0());
-				break;
-			case "8": 
 				oMonth.setB(o.getB7());
 				oMonth.setC(o.getC7());
 				oMonth.setD(o.getD7());
 				break;
-			case "9": 
+			case "8": 
 				oMonth.setB(o.getB8());
 				oMonth.setC(o.getC8());
 				oMonth.setD(o.getD8());
 				break;
-			case "10":
+			case "9": 
 				oMonth.setB(o.getB9());
 				oMonth.setC(o.getC9());
 				oMonth.setD(o.getD9());
 				break;
-			case "11": 
+			case "10":
 				oMonth.setB(o.getB10());
 				oMonth.setC(o.getC10());
 				oMonth.setD(o.getD10());
 				break;
-			case "12":
+			case "11": 
 				oMonth.setB(o.getB11());
 				oMonth.setC(o.getC11());
 				oMonth.setD(o.getD11());
+				break;
+			case "12":
+				oMonth.setB(o.getB12());
+				oMonth.setC(o.getC12());
+				oMonth.setD(o.getD12());
 				break;
 			default:
 				oMonth.setB(o.getB12());

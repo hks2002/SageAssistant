@@ -10,18 +10,18 @@
 			T1.Currency, 
 			T1.Year,
 			D0-C0 AS B0,
-			D0+D1-C0-C1 AS B1,
-			D0+D1+D2-C0-C1-C2 AS B2,
-			D0+D1+D2+D3-C0-C1-C2-C3 AS B3,
-			D0+D1+D2+D3+D4-C0-C1-C2-C3-C4 AS B4,
-			D0+D1+D2+D3+D4+D5-C0-C1-C2-C3-C4-C5 AS B5,
-			D0+D1+D2+D3+D4+D5+D6-C0-C1-C2-C3-C4-C5-C6 AS B6,
-			D0+D1+D2+D3+D4+D5+D6+D7-C0-C1-C2-C3-C4-C5-C6-C7 AS B7,
-			D0+D1+D2+D3+D4+D5+D6+D7+D8-C0-C1-C2-C3-C4-C5-C6-C7-C8 AS B8,
-			D0+D1+D2+D3+D4+D5+D6+D7+D8+D9-C0-C1-C2-C3-C4-C5-C6-C7-C8-C9 AS B9,
-			D0+D1+D2+D3+D4+D5+D6+D7+D8+D9+D10-C0-C1-C2-C3-C4-C5-C6-C7-C8-C9-C10 AS B10,
-			D0+D1+D2+D3+D4+D5+D6+D7+D8+D9+D10+D11-C0-C1-C2-C3-C4-C5-C6-C7-C8-C9-C10-C11 AS B11,
-			D0+D1+D2+D3+D4+D5+D6+D7+D8+D9+D10+D11+D12-C0-C1-C2-C3-C4-C5-C6-C7-C8-C9-C10-C11-C12 AS B12,
+			D1-C1 AS B1,
+			D2-C2 AS B2,
+			D3-C3 AS B3,
+			D4-C4 AS B4,
+			D5-C5 AS B5,
+			D6-C6 AS B6,
+			D7-C7 AS B7,
+			D8-C8 AS B8,
+			D9-C9 AS B9,
+			D10-C10 AS B10,
+			D11-C11 AS B11,
+			D12-C12 AS B12,
 			T1.C0,
 			T1.C1,
 			T1.C2,
@@ -89,10 +89,13 @@
 		WHERE 
 			BALANCE.FCY_0=#{Site} 
 				AND BALANCE.BPR_0=''
-				<if test = " AccountNO !=null and AccountNO != '' ">
-				AND GACCOUNT.ACC_0 = #{AccountNO}
+				<if test = "AccountNOs.length ==1 ">
+				AND GACCOUNT.ACC_0 = 
+					<foreach item="item" index="index" collection="AccountNOs" open="" separator="" close="">
+					#{item}
+					</foreach>
 				</if>
-				<if test = " AccountNO =='' and AccountNOs !=null and AccountNOs !='' ">
+				<if test = "AccountNOs.length >1 ">
 				AND GACCOUNT.ACC_0 IN 
 					<foreach item="item" index="index" collection="AccountNOs" open="(" separator="," close=")">
 					#{item}
@@ -111,18 +114,18 @@
 			T1.Currency, 
 			T1.Year,
 			D0-C0 AS B0,
-			D0+D1-C0-C1 AS B1,
-			D0+D1+D2-C0-C1-C2 AS B2,
-			D0+D1+D2+D3-C0-C1-C2-C3 AS B3,
-			D0+D1+D2+D3+D4-C0-C1-C2-C3-C4 AS B4,
-			D0+D1+D2+D3+D4+D5-C0-C1-C2-C3-C4-C5 AS B5,
-			D0+D1+D2+D3+D4+D5+D6-C0-C1-C2-C3-C4-C5-C6 AS B6,
-			D0+D1+D2+D3+D4+D5+D6+D7-C0-C1-C2-C3-C4-C5-C6-C7 AS B7,
-			D0+D1+D2+D3+D4+D5+D6+D7+D8-C0-C1-C2-C3-C4-C5-C6-C7-C8 AS B8,
-			D0+D1+D2+D3+D4+D5+D6+D7+D8+D9-C0-C1-C2-C3-C4-C5-C6-C7-C8-C9 AS B9,
-			D0+D1+D2+D3+D4+D5+D6+D7+D8+D9+D10-C0-C1-C2-C3-C4-C5-C6-C7-C8-C9-C10 AS B10,
-			D0+D1+D2+D3+D4+D5+D6+D7+D8+D9+D10+D11-C0-C1-C2-C3-C4-C5-C6-C7-C8-C9-C10-C11 AS B11,
-			D0+D1+D2+D3+D4+D5+D6+D7+D8+D9+D10+D11+D12-C0-C1-C2-C3-C4-C5-C6-C7-C8-C9-C10-C11-C12 AS B12,
+			D1-C1 AS B1,
+			D2-C2 AS B2,
+			D3-C3 AS B3,
+			D4-C4 AS B4,
+			D5-C5 AS B5,
+			D6-C6 AS B6,
+			D7-C7 AS B7,
+			D8-C8 AS B8,
+			D9-C9 AS B9,
+			D10-C10 AS B10,
+			D11-C11 AS B11,
+			D12-C12 AS B12,
 			T1.C0,
 			T1.C1,
 			T1.C2,
