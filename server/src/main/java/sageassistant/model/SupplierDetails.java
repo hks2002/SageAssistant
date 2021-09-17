@@ -1,13 +1,6 @@
 package sageassistant.model;
 
-import java.io.Serializable;
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.PascalNameFilter;
-import com.alibaba.fastjson.serializer.SerializeConfig;
-import com.alibaba.fastjson.serializer.SerializeFilter;
-
-public class SupplierDetails implements Serializable {
+public class SupplierDetails extends AmodelTemplate {
 	private static final long serialVersionUID = 1L;
 
 	private String SupplierCode;
@@ -209,9 +202,4 @@ public class SupplierDetails implements Serializable {
 		Website = website;
 	}
 
-	@Override
-	public String toString() {
-		return JSON.toJSONString(this, SerializeConfig.globalInstance, new SerializeFilter[] { new PascalNameFilter() },
-				"yyyy-MM-dd", JSON.DEFAULT_GENERATE_FEATURE);
-	}
 }

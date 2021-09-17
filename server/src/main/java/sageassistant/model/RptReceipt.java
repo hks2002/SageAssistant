@@ -3,11 +3,6 @@ package sageassistant.model;
 import java.math.BigDecimal;
 import java.sql.Date;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.PascalNameFilter;
-import com.alibaba.fastjson.serializer.SerializeConfig;
-import com.alibaba.fastjson.serializer.SerializeFilter;
-
 public class RptReceipt {
 	private String FCYNAM_0;
 	private String PTHNUM_0;
@@ -431,12 +426,6 @@ public class RptReceipt {
 
 	public void setSTA_0(String sTA_0) {
 		STA_0 = sTA_0;
-	}
-	
-	@Override
-	public String toString() {
-		return JSON.toJSONString(this, SerializeConfig.globalInstance, new SerializeFilter[] { new PascalNameFilter() },
-				"yyyy-MM-dd", JSON.DEFAULT_GENERATE_FEATURE);
 	}
 
 }

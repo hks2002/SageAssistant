@@ -1,16 +1,11 @@
 package sageassistant.model;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.PascalNameFilter;
-import com.alibaba.fastjson.serializer.SerializeConfig;
-import com.alibaba.fastjson.serializer.SerializeFilter;
 
-public class TobeReceive implements Serializable {
+public class TobeReceive extends AmodelTemplate {
 	private static final long serialVersionUID = 1L;
-	
+
 	private String ProjectNO;
 	private String PurchaseNO;
 	private String Line;
@@ -80,7 +75,6 @@ public class TobeReceive implements Serializable {
 	public Float getRate() {
 		return Rate;
 	}
-
 
 	public String getUnit() {
 		return Unit;
@@ -164,12 +158,6 @@ public class TobeReceive implements Serializable {
 
 	public void setUSD(BigDecimal uSD) {
 		USD = uSD;
-	}
-	
-	@Override
-	public String toString() {
-		return JSON.toJSONString(this, SerializeConfig.globalInstance, new SerializeFilter[] { new PascalNameFilter() },
-				"yyyy-MM-dd", JSON.DEFAULT_GENERATE_FEATURE);
 	}
 
 }
