@@ -1,6 +1,5 @@
 package sageassistant.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 //import org.apache.logging.log4j.LogManager;
@@ -26,26 +25,19 @@ public class FinancialController {
 	public String getFinancialBalance(@RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
 			@RequestParam(value = "Year", required = false, defaultValue = "") String Year,
 			@RequestParam(value = "Month", required = false, defaultValue = "") String Month,
-			@RequestParam(value = "AccountNO", required = false, defaultValue = "") String AccountNO,
-			@RequestParam(value = "AccountNOList", required = false, defaultValue = "") String AccountNOList) {
+			@RequestParam(value = "AccountNO", required = false, defaultValue = "") String AccountNO) {
 
-		if (AccountNO.equals("") && AccountNOList.equals("")) {
+		if (AccountNO.equals("") ) {
 			if (Month.equals("")) {
 				return financialService.getAccoutBalanceForAll(Site, Year).toString();
 			} else {
 				return financialService.getAccoutMonthBalanceForAll(Site, Year, Month).toString();
 			}
-		} else if (!AccountNOList.equals("")) { // AccountNOList first
+		}  else {
 			if (Month.equals("")) {
-				return financialService.getAccoutBalanceForAccountNO(Site, Year, "", AccountNOList).toString();
+				return financialService.getAccoutBalanceForAccountNO(Site, Year, AccountNO).toString();
 			} else {
-				return financialService.getAccoutMonthBalanceForAccountNO(Site, Year, Month, "", AccountNOList).toString();
-			}
-		} else { // Now it should be AccountNO
-			if (Month.equals("")) {
-				return financialService.getAccoutBalanceForAccountNO(Site, Year, AccountNO, null).toString();
-			} else {
-				return financialService.getAccoutMonthBalanceForAccountNO(Site, Year, Month, AccountNO, null).toString();
+				return financialService.getAccoutMonthBalanceForAccountNO(Site, Year, Month, AccountNO).toString();
 			}
 		}
 	}
@@ -54,49 +46,40 @@ public class FinancialController {
 	public String getFinancialBalanceB(@RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
 			@RequestParam(value = "Year", required = false, defaultValue = "") String Year,
 			@RequestParam(value = "Month", required = false, defaultValue = "") String Month,
-			@RequestParam(value = "AccountNO", required = false, defaultValue = "") String AccountNO,
-			@RequestParam(value = "AccountNOList", required = false, defaultValue = "") String AccountNOList) {
+			@RequestParam(value = "AccountNO", required = false, defaultValue = "") String AccountNO) {
 
-		return getFinancialBalanceBCD(Site, Year, Month, AccountNO, AccountNOList, "B");
+		return getFinancialBalanceBCD(Site, Year, Month, AccountNO, "B");
 	}
 	
 	@GetMapping("/Data/FinancialBalanceC")
 	public String getFinancialBalanceC(@RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
 			@RequestParam(value = "Year", required = false, defaultValue = "") String Year,
 			@RequestParam(value = "Month", required = false, defaultValue = "") String Month,
-			@RequestParam(value = "AccountNO", required = false, defaultValue = "") String AccountNO,
-			@RequestParam(value = "AccountNOList", required = false, defaultValue = "") String AccountNOList) {
+			@RequestParam(value = "AccountNO", required = false, defaultValue = "") String AccountNO) {
 
-		return getFinancialBalanceBCD(Site, Year, Month, AccountNO, AccountNOList, "C");
+		return getFinancialBalanceBCD(Site, Year, Month, AccountNO, "C");
 	}
 
 	@GetMapping("/Data/FinancialBalanceD")
 	public String getFinancialBalanceD(@RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
 			@RequestParam(value = "Year", required = false, defaultValue = "") String Year,
 			@RequestParam(value = "Month", required = false, defaultValue = "") String Month,
-			@RequestParam(value = "AccountNO", required = false, defaultValue = "") String AccountNO,
-			@RequestParam(value = "AccountNOList", required = false, defaultValue = "") String AccountNOList) {
+			@RequestParam(value = "AccountNO", required = false, defaultValue = "") String AccountNO) {
 
-		return getFinancialBalanceBCD(Site, Year, Month, AccountNO, AccountNOList, "D");
+		return getFinancialBalanceBCD(Site, Year, Month, AccountNO, "D");
 	}
 	
 
-	private String getFinancialBalanceBCD(String Site,String Year,String Month,String AccountNO,String AccountNOList,String Cat) {
+	private String getFinancialBalanceBCD(String Site,String Year,String Month,String AccountNO, String Cat) {
 
 		if (Site.equals("") || Year.equals("") || Month.equals("")) {
 			return "Must set Year and Month";
 		}
-		if (AccountNO.equals("") && AccountNOList.equals("")) {
-			return "Must set AccountNO or AccountNOList";
+		if (AccountNO.equals("")) {
+			return "Must set AccountNO, if more than one AccountNO, use , between AccountNOs";
 		}
 		
-		List<FinancialMonthBalance> listMonth = new ArrayList<>();
-		
-		if (!AccountNOList.equals("")) { // AccountNOList first
-			listMonth = financialService.getAccoutMonthBalanceForAccountNO(Site, Year, Month, "", AccountNOList);
-		} else { // Now it should be AccountNO
-			listMonth = financialService.getAccoutMonthBalanceForAccountNO(Site, Year, Month, AccountNO, null);
-		}
+		List<FinancialMonthBalance> listMonth = financialService.getAccoutMonthBalanceForAccountNO(Site, Year, Month, AccountNO);
 		
 		if (listMonth.size()==0) {
 			return "No result";
