@@ -3,11 +3,6 @@ package sageassistant.model;
 import java.math.BigDecimal;
 import java.sql.Date;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.PascalNameFilter;
-import com.alibaba.fastjson.serializer.SerializeConfig;
-import com.alibaba.fastjson.serializer.SerializeFilter;
-
 public class RptSOA {
 	private String Site;
 	private String Customer;
@@ -119,7 +114,6 @@ public class RptSOA {
 		Paid = paid;
 	}
 
-
 	public BigDecimal getPaidSO() {
 		return PaidSO;
 	}
@@ -128,9 +122,4 @@ public class RptSOA {
 		PaidSO = paidSO;
 	}
 
-	@Override
-	public String toString() {
-		return JSON.toJSONString(this, SerializeConfig.globalInstance, new SerializeFilter[] { new PascalNameFilter() },
-				"yyyy-MM-dd", JSON.DEFAULT_GENERATE_FEATURE);
-	}
 }

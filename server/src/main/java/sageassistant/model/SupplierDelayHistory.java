@@ -1,14 +1,8 @@
 package sageassistant.model;
 
-import java.io.Serializable;
 import java.util.Date;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.PascalNameFilter;
-import com.alibaba.fastjson.serializer.SerializeConfig;
-import com.alibaba.fastjson.serializer.SerializeFilter;
-
-public class SupplierDelayHistory implements Serializable {
+public class SupplierDelayHistory extends AmodelTemplate {
 	/**
 	 * 
 	 */
@@ -121,12 +115,6 @@ public class SupplierDelayHistory implements Serializable {
 
 	public void setDaysDelay(int daysDelay) {
 		DaysDelay = daysDelay;
-	}
-
-	@Override
-	public String toString() {
-		return JSON.toJSONString(this, SerializeConfig.globalInstance, new SerializeFilter[] { new PascalNameFilter() },
-				"yyyy-MM-dd", JSON.DEFAULT_GENERATE_FEATURE);
 	}
 
 }
