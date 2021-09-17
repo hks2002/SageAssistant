@@ -1,5 +1,6 @@
 package sageassistant.model;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 
 import com.alibaba.fastjson.JSON;
@@ -46,8 +47,8 @@ public class RptPurchase {
 	private Float DISCRGVAL1_0;
 	private String PJT_0;
 	private Date EXTRCPDAT_0;
-	private Float LINAMT_0;
-	private Float LINATIAMT_0;
+	private BigDecimal LINAMT_0;
+	private BigDecimal LINATIAMT_0;
 	private Float QTYUOM_0;
 	private Float QTYSTU_0;
 	private String UOM_0;
@@ -288,16 +289,16 @@ public class RptPurchase {
 	public void setEXTRCPDAT_0(Date eXTRCPDAT_0) {
 		EXTRCPDAT_0 = eXTRCPDAT_0;
 	}
-	public Float getLINAMT_0() {
+	public BigDecimal getLINAMT_0() {
 		return LINAMT_0;
 	}
-	public void setLINAMT_0(Float lINAMT_0) {
+	public void setLINAMT_0(BigDecimal lINAMT_0) {
 		LINAMT_0 = lINAMT_0;
 	}
-	public Float getLINATIAMT_0() {
+	public BigDecimal getLINATIAMT_0() {
 		return LINATIAMT_0;
 	}
-	public void setLINATIAMT_0(Float lINATIAMT_0) {
+	public void setLINATIAMT_0(BigDecimal lINATIAMT_0) {
 		LINATIAMT_0 = lINATIAMT_0;
 	}
 	public Float getQTYUOM_0() {

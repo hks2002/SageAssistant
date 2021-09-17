@@ -1,5 +1,6 @@
 package sageassistant.service;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -49,9 +50,9 @@ public class InvoiceService {
 		Set<String> faPiao = new HashSet<String>();
 		Set<String> Address = new HashSet<String>();
 		Float CurrRate = (float) 0;
-		Float AmountTaxInclude=(float) 0;
-		Float AmountTaxNotInclude=(float) 0;
-		Float AmountTax=(float) 0;
+		BigDecimal AmountTaxInclude = new BigDecimal("0");
+		BigDecimal AmountTaxNotInclude = new BigDecimal("0");
+		BigDecimal AmountTax = new BigDecimal("0");
 		
 		for ( InvoiceHeader o : list) {
 			Facility.add(o.getFacility());
@@ -64,9 +65,9 @@ public class InvoiceService {
 			faPiao.add(o.getFaPiao());
 			Address.add(o.getAddress());
 			CurrRate += o.getCurrRate();
-			AmountTaxInclude += o.getAmountTaxInclude();
-			AmountTaxNotInclude += o.getAmountTaxNotInclude();
-			AmountTax += o.getAmountTax();
+			AmountTaxInclude = AmountTaxInclude.add(o.getAmountTaxInclude());
+			AmountTaxNotInclude = AmountTaxNotInclude.add(o.getAmountTaxNotInclude());
+			AmountTax = AmountTax.add(o.getAmountTax());
  		}
 		invoiceHeader.setFacility(Facility.toString());
 		invoiceHeader.setCurrency(Currency.toString());

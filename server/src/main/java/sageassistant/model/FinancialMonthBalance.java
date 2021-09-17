@@ -1,6 +1,7 @@
 package sageassistant.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.PascalNameFilter;
@@ -15,9 +16,9 @@ public class FinancialMonthBalance implements Serializable {
 	private String Currency;
 	private String Year;
 	private String Month;
-	private Float B;
-	private Float C;
-	private Float D;
+	private BigDecimal B;
+	private BigDecimal C;
+	private BigDecimal D;
 
 	public String getAccountNO() {
 		return AccountNO;
@@ -51,27 +52,27 @@ public class FinancialMonthBalance implements Serializable {
 		Month = month;
 	}
 
-	public Float getB() {
+	public BigDecimal getB() {
 		return B;
 	}
 
-	public void setB(Float b) {
+	public void setB(BigDecimal b) {
 		B = b;
 	}
 
-	public Float getC() {
+	public BigDecimal getC() {
 		return C;
 	}
 
-	public void setC(Float c) {
+	public void setC(BigDecimal c) {
 		C = c;
 	}
 
-	public Float getD() {
+	public BigDecimal getD() {
 		return D;
 	}
 
-	public void setD(Float d) {
+	public void setD(BigDecimal d) {
 		D = d;
 	}
 

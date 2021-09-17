@@ -1,6 +1,7 @@
 package sageassistant.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.alibaba.fastjson.JSON;
@@ -14,13 +15,13 @@ public class SalesHistory implements Serializable {
 	private String SalesSite;
 	private String OrderNO;
 	private String PN;
-	private Float NetPrice;
+	private BigDecimal NetPrice;
 	private String Currency;
 	private Integer Qty;
 	private String CustomerName;
 	private String CustomerCode;
 	private Date OrderDate;
-	private Float USD;
+	private BigDecimal USD;
 	private Float Rate;
 	private String TradeTerm;
 
@@ -48,11 +49,11 @@ public class SalesHistory implements Serializable {
 		PN = pN;
 	}
 
-	public Float getNetPrice() {
+	public BigDecimal getNetPrice() {
 		return NetPrice;
 	}
 
-	public void setNetPrice(Float netPrice) {
+	public void setNetPrice(BigDecimal netPrice) {
 		NetPrice = netPrice;
 	}
 
@@ -96,11 +97,11 @@ public class SalesHistory implements Serializable {
 		OrderDate = orderDate;
 	}
 
-	public Float getUSD() {
+	public BigDecimal getUSD() {
 		return USD;
 	}
 
-	public void setUSD(Float usd) {
+	public void setUSD(BigDecimal usd) {
 		USD = usd;
 	}
 

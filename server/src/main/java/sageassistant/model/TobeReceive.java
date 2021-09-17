@@ -1,6 +1,7 @@
 package sageassistant.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.PascalNameFilter;
@@ -19,9 +20,9 @@ public class TobeReceive implements Serializable {
 	private Integer Qty;
 	private String Unit;
 	private String Description;
-	private Float NetPrice;
+	private BigDecimal NetPrice;
 	private String Currency;
-	private Float USD;
+	private BigDecimal USD;
 	private Float Rate;
 	private Date OrderDate;
 	private Date AckDate;
@@ -52,7 +53,7 @@ public class TobeReceive implements Serializable {
 		return Line;
 	}
 
-	public Float getNetPrice() {
+	public BigDecimal getNetPrice() {
 		return NetPrice;
 	}
 
@@ -117,7 +118,7 @@ public class TobeReceive implements Serializable {
 		Line = line;
 	}
 
-	public void setNetPrice(Float netPrice) {
+	public void setNetPrice(BigDecimal netPrice) {
 		NetPrice = netPrice;
 	}
 
@@ -157,11 +158,11 @@ public class TobeReceive implements Serializable {
 		VendorName = vendorName;
 	}
 
-	public Float getUSD() {
+	public BigDecimal getUSD() {
 		return USD;
 	}
 
-	public void setUSD(Float uSD) {
+	public void setUSD(BigDecimal uSD) {
 		USD = uSD;
 	}
 	

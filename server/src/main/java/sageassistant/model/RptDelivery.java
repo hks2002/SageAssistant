@@ -1,5 +1,6 @@
 package sageassistant.model;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 
 import com.alibaba.fastjson.JSON;
@@ -17,7 +18,7 @@ public class RptDelivery {
 	private String YBPDTRSP_0;
 	private Short PACNBR_0;
 	private String NETWEI_SDE;
-	private Float GROWEI_0;
+	private BigDecimal GROWEI_0;
 	private String WEU_DLI;
 	private String EECICT_0;
 	private Byte CFMFLG_0;
@@ -68,21 +69,21 @@ public class RptDelivery {
 	private Integer YSOQ_ITEMCUS_0;
 	private String YSOQ_BPCPN_0;
 	private Date ORDDAT_MULT;
-	private Float QTY_ORD;
-	private Float ODLQTY_0;
-	private Float DLVQTY_0;
+	private BigDecimal QTY_ORD;
+	private BigDecimal ODLQTY_0;
+	private BigDecimal DLVQTY_0;
 	private String SERNUM_0;
-	private Float QTYPCU_0;
+	private BigDecimal QTYPCU_0;
 	private String PCU_0;
 	private String LOT_0;
 	private String YPCKSNCLI_0;
 	private String YPKDTEX_0;
 	private String PCK_0;
-	private Float YPCKWID_0;
-	private Float YPCKLEN_0;
-	private Float YPCKHEI_0;
+	private BigDecimal YPCKWID_0;
+	private BigDecimal YPCKLEN_0;
+	private BigDecimal YPCKHEI_0;
 	private String WEU_PCK;
-	private Float NETWEI_SPK;
+	private BigDecimal NETWEI_SPK;
 	private String PACNUM_0;
 	private String TEXT_DEB;
 	private String TEXT_DET;
@@ -160,11 +161,11 @@ public class RptDelivery {
 		NETWEI_SDE = nETWEI_SDE;
 	}
 
-	public Float getGROWEI_0() {
+	public BigDecimal getGROWEI_0() {
 		return GROWEI_0;
 	}
 
-	public void setGROWEI_0(Float gROWEI_0) {
+	public void setGROWEI_0(BigDecimal gROWEI_0) {
 		GROWEI_0 = gROWEI_0;
 	}
 
@@ -560,27 +561,27 @@ public class RptDelivery {
 		ORDDAT_MULT = oRDDAT_MULT;
 	}
 
-	public Float getQTY_ORD() {
+	public BigDecimal getQTY_ORD() {
 		return QTY_ORD;
 	}
 
-	public void setQTY_ORD(Float qTY_ORD) {
+	public void setQTY_ORD(BigDecimal qTY_ORD) {
 		QTY_ORD = qTY_ORD;
 	}
 
-	public Float getODLQTY_0() {
+	public BigDecimal getODLQTY_0() {
 		return ODLQTY_0;
 	}
 
-	public void setODLQTY_0(Float oDLQTY_0) {
+	public void setODLQTY_0(BigDecimal oDLQTY_0) {
 		ODLQTY_0 = oDLQTY_0;
 	}
 
-	public Float getDLVQTY_0() {
+	public BigDecimal getDLVQTY_0() {
 		return DLVQTY_0;
 	}
 
-	public void setDLVQTY_0(Float dLVQTY_0) {
+	public void setDLVQTY_0(BigDecimal dLVQTY_0) {
 		DLVQTY_0 = dLVQTY_0;
 	}
 
@@ -592,11 +593,11 @@ public class RptDelivery {
 		SERNUM_0 = sERNUM_0;
 	}
 
-	public Float getQTYPCU_0() {
+	public BigDecimal getQTYPCU_0() {
 		return QTYPCU_0;
 	}
 
-	public void setQTYPCU_0(Float qTYPCU_0) {
+	public void setQTYPCU_0(BigDecimal qTYPCU_0) {
 		QTYPCU_0 = qTYPCU_0;
 	}
 
@@ -640,27 +641,27 @@ public class RptDelivery {
 		PCK_0 = pCK_0;
 	}
 
-	public Float getYPCKWID_0() {
+	public BigDecimal getYPCKWID_0() {
 		return YPCKWID_0;
 	}
 
-	public void setYPCKWID_0(Float yPCKWID_0) {
+	public void setYPCKWID_0(BigDecimal yPCKWID_0) {
 		YPCKWID_0 = yPCKWID_0;
 	}
 
-	public Float getYPCKLEN_0() {
+	public BigDecimal getYPCKLEN_0() {
 		return YPCKLEN_0;
 	}
 
-	public void setYPCKLEN_0(Float yPCKLEN_0) {
+	public void setYPCKLEN_0(BigDecimal yPCKLEN_0) {
 		YPCKLEN_0 = yPCKLEN_0;
 	}
 
-	public Float getYPCKHEI_0() {
+	public BigDecimal getYPCKHEI_0() {
 		return YPCKHEI_0;
 	}
 
-	public void setYPCKHEI_0(Float yPCKHEI_0) {
+	public void setYPCKHEI_0(BigDecimal yPCKHEI_0) {
 		YPCKHEI_0 = yPCKHEI_0;
 	}
 
@@ -672,11 +673,11 @@ public class RptDelivery {
 		WEU_PCK = wEU_PCK;
 	}
 
-	public Float getNETWEI_SPK() {
+	public BigDecimal getNETWEI_SPK() {
 		return NETWEI_SPK;
 	}
 
-	public void setNETWEI_SPK(Float nETWEI_SPK) {
+	public void setNETWEI_SPK(BigDecimal nETWEI_SPK) {
 		NETWEI_SPK = nETWEI_SPK;
 	}
 

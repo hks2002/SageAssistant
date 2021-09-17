@@ -1,6 +1,7 @@
 package sageassistant.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.PascalNameFilter;
@@ -16,11 +17,11 @@ public class InvoiceBody implements Serializable {
 	private String Description;
 	private Integer Qty;
 	private String Unit;
-	private Float NetPrice;
-	private Float AmountNoTax;
-	private Float AmountTaxInclude;
-	private Float AmountTax;
-	private Float TaxRate;
+	private BigDecimal NetPrice;
+	private BigDecimal AmountNoTax;
+	private BigDecimal AmountTaxInclude;
+	private BigDecimal AmountTax;
+	private BigDecimal TaxRate;
 
 	public Integer getLine() {
 		return Line;
@@ -62,43 +63,43 @@ public class InvoiceBody implements Serializable {
 		Unit = unit;
 	}
 
-	public Float getNetPrice() {
+	public BigDecimal getNetPrice() {
 		return NetPrice;
 	}
 
-	public void setNetPrice(Float netPrice) {
+	public void setNetPrice(BigDecimal netPrice) {
 		NetPrice = netPrice;
 	}
 
-	public Float getAmountNoTax() {
+	public BigDecimal getAmountNoTax() {
 		return AmountNoTax;
 	}
 
-	public void setAmountNoTax(Float amountNoTax) {
+	public void setAmountNoTax(BigDecimal amountNoTax) {
 		AmountNoTax = amountNoTax;
 	}
 
-	public Float getAmountTaxInclude() {
+	public BigDecimal getAmountTaxInclude() {
 		return AmountTaxInclude;
 	}
 
-	public void setAmountTaxInclude(Float amountTaxInclude) {
+	public void setAmountTaxInclude(BigDecimal amountTaxInclude) {
 		AmountTaxInclude = amountTaxInclude;
 	}
 
-	public Float getAmountTax() {
+	public BigDecimal getAmountTax() {
 		return AmountTax;
 	}
 
-	public void setAmountTax(Float amountTax) {
+	public void setAmountTax(BigDecimal amountTax) {
 		AmountTax = amountTax;
 	}
 
-	public Float getTaxRate() {
+	public BigDecimal getTaxRate() {
 		return TaxRate;
 	}
 
-	public void setTaxRate(Float taxRate) {
+	public void setTaxRate(BigDecimal taxRate) {
 		TaxRate = taxRate;
 	}
 

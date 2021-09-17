@@ -1,5 +1,6 @@
 package sageassistant.model;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 
 import com.alibaba.fastjson.JSON;
@@ -12,10 +13,10 @@ public class RptInvoice2 {
 	private String CUR_0;
 	private String NUM_0;
 	private Date ACCDAT_0;
-	private Double AMTATI_0;
-	private Double AMTNOT_0;
-	private Double AMTTAX_0;
-	private Double RATMLT_3;
+	private BigDecimal AMTATI_0;
+	private BigDecimal AMTNOT_0;
+	private BigDecimal AMTTAX_0;
+	private BigDecimal RATMLT_3;
 	private String BPR_0;
 	private String YFAPIAO_0;
 	private String YSIH_CUSDOC_0;
@@ -49,10 +50,10 @@ public class RptInvoice2 {
 	private Float QTY_0;
 	private String SAU_0;
 	private Float NETPRI_0;
-	private Double AMTTAXLIN_0;
-	private Double AMTTATLIN_0;
-	private Double AMTNOTLIN_0;
-	private Double RATTAXLIN_0;	
+	private BigDecimal AMTTAXLIN_0;
+	private BigDecimal AMTTATLIN_0;
+	private BigDecimal AMTNOTLIN_0;
+	private BigDecimal RATTAXLIN_0;	
 	private String BPIEECNUM_0;
 	private String EECICT_0;
 	private String ICTCTY_0;
@@ -93,28 +94,28 @@ public class RptInvoice2 {
 	private String LOT_0;
 	
 
-	public Double getAMTTAXLIN_0() {
+	public BigDecimal getAMTTAXLIN_0() {
 		return AMTTAXLIN_0;
 	}
-	public void setAMTTAXLIN_0(Double aMTTAXLIN_0) {
+	public void setAMTTAXLIN_0(BigDecimal aMTTAXLIN_0) {
 		AMTTAXLIN_0 = aMTTAXLIN_0;
 	}
-	public Double getAMTTATLIN_0() {
+	public BigDecimal getAMTTATLIN_0() {
 		return AMTTATLIN_0;
 	}
-	public void setAMTTATLIN_0(Double aMTTATLIN_0) {
+	public void setAMTTATLIN_0(BigDecimal aMTTATLIN_0) {
 		AMTTATLIN_0 = aMTTATLIN_0;
 	}
-	public Double getAMTNOTLIN_0() {
+	public BigDecimal getAMTNOTLIN_0() {
 		return AMTNOTLIN_0;
 	}
-	public void setAMTNOTLIN_0(Double aMTNOTLIN_0) {
+	public void setAMTNOTLIN_0(BigDecimal aMTNOTLIN_0) {
 		AMTNOTLIN_0 = aMTNOTLIN_0;
 	}
-	public Double getRATTAXLIN_0() {
+	public BigDecimal getRATTAXLIN_0() {
 		return RATTAXLIN_0;
 	}
-	public void setRATTAXLIN_0(Double rATTAXLIN_0) {
+	public void setRATTAXLIN_0(BigDecimal rATTAXLIN_0) {
 		RATTAXLIN_0 = rATTAXLIN_0;
 	}
 	public String getFCY_0() {
@@ -141,28 +142,28 @@ public class RptInvoice2 {
 	public void setACCDAT_0(Date aCCDAT_0) {
 		ACCDAT_0 = aCCDAT_0;
 	}
-	public Double getAMTATI_0() {
+	public BigDecimal getAMTATI_0() {
 		return AMTATI_0;
 	}
-	public void setAMTATI_0(Double aMTATI_0) {
+	public void setAMTATI_0(BigDecimal aMTATI_0) {
 		AMTATI_0 = aMTATI_0;
 	}
-	public Double getAMTNOT_0() {
+	public BigDecimal getAMTNOT_0() {
 		return AMTNOT_0;
 	}
-	public void setAMTNOT_0(Double aMTNOT_0) {
+	public void setAMTNOT_0(BigDecimal aMTNOT_0) {
 		AMTNOT_0 = aMTNOT_0;
 	}
-	public Double getAMTTAX_0() {
+	public BigDecimal getAMTTAX_0() {
 		return AMTTAX_0;
 	}
-	public void setAMTTAX_0(Double aMTTAX_0) {
+	public void setAMTTAX_0(BigDecimal aMTTAX_0) {
 		AMTTAX_0 = aMTTAX_0;
 	}
-	public Double getRATMLT_3() {
+	public BigDecimal getRATMLT_3() {
 		return RATMLT_3;
 	}
-	public void setRATMLT_3(Double rATMLT_3) {
+	public void setRATMLT_3(BigDecimal rATMLT_3) {
 		RATMLT_3 = rATMLT_3;
 	}
 	public String getBPR_0() {

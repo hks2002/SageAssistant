@@ -1,6 +1,7 @@
 package sageassistant.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.alibaba.fastjson.JSON;
@@ -18,7 +19,7 @@ public class StockHistory implements Serializable {
 	private String Description;
 	private Float Qty;
 	private String Unit;
-	private Float Cost;
+	private BigDecimal Cost;
 	private String ProjectNO;
 	private String SourceNO;
 	private String SourceLine;
@@ -75,11 +76,11 @@ public class StockHistory implements Serializable {
 		Unit = unit;
 	}
 
-	public Float getCost() {
+	public BigDecimal getCost() {
 		return Cost;
 	}
 
-	public void setCost(Float cost) {
+	public void setCost(BigDecimal cost) {
 		Cost = cost;
 	}
 

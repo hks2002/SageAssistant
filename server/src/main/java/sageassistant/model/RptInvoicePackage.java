@@ -3,11 +3,11 @@ package sageassistant.model;
 public class RptInvoicePackage {
 	private String PACNUM_0;
 	private String PCK_0;
-	private Float YPCKWID_0;
-	private Float YPCKLEN_0;
-	private Float YPCKHEI_0;
+	private Double YPCKWID_0;
+	private Double YPCKLEN_0;
+	private Double YPCKHEI_0;
 	private String WEU_PCK;
-	private Float NETWEI_SPK;
+	private Double NETWEI_SPK;
 	
 	public String getPACNUM_0() {
 		return PACNUM_0;
@@ -21,22 +21,22 @@ public class RptInvoicePackage {
 	public void setPCK_0(String pCK_0) {
 		PCK_0 = pCK_0;
 	}
-	public Float getYPCKWID_0() {
+	public Double getYPCKWID_0() {
 		return YPCKWID_0;
 	}
-	public void setYPCKWID_0(Float yPCKWID_0) {
+	public void setYPCKWID_0(Double yPCKWID_0) {
 		YPCKWID_0 = yPCKWID_0;
 	}
-	public Float getYPCKLEN_0() {
+	public Double getYPCKLEN_0() {
 		return YPCKLEN_0;
 	}
-	public void setYPCKLEN_0(Float yPCKLEN_0) {
+	public void setYPCKLEN_0(Double yPCKLEN_0) {
 		YPCKLEN_0 = yPCKLEN_0;
 	}
-	public Float getYPCKHEI_0() {
+	public Double getYPCKHEI_0() {
 		return YPCKHEI_0;
 	}
-	public void setYPCKHEI_0(Float yPCKHEI_0) {
+	public void setYPCKHEI_0(Double yPCKHEI_0) {
 		YPCKHEI_0 = yPCKHEI_0;
 	}
 	public String getWEU_PCK() {
@@ -45,10 +45,10 @@ public class RptInvoicePackage {
 	public void setWEU_PCK(String wEU_PCK) {
 		WEU_PCK = wEU_PCK;
 	}
-	public Float getNETWEI_SPK() {
+	public Double getNETWEI_SPK() {
 		return NETWEI_SPK;
 	}
-	public void setNETWEI_SPK(Float nETWEI_SPK) {
+	public void setNETWEI_SPK(Double nETWEI_SPK) {
 		NETWEI_SPK = nETWEI_SPK;
 	}
 	
