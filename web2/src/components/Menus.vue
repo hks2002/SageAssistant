@@ -96,6 +96,14 @@ const menus = [
     enable: true
   },
   {
+    title: 'Analysis',
+    caption: '',
+    icon: 'fas fa-search-dollar',
+    link: '/Analysis',
+    split: false,
+    enable: true
+  },
+  {
     title: 'Reports',
     caption: '',
     icon: 'fas fa-print',

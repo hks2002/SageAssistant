@@ -42,13 +42,22 @@ public class FinancialController {
 		}
 	}
 
+	@GetMapping("/Data/FinancialBalanceA")
+	public String getFinancialBalanceA(@RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
+			@RequestParam(value = "Year", required = false, defaultValue = "") String Year,
+			@RequestParam(value = "Month", required = false, defaultValue = "") String Month,
+			@RequestParam(value = "AccountNO", required = false, defaultValue = "") String AccountNO) {
+
+		return getFinancialBalanceABCD(Site, Year, Month, AccountNO, "A");
+	}
+	
 	@GetMapping("/Data/FinancialBalanceB")
 	public String getFinancialBalanceB(@RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
 			@RequestParam(value = "Year", required = false, defaultValue = "") String Year,
 			@RequestParam(value = "Month", required = false, defaultValue = "") String Month,
 			@RequestParam(value = "AccountNO", required = false, defaultValue = "") String AccountNO) {
 
-		return getFinancialBalanceBCD(Site, Year, Month, AccountNO, "B");
+		return getFinancialBalanceABCD(Site, Year, Month, AccountNO, "B");
 	}
 	
 	@GetMapping("/Data/FinancialBalanceC")
@@ -57,7 +66,7 @@ public class FinancialController {
 			@RequestParam(value = "Month", required = false, defaultValue = "") String Month,
 			@RequestParam(value = "AccountNO", required = false, defaultValue = "") String AccountNO) {
 
-		return getFinancialBalanceBCD(Site, Year, Month, AccountNO, "C");
+		return getFinancialBalanceABCD(Site, Year, Month, AccountNO, "C");
 	}
 
 	@GetMapping("/Data/FinancialBalanceD")
@@ -66,11 +75,11 @@ public class FinancialController {
 			@RequestParam(value = "Month", required = false, defaultValue = "") String Month,
 			@RequestParam(value = "AccountNO", required = false, defaultValue = "") String AccountNO) {
 
-		return getFinancialBalanceBCD(Site, Year, Month, AccountNO, "D");
+		return getFinancialBalanceABCD(Site, Year, Month, AccountNO, "D");
 	}
 	
 
-	private String getFinancialBalanceBCD(String Site,String Year,String Month,String AccountNO, String Cat) {
+	private String getFinancialBalanceABCD(String Site,String Year,String Month,String AccountNO, String Cat) {
 
 		if (Site.equals("") || Year.equals("") || Month.equals("")) {
 			return "Must set Year and Month";
@@ -82,17 +91,19 @@ public class FinancialController {
 		List<FinancialMonthBalance> listMonth = financialService.getAccoutMonthBalanceForAccountNO(Site, Year, Month, AccountNO);
 		
 		if (listMonth.size()==0) {
-			return "No result";
+			return "0";
 		} else {
 			switch (Cat) {
+			case "A": 
+				return String.format("%,.2f",listMonth.get(0).getA().doubleValue());
 			case "B": 
-				return listMonth.get(0).getB().toString();
+				return String.format("%,.2f",listMonth.get(0).getB().doubleValue());
 			case "C":
-				return listMonth.get(0).getC().toString();
+				return String.format("%,.2f",listMonth.get(0).getC().doubleValue());
 			case "D":
-				return listMonth.get(0).getD().toString();
+				return String.format("%,.2f",listMonth.get(0).getD().doubleValue());
 			default:
-				return listMonth.get(0).getB().toString();
+				return String.format("%,.2f",listMonth.get(0).getB().doubleValue());
 			}
 		}
 	}

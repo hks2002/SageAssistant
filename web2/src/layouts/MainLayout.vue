@@ -18,7 +18,7 @@
     </q-drawer>
 
     <q-page-container>
-      <q-scroll-area :style="pageHeightStyle">
+      <q-scroll-area :style="pageStyle">
         <router-view />
       </q-scroll-area>
     </q-page-container>
@@ -45,7 +45,7 @@ export default defineComponent({
 
   setup() {
     const leftDrawerOpen = ref(false)
-    const pageHeightStyle = ref('')
+    const pageStyle = ref('')
 
     const toggleLeftDrawer = () => {
       console.debug('[evt] toggleLeftDrawer')
@@ -57,7 +57,7 @@ export default defineComponent({
     }
 
     const updatePageHeight = () => {
-      pageHeightStyle.value = 'height:' + (document.body.clientHeight - 74) + 'px'
+      pageStyle.value = 'height:' + (document.body.clientHeight - 58) + 'px;'
     }
 
     window.onresize = () => {
@@ -80,7 +80,7 @@ export default defineComponent({
     // return them to vue template
     return {
       leftDrawerOpen,
-      pageHeightStyle,
+      pageStyle,
       miniState: ref(true)
     }
   }

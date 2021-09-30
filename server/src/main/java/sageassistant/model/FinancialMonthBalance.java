@@ -10,6 +10,7 @@ public class FinancialMonthBalance extends AmodelTemplate {
 	private String Currency;
 	private String Year;
 	private String Month;
+	private BigDecimal A;
 	private BigDecimal B;
 	private BigDecimal C;
 	private BigDecimal D;
@@ -68,6 +69,14 @@ public class FinancialMonthBalance extends AmodelTemplate {
 
 	public void setD(BigDecimal d) {
 		D = d;
+	}
+
+	public BigDecimal getA() {
+		return A;
+	}
+
+	public void setA(BigDecimal a) {
+		A = a;
 	}
 
 }

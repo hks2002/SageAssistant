@@ -30,14 +30,14 @@
         name="Fapiao"
         style="padding:0px"
       >
-        <page-fapiao v-if="isAuthorised('GESSIH')" />
+        <fapiao v-if="isAuthorised('GESSIH')" />
         <error-403 v-else />
       </q-tab-panel>
       <q-tab-panel
         name="Profit"
         style="padding:0px"
       >
-        <page-fapiao v-if="isAuthorised('CONSBAL')" />
+        <fapiao v-if="isAuthorised('CONSBAL')" />
         <error-403 v-else />
       </q-tab-panel>
     </q-tab-panels>
@@ -48,14 +48,14 @@
 import { defineComponent, ref } from 'vue'
 import { ebus } from 'boot/ebus'
 import { isAuthorised } from 'assets/auth'
-import PageFapiao from 'src/components/PageFapiao.vue'
+import Fapiao from 'src/components/Fapiao.vue'
 import Error403 from 'pages/Error403.vue'
 
 export default defineComponent({
   name: 'Financials',
 
   components: {
-    PageFapiao,
+    Fapiao,
     Error403
   },
 

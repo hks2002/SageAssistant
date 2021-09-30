@@ -155,6 +155,7 @@ export default defineComponent({
       axios.get('/Data/Sites')
         .then((response) => {
           siteList.value = response.data
+          setCookies('siteList', siteList.value, 3600 * 24 * 7)
         })
         .catch((e) => {
           notifyError('Loading Sites Failed!')

@@ -14,6 +14,7 @@ Mock.mock(RegExp('^(/Data/StockSummary)' + '.*'), options => {
       {
         G: /[A-Z]/,
         A: '',
+        Location: /[A-Z]MAG\d{2}/,
         PN: /[0-9A-Z]{5,8}/,
         OptionPN: /(123|456)/,
         Description: () => { return Mock.mock('@title(5, 10)') },

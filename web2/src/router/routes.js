@@ -28,13 +28,36 @@ const routes = [
   },
   {
     path: '/Todo',
+    name: '/Todo',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/Todo.vue') }]
+    children: [
+      {
+        path: '',
+        component: () => import('pages/Todo.vue')
+      }
+    ]
   },
   {
     path: '/Financials',
+    name: '/Financials',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('src/pages/Financials.vue') }]
+    children: [
+      {
+        path: '',
+        component: () => import('src/pages/Financials.vue')
+      }
+    ]
+  },
+  {
+    path: '/Analysis',
+    name: '/Analysis',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      {
+        path: '',
+        component: () => import('src/pages/Analysis.vue')
+      }
+    ]
   },
   {
     path: '/Reports',

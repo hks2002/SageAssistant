@@ -30,14 +30,14 @@
         name="Count"
         style="padding:0px"
       >
-        <page-stock-summary v-if="isAuthorised('CONSSAR')" />
+        <stock-summary v-if="isAuthorised('CONSSAR')" />
         <error-403 v-else />
       </q-tab-panel>
       <q-tab-panel
         name="History"
         style="padding:0px"
       >
-        <page-stock-history v-if="isAuthorised('CONSSAR')" />
+        <stock-history v-if="isAuthorised('CONSSAR')" />
         <error-403 v-else />
       </q-tab-panel>
     </q-tab-panels>
@@ -49,16 +49,16 @@ import { defineComponent, ref, onBeforeUnmount } from 'vue'
 import { ebus } from 'boot/ebus'
 import { getCookies } from 'assets/storage'
 import { isAuthorised } from 'assets/auth'
-import PageStockSummary from 'src/components/PageStockSummary.vue'
-import PageStockHistory from 'src/components/PageStockHistory.vue'
+import StockSummary from 'src/components/StockSummary.vue'
+import StockHistory from 'src/components/StockHistory.vue'
 import Error403 from 'pages/Error403.vue'
 
 export default defineComponent({
   name: 'Stock',
 
   components: {
-    PageStockSummary,
-    PageStockHistory,
+    StockSummary,
+    StockHistory,
     Error403
   },
 
