@@ -8,5 +8,6 @@
         SELECT DISTINCT
 	        FCY_0 AS Site
 	    FROM EXPLOIT.FACILITY
+	    ORDER BY Site ASC
     </select>
 </mapper>
