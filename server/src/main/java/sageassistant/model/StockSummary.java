@@ -2,7 +2,9 @@ package sageassistant.model;
 
 import java.math.BigDecimal;
 
-public class StockSummary extends AmodelTemplate {
+import sageassistant.model.base.ModelTemplate;
+
+public class StockSummary extends ModelTemplate {
 
 	private static final long serialVersionUID = 1L;
 

@@ -1,6 +1,8 @@
 package sageassistant.model;
 
-public class Attachment extends AmodelTemplate {
+import sageassistant.model.base.ModelTemplate;
+
+public class Attachment extends ModelTemplate {
 
 	private static final long serialVersionUID = 1L;
 	private String PN;

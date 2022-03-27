@@ -1,7 +1,5 @@
 package sageassistant.controller;
 
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,8 +11,6 @@ import sageassistant.service.StockService;
 @CrossOrigin
 @RestController
 public class StockController {
-	// private static final Logger log =
-	// LoggerFactory.getLogger(ProductsController.class);
 
 	@Autowired
 	private StockService stockService;
@@ -24,20 +20,20 @@ public class StockController {
 			@RequestParam(value = "PN", required = false, defaultValue = "--") String PN) {
 		return stockService.checkPN(PN);
 	}
-	
+
 	@GetMapping("/Data/StockOptionPN")
-	public String findStockOptionPN(
+	public String getStockOptionPN(
 			@RequestParam(value = "PN", required = false, defaultValue = "--") String PN) {
-		return stockService.findStockOptionPN(PN);
+		return stockService.getStockOptionPN(PN);
 	}
-	
+
 	@GetMapping("/Data/StockQty")
-	public String findStockQty(
+	public String getStockQty(
 			@RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
 			@RequestParam(value = "PN", required = false, defaultValue = "--") String PN) {
-		return stockService.findStockQty(Site, PN).toString();
+		return stockService.getStockQty(Site, PN).toString();
 	}
-	
+
 	@GetMapping("/Data/StockSummary")
 	public String getStockSummary(
 			@RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site) {
@@ -48,9 +44,9 @@ public class StockController {
 	public String getStockHistory(
 			@RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
 			@RequestParam(value = "PnOrName", required = false, defaultValue = "%%") String PnOrName,
-			@RequestParam(value = "DateFrom", required = false, defaultValue = "2000-01-01") String DateFrom,
-			@RequestParam(value = "DateTo", required = false, defaultValue = "2099-12-31") String DateTo) {
+			@RequestParam(value = "DateFrom", required = false, defaultValue = "2022-01-01") String DateFrom,
+			@RequestParam(value = "DateTo", required = false, defaultValue = "2022-12-31") String DateTo) {
 		return stockService.getStockHistory(Site, PnOrName, DateFrom, DateTo).toString();
 	}
-	
+
 }

@@ -1,6 +1,8 @@
 package sageassistant.model;
 
-public class StockInfo extends AmodelTemplate {
+import sageassistant.model.base.ModelTemplate;
+
+public class StockInfo extends ModelTemplate {
 
 	private static final long serialVersionUID = 1L;
 

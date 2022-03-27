@@ -2,7 +2,9 @@ package sageassistant.model;
 
 import java.util.Date;
 
-public class TobeClosedWO extends AmodelTemplate {
+import sageassistant.model.base.ModelTemplate;
+
+public class TobeClosedWO extends ModelTemplate {
 	private static final long serialVersionUID = 1L;
 
 	private String ProjectNO;

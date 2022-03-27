@@ -15,7 +15,7 @@ public class HttpController {
 	@Autowired
 	HttpService httpService;
 
-	@RequestMapping("/Proxy/*/*")
+	@RequestMapping("/Proxy/**/*")
 	public void doRequest(HttpServletRequest request, HttpServletResponse response) {
 		httpService.doRequest(request, response);
 	}

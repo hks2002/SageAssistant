@@ -1,4 +1,4 @@
-package sageassistant.utils;
+package sageassistant.model.base;
 
 import java.math.BigDecimal;
 

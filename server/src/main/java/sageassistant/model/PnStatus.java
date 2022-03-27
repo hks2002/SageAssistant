@@ -1,6 +1,8 @@
 package sageassistant.model;
 
-public class PnStatus extends AmodelTemplate {
+import sageassistant.model.base.ModelTemplate;
+
+public class PnStatus extends ModelTemplate {
 	private static final long serialVersionUID = 1L;
 
 	private String PN;

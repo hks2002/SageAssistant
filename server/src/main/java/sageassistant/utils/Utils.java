@@ -12,33 +12,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import com.google.common.io.ByteStreams;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 //@Slf4j  //using it cause this class Utils cannot directly use in other class method
 public class Utils {
 	private static final Logger log = LogManager.getLogger(Utils.class);
-
-	public static String readFileContent(String filename) {
-		// Reading files in jar, use getResourceAsStream(filename), here is reading for
-		// war distribution
-		String path = Thread.currentThread().getContextClassLoader().getResource(filename).getPath();
-		log.debug("Resource base path :" + path);
-
-		try {
-			InputStream inputStream = new FileInputStream(path);
-			return new String(ByteStreams.toByteArray(inputStream));
-		} catch (FileNotFoundException e) {
-			log.info("FileNotFound: " + path + filename);
-			return "";
-		} catch (IOException e) {
-			log.error("IOException: " + "When reading " + filename);
-			return "";
-		}
-
-	}
 
 	public static boolean isNullOrEmpty(String str) {
 		if (str == null || str.isEmpty()) {
@@ -48,9 +30,46 @@ public class Utils {
 		}
 	}
 
+	public static boolean isWin() {
+		String os = System.getProperty("os.name");
+		if (os.toLowerCase().startsWith("win")) { // windows
+			return true;
+		} else { // linux 和mac
+			return false;
+		}
+	}
+
+	public static String getFileExt(String filename) {
+		int dot = filename.lastIndexOf('.');
+		if ((dot > -1) && (dot < (filename.length() - 1))) {
+			return filename.substring(dot + 1).toUpperCase();
+		} else {
+			return "";
+		}
+
+	}
+
+	public static Boolean isServerAtZhuhai() {
+		InetAddress addr;
+		try {
+			addr = InetAddress.getLocalHost();
+			if (addr.getHostAddress().startsWith("192.168.0.")) {
+				return true;
+			}
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		return false;
+
+	}
+
+	public static long dateDiff(Date start, Date end) {
+		return (end.getTime() - start.getTime()) / (24 * 60 * 60 * 1000);
+	}
+
 	public static String formatDate(Date date) {
 		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		if (date== null) {
+		if (date == null) {
 			return "";
 		}
 		return formatter.format(date);
@@ -91,41 +110,24 @@ public class Utils {
 		return findFiles(new File(path));
 	}
 
-	public static boolean isWin() {
-		String os = System.getProperty("os.name");
-		if (os.toLowerCase().startsWith("win")) { // windows
-			return true;
-		} else { // linux 和mac
-			return false;
-		}
-	}
+	public static String readFileContent(String filename) {
+		// Reading files in jar, use getResourceAsStream(filename), here is reading for
+		// war distribution
+		String path = Thread.currentThread().getContextClassLoader().getResource("").getPath();
+		path += filename;
+		log.debug("Resource base path :" + path);
 
-	public static String getFileExt(String filename) {
-		int dot = filename.lastIndexOf('.');
-		if ((dot > -1) && (dot < (filename.length() - 1))) {
-			return filename.substring(dot + 1).toUpperCase();
-		} else {
+		try {
+			InputStream inputStream = new FileInputStream(path);
+			return new String(ByteStreams.toByteArray(inputStream));
+		} catch (FileNotFoundException e) {
+			log.info("FileNotFound: " + path + filename);
+			return "";
+		} catch (IOException e) {
+			log.error("IOException: " + "When reading " + filename);
 			return "";
 		}
 
-	}
-
-	public static Boolean isServerAtZhuhai() {
-		InetAddress addr;
-		try {
-			addr = InetAddress.getLocalHost();
-			if (addr.getHostAddress().startsWith("192.168.0.")) {
-				return true;
-			}
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-		return false;
-
-	}
-
-	public static long dateDiff(Date start, Date end) {
-		return (end.getTime() - start.getTime()) / (24 * 60 * 60 * 1000);
 	}
 
 	public static String makeShortPn(String pn) {
@@ -211,19 +213,20 @@ public class Utils {
 		}
 		return newPn;
 	}
-	
-	// Page{count=true, pageNum=1, pageSize=50, startRow=0, endRow=50, total=13346, pages=267, reasonable=true, pageSizeZero=false}[{},{}]
+
+	// Page{count=true, pageNum=1, pageSize=50, startRow=0, endRow=50, total=13346,
+	// pages=267, reasonable=true, pageSizeZero=false}[{},{}]
 	// [{},{}]
 	public static String listToString(List<?> list) {
-		return list.toString().replaceAll("(Page\\{.*?\\})(.*)","$2");
+		return list.toString().replaceAll("(Page\\{.*?\\})(.*)", "$2");
 	}
-	
+
 	public static String list2String(List<String> list) {
-		String s="[";
-		for (String o : list ) {
-			s += "\"" + o+"\",";
+		String s = "[";
+		for (String o : list) {
+			s += "\"" + o + "\",";
 		}
-		if (list.size()>0) {
+		if (list.size() > 0) {
 			s = s.substring(0, s.lastIndexOf(','));
 		}
 		s += "]";

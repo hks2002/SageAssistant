@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.2.4.RELEASE</version>
-		<relativePath /> <!-- lookup parent from repository -->
+		<relativePath />
+		<!-- lookup parent from repository -->
 	</parent>
 	<groupId>sageassistant</groupId>
 	<artifactId>SageAssistantSrv</artifactId>
 	<!-- version A.B.C.D A: project B: add/remove function C: fix bug D: build 
-		time stamp -->
-	<version>1.14.10.${maven.build.timestamp}</version>
+		time stamp ${maven.build.timestamp} -->
+	<version>2.0.0</version>
 	<packaging>war</packaging>
 	<name>SageAssistantSrv</name>
 	<description>Sage assistant data server</description>
@@ -28,7 +28,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-			<exclusions><!-- remove default logger config, default is logback -->
+			<exclusions>				<!-- remove default logger config, default is logback -->
 				<exclusion>
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-starter-logging</artifactId>
@@ -36,7 +36,7 @@
 			</exclusions>
 		</dependency>
 
-		<dependency> <!-- use log4j2 -->
+		<dependency>			<!-- use log4j2 -->
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-log4j2</artifactId>
 		</dependency>
@@ -241,52 +241,6 @@
 		<finalName>ROOT</finalName>
 		<pluginManagement>
 			<plugins>
-				<plugin>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-maven-plugin</artifactId>
-				</plugin>
-				<!-- Skip test resource when package to war -->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.apache.maven.plugins</groupId>
-										<artifactId>maven-resources-plugin</artifactId>
-										<versionRange>[1.2,)</versionRange>
-										<goals>
-											<goal>resources</goal>
-											<goal>testResources</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore />
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-				<!-- Package referenced libraries to war -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-war-plugin</artifactId>
-					<configuration>
-						<webResources>
-							<resource>
-								<directory>lib</directory>
-								<targetPath>WEB-INF/lib/</targetPath>
-								<includes>
-									<include>**/*.jar</include>
-								</includes>
-							</resource>
-						</webResources>
-					</configuration>
-				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>

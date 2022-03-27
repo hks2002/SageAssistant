@@ -2,7 +2,9 @@ package sageassistant.model;
 
 import java.util.Date;
 
-public class SupplierDelayHistory extends AmodelTemplate {
+import sageassistant.model.base.ModelTemplate;
+
+public class SupplierDelayHistory extends ModelTemplate {
 	/**
 	 * 
 	 */

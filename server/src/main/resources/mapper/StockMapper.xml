@@ -9,7 +9,7 @@
 			ITMMASTER
 		WHERE ITMMASTER.ITMREF_0=#{pnRoot}
 	</select>
-	<select id="findStockQty" parameterType="String" resultType="java.lang.Float">
+	<select id="findStockQty" parameterType="String" resultType="java.lang.String">
 		SELECT 
 			SUM(STOCK.QTYSTU_0) AS QTY
 		FROM

@@ -3,7 +3,9 @@ package sageassistant.model;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class StockHistory extends AmodelTemplate {
+import sageassistant.model.base.ModelTemplate;
+
+public class StockHistory extends ModelTemplate {
 
 	private static final long serialVersionUID = 1L;
 

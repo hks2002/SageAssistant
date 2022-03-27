@@ -9,22 +9,22 @@ import com.alibaba.fastjson.JSONArray;
 
 @CrossOrigin
 @RestController
-public class SrvInfoController {	 
-	 @Value("${project.name}")
-	 private String name;
+public class SrvInfoController {
+	@Value("${project.name}")
+	private String name;
 
-	 @Value("${project.version}")
-	 private String version;
-	
-	 @Value("${spring.boot.version}")
-	 private String springBootVersion;
-	 
-	 @Value("${project.dependencies}")
-	 private String dependencies;
-	 
+	@Value("${project.version}")
+	private String version;
+
+	@Value("${spring.boot.version}")
+	private String springBootVersion;
+
+	@Value("${project.dependencies}")
+	private String dependencies;
+
 	@GetMapping("/Data/SrvVersion")
 	public String getVersion() {
-	 return version;
+		return version;
 	}
 
 	@GetMapping("/Data/SrvName")
@@ -34,9 +34,10 @@ public class SrvInfoController {
 
 	@GetMapping("/Data/SrvInfo")
 	public String getInfo() {
-		return "{\"name\":\"" + name + "\",\"version\":\"" + version+ "\",\"springBootVersion\":\"" + springBootVersion + "\"}";
+		return "{\"name\":\"" + name + "\",\"version\":\"" + version + "\",\"springBootVersion\":\"" + springBootVersion
+				+ "\"}";
 	}
-	
+
 	@GetMapping("/Data/SrvProjectDependencies")
 	public String getDependencies() {
 		String str = "";

@@ -2,7 +2,9 @@ package sageassistant.model;
 
 import java.util.Date;
 
-public class DeliveryDuration extends AmodelTemplate {
+import sageassistant.model.base.ModelTemplate;
+
+public class DeliveryDuration extends ModelTemplate {
 
 	private static final long serialVersionUID = 1L;
 
