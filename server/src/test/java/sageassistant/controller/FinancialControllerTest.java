@@ -111,4 +111,20 @@ public class FinancialControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
     }
+
+    @Test
+    void testGetFinancialInvoicePay() throws Exception {
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialInvoicePay?Site=ZHU&DateFrom=2021-01-01&DateTo=2021-02-01"))
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
+        .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    void testGetFinancialInvoicePayPro() throws Exception {
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialInvoicePayPro?Site=ZHU&DateFrom=2021-01-01&DateTo=2021-02-01"))
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
+        .andDo(MockMvcResultHandlers.print());
+    }
 }

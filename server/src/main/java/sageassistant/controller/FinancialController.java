@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import sageassistant.model.FinancialMonthBalance;
 import sageassistant.service.FinancialService;
+import sageassistant.utils.Utils;
 
 @CrossOrigin
 @RestController
@@ -108,4 +109,21 @@ public class FinancialController {
 		}
 	}
 	
+	@GetMapping("/Data/FinancialInvoicePay")
+	public String getFinancialInvoicePay(
+		    @RequestParam(value = "Site", required = true, defaultValue = "ZHU") String Site,
+			@RequestParam(value = "BPCode", required = false, defaultValue = "") String BPCode,
+			@RequestParam(value = "DateFrom", required = false, defaultValue = "2000-01-01") String DateFrom,
+			@RequestParam(value = "DateTo", required = false, defaultValue = "1999-12-31") String DateTo) {
+		return Utils.listToString(financialService.getInvoicePay(Site, BPCode, DateFrom, DateTo));
+	}
+
+	@GetMapping("/Data/FinancialInvoicePayPro")
+	public String getFinancialInvoicePayPro(
+		    @RequestParam(value = "Site", required = true, defaultValue = "ZHU") String Site,
+			@RequestParam(value = "BPCode", required = false, defaultValue = "") String BPCode,
+			@RequestParam(value = "DateFrom", required = false, defaultValue = "2000-01-01") String DateFrom,
+			@RequestParam(value = "DateTo", required = false, defaultValue = "1999-12-31") String DateTo) {
+		return Utils.listToString(financialService.getInvoicePayPro(Site, BPCode, DateFrom, DateTo));
+	}
 }

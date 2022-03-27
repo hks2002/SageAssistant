@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import sageassistant.dao.FinancialMapper;
 import sageassistant.model.FinancialBalance;
+import sageassistant.model.FinancialInvoicePay;
+import sageassistant.model.FinancialInvoicePayPro;
 import sageassistant.model.FinancialMonthBalance;
 
 @Service
@@ -233,4 +235,11 @@ public class FinancialService {
 		return listMonth;
 	}
 	
+	public List<FinancialInvoicePay> getInvoicePay(String Site, String BPCode, String DateFrom, String DateTo) {
+		return financialMapper.findInvoicePay(Site, BPCode, DateFrom, DateTo);
+	}
+
+	public List<FinancialInvoicePayPro> getInvoicePayPro(String Site, String BPCode, String DateFrom, String DateTo) {
+		return financialMapper.findInvoicePayPro(Site, BPCode, DateFrom, DateTo);
+	}
 }
