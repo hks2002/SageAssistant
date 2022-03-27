@@ -1,0 +1,12 @@
+{
+    "recommendations": [
+        "visualstudioexptteam.vscodeintellicode",
+        "eamodio.gitlens",
+        "pivotal.vscode-boot-dev-pack",
+        "vscjava.vscode-java-test",
+        "redhat.vscode-xml"
+    ],
+    "unwantedRecommendations": [
+        "DavidAnson.vscode-markdownlint"
+    ]
+  }
