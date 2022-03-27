@@ -1,0 +1,27 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-SrvApplication<SageAssistantSrv>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "sageassistant.SrvApplication",
+            "projectName": "SageAssistantSrv",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+    // "configurations": [
+    //     {
+    //         "type": "java",
+    //         "name": "Spring Boot-SageAssistantSrv",
+    //         "request": "launch",
+    //         "cwd": "${workspaceFolder}",
+    //         "console": "internalConsole",
+    //         "mainClass": "sageassistant.SrvApplication",
+    //         "projectName": "SageAssistantSrv",
+    //         "args": ""
+    //     }
+    // ]
+}

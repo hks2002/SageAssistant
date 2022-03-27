@@ -1,0 +1,5 @@
+{
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.help.showReleaseNotes": false,
+    "boot-java.change-detection.on": true
+}
