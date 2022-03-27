@@ -1,4 +1,4 @@
-package sageassistant.model;
+package sageassistant.model.base;
 
 import java.io.Serializable;
 
@@ -7,9 +7,7 @@ import com.alibaba.fastjson.serializer.PascalNameFilter;
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.serializer.SerializeFilter;
 
-import sageassistant.utils.BigDecimalValueFilter;
-
-public class AmodelTemplate implements Serializable {
+public class ModelTemplate implements Serializable {
 
 	public static final long serialVersionUID = 1L;
 

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import org.apache.ibatis.annotations.Param;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,15 +124,15 @@ public class PnService {
 		return listPage;
 	}
 	
-	public List<DeliveryDuration> findDeliveryDurationByPnRoot(@Param("pnRoot") String pnRoot){
+	public List<DeliveryDuration> findDeliveryDurationByPnRoot(String pnRoot){
 		return pnMapper.findDeliveryDurationByPnRoot(pnRoot);
 	}
 	
-	public List<StockInfo> findStockInfoByPnRoot(@Param("pnRoot") String pnRoot){
+	public List<StockInfo> findStockInfoByPnRoot(String pnRoot){
 		return stockMapper.findStockInfoByPnRoot(pnRoot);
 	}
 	
-	public List<PnStatus> findObseletPnBySite(@Param("site") String site){
+	public List<PnStatus> findObseletPnBySite(String site){
 		return pnMapper.findObseletPnBySite(site);
 	}
 }

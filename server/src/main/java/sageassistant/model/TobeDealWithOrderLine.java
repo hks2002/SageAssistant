@@ -2,7 +2,9 @@ package sageassistant.model;
 
 import java.util.Date;
 
-public class TobeDealWithOrderLine extends AmodelTemplate {
+import sageassistant.model.base.ModelTemplate;
+
+public class TobeDealWithOrderLine extends ModelTemplate {
 	private static final long serialVersionUID = 1L;
 
 	private String SalesOrderNO;

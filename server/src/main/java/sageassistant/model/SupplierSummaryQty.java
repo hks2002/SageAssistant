@@ -1,6 +1,8 @@
 package sageassistant.model;
 
-public class SupplierSummaryQty extends AmodelTemplate {
+import sageassistant.model.base.ModelTemplate;
+
+public class SupplierSummaryQty extends ModelTemplate {
 	private static final long serialVersionUID = 1L;
 
 	private String Site;

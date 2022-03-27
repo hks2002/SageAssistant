@@ -38,12 +38,12 @@ public class ReportService {
 
 	@Autowired
 	private RptMapper rptMapper;
-
+	
 	/*
 	 * request url like /Report/COC/showPdf
 	 */
 	public void handRequest(HttpServletRequest request, HttpServletResponse response) {
-
+        
 		String ProjectNO = null;
 		String DeliveryNO = null;
 		String PurchaseNO = null;
@@ -62,13 +62,11 @@ public class ReportService {
 		List<RptInvoicePackage> InvoicePackage=null;
 		List<RptInvoicePay> InvoicePay=null;
 		
-		String report = request.getServletPath().split("/")[2];
-		String action = request.getServletPath().split("/")[3];
-
-		ReportClientDocument reportClientDocument = new ReportClientDocument();
-		
 		try {
-			
+			String report = request.getServletPath().split("/")[2];
+		    String action = request.getServletPath().split("/")[3];
+			ReportClientDocument reportClientDocument = new ReportClientDocument();
+
 			switch (report) {
 			case "COC":
 				reportClientDocument.open("reports/COC.rpt", 0);
@@ -188,9 +186,9 @@ public class ReportService {
 					LocalDate startDate = LocalDate.parse(StartDay, fmt);
 					LocalDate endDate = LocalDate.parse(EndDay, fmt);
 					
-					DateTimeFormatter fmtsqlserver=DateTimeFormatter.ofPattern("yyyy-dd-MM");
-					StartDay = startDate.format(fmtsqlserver);
-					EndDay = endDate.format(fmtsqlserver);
+					DateTimeFormatter fmtsql=DateTimeFormatter.ofPattern("yyyy-MM-dd");
+					StartDay = startDate.format(fmtsql);
+					EndDay = endDate.format(fmtsql);
 				} catch (DateTimeParseException ex) {
 					response.getWriter().write("<H1>Date Format is not correct!</H1>");
 					return;
@@ -274,6 +272,13 @@ public class ReportService {
 			/* Close report */
 			reportClientDocument.close();
 
+		} catch (ArrayIndexOutOfBoundsException e){
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			try {
+				response.getWriter().write("<H1>Request Url Wrong!</H1>");
+			} catch (IOException e1) {
+				log.error(e1.getMessage());
+			}	
 		} catch (IOException | ReportSDKExceptionBase | ClassNotFoundException e) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			try {

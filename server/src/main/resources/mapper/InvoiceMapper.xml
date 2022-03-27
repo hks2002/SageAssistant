@@ -3,8 +3,7 @@
 
 <mapper namespace="sageassistant.dao.InvoiceMapper">
 	<cache eviction="LRU" flushInterval="3600000" readOnly="true" size="1024"/>
-	<select id="findInvoiceNOByInvoiceNO"
-		resultType="java.lang.String">
+	<select id="findInvoiceNOByInvoiceNO" resultType="java.lang.String">
 		SELECT DISTINCT
 			SINVOICE.NUM_0 AS InvoiceNO
 		FROM
@@ -12,8 +11,7 @@
 		WHERE 
 			SINVOICE.NUM_0 LIKE #{InvoiceNO}
 	</select>	
-	<select id="findInvoiceHeaderByInvoiceNO"
-		resultType="sageassistant.model.InvoiceHeader">
+	<select id="findInvoiceHeaderByInvoiceNO" resultType="sageassistant.model.InvoiceHeader">
 		SELECT DISTINCT
 			SINVOICE.FCY_0 AS Facility,
 			SINVOICE.CUR_0 AS Currency,
@@ -36,8 +34,7 @@
 		WHERE 
 			SINVOICE.NUM_0 =#{InvoiceNO}
 	</select>
-	<select id="findInvoiceBodyByInvoiceNO"
-		resultType="sageassistant.model.InvoiceBody">
+	<select id="findInvoiceBodyByInvoiceNO" resultType="sageassistant.model.InvoiceBody">
 		SELECT DISTINCT
 			SINVOICED.SIDLIN_0 AS Line,
 			IIF((SINVOICED.ECCVALMAJ_0='#' OR SINVOICED.ECCVALMAJ_0 ='' ),SINVOICED.ITMREF_0,SINVOICED.ITMREF_0+'_'+SINVOICED.ECCVALMAJ_0) AS PN,
@@ -53,8 +50,7 @@
 		WHERE
 			SINVOICED.NUM_0 =#{InvoiceNO}
 	</select>
-	<select id="findInvoiceHeaderByFaPiao"
-		resultType="sageassistant.model.InvoiceHeader">
+	<select id="findInvoiceHeaderByFaPiao" resultType="sageassistant.model.InvoiceHeader">
 		SELECT DISTINCT
 			SINVOICE.FCY_0 AS Facility,
 			SINVOICE.CUR_0 AS Currency,
@@ -77,8 +73,7 @@
 		WHERE 
 			SINVOICE.YFAPIAO_0 =#{FaPiao}
 	</select>	
-	<select id="findInvoiceBodyByFaPiao"
-		resultType="sageassistant.model.InvoiceBody">
+	<select id="findInvoiceBodyByFaPiao" resultType="sageassistant.model.InvoiceBody">
 		SELECT DISTINCT
 			SINVOICED.SIDLIN_0 AS Line,
 			IIF((SINVOICED.ECCVALMAJ_0='#' OR SINVOICED.ECCVALMAJ_0 ='' ),SINVOICED.ITMREF_0,SINVOICED.ITMREF_0+'_'+SINVOICED.ECCVALMAJ_0) AS PN,
@@ -91,12 +86,11 @@
 			SINVOICED.AMTTAXLIN_0 AS AmountTax,
 			SINVOICED.AMTATILIN_0 AS AmountTaxInclude
 		FROM EXPLOIT.SINVOICED SINVOICED
-		INNER JOIN EXPLOIT.SINVOICE SINVOICE
-			ON SINVOICED.NUM_0 = SINVOICE.NUM_0
+			INNER JOIN EXPLOIT.SINVOICE SINVOICE
+				ON SINVOICED.NUM_0 = SINVOICE.NUM_0
 		WHERE
-			SINVOICE.YFAPIAO_0 =#{FaPiao}
+			SINVOICE.YFAPIAO_0 = #{FaPiao}
 		ORDER BY 
-			SINVOICE.NUM_0 ASC
 			SINVOICED.SIDLIN_0 ASC
 	</select>
 </mapper>

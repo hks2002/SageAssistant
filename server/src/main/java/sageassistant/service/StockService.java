@@ -13,30 +13,36 @@ import sageassistant.model.StockSummary;;
 @Service
 public class StockService {
 	// private static final Logger log = LogManager.getLogger();
-	
+
 	@Autowired
 	private StockMapper stockMapper;
-	
+
 	public String checkPN(@Param("pnRoot") String pnRoot) {
 		return stockMapper.checkPN(pnRoot);
 	}
-	
-	public String findStockOptionPN(@Param("pnRoot") String pnRoot) {
+
+	public String getStockOptionPN(@Param("pnRoot") String pnRoot) {
 		// remove special character, pnRoot must be url encoded,
-		pnRoot=pnRoot.replaceAll(",|\\.| |-|_|/|\\\\", "");
+		pnRoot = pnRoot.replaceAll(",|\\.| |-|_|/|\\\\", "");
 		return stockMapper.findStockOptionPN(pnRoot);
 	}
-	
-	public Float findStockQty(@Param("Site") String Site, @Param("pnRoot") String pnRoot) {
-		return stockMapper.findStockQty(Site, pnRoot);
+
+	public String getStockQty(@Param("Site") String Site, @Param("PnRoot") String pnRoot) {
+		if (stockMapper.findStockQty(Site, pnRoot) == null) {
+			return "0";
+		} else {
+			return stockMapper.findStockQty(Site, pnRoot);
+		}
+
 	}
 
 	public List<StockSummary> getStockSummary(@Param("Site") String Site) {
 		return stockMapper.findStockSummaryBySite(Site);
 	}
-	
-	public List<StockHistory> getStockHistory(@Param("Site") String Site, @Param("PnOrName") String PnOrName,  @Param("DateFrom") String DateFrom,  @Param("DateTo") String DateTo) {
+
+	public List<StockHistory> getStockHistory(@Param("Site") String Site, @Param("PnOrName") String PnOrName,
+			@Param("DateFrom") String DateFrom, @Param("DateTo") String DateTo) {
 		return stockMapper.findStockHistoryBySite(Site, PnOrName, DateFrom, DateTo);
 	}
-	
+
 }

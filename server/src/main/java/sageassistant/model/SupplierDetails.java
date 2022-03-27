@@ -1,6 +1,8 @@
 package sageassistant.model;
 
-public class SupplierDetails extends AmodelTemplate {
+import sageassistant.model.base.ModelTemplate;
+
+public class SupplierDetails extends ModelTemplate {
 	private static final long serialVersionUID = 1L;
 
 	private String SupplierCode;

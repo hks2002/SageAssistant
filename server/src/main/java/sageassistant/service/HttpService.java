@@ -97,14 +97,19 @@ public class HttpService {
 	public void doRequest(HttpServletRequest request, HttpServletResponse responseToClinet) {
 
 		String method = request.getMethod();
-		String path = request.getRequestURL().toString();
+		String path = request.getPathInfo().toString();
+		log.debug("path before:" + path);
+		path=path.replaceFirst("^/Proxy/", "");
+        log.debug("path after:" + path);
+
 		Enumeration<String> headers = request.getHeaderNames();
 
 		HttpURLConnection connection = null;
 		BufferedReader reader = null;
 		try {
-			URL url = new URL(path);
+			URL url = new URL("http://www.baidu.com");
 			connection = (HttpURLConnection) url.openConnection();
+
 			connection.setConnectTimeout(8000);
 			connection.setReadTimeout(8000);
 			connection.setRequestProperty("accept", "*/*");

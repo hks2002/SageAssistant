@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import sageassistant.service.AttachmentService;
-import sageassistant.utils.Utils;
 
 @CrossOrigin
 @RestController
@@ -25,7 +24,6 @@ public class AttachmentController {
 			@RequestParam(value = "Cat", required = true) String cat,
 			@RequestParam("file") final MultipartFile uploadfile, HttpServletResponse response) {
 		return attachmentService.handleFileUpload(pn, cat, uploadfile, response);
-
 	}
 
 	@GetMapping("/Data/FileDelete")
@@ -42,10 +40,5 @@ public class AttachmentController {
 		return attachmentService.getAttachmentPath(pn);
 	}
 
-	@GetMapping("/Data/MakeShortPn")
-	public String makeShortPn(@RequestParam(value = "Pn", required = true) String pn) {
-		return Utils.makeShortPn(pn);
-	}
-	
 
 }

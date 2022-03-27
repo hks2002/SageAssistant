@@ -593,9 +593,8 @@
 		   AND STOJOU.VCRLIN_0 = PRECEIPTD.PTDLIN_0
 		   AND STOJOU.TRSTYP_0=3
 	WHERE PRECEIPT.PRHFCY_0=#{PurchaseSite} 
-	      AND PRECEIPT.BPSNUM_0=#{VendorCode} 
-		  AND PRECEIPT.RCPDAT_0 &gt;= #{StartDay}
-		  AND PRECEIPT.RCPDAT_0 &lt;= #{EndDay} 
+	      AND PRECEIPT.BPSNUM_0=#{VendorCode}
+		  AND (PRECEIPT.RCPDAT_0 BETWEEN CONVERT(datetime, #{StartDay},120) AND CONVERT(datetime, #{EndDay},120) ) 
     </select>
     <select id="findInvoiceByInvoiceNO"  resultType="sageassistant.model.RptInvoice">
     SELECT DISTINCT

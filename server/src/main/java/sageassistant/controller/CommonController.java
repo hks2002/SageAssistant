@@ -10,6 +10,7 @@ import sageassistant.service.CommonService;
 @CrossOrigin
 @RestController
 public class CommonController {	 
+	
 	@Autowired
 	CommonService commonService;
 
