@@ -71,18 +71,19 @@ module.exports = configure(function (ctx) {
           .plugin('eslint-webpack-plugin')
           .use(ESLintPlugin, [{ extensions: ['js', 'vue'] }])
 
+        // Vue3Lottie instead lottie-player, keep codes here for future,
         // add cumstomer html tag for vue
-        chain.module
-          .rule('vue')
-          .use('vue-loader')
-          .loader('vue-loader')
-          .tap((options) => {
-            options.compilerOptions = {
-              ...(options.compilerOptions || {}),
-              isCustomElement: (tag) => /^lottie-player/.test(tag)
-            }
-            return options
-          })
+        // chain.module
+        //   .rule('vue')
+        //   .use('vue-loader')
+        //   .loader('vue-loader')
+        //   .tap((options) => {
+        //     options.compilerOptions = {
+        //       ...(options.compilerOptions || {}),
+        //       isCustomElement: (tag) => /^lottie-player/.test(tag)
+        //     }
+        //     return options
+        //   })
       },
 
       scopeHoisting: true,
