@@ -14,8 +14,8 @@
         label="Fapiao"
       />
       <q-tab
-        name="Profit"
-        label="Profit"
+        name="InvoicePay"
+        label="Invoice Pay"
       />
     </q-tabs>
 
@@ -31,14 +31,20 @@
         style="padding:0px"
       >
         <fapiao v-if="isAuthorised('GESSIH')" />
-        <error-403 v-else />
+        <exception
+          :ErrorCode="403"
+          v-else
+        />
       </q-tab-panel>
       <q-tab-panel
-        name="Profit"
+        name="InvoicePay"
         style="padding:0px"
       >
-        <fapiao v-if="isAuthorised('CONSBAL')" />
-        <error-403 v-else />
+        <fapiao v-if="isAuthorised('GESSIH')" />
+        <exception
+          :ErrorCode="403"
+          v-else
+        />
       </q-tab-panel>
     </q-tab-panels>
   </q-page>
@@ -49,14 +55,14 @@ import { defineComponent, ref } from 'vue'
 import { ebus } from 'boot/ebus'
 import { isAuthorised } from 'assets/auth'
 import Fapiao from 'src/components/Fapiao.vue'
-import Error403 from 'pages/Error403.vue'
+import Exception from 'pages/Exception.vue'
 
 export default defineComponent({
   name: 'Financials',
 
   components: {
     Fapiao,
-    Error403
+    Exception
   },
 
   setup(props, ctx) {
@@ -74,5 +80,4 @@ export default defineComponent({
 })
 </script>
 <style lang='scss' scoped>
-
 </style>

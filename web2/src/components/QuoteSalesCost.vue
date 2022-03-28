@@ -100,7 +100,10 @@
           </q-toolbar>
         </template>
       </q-table>
-      <error-403 v-else />
+      <exception
+        :ErrorCode="403"
+        v-else
+      />
     </q-tab-panel>
     <q-tab-panel
       name="AllSites"
@@ -236,15 +239,18 @@
           <q-tr :props="props">
             <q-th
               v-for="col in props.cols"
-              :key="col.name"
+              :key="col['name']"
               :props="props"
             >
-              {{ col.label }}
+              {{ col['label'] }}
             </q-th>
           </q-tr>
         </template>
       </q-table>
-      <error-403 v-else />
+      <exception
+        :ErrorCode="403"
+        v-else
+      />
     </q-tab-panel>
   </q-tab-panels>
 </template>
@@ -257,7 +263,7 @@ import { useQuasar, date } from 'quasar'
 import { getCookies } from 'assets/storage'
 import { jsonToExcel, jsonToTable } from 'assets/dataUtils'
 import { isAuthorised } from 'assets/auth'
-import Error403 from 'pages/Error403.vue'
+import Exception from 'pages/Exception.vue'
 import _forEach from 'lodash/forEach'
 import _groupBy from 'lodash/groupBy'
 import _map from 'lodash/map'
@@ -267,7 +273,7 @@ export default defineComponent({
   name: 'QuoteSalesCost',
 
   components: {
-    Error403
+    Exception
   },
 
   setup(props, ctx) {
@@ -306,7 +312,10 @@ export default defineComponent({
       if (!checkInput()) return
 
       $q.loadingBar.start()
-      axios.get(`/Data/AnalysisQuoteSalesCost?Site=${site.value}&CategoryCode=${categoryCode.value}&DateFrom=${dateFrom.value}&DateTo=${dateTo.value}&Limit=${limitN.value}`)
+      axios
+        .get(
+          `/Data/AnalysisQuoteSalesCost?Site=${site.value}&CategoryCode=${categoryCode.value}&DateFrom=${dateFrom.value}&DateTo=${dateTo.value}&Limit=${limitN.value}`
+        )
         .then((response) => {
           analysisQuoteSalesCost.value = response.data
           analysisQuoteSalesCost.value.forEach((row, index) => {
@@ -316,17 +325,23 @@ export default defineComponent({
         .catch((e) => {
           console.error(e)
           notifyError('Loading AnalysisQuoteSalesCost Failed!')
-        }).finally(() => {
+        })
+        .finally(() => {
           $q.loadingBar.stop()
         })
     }
 
     const doUpdateAll = () => {
       $q.loadingBar.start()
-      axios.get(`/Data/AnalysisQuoteSalesCost?Site=ALL&CategoryCode=${categoryCode.value}&DateFrom=${dateFrom.value}&DateTo=${dateTo.value}&Limit=${limitN.value}`)
+      axios
+        .get(
+          `/Data/AnalysisQuoteSalesCost?Site=ALL&CategoryCode=${categoryCode.value}&DateFrom=${dateFrom.value}&DateTo=${dateTo.value}&Limit=${limitN.value}`
+        )
         .then((response) => {
           analysisQuoteSalesCostAll = response.data
-          analysisQuoteSalesCostAllKeyed.value = _values(_groupBy(analysisQuoteSalesCostAll, 'PN'))
+          analysisQuoteSalesCostAllKeyed.value = _values(
+            _groupBy(analysisQuoteSalesCostAll, 'PN')
+          )
           analysisQuoteSalesCostAllKeyed.value.forEach((row, index) => {
             row.index = index + 1
           })
@@ -334,7 +349,8 @@ export default defineComponent({
         .catch((e) => {
           console.error(e)
           notifyError('Loading AnalysisQuoteSalesCost Failed!')
-        }).finally(() => {
+        })
+        .finally(() => {
           $q.loadingBar.stop()
         })
     }
@@ -349,7 +365,7 @@ export default defineComponent({
       {
         name: '#',
         label: '#',
-        field: row => row.index,
+        field: (row) => row.index,
         align: 'center',
         headerClasses: 'bg-primary text-white'
       },
@@ -357,52 +373,52 @@ export default defineComponent({
         name: 'PN',
         label: 'PN',
         align: 'left',
-        field: row => row.PN,
+        field: (row) => row.PN,
         headerClasses: 'bg-primary text-white'
       },
       {
         name: 'Description',
         label: 'Description',
         align: 'left',
-        field: row => row.Description,
+        field: (row) => row.Description,
         headerClasses: 'bg-primary text-white'
       },
       {
         name: 'QCnt',
         label: 'QCnt',
         align: 'center',
-        field: row => row.QCnt,
+        field: (row) => row.QCnt,
         headerClasses: 'bg-positive text-white'
       },
       {
         name: 'QQty',
         label: 'QQty',
         align: 'center',
-        field: row => row.QQty,
+        field: (row) => row.QQty,
         headerClasses: 'bg-positive text-white'
       },
       {
         name: 'MinQPrice',
         label: 'MinQPrice',
         align: 'right',
-        format: val => isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10),
-        field: row => row.MinQPrice,
+        format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+        field: (row) => row.MinQPrice,
         headerClasses: 'bg-info text-white'
       },
       {
         name: 'AvgQPrice',
         label: 'AvgQPrice',
         align: 'right',
-        format: val => isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10),
-        field: row => row.AvgQPrice,
+        format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+        field: (row) => row.AvgQPrice,
         headerClasses: 'bg-info text-white'
       },
       {
         name: 'MaxQPrice',
         label: 'MaxQPrice',
         align: 'right',
-        format: val => isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10),
-        field: row => row.MaxQPrice,
+        format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+        field: (row) => row.MaxQPrice,
         headerClasses: 'bg-info text-white'
       }
     ]
@@ -411,8 +427,8 @@ export default defineComponent({
         name: 'LastQPrice' + (i + 1),
         label: 'LastQPrice' + (i + 1),
         align: 'right',
-        format: val => isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10),
-        field: row => row['LastQPrice' + (i + 1)],
+        format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+        field: (row) => row['LastQPrice' + (i + 1)],
         headerClasses: 'bg-info text-white'
       }
       columns.push(o)
@@ -422,7 +438,7 @@ export default defineComponent({
       name: 'SCnt',
       label: 'SCnt',
       align: 'center',
-      field: row => row.SCnt,
+      field: (row) => row.SCnt,
       headerClasses: 'bg-positive text-white'
     }
     columns.push(o)
@@ -430,7 +446,7 @@ export default defineComponent({
       name: 'SQty',
       label: 'SQty',
       align: 'center',
-      field: row => row.SQty,
+      field: (row) => row.SQty,
       headerClasses: 'bg-positive text-white'
     }
     columns.push(o)
@@ -438,8 +454,8 @@ export default defineComponent({
       name: 'MinSPrice',
       label: 'MinSPrice',
       align: 'right',
-      format: val => isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10),
-      field: row => row.AvgSPrice,
+      format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+      field: (row) => row.AvgSPrice,
       headerClasses: 'bg-accent text-white'
     }
     columns.push(o)
@@ -447,8 +463,8 @@ export default defineComponent({
       name: 'AvgSPrice',
       label: 'AvgSPrice',
       align: 'right',
-      format: val => isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10),
-      field: row => row.AvgSPrice,
+      format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+      field: (row) => row.AvgSPrice,
       headerClasses: 'bg-accent text-white'
     }
     columns.push(o)
@@ -456,8 +472,8 @@ export default defineComponent({
       name: 'MaxSPrice',
       label: 'MaxSPrice',
       align: 'right',
-      format: val => isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10),
-      field: row => row.MaxSPrice,
+      format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+      field: (row) => row.MaxSPrice,
       headerClasses: 'bg-accent text-white'
     }
     columns.push(o)
@@ -466,8 +482,8 @@ export default defineComponent({
         name: 'LastSPrice' + (i + 1),
         label: 'LastSPrice' + (i + 1),
         align: 'right',
-        format: val => isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10),
-        field: row => row['LastSPrice' + (i + 1)],
+        format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+        field: (row) => row['LastSPrice' + (i + 1)],
         headerClasses: 'bg-accent text-white'
       }
       columns.push(o)
@@ -477,7 +493,7 @@ export default defineComponent({
         name: 'LastPJT' + (i + 1),
         label: 'LastPJT' + (i + 1),
         align: 'right',
-        field: row => row['LastPJT' + (i + 1)],
+        field: (row) => row['LastPJT' + (i + 1)],
         headerClasses: 'bg-warning text-white'
       }
       columns.push(o)
@@ -487,8 +503,8 @@ export default defineComponent({
         name: 'LastCost' + (i + 1),
         label: 'LastCost' + (i + 1),
         align: 'right',
-        format: val => isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10),
-        field: row => row['LastCost' + (i + 1)],
+        format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+        field: (row) => row['LastCost' + (i + 1)],
         headerClasses: 'bg-primary text-white'
       }
       columns.push(o)
@@ -496,14 +512,25 @@ export default defineComponent({
 
     const download = () => {
       const header = _map(columns, 'name')
-      jsonToExcel(header, analysisQuoteSalesCost.value, 'Product group2 [' + categoryCode.value + '] in ' + site.value + ' from ' + dateFrom.value + ' to ' + dateTo.value)
+      jsonToExcel(
+        header,
+        analysisQuoteSalesCost.value,
+        'Product group2 [' +
+          categoryCode.value +
+          '] in ' +
+          site.value +
+          ' from ' +
+          dateFrom.value +
+          ' to ' +
+          dateTo.value
+      )
     }
 
     const columnsAll = [
       {
         name: '#',
         label: '#',
-        field: row => row.index,
+        field: (row) => row.index,
         align: 'center',
         headerClasses: 'bg-primary text-white'
       },
@@ -511,16 +538,17 @@ export default defineComponent({
         name: 'PN',
         label: 'PN',
         align: 'left',
-        field: row => row[0].PN,
+        field: (row) => row[0].PN,
         headerClasses: 'bg-primary text-white'
       },
       {
         name: 'Description',
         label: 'Description',
         align: 'left',
-        field: row => row[0].Description,
+        field: (row) => row[0].Description,
         headerClasses: 'bg-primary text-white'
-      }]
+      }
+    ]
 
     // get value from the array data which contains all sites
     const getSiteValue = (array, site, key) => {
@@ -536,7 +564,7 @@ export default defineComponent({
         name: 'QCnt' + siteList.value[i],
         label: siteList.value[i],
         align: 'center',
-        field: row => getSiteValue(row, siteList.value[i], 'QCnt'),
+        field: (row) => getSiteValue(row, siteList.value[i], 'QCnt'),
         headerClasses: 'bg-light-green text-white'
       }
       columnsAll.push(o)
@@ -547,7 +575,7 @@ export default defineComponent({
         name: 'QQty' + siteList.value[i],
         label: siteList.value[i],
         align: 'center',
-        field: row => getSiteValue(row, siteList.value[i], 'QQty'),
+        field: (row) => getSiteValue(row, siteList.value[i], 'QQty'),
         headerClasses: 'bg-green text-white'
       }
       columnsAll.push(o)
@@ -558,8 +586,8 @@ export default defineComponent({
         name: 'MinQPrice' + siteList.value[i],
         label: siteList.value[i],
         align: 'right',
-        format: val => isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10),
-        field: row => getSiteValue(row, siteList.value[i], 'MinQPrice'),
+        format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+        field: (row) => getSiteValue(row, siteList.value[i], 'MinQPrice'),
         headerClasses: 'bg-indigo-6 text-white'
       }
       columnsAll.push(o)
@@ -570,8 +598,8 @@ export default defineComponent({
         name: 'AvgQPrice' + siteList.value[i],
         label: siteList.value[i],
         align: 'right',
-        format: val => isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10),
-        field: row => getSiteValue(row, siteList.value[i], 'AvgQPrice'),
+        format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+        field: (row) => getSiteValue(row, siteList.value[i], 'AvgQPrice'),
         headerClasses: 'bg-indigo-4 text-white'
       }
       columnsAll.push(o)
@@ -582,8 +610,8 @@ export default defineComponent({
         name: 'MaxQPrice' + siteList.value[i],
         label: siteList.value[i],
         align: 'right',
-        format: val => isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10),
-        field: row => getSiteValue(row, siteList.value[i], 'MaxQPrice'),
+        format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+        field: (row) => getSiteValue(row, siteList.value[i], 'MaxQPrice'),
         headerClasses: 'bg-indigo-2 text-white'
       }
       columnsAll.push(o)
@@ -595,8 +623,9 @@ export default defineComponent({
           name: 'LastQPrice' + (ii + 1) + siteList.value[i],
           label: siteList.value[i],
           align: 'right',
-          format: val => isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10),
-          field: row => getSiteValue(row, siteList.value[i], 'LastQPrice' + (ii + 1)),
+          format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+          field: (row) =>
+            getSiteValue(row, siteList.value[i], 'LastQPrice' + (ii + 1)),
           headerClasses: 'bg-cyan-' + (14 - ii) + ' text-white'
         }
         columnsAll.push(o)
@@ -608,7 +637,7 @@ export default defineComponent({
         name: 'SCnt' + siteList.value[i],
         label: siteList.value[i],
         align: 'center',
-        field: row => getSiteValue(row, siteList.value[i], 'SCnt'),
+        field: (row) => getSiteValue(row, siteList.value[i], 'SCnt'),
         headerClasses: 'bg-light-green text-white'
       }
       columnsAll.push(o)
@@ -619,7 +648,7 @@ export default defineComponent({
         name: 'SQty' + siteList.value[i],
         label: siteList.value[i],
         align: 'center',
-        field: row => getSiteValue(row, siteList.value[i], 'SQty'),
+        field: (row) => getSiteValue(row, siteList.value[i], 'SQty'),
         headerClasses: 'bg-green text-white'
       }
       columnsAll.push(o)
@@ -630,8 +659,8 @@ export default defineComponent({
         name: 'MinSPrice' + siteList.value[i],
         label: siteList.value[i],
         align: 'right',
-        format: val => isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10),
-        field: row => getSiteValue(row, siteList.value[i], 'MinSPrice'),
+        format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+        field: (row) => getSiteValue(row, siteList.value[i], 'MinSPrice'),
         headerClasses: 'bg-indigo-6 text-white'
       }
       columnsAll.push(o)
@@ -642,8 +671,8 @@ export default defineComponent({
         name: 'AvgSPrice' + siteList.value[i],
         label: siteList.value[i],
         align: 'right',
-        format: val => isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10),
-        field: row => getSiteValue(row, siteList.value[i], 'AvgSPrice'),
+        format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+        field: (row) => getSiteValue(row, siteList.value[i], 'AvgSPrice'),
         headerClasses: 'bg-indigo-4 text-white'
       }
       columnsAll.push(o)
@@ -654,8 +683,8 @@ export default defineComponent({
         name: 'MaxSPrice' + siteList.value[i],
         label: siteList.value[i],
         align: 'right',
-        format: val => isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10),
-        field: row => getSiteValue(row, siteList.value[i], 'MaxSPrice'),
+        format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+        field: (row) => getSiteValue(row, siteList.value[i], 'MaxSPrice'),
         headerClasses: 'bg-indigo-2 text-white'
       }
       columnsAll.push(o)
@@ -667,8 +696,9 @@ export default defineComponent({
           name: 'LastSPrice' + (ii + 1) + siteList.value[i],
           label: siteList.value[i],
           align: 'right',
-          format: val => isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10),
-          field: row => getSiteValue(row, siteList.value[i], 'LastSPrice' + (ii + 1)),
+          format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+          field: (row) =>
+            getSiteValue(row, siteList.value[i], 'LastSPrice' + (ii + 1)),
           headerClasses: 'bg-blue-' + (14 - ii) + ' text-white'
         }
         columnsAll.push(o)
@@ -681,8 +711,9 @@ export default defineComponent({
           name: 'LastCost' + (ii + 1) + siteList.value[i],
           label: siteList.value[i],
           align: 'right',
-          format: val => isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10),
-          field: row => getSiteValue(row, siteList.value[i], 'LastCost' + (ii + 1)),
+          format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+          field: (row) =>
+            getSiteValue(row, siteList.value[i], 'LastCost' + (ii + 1)),
           headerClasses: 'bg-orange-' + (14 - ii) + ' text-white'
         }
         columnsAll.push(o)
@@ -690,7 +721,16 @@ export default defineComponent({
     }
 
     const downloadAll = () => {
-      const header = ['Site', 'PN', 'Description', 'QCnt', 'QQty', 'MinQPrice', 'AvgQPrice', 'MaxQPrice']
+      const header = [
+        'Site',
+        'PN',
+        'Description',
+        'QCnt',
+        'QQty',
+        'MinQPrice',
+        'AvgQPrice',
+        'MaxQPrice'
+      ]
 
       for (let ii = 0; ii < limitN.value; ++ii) {
         header.push('LastQPrice' + (ii + 1))
@@ -706,7 +746,17 @@ export default defineComponent({
       for (let ii = 0; ii < limitN.value; ++ii) {
         header.push('LastCost' + (ii + 1))
       }
-      jsonToExcel(header, analysisQuoteSalesCostAll, 'Product group2 [' + categoryCode.value + '] in all sites' + ' from ' + dateFrom.value + ' to ' + dateTo.value)
+      jsonToExcel(
+        header,
+        analysisQuoteSalesCostAll,
+        'Product group2 [' +
+          categoryCode.value +
+          '] in all sites' +
+          ' from ' +
+          dateFrom.value +
+          ' to ' +
+          dateTo.value
+      )
     }
 
     // event handing
@@ -714,7 +764,9 @@ export default defineComponent({
       site.value = newSite
       doUpdateOne()
     })
-    onBeforeUnmount(() => { ebus.off('changeSite') })
+    onBeforeUnmount(() => {
+      ebus.off('changeSite')
+    })
 
     return {
       tab,

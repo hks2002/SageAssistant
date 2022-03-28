@@ -58,8 +58,8 @@ module.exports = configure(function (ctx) {
       // rtl: false, // https://v2.quasar.dev/options/rtl-support
       preloadChunks: true,
       showProgress: true,
-      gzip: false,
-      analyze: true,
+      gzip: true,
+      analyze: false,
 
       // Options below are automatically set depending on the env, set them if you want to override
       // extractCSS: false,

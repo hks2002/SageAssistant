@@ -114,53 +114,32 @@ const routes = [
       }
     ]
   },
-  // exception
   {
-    path: '/exception/403',
-    name: '/exception/403',
+    path: '/exception',
+    name: '/exception',
     component: () => import('layouts/DefaultLayout.vue'),
     children: [
       {
-        path: '',
-        component: () => import('pages/Error403.vue')
+        path: ':ErrorCode',
+        component: () => import('pages/Exception.vue'),
+        props: (route) => {
+          if (route.params.ErrorCode !== '403' &&
+            route.params.ErrorCode !== '404' &&
+            route.params.ErrorCode !== '500') {
+            return { ErrorCode: '404' }
+          } else {
+            return { ErrorCode: route.params.ErrorCode }
+          }
+        }
       }
     ]
   },
-  {
-    path: '/exception/404',
-    name: '/exception/404',
-    component: () => import('layouts/DefaultLayout.vue'),
-    children: [
-      {
-        path: '',
-        component: () => import('pages/Error404.vue')
-      }
-    ]
-  },
-  {
-    path: '/exception/500',
-    name: '/exception/500',
-    component: () => import('layouts/DefaultLayout.vue'),
-    children: [
-      {
-        path: '',
-        component: () => import('pages/Error500.vue')
-      }
-    ]
-  },
-  // exception
-
   // Always leave this as last one,
   // but you can also remove it
   {
     path: '/:catchAll(.*)*',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [
-      {
-        path: '',
-        component: () => import('pages/Error404.vue')
-      }
-    ]
+    component: () => import('layouts/DefaultLayout.vue'),
+    redirect: '/exception/404'
   }
 ]
 

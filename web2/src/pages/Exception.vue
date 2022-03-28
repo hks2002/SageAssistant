@@ -1,6 +1,6 @@
 <template>
   <lottie-player
-    src="/json/404.json"
+    :src="'/json/' + ErrorCode +'.json'"
     background="transparent"
     style="width: 400px"
     class="fixed-center"
@@ -11,14 +11,11 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { useQuasar } from 'quasar'
 import '@lottiefiles/lottie-player'
 
 export default defineComponent({
-  name: 'Error404',
-  setup() {
-    const $q = useQuasar()
-    $q.loadingBar.stop()
-  }
+  name: 'Exception',
+  props: ['ErrorCode'],
+  setup(props) {}
 })
 </script>

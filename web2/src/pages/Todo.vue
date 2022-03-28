@@ -47,7 +47,10 @@
           :style="tabHeight"
           v-if="isAuthorised('GESPOH') || isAuthorised('GESSOH')"
         />
-        <error-403 v-else />
+        <exception
+          :ErrorCode="403"
+          v-else
+        />
       </q-tab-panel>
 
       <q-tab-panel
@@ -59,7 +62,10 @@
           :style="tabHeight"
           v-if="isAuthorised('GESPOH') || isAuthorised('GESSOH')"
         />
-        <error-403 v-else />
+        <exception
+          :ErrorCode="403"
+          v-else
+        />
       </q-tab-panel>
 
       <q-tab-panel
@@ -71,7 +77,10 @@
           :style="tabHeight"
           v-if="isAuthorised('GESPOH') || isAuthorised('GESSOH')"
         />
-        <error-403 v-else />
+        <exception
+          :ErrorCode="403"
+          v-else
+        />
       </q-tab-panel>
       <q-tab-panel
         name="Short-Bom"
@@ -82,7 +91,10 @@
           :style="tabHeight"
           v-if="isAuthorised('GESPOH') || isAuthorised('GESSOH')"
         />
-        <error-403 v-else />
+        <exception
+          :ErrorCode="403"
+          v-else
+        />
       </q-tab-panel>
       <q-tab-panel
         name="Orphan-WO"
@@ -93,7 +105,10 @@
           :style="tabHeight"
           v-if="isAuthorised('GESMFG')"
         />
-        <error-403 v-else />
+        <exception
+          :ErrorCode="403"
+          v-else
+        />
       </q-tab-panel>
     </q-tab-panels>
   </q-page>
@@ -111,7 +126,7 @@ import EchartTodoReceive from 'components/echarts/EchartTodoReceive.vue'
 import EchartTodoPurchaseBom from 'components/echarts/EchartTodoPurchaseBom.vue'
 import EchartTodoDealWithOrderLine from 'components/echarts/EchartTodoDealWithOrderLine.vue'
 import EchartTodoClosedWO from 'components/echarts/EchartTodoClosedWO.vue'
-import Error403 from 'pages/Error403.vue'
+import Exception from 'pages/Exception.vue'
 
 export default defineComponent({
   name: 'Todo',
@@ -122,7 +137,7 @@ export default defineComponent({
     EchartTodoPurchaseBom,
     EchartTodoDealWithOrderLine,
     EchartTodoClosedWO,
-    Error403
+    Exception
   },
 
   setup() {
@@ -139,7 +154,9 @@ export default defineComponent({
     ebus.on('changeSite', (newSite) => {
       site.value = newSite
     })
-    onBeforeUnmount(() => { ebus.off('changeSite') })
+    onBeforeUnmount(() => {
+      ebus.off('changeSite')
+    })
 
     return {
       tab,
@@ -152,5 +169,4 @@ export default defineComponent({
 })
 </script>
 <style lang='scss' scoped>
-
 </style>

@@ -27,7 +27,10 @@
         style="padding:0px"
       >
         <quote-sales-cost v-if="isAuthorised('GESSOH') || isAuthorised('GESSQH')" />
-        <error-403 v-else />
+        <exception
+          :ErrorCode="403"
+          v-else
+        />
       </q-tab-panel>
     </q-tab-panels>
   </q-page>
@@ -38,14 +41,14 @@ import { defineComponent, ref } from 'vue'
 import { ebus } from 'boot/ebus'
 import { isAuthorised } from 'assets/auth'
 import QuoteSalesCost from 'src/components/QuoteSalesCost.vue'
-import Error403 from 'pages/Error403.vue'
+import Exception from 'pages/Exception.vue'
 
 export default defineComponent({
   name: 'Analysis',
 
   components: {
     QuoteSalesCost,
-    Error403
+    Exception
   },
 
   setup(props, ctx) {
@@ -63,5 +66,4 @@ export default defineComponent({
 })
 </script>
 <style lang='scss' scoped>
-
 </style>

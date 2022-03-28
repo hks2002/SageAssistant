@@ -31,14 +31,20 @@
         style="padding:0px"
       >
         <stock-summary v-if="isAuthorised('CONSSAR')" />
-        <error-403 v-else />
+        <exception
+          :ErrorCode="403"
+          v-else
+        />
       </q-tab-panel>
       <q-tab-panel
         name="History"
         style="padding:0px"
       >
         <stock-history v-if="isAuthorised('CONSSAR')" />
-        <error-403 v-else />
+        <exception
+          :ErrorCode="403"
+          v-else
+        />
       </q-tab-panel>
     </q-tab-panels>
   </q-page>
@@ -51,7 +57,7 @@ import { getCookies } from 'assets/storage'
 import { isAuthorised } from 'assets/auth'
 import StockSummary from 'src/components/StockSummary.vue'
 import StockHistory from 'src/components/StockHistory.vue'
-import Error403 from 'pages/Error403.vue'
+import Exception from 'pages/Exception.vue'
 
 export default defineComponent({
   name: 'Stock',
@@ -59,7 +65,7 @@ export default defineComponent({
   components: {
     StockSummary,
     StockHistory,
-    Error403
+    Exception
   },
 
   setup(props, ctx) {
@@ -79,5 +85,4 @@ export default defineComponent({
 })
 </script>
 <style lang='scss' scoped>
-
 </style>
