@@ -41,7 +41,7 @@
 		FROM EXPLOIT.BPARTNER AS BPARTNER
 		   LEFT JOIN EXPLOIT.BPADDRESS AS BPADDRESS
 		     ON BPARTNER.BPRNUM_0 = BPADDRESS.BPANUM_0
-		WHERE BPARTNER.BPRNUM_0 LIKE #{SupplierCode}
+		WHERE BPARTNER.BPRNUM_0 = #{SupplierCode}
     </select>
     <select id="findSupplierTotalAmount" parameterType="String" resultType="sageassistant.model.SupplierSummaryAmount">
         SELECT DISTINCT
@@ -58,13 +58,12 @@
 			PORDER.POHFCY_0 AS Site,
 			PORDER.BPSNUM_0 AS SupplierCode,
 			'Project' AS CountType,
-			COUNT(DISTINCT PORDERP.PJT_0) AS Qty
+			COUNT(PORDERP.PJT_0) OVER (PARTITION BY PORDER.POHFCY_0,PORDER.BPSNUM_0) AS Qty
 		FROM EXPLOIT.PORDER AS PORDER
 			LEFT JOIN EXPLOIT.PORDERP AS PORDERP
 			    ON PORDER.POHNUM_0=PORDERP.POHNUM_0
 		WHERE PORDER.BPSNUM_0=#{SupplierCode}
 		      AND (PORDER.ORDDAT_0 BETWEEN CONVERT(datetime, #{DateFrom},120) AND CONVERT(datetime, #{DateTo},120) )
-		GROUP BY PORDER.POHFCY_0,PORDER.BPSNUM_0
     </select>
     <select id="findSupplierTotalItemQty" parameterType="String" resultType="sageassistant.model.SupplierSummaryQty">
         SELECT DISTINCT
@@ -104,7 +103,7 @@
             PORDER.POHFCY_0 AS Site,
 	        PORDER.BPSNUM_0 AS SupplierCode,
 			'Project' AS CountType,
-			COUNT(DISTINCT PORDERP.PJT_0) AS Qty
+			COUNT(PORDERP.PJT_0) OVER (PARTITION BY PORDER.POHFCY_0,PORDER.BPSNUM_0) AS Qty
 	    FROM  EXPLOIT.PORDERQ AS PORDERQ
 	        LEFT JOIN EXPLOIT.PORDER AS PORDER
 	        	ON PORDERQ.POHNUM_0=PORDER.POHNUM_0
@@ -114,21 +113,19 @@
 	    WHERE PORDERQ.LINCLEFLG_0 != 2
 		    AND PORDERQ.PTHNUM_0 =''
 		    AND PORDER.BPSNUM_0=#{SupplierCode}
-		GROUP BY PORDER.POHFCY_0,PORDER.BPSNUM_0
 	</select>
 	<select id="findSupplierOpenItemQty" parameterType="String" resultType="sageassistant.model.SupplierSummaryQty">
         SELECT DISTINCT 
             PORDER.POHFCY_0 AS Site,
 	        PORDER.BPSNUM_0 AS SupplierCode,
 			'Item' AS CountType,
-			COUNT(DISTINCT PORDERQ.ROWID) AS Qty
+			COUNT(PORDERQ.ROWID) OVER (PARTITION BY PORDER.POHFCY_0,PORDER.BPSNUM_0) AS Qty
 	    FROM  EXPLOIT.PORDERQ AS PORDERQ
 	        LEFT JOIN EXPLOIT.PORDER AS PORDER
 	        ON PORDERQ.POHNUM_0=PORDER.POHNUM_0
 	    WHERE PORDERQ.LINCLEFLG_0 != 2
 		    AND PORDERQ.PTHNUM_0 =''
 		    AND PORDER.BPSNUM_0=#{SupplierCode}
-		GROUP BY PORDER.POHFCY_0,PORDER.BPSNUM_0
 	</select>
 	<select id="findSupplierOpenProductQty" parameterType="String" resultType="sageassistant.model.SupplierSummaryQty">
         SELECT DISTINCT 
