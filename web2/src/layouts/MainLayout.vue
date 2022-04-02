@@ -1,13 +1,13 @@
 <template>
   <q-layout view="hHh Lpr lFf">
-    <PageHeader />
+    <PageHeader :height="pageHeaderHeight" />
 
     <!-- mini-to-overlay let the main body size frezon-->
     <q-drawer
-      v-model="leftDrawerOpen"
+      v-model="leftDrawerClose"
       show-if-above
       :mini="miniState"
-      :mini-width="40"
+      :mini-width="drawerMiniWidth"
       :width="150"
       mini-to-overlay
       bordered
@@ -17,22 +17,29 @@
       <Menus />
     </q-drawer>
 
-    <q-page-container>
-      <q-scroll-area :style="pageStyle">
+    <q-page-container expand>
+      <q-scroll-area :style="'height:'+ pageBodyHeight + 'px'">
         <router-view />
       </q-scroll-area>
     </q-page-container>
 
-    <PageFooter />
+    <PageFooter :height="pageFooterHeight" />
   </q-layout>
 </template>
 
 <script>
-import { defineComponent, ref, onBeforeUnmount, onMounted } from 'vue'
-import { ebus } from 'src/boot/ebus'
-import Menus from 'src/components/Menus.vue'
-import PageFooter from 'src/components/PageFooter.vue'
-import PageHeader from 'src/components/PageHeader.vue'
+import {
+  defineComponent,
+  ref,
+  onBeforeUnmount,
+  onMounted,
+  onBeforeMount
+} from 'vue'
+import { useQuasar } from 'quasar'
+import { ebus } from 'boot/ebus'
+import Menus from 'components/.layouts/Menus.vue'
+import PageFooter from 'components/.layouts/PageFooter.vue'
+import PageHeader from 'components/.layouts/PageHeader.vue'
 
 export default defineComponent({
   name: 'MainLayout',
@@ -44,29 +51,57 @@ export default defineComponent({
   },
 
   setup() {
-    const leftDrawerOpen = ref(false)
-    const pageStyle = ref('')
+    const $q = useQuasar()
+    const leftDrawerClose = ref(false)
+    const pageHeaderHeight = ref(40)
+    const pageFooterHeight = ref(18)
+    const pageBodyHeight = ref(800)
+    const drawerMiniWidth = ref(40)
+    const pageBodyWidth = ref(600)
 
     const toggleLeftDrawer = () => {
       console.debug('[evt] toggleLeftDrawer')
-      leftDrawerOpen.value = !leftDrawerOpen.value
+      leftDrawerClose.value = !leftDrawerClose.value
     }
     const closeLeftDrawer = () => {
       console.debug('[evt] closeLeftDrawer')
-      leftDrawerOpen.value = false
+      leftDrawerClose.value = true
     }
 
     const updatePageHeight = () => {
-      pageStyle.value = 'height:' + (document.body.clientHeight - 58) + 'px;'
+      pageBodyHeight.value =
+        window.innerHeight - pageHeaderHeight.value - pageFooterHeight.value
+      // save to global
+      $q.pageBodyHeight = pageBodyHeight.value
+      console.debug('pageHeight:' + pageBodyHeight.value)
+    }
+
+    const updatePageWidth = () => {
+      if (leftDrawerClose.value) {
+        pageBodyWidth.value = window.innerWidth
+      } else {
+        pageBodyWidth.value = window.innerWidth - drawerMiniWidth.value
+      }
+      // save to global
+      $q.pageBodyWidth = pageBodyWidth.value
+      console.debug('pageWidth:' + pageBodyWidth.value)
     }
 
     window.onresize = () => {
       updatePageHeight()
+      updatePageWidth()
     }
 
-    onMounted(() => {
+    onBeforeMount(() => {
+      console.debug('onBeforeMount MainLayout')
+      // sub components mounted before layout, need set global pageBodyHeight for sub components
       updatePageHeight()
+      updatePageWidth()
     })
+    onMounted(() => {
+      console.debug('onMounted MainLayout')
+    })
+
     // event handing
     ebus.on('toggleLeftDrawer', toggleLeftDrawer)
     onBeforeUnmount(() => {
@@ -79,8 +114,11 @@ export default defineComponent({
 
     // return them to vue template
     return {
-      leftDrawerOpen,
-      pageStyle,
+      leftDrawerClose,
+      pageHeaderHeight,
+      pageBodyHeight,
+      pageFooterHeight,
+      drawerMiniWidth,
       miniState: ref(true)
     }
   }

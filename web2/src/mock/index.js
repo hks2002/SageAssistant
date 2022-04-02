@@ -7,7 +7,7 @@ if (process.env.DEV) {
   require('./services/auth')
   require('./services/currencyRate')
   require('./services/files')
-  require('./services/productions')
+  require('./services/products')
   require('./services/sites')
   require('./services/srvInfo')
   require('./services/suppliers')
@@ -16,6 +16,8 @@ if (process.env.DEV) {
   require('./services/invoice')
   require('./services/stock')
   require('./services/analysis')
+  require('./services/customers')
+  require('./services/financials')
 
   console.debug('\u001b[35m' + '[Mock] ', 'Mounted')
 }

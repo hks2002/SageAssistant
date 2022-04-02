@@ -1,11 +1,10 @@
 <template>
   <Vue3Lottie
     :animationLink="'/json/' + ErrorCode +'.json'"
-    :height="200"
-    :width="200"
+    :height="400"
+    :width="400"
     background="transparent"
-    style="width: 400px"
-    class="fixed-center"
+    class="flex fixed-center"
   />
 </template>
 

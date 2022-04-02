@@ -104,17 +104,6 @@ const routes = [
     ]
   },
   {
-    path: '/Waiting',
-    name: '/Waiting',
-    component: () => import('layouts/DefaultLayout.vue'),
-    children: [
-      {
-        path: '',
-        component: () => import('pages/Waiting.vue')
-      }
-    ]
-  },
-  {
     path: '/exception',
     name: '/exception',
     component: () => import('layouts/DefaultLayout.vue'),

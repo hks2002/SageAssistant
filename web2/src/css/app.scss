@@ -24,3 +24,52 @@ $sampleColor: #85a5ff;
 $sampleColor: #95de64;
 $sampleColor: #ffd666;
 $sampleColor: #ff7875;
+
+::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+    contain: strict;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    transition: opacity 0.3s;
+    will-change: opacity;
+    background-color: #f90;
+    background-image: -webkit-linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0.2) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255, 255, 255, 0.2) 50%,
+        rgba(255, 255, 255, 0.2) 75%,
+        transparent 75%,
+        transparent
+    );
+}
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+    background: #ededed;
+}
+
+.q-scrollarea__bar {
+    width: 4px;
+    height: 4px;
+}
+.q-scrollarea__thumb {
+    width: 4px;
+    height: 4px;
+    opacity: 1;
+    border-radius: 2px;
+    background-color: #f90;
+    background-image: -webkit-linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0.2) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255, 255, 255, 0.2) 50%,
+        rgba(255, 255, 255, 0.2) 75%,
+        transparent 75%,
+        transparent
+    );
+}

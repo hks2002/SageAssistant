@@ -430,7 +430,7 @@ import { axios } from 'boot/axios'
 import { notifyError } from 'assets/common'
 import { ebus } from 'boot/ebus'
 import { isAuthorised } from 'assets/auth'
-import QSelectInput from 'components/QSelectInputSimple.vue'
+import QSelectInput from 'components/.controls/QSelectInputSimple.vue'
 
 export default defineComponent({
   name: 'Fapiao',
@@ -464,17 +464,19 @@ export default defineComponent({
       skr: '',
       fpzt: ''
     })
-    const FapiaoBody = ref([{
-      xh: '',
-      spmc: '',
-      ggxh: '',
-      jldw: '',
-      dj: '',
-      sl: '',
-      je: '',
-      slv: '',
-      se: ''
-    }])
+    const FapiaoBody = ref([
+      {
+        xh: '',
+        spmc: '',
+        ggxh: '',
+        jldw: '',
+        dj: '',
+        sl: '',
+        je: '',
+        slv: '',
+        se: ''
+      }
+    ])
     const InvoiceHeader = ref({
       Facility: '',
       Currency: '',
@@ -491,18 +493,20 @@ export default defineComponent({
       AmountTax: '',
       CurrRate: ''
     })
-    const InvoiceBody = ref([{
-      Line: '',
-      PN: '',
-      Description: '',
-      Qty: '',
-      Unit: '',
-      NetPrice: '',
-      AmountNoTax: '',
-      AmountTaxInclude: '',
-      AmountTax: '',
-      TaxRate: ''
-    }])
+    const InvoiceBody = ref([
+      {
+        Line: '',
+        PN: '',
+        Description: '',
+        Qty: '',
+        Unit: '',
+        NetPrice: '',
+        AmountNoTax: '',
+        AmountTaxInclude: '',
+        AmountTax: '',
+        TaxRate: ''
+      }
+    ])
     const showLoadingFapiaoHeader = ref(false)
     const showLoadingFapiaoBody = ref(false)
     const showLoadingInvoiceHeader = ref(false)
@@ -515,7 +519,8 @@ export default defineComponent({
         url += '&Lbdm=' + Lbdm.value
       }
 
-      axios.get(url)
+      axios
+        .get(url)
         .then((response) => {
           // Fapiao aways be array, even on recorder
           if (response.data.length > 0) {
@@ -525,7 +530,8 @@ export default defineComponent({
         .catch((e) => {
           console.error(e)
           notifyError('Loading Fapiao Failed!')
-        }).finally(() => {
+        })
+        .finally(() => {
           showLoadingFapiaoHeader.value = false
         })
     }
@@ -537,14 +543,16 @@ export default defineComponent({
         url += '&Lbdm=' + Lbdm.value
       }
 
-      axios.get(url)
+      axios
+        .get(url)
         .then((response) => {
           FapiaoBody.value = response.data
         })
         .catch((e) => {
           console.error(e)
           notifyError('Loading Fapiao Failed!')
-        }).finally(() => {
+        })
+        .finally(() => {
           showLoadingFapiaoBody.value = false
         })
     }
@@ -558,14 +566,16 @@ export default defineComponent({
       if (byType === 'Fapiao') {
         url = '/Data/InvoiceHeaderByFaPiao?FaPiao=' + Fphm.value
       }
-      axios.get(url)
+      axios
+        .get(url)
         .then((response) => {
           InvoiceHeader.value = response.data
         })
         .catch((e) => {
           console.error(e)
           notifyError('Loading Invoice Failed!')
-        }).finally(() => {
+        })
+        .finally(() => {
           showLoadingInvoiceHeader.value = false
         })
     }
@@ -579,14 +589,16 @@ export default defineComponent({
       if (byType === 'Fapiao') {
         url = '/Data/InvoiceBodyByFaPiao?FaPiao=' + Fphm.value
       }
-      axios.get(url)
+      axios
+        .get(url)
         .then((response) => {
           InvoiceBody.value = response.data
         })
         .catch((e) => {
           console.error(e)
           notifyError('Loading Invoice Failed!')
-        }).finally(() => {
+        })
+        .finally(() => {
           showLoadingInvoiceBody.value = false
         })
     }
@@ -637,7 +649,7 @@ export default defineComponent({
     const ANN = (array, index, key) => {
       const a = toRaw(array)
       let N = 0
-      if (a.length < (index + 1)) {
+      if (a.length < index + 1) {
         N = 0
       } else {
         return a[index][key]
@@ -670,7 +682,9 @@ export default defineComponent({
         doUpdateFapiaoBody(false)
       }
     })
-    onBeforeUnmount(() => { ebus.off('searchInvoiceNO') })
+    onBeforeUnmount(() => {
+      ebus.off('searchInvoiceNO')
+    })
     ebus.on('searchFapiaoLbdm', async (lbdm) => {
       Lbdm.value = lbdm
       if (Lbdm.value !== '' && Fphm.value !== '') {
@@ -681,7 +695,9 @@ export default defineComponent({
         doUpdateInvoiceBody('Fapiao')
       }
     })
-    onBeforeUnmount(() => { ebus.off('searchFapiaoLbdm') })
+    onBeforeUnmount(() => {
+      ebus.off('searchFapiaoLbdm')
+    })
     ebus.on('searchFapiaoFphm', async (fphm) => {
       Fphm.value = fphm
       if (Lbdm.value !== '' && Fphm.value !== '') {
@@ -692,7 +708,9 @@ export default defineComponent({
         doUpdateInvoiceBody('Fapiao')
       }
     })
-    onBeforeUnmount(() => { ebus.off('searchFapiaoFphm') })
+    onBeforeUnmount(() => {
+      ebus.off('searchFapiaoFphm')
+    })
 
     return {
       isAuthorised,

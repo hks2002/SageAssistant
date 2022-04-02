@@ -1,7 +1,9 @@
 <template>
-  <div class="flex justify-center">
-    <router-view />
-  </div>
+  <q-layout>
+    <q-page-container>
+      <router-view />
+    </q-page-container>
+  </q-layout>
 </template>
 
 <script>

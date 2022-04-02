@@ -1,51 +1,64 @@
 <template>
-  <div class="row  q-ml-md q-mr-md">
-    <div class="col-3">
-      <q-input
-        v-model="categoryCode"
-        debounce="1000"
-        :label="$t('Product Group2 Code')"
-        input-class="text-uppercase"
-        class="q-pr-md"
-        @update:model-value="doUpdate"
-        :disable="!isAuthorised('GESPOH')"
-      />
-    </div>
-    <div class="col-3">
-      <q-input
-        v-model="dateFrom"
-        debounce="1000"
-        type="date"
-        :label="$t('From')"
-        class="q-pr-md"
-        @update:model-value="doUpdate"
-        :disable="!isAuthorised('GESPOH')"
-      />
-    </div>
-    <div class="col-3">
-      <q-input
-        v-model="dateTo"
-        debounce="1000"
-        type="date"
-        :label="$t('To')"
-        class="q-pr-md"
-        @update:model-value="doUpdate"
-        :disable="!isAuthorised('GESPOH')"
-      />
-    </div>
-    <div class="col-3">
-      <q-input
-        v-model="limitN"
-        debounce="1000"
-        type="number"
-        :label="$t('Limit last N')"
-        :rules="[val => (val !== null && val !== '') || 'Please type last N limmit',
-                   val => (val > 0 && val <= 10) || 'Limit between from 1 to 10']"
-        class="q-pr-md"
-        @update:model-value="doUpdate"
-        :disable="!isAuthorised('GESPOH')"
-      />
-    </div>
+  <div class="row q-gutter-sm q-pa-sm">
+    <Vue3Lottie
+      animationLink="/json/waiting-input.json"
+      :height="600"
+      :width="600"
+      class="fixed-center"
+      v-if="!categoryCode && isAuthorised('GESPOH')"
+    />
+    <q-input
+      v-model="categoryCode"
+      class="col-grow"
+      outlined
+      hide-hint
+      hide-bottom-space
+      debounce="1000"
+      :label="$t('Product Group2 Code')"
+      input-class="text-uppercase"
+      @update:model-value="doUpdate"
+      :disable="!isAuthorised('GESPOH')"
+    />
+    <q-input
+      v-model="dateFrom"
+      outlined
+      hide-hint
+      hide-bottom-space
+      class="col-3"
+      debounce="1000"
+      type="date"
+      :label="$t('From')"
+      @update:model-value="doUpdate"
+      :disable="!isAuthorised('GESPOH')"
+    />
+    <q-input
+      v-model="dateTo"
+      outlined
+      hide-hint
+      hide-bottom-space
+      class="col-3"
+      debounce="1000"
+      type="date"
+      :label="$t('To')"
+      @update:model-value="doUpdate"
+      :disable="!isAuthorised('GESPOH')"
+    />
+    <q-input
+      v-model="limitN"
+      outlined
+      hide-hint
+      hide-bottom-space
+      class="col-1"
+      debounce="1000"
+      type="number"
+      :label="$t('Limit last N Years')"
+      :rules="[
+        (val) => (val !== null && val !== '') || 'Please type last N limmit',
+        (val) => (val > 0 && val <= 10) || 'Limit between from 1 to 10'
+      ]"
+      @update:model-value="doUpdate"
+      :disable="!isAuthorised('GESPOH')"
+    />
   </div>
   <q-tabs
     v-model="tab"
@@ -55,208 +68,141 @@
     active-color="primary"
     indicator-color="primary"
     narrow-indicator
+    :style="'height:' + tabHeaderHeight + 'px'"
+    v-if="categoryCode"
   >
-    <q-tab
-      name="YourSite"
-      label="Your-Site"
-    />
-    <q-tab
-      name="AllSites"
-      label="All-Sites"
-    />
+    <q-tab name="YourSite" label="Your-Site" />
+    <q-tab name="AllSites" label="All-Sites" />
   </q-tabs>
-  <q-tab-panels
-    v-model="tab"
-    animated
-    keep-alive
-  >
-    <q-tab-panel
-      name="YourSite"
-      style="padding:0px"
-    >
+  <q-tab-panels v-model="tab" keep-alive v-if="categoryCode">
+    <q-tab-panel name="YourSite" class="q-pa-none">
       <q-table
         v-if="isAuthorised('GESSOH') || isAuthorised('GESSQH')"
-        class="col-12 q-pr-sm q-pl-sm my-sticky"
-        style="height: 75vh; width: 97vw"
+        v-model:pagination="pagination"
+        row-key="index"
+        dense
+        :virtual-scroll-sticky-size-start="48"
         :rows="analysisQuoteSalesCost"
         :columns="columns"
-        row-key="index"
-        virtual-scroll
-        v-model:pagination="pagination"
         :rows-per-page-options="[0]"
-        :virtual-scroll-sticky-size-start="48"
-        dense
+        class="q-mx-sm q-mb-sm my-sticky"
+        :style="
+          'height:' + tableHeight + 'px;width:' + (pageBodyWidth - 16) + 'px'
+        "
       >
         <template v-slot:top>
           <q-toolbar class="bg-teal text-white shadow-2">
-            <q-toolbar-title class="text-left">Products of group2 [{{categoryCode}}] in {{site}} from {{dateFrom}} to {{dateTo}}
-              <q-btn
-                dense
-                flat
-                icon="fas fa-download"
-                @click="download()"
-              />
+            <q-toolbar-title class="text-left"
+              >Products of group2 [{{ categoryCode }}] in {{ site }} from
+              {{ dateFrom }} to {{ dateTo }}
+              <q-btn dense flat icon="fas fa-download" @click="download()" />
             </q-toolbar-title>
           </q-toolbar>
         </template>
       </q-table>
-      <exception
-        :ErrorCode="403"
-        v-else
-      />
+      <exception :ErrorCode="403" v-else />
     </q-tab-panel>
-    <q-tab-panel
-      name="AllSites"
-      style="padding:0px"
-    >
+    <q-tab-panel name="AllSites" class="q-pa-none">
       <q-table
         v-if="isAuthorised('GESSOH') || isAuthorised('GESSQH')"
-        class="col-12 q-pr-sm q-pl-sm my-sticky"
-        style="height: 75vh; width: 97vw"
+        v-model:pagination="pagination"
+        row-key="index"
+        dense
+        :virtual-scroll-sticky-size-start="48"
         :rows="analysisQuoteSalesCostAllKeyed"
         :columns="columnsAll"
-        row-key="index"
-        virtual-scroll
-        v-model:pagination="pagination"
         :rows-per-page-options="[0]"
-        :virtual-scroll-sticky-size-start="48"
-        dense
+        class="q-mx-sm q-mb-sm my-sticky"
+        :style="
+          'height:' + tableHeight + 'px;width:' + (pageBodyWidth - 16) + 'px'
+        "
       >
         <template v-slot:top>
           <q-toolbar class="bg-teal text-white shadow-2">
-            <q-toolbar-title class="text-left">Products of group2 [{{categoryCode}}] in all sites from {{dateFrom}} to {{dateTo}}
-              <q-btn
-                dense
-                flat
-                icon="fas fa-download"
-                @click="downloadAll()"
-              />
+            <q-toolbar-title class="text-left"
+              >Products of group2 [{{ categoryCode }}] in all sites from
+              {{ dateFrom }} to {{ dateTo }}
+              <q-btn dense flat icon="fas fa-download" @click="downloadAll()" />
             </q-toolbar-title>
           </q-toolbar>
         </template>
         <template v-slot:header="props">
           <q-tr :props="props">
-            <q-th class="bg-primary text-white">
-            </q-th>
-            <q-th class="bg-primary text-white">
-            </q-th>
-            <q-th class="bg-primary text-white">
-            </q-th>
-            <q-th
-              :colspan="siteN"
-              class="bg-light-green text-white"
-            >
+            <q-th class="bg-primary text-white"> </q-th>
+            <q-th class="bg-primary text-white"> </q-th>
+            <q-th class="bg-primary text-white"> </q-th>
+            <q-th :colspan="siteN" class="bg-light-green text-white">
               QCnt
             </q-th>
-            <q-th
-              :colspan="siteN"
-              class="bg-green text-white"
-            >
-              QQty
-            </q-th>
-            <q-th
-              :colspan="siteN"
-              class="bg-indigo-6 text-white"
-            >
+            <q-th :colspan="siteN" class="bg-green text-white"> QQty </q-th>
+            <q-th :colspan="siteN" class="bg-indigo-6 text-white">
               MinQPrice
             </q-th>
-            <q-th
-              :colspan="siteN"
-              class="bg-indigo-4 text-white"
-            >
+            <q-th :colspan="siteN" class="bg-indigo-4 text-white">
               AvgQPrice
             </q-th>
-            <q-th
-              :colspan="siteN"
-              class="bg-indigo-2 text-white"
-            >
+            <q-th :colspan="siteN" class="bg-indigo-2 text-white">
               MaxQPrice
             </q-th>
-            <template
-              v-for="li in limitN"
-              :key="li"
-            >
+            <template v-for="li in limitN" :key="li">
               <q-th
                 :colspan="siteN"
-                :class="'bg-cyan-' + (15-li) +' text-white'"
+                :class="'bg-cyan-' + (15 - li) + ' text-white'"
               >
-                LastQPrice{{li}}
+                LastQPrice{{ li }}
               </q-th>
             </template>
-            <q-th
-              :colspan="siteN"
-              class="bg-light-green text-white"
-            >
+            <q-th :colspan="siteN" class="bg-light-green text-white">
               SCnt
             </q-th>
-            <q-th
-              :colspan="siteN"
-              class="bg-green text-white"
-            >
-              SQty
-            </q-th>
-            <q-th
-              :colspan="siteN"
-              class="bg-indigo-6 text-white"
-            >
+            <q-th :colspan="siteN" class="bg-green text-white"> SQty </q-th>
+            <q-th :colspan="siteN" class="bg-indigo-6 text-white">
               MinSPrice
             </q-th>
-            <q-th
-              :colspan="siteN"
-              class="bg-indigo-4 text-white"
-            >
+            <q-th :colspan="siteN" class="bg-indigo-4 text-white">
               AvgSPrice
             </q-th>
-            <q-th
-              :colspan="siteN"
-              class="bg-indigo-2 text-white"
-            >
+            <q-th :colspan="siteN" class="bg-indigo-2 text-white">
               MaxSPrice
             </q-th>
-            <template
-              v-for="li in limitN"
-              :key="li"
-            >
+            <template v-for="li in limitN" :key="li">
               <q-th
                 :colspan="siteN"
-                :class="'bg-blue-' + (15-li) +' text-white'"
+                :class="'bg-blue-' + (15 - li) + ' text-white'"
               >
-                LastSPrice{{li}}
+                LastSPrice{{ li }}
               </q-th>
             </template>
-            <template
-              v-for="li in limitN"
-              :key="li"
-            >
+            <template v-for="li in limitN" :key="li">
               <q-th
                 :colspan="siteN"
-                :class="'bg-orange-' + (15-li) +' text-white'"
+                :class="'bg-orange-' + (15 - li) + ' text-white'"
               >
-                LastCost{{li}}
+                LastCost{{ li }}
               </q-th>
             </template>
           </q-tr>
           <q-tr :props="props">
-            <q-th
-              v-for="col in props.cols"
-              :key="col['name']"
-              :props="props"
-            >
+            <q-th v-for="col in props.cols" :key="col['name']" :props="props">
               {{ col['label'] }}
             </q-th>
           </q-tr>
         </template>
       </q-table>
-      <exception
-        :ErrorCode="403"
-        v-else
-      />
+      <exception :ErrorCode="403" v-else />
     </q-tab-panel>
   </q-tab-panels>
 </template>
 
 <script>
-import { defineComponent, ref, onBeforeUnmount, toRaw } from 'vue'
+import {
+  defineComponent,
+  ref,
+  onBeforeUnmount,
+  toRaw,
+  onBeforeMount,
+  onMounted
+} from 'vue'
 import { axios } from 'boot/axios'
 import { ebus } from 'boot/ebus'
 import { useQuasar, date } from 'quasar'
@@ -268,16 +214,29 @@ import _forEach from 'lodash/forEach'
 import _groupBy from 'lodash/groupBy'
 import _map from 'lodash/map'
 import _values from 'lodash/values'
+import { Vue3Lottie } from 'vue3-lottie'
 
 export default defineComponent({
   name: 'QuoteSalesCost',
-
+  props: {
+    // if mount to tabpanel
+    tabPanelHeight: {
+      type: Number,
+      required: false,
+      default: 0
+    }
+  },
   components: {
-    Exception
+    Exception,
+    Vue3Lottie
   },
 
   setup(props, ctx) {
     const $q = useQuasar()
+    const tabHeaderHeight = ref(36)
+    const tableHeight = ref(250)
+    const pageBodyWidth = ref(600)
+
     const { formatDate, addToDate } = date
 
     const site = ref('')
@@ -759,6 +718,23 @@ export default defineComponent({
       )
     }
 
+    onBeforeMount(() => {
+      console.log('onBeforeMount:')
+      pageBodyWidth.value = $q.pageBodyWidth
+      console.log('tabPanelHeight:' + props.tabPanelHeight)
+      console.log('tabHeaderHeight.value:' + tabHeaderHeight.value)
+      console.log('$.pageBodyHeight:' + $q.pageBodyHeight)
+      if (props.tabPanelHeight > 0) {
+        tableHeight.value = props.tabPanelHeight - tabHeaderHeight.value - 80
+      } else {
+        tableHeight.value = $q.pageBodyHeight - tabHeaderHeight.value
+      }
+      console.log('tableHeight:' + tableHeight.value)
+    })
+
+    onMounted(() => {
+      console.log('onMounted:')
+    })
     // event handing
     ebus.on('changeSite', (newSite) => {
       site.value = newSite
@@ -770,6 +746,9 @@ export default defineComponent({
 
     return {
       tab,
+      tabHeaderHeight,
+      tableHeight,
+      pageBodyWidth,
       timer: new Date().getTime(),
       isAuthorised,
       site,
@@ -792,7 +771,7 @@ export default defineComponent({
   }
 })
 </script>
-<style lang='sass'>
+<style lang="sass">
 .q-table--dense .q-table__top
   padding: 0
 

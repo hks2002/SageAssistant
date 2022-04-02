@@ -9,106 +9,57 @@
       indicator-color="primary"
       narrow-indicator
     >
-      <q-tab
-        name="Delivery"
-        label="Delivery"
-      />
-      <q-tab
-        name="Receive"
-        label="Receive"
-      />
-      <q-tab
-        name="New-Order"
-        label="New-Order"
-      />
-      <q-tab
-        name="Short-Bom"
-        label="Short-Bom"
-      />
-      <q-tab
-        name="Orphan-WO"
-        label="Orphan-WO"
-      />
+      <q-tab name="Delivery" label="Delivery" />
+      <q-tab name="Receive" label="Receive" />
+      <q-tab name="New-Order" label="New-Order" />
+      <q-tab name="Short-Bom" label="Short-Bom" />
+      <q-tab name="Orphan-WO" label="Orphan-WO" />
     </q-tabs>
 
     <q-separator />
 
-    <q-tab-panels
-      v-model="tab"
-      animated
-      keep-alive
-    >
-      <q-tab-panel
-        name="Delivery"
-        style="padding:0px"
-      >
+    <q-tab-panels v-model="tab" animated keep-alive>
+      <q-tab-panel name="Delivery" style="padding: 0px">
         <echart-todo-delivery
           :site="site"
           :style="tabHeight"
           v-if="isAuthorised('GESPOH') || isAuthorised('GESSOH')"
         />
-        <exception
-          :ErrorCode="403"
-          v-else
-        />
+        <exception :ErrorCode="403" v-else />
       </q-tab-panel>
 
-      <q-tab-panel
-        name="Receive"
-        style="padding:0px"
-      >
+      <q-tab-panel name="Receive" style="padding: 0px">
         <echart-todo-receive
           :site="site"
           :style="tabHeight"
           v-if="isAuthorised('GESPOH') || isAuthorised('GESSOH')"
         />
-        <exception
-          :ErrorCode="403"
-          v-else
-        />
+        <exception :ErrorCode="403" v-else />
       </q-tab-panel>
 
-      <q-tab-panel
-        name="New-Order"
-        style="padding:0px"
-      >
+      <q-tab-panel name="New-Order" style="padding: 0px">
         <echart-todo-deal-with-order-line
           :site="site"
           :style="tabHeight"
           v-if="isAuthorised('GESPOH') || isAuthorised('GESSOH')"
         />
-        <exception
-          :ErrorCode="403"
-          v-else
-        />
+        <exception :ErrorCode="403" v-else />
       </q-tab-panel>
-      <q-tab-panel
-        name="Short-Bom"
-        style="padding:0px"
-      >
+      <q-tab-panel name="Short-Bom" style="padding: 0px">
         <echart-todo-purchase-bom
           :site="site"
           :style="tabHeight"
           v-if="isAuthorised('GESPOH') || isAuthorised('GESSOH')"
         />
-        <exception
-          :ErrorCode="403"
-          v-else
-        />
+        <exception :ErrorCode="403" v-else />
       </q-tab-panel>
-      <q-tab-panel
-        name="Orphan-WO"
-        style="padding:0px"
-      >
+      <q-tab-panel name="Orphan-WO" style="padding: 0px">
         <echart-todo-closed-w-o
           :site="site"
           :style="tabHeight"
           v-if="isAuthorised('GESMFG')"
         />
-        <exception
-          :ErrorCode="403"
-          v-else
-        />
+        <exception :ErrorCode="403" v-else />
       </q-tab-panel>
     </q-tab-panels>
   </q-page>
@@ -168,5 +119,4 @@ export default defineComponent({
   }
 })
 </script>
-<style lang='scss' scoped>
-</style>
+<style lang="scss" scoped></style>
