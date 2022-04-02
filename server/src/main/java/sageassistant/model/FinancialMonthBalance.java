@@ -12,7 +12,7 @@ public class FinancialMonthBalance extends ModelTemplate {
 	private String Currency;
 	private String Year;
 	private String Month;
-	private BigDecimal A;
+	private BigDecimal M;
 	private BigDecimal B;
 	private BigDecimal C;
 	private BigDecimal D;
@@ -73,12 +73,12 @@ public class FinancialMonthBalance extends ModelTemplate {
 		D = d;
 	}
 
-	public BigDecimal getA() {
-		return A;
+	public BigDecimal getM() {
+		return M;
 	}
 
-	public void setA(BigDecimal a) {
-		A = a;
+	public void setM(BigDecimal m) {
+		M = m;
 	}
 
 }
