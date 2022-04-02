@@ -17,10 +17,8 @@
     "javascript": "javascriptreact"
   },
   "vetur.experimental.templateInterpolationService": true,
-  "vetur.format.defaultFormatter.html": "js-beautify-html",
   "vetur.format.defaultFormatter.js": "prettier-eslint",
   "vetur.validation.templateProps": true,
-  "vetur.format.defaultFormatter.ts": "vscode-typescript",
   "vetur.format.enable": true,
   "vetur.validation.template": true,
   "editor.formatOnType": true,
