@@ -5,9 +5,12 @@
 * web(is developed with vue/quasar)
 
 ### Screen snap
-![Products Show](./product.png)
+![Products Show](./Products.png)
 ![Todo](./Todo.png)
 ![DataView](./DataView.png)
+![StockSummary](./StockSummary.png)
+![StockHistory](./StockHistory.png)
+![Suppliers](./Suppliers.png)
 ![Report](./Report.png)
 
 ### Server install&config
