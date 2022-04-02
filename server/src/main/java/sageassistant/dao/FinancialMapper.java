@@ -23,13 +23,13 @@ public interface FinancialMapper {
 
 	List<FinancialInvoicePay> findInvoicePay(
 			@Param("Site") String Site,
-			@Param("BPCode") String BPCode,
+			@Param("CustomerCode") String CustomerCode,
 			@Param("DateFrom") String DateFrom,
 			@Param("DateTo") String DateTo);
 
 	List<FinancialInvoicePayPro> findInvoicePayPro(
 			@Param("Site") String Site,
-			@Param("BPCode") String BPCode,
+			@Param("CustomerCode") String CustomerCode,
 			@Param("DateFrom") String DateFrom,
 			@Param("DateTo") String DateTo);
 }

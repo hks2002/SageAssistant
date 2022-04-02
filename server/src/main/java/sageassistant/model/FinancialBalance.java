@@ -11,19 +11,19 @@ public class FinancialBalance extends ModelTemplate {
 	private String AccountNO;
 	private String Currency;
 	private String Year;
-	private BigDecimal A0;
-	private BigDecimal A1;
-	private BigDecimal A2;
-	private BigDecimal A3;
-	private BigDecimal A4;
-	private BigDecimal A5;
-	private BigDecimal A6;
-	private BigDecimal A7;
-	private BigDecimal A8;
-	private BigDecimal A9;
-	private BigDecimal A10;
-	private BigDecimal A11;
-	private BigDecimal A12;
+	private BigDecimal M0;
+	private BigDecimal M1;
+	private BigDecimal M2;
+	private BigDecimal M3;
+	private BigDecimal M4;
+	private BigDecimal M5;
+	private BigDecimal M6;
+	private BigDecimal M7;
+	private BigDecimal M8;
+	private BigDecimal M9;
+	private BigDecimal M10;
+	private BigDecimal M11;
+	private BigDecimal M12;
 	private BigDecimal B0;
 	private BigDecimal B1;
 	private BigDecimal B2;
@@ -86,110 +86,6 @@ public class FinancialBalance extends ModelTemplate {
 
 	public void setYear(String year) {
 		Year = year;
-	}
-
-	public BigDecimal getA0() {
-		return A0;
-	}
-
-	public void setA0(BigDecimal a0) {
-		A0 = a0;
-	}
-
-	public BigDecimal getA1() {
-		return A1;
-	}
-
-	public void setA1(BigDecimal a1) {
-		A1 = a1;
-	}
-
-	public BigDecimal getA2() {
-		return A2;
-	}
-
-	public void setA2(BigDecimal a2) {
-		A2 = a2;
-	}
-
-	public BigDecimal getA3() {
-		return A3;
-	}
-
-	public void setA3(BigDecimal a3) {
-		A3 = a3;
-	}
-
-	public BigDecimal getA4() {
-		return A4;
-	}
-
-	public void setA4(BigDecimal a4) {
-		A4 = a4;
-	}
-
-	public BigDecimal getA5() {
-		return A5;
-	}
-
-	public void setA5(BigDecimal a5) {
-		A5 = a5;
-	}
-
-	public BigDecimal getA6() {
-		return A6;
-	}
-
-	public void setA6(BigDecimal a6) {
-		A6 = a6;
-	}
-
-	public BigDecimal getA7() {
-		return A7;
-	}
-
-	public void setA7(BigDecimal a7) {
-		A7 = a7;
-	}
-
-	public BigDecimal getA8() {
-		return A8;
-	}
-
-	public void setA8(BigDecimal a8) {
-		A8 = a8;
-	}
-
-	public BigDecimal getA9() {
-		return A9;
-	}
-
-	public void setA9(BigDecimal a9) {
-		A9 = a9;
-	}
-
-	public BigDecimal getA10() {
-		return A10;
-	}
-
-	public void setA10(BigDecimal a10) {
-		A10 = a10;
-	}
-
-	public BigDecimal getA11() {
-		return A11;
-	}
-
-	public void setA11(BigDecimal a11) {
-		A11 = a11;
-	}
-
-	public BigDecimal getA12() {
-		return A12;
-	}
-
-	public void setA12(BigDecimal a12) {
-		A12 = a12;
 	}
 
 	public BigDecimal getB0() {
@@ -503,5 +399,108 @@ public class FinancialBalance extends ModelTemplate {
 	public void setD12(BigDecimal d12) {
 		D12 = d12;
 	}
+	
+	public BigDecimal getM0() {
+		return M0;
+	}
 
+	public void setM0(BigDecimal m0) {
+		M0 = m0;
+	}
+
+	public BigDecimal getM1() {
+		return M1;
+	}
+
+	public void setM1(BigDecimal m1) {
+		M1 = m1;
+	}
+
+	public BigDecimal getM2() {
+		return M2;
+	}
+
+	public void setM2(BigDecimal m2) {
+		M2 = m2;
+	}
+
+	public BigDecimal getM3() {
+		return M3;
+	}
+
+	public void setM3(BigDecimal m3) {
+		M3 = m3;
+	}
+
+	public BigDecimal getM4() {
+		return M4;
+	}
+
+	public void setM4(BigDecimal m4) {
+		M4 = m4;
+	}
+
+	public BigDecimal getM5() {
+		return M5;
+	}
+
+	public void setM5(BigDecimal m5) {
+		M5 = m5;
+	}
+
+	public BigDecimal getM6() {
+		return M6;
+	}
+
+	public void setM6(BigDecimal m6) {
+		M6 = m6;
+	}
+
+	public BigDecimal getM7() {
+		return M7;
+	}
+
+	public void setM7(BigDecimal m7) {
+		M7 = m7;
+	}
+
+	public BigDecimal getM8() {
+		return M8;
+	}
+
+	public void setM8(BigDecimal m8) {
+		M8 = m8;
+	}
+
+	public BigDecimal getM9() {
+		return M9;
+	}
+
+	public void setM9(BigDecimal m9) {
+		M9 = m9;
+	}
+
+	public BigDecimal getM10() {
+		return M10;
+	}
+
+	public void setM10(BigDecimal m10) {
+		M10 = m10;
+	}
+
+	public BigDecimal getM11() {
+		return M11;
+	}
+
+	public void setM11(BigDecimal m11) {
+		M11 = m11;
+	}
+
+	public BigDecimal getM12() {
+		return M12;
+	}
+
+	public void setM12(BigDecimal m12) {
+		M12 = m12;
+	}
 }

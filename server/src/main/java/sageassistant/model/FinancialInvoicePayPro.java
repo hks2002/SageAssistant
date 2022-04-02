@@ -11,7 +11,7 @@ public class FinancialInvoicePayPro extends ModelTemplate {
 
 	private String Site;
 	private String Currency;
-	private String Custom;
+	private String Customer;
 	private String Name;
 	private String InvoiceNO;
 	private BigDecimal Amount;
@@ -101,12 +101,12 @@ public class FinancialInvoicePayPro extends ModelTemplate {
 		Currency = currency;
 	}
 
-	public String getCustom() {
-		return Custom;
+	public String getCustomer() {
+		return Customer;
 	}
 
-	public void setCustom(String custom) {
-		Custom = custom;
+	public void setCustomer(String customer) {
+		Customer = customer;
 	}
 
 	public String getName() {
