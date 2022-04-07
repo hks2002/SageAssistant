@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import sageassistant.model.FinancialMonthBalance;
+import sageassistant.model.FinancialBalance;
 import sageassistant.service.FinancialService;
 import sageassistant.utils.Utils;
 
@@ -25,21 +25,12 @@ public class FinancialController {
 	@GetMapping("/Data/FinancialBalance")
 	public String getFinancialBalance(@RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
 			@RequestParam(value = "Year", required = false, defaultValue = "") String Year,
-			@RequestParam(value = "Month", required = false, defaultValue = "") String Month,
 			@RequestParam(value = "AccountNO", required = false, defaultValue = "") String AccountNO) {
 
 		if (AccountNO.equals("")) {
-			if (Month.equals("")) {
 				return financialService.getAccoutBalanceForAll(Site, Year).toString();
-			} else {
-				return financialService.getAccoutMonthBalanceForAll(Site, Year, Month).toString();
-			}
 		} else {
-			if (Month.equals("")) {
 				return financialService.getAccoutBalanceForAccountNO(Site, Year, AccountNO).toString();
-			} else {
-				return financialService.getAccoutMonthBalanceForAccountNO(Site, Year, Month, AccountNO).toString();
-			}
 		}
 	}
 
@@ -47,70 +38,47 @@ public class FinancialController {
 	public String getFinancialBalanceA(
 			@RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
 			@RequestParam(value = "Year", required = false, defaultValue = "") String Year,
-			@RequestParam(value = "Month", required = false, defaultValue = "") String Month,
 			@RequestParam(value = "AccountNO", required = false, defaultValue = "") String AccountNO) {
 
-		return getFinancialBalanceCDMB(Site, Year, Month, AccountNO, "M");
+		return getFinancialBalanceCDMB(Site, Year, AccountNO, "M");
 	}
 
 	@GetMapping("/Data/FinancialBalanceB")
 	public String getFinancialBalanceB(
 			@RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
 			@RequestParam(value = "Year", required = false, defaultValue = "") String Year,
-			@RequestParam(value = "Month", required = false, defaultValue = "") String Month,
 			@RequestParam(value = "AccountNO", required = false, defaultValue = "") String AccountNO) {
 
-		return getFinancialBalanceCDMB(Site, Year, Month, AccountNO, "B");
+		return getFinancialBalanceCDMB(Site, Year, AccountNO, "B");
 	}
 
 	@GetMapping("/Data/FinancialBalanceC")
 	public String getFinancialBalanceC(
 			@RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
 			@RequestParam(value = "Year", required = false, defaultValue = "") String Year,
-			@RequestParam(value = "Month", required = false, defaultValue = "") String Month,
 			@RequestParam(value = "AccountNO", required = false, defaultValue = "") String AccountNO) {
 
-		return getFinancialBalanceCDMB(Site, Year, Month, AccountNO, "C");
+		return getFinancialBalanceCDMB(Site, Year, AccountNO, "C");
 	}
 
 	@GetMapping("/Data/FinancialBalanceD")
 	public String getFinancialBalanceD(
 			@RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
 			@RequestParam(value = "Year", required = false, defaultValue = "") String Year,
-			@RequestParam(value = "Month", required = false, defaultValue = "") String Month,
 			@RequestParam(value = "AccountNO", required = false, defaultValue = "") String AccountNO) {
 
-		return getFinancialBalanceCDMB(Site, Year, Month, AccountNO, "D");
+		return getFinancialBalanceCDMB(Site, Year, AccountNO, "D");
 	}
 
-	private String getFinancialBalanceCDMB(String Site, String Year, String Month, String AccountNO, String Cat) {
-
-		if (Site.equals("") || Year.equals("") || Month.equals("")) {
-			return "Must set Year and Month";
+	private String getFinancialBalanceCDMB(String Site, String Year, String AccountNO, String Cat) {
+		if (Site.equals("") || Year.equals("")) {
+			return "Must set Site and Year";
 		}
 		if (AccountNO.equals("")) {
-			return "Must set AccountNO, if more than one AccountNO, use , between AccountNOs";
+			return "Must set AccountNO, if more than one AccountNO, use ',' between AccountNO";
 		}
-
-		List<FinancialMonthBalance> listMonth = financialService.getAccoutMonthBalanceForAccountNO(Site, Year, Month,
-				AccountNO);
-
-		if (listMonth.size() == 0) {
-			return "0";
-		} else {
-			switch (Cat) {
-				case "C":
-					return String.format("%,.2f", listMonth.get(0).getC().doubleValue());
-				case "D":
-					return String.format("%,.2f", listMonth.get(0).getD().doubleValue());
-				case "M":
-					return String.format("%,.2f", listMonth.get(0).getM().doubleValue());
-				case "B":
-					return String.format("%,.2f", listMonth.get(0).getB().doubleValue());
-				default:
-					return String.format("%,.2f", listMonth.get(0).getB().doubleValue());
-			}
-		}
+		return Utils.listToString(financialService.getAccoutBalanceForAccountNOByCat(Site, Year, Cat,
+		AccountNO));
 	}
 
 	@GetMapping("/Data/FinancialInvoicePay")
