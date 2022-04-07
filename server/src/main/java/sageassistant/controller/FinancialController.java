@@ -75,7 +75,7 @@ public class FinancialController {
 			return "Must set Site and Year";
 		}
 		if (AccountNO.equals("")) {
-			return "Must set AccountNO, if more than one AccountNO, use ',' between AccountNO";
+			return "Must set AccountNO, if more than one AccountNO, use ',' between AccountNOs";
 		}
 		return Utils.listToString(financialService.getAccoutBalanceForAccountNOByCat(Site, Year, Cat,
 		AccountNO));
