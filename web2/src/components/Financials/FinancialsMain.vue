@@ -10,7 +10,7 @@
   >
     <q-tab name="Fapiao" label="Fapiao" />
     <q-tab name="InvoicePay" label="Invoice Pay" />
-    <q-tab name="Balance" label="Blance" />
+    <q-tab name="Balance" label="Balance" />
   </q-tabs>
 
   <q-separator />
@@ -34,7 +34,6 @@ import { isAuthorised } from 'assets/auth'
 import FapiaoVue from 'components/Financials/Fapiao.vue'
 import InvoicePayMainVue from 'src/components/Financials/InvoicePayMain.vue'
 import BalanceVue from 'src/components/Financials/Balance.vue'
-import Exception from 'pages/Exception.vue'
 
 export default defineComponent({
   name: 'FinancialsMain',

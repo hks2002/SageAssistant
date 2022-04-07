@@ -14,17 +14,23 @@
         <th class="text-left">AccountNO</th>
         <th class="text-left">Currency</th>
         <template v-for="month in 13" :key="month">
+          <template v-if="showBalance">
+            <th class="text-right">B{{ month - 1 }}</th>
+          </template>
+        </template>
+        <template v-for="month in 13" :key="month">
           <template v-if="showCredit">
             <th class="text-right">C{{ month - 1 }}</th>
           </template>
+        </template>
+        <template v-for="month in 13" :key="month">
           <template v-if="showDebit">
             <th class="text-right">D{{ month - 1 }}</th>
           </template>
+        </template>
+        <template v-for="month in 13" :key="month">
           <template v-if="showMovement">
             <th class="text-right">M{{ month - 1 }}</th>
-          </template>
-          <template v-if="showBalance">
-            <th class="text-right">B{{ month - 1 }}</th>
           </template>
         </template>
       </tr>
@@ -36,17 +42,23 @@
         <td class="text-left">{{ item['AccountNO'] }}</td>
         <td class="text-left">{{ item['Currency'] }}</td>
         <template v-for="month in 13" :key="month">
+          <template v-if="showBalance">
+            <td class="text-right">{{ item['B' + (month - 1)] }}</td>
+          </template>
+        </template>
+        <template v-for="month in 13" :key="month">
           <template v-if="showCredit">
             <td class="text-right">{{ item['C' + (month - 1)] }}</td>
           </template>
+        </template>
+        <template v-for="month in 13" :key="month">
           <template v-if="showDebit">
             <td class="text-right">{{ item['D' + (month - 1)] }}</td>
           </template>
+        </template>
+        <template v-for="month in 13" :key="month">
           <template v-if="showMovement">
             <td class="text-right">{{ item['M' + (month - 1)] }}</td>
-          </template>
-          <template v-if="showBalance">
-            <td class="text-right">{{ item['B' + (month - 1)] }}</td>
           </template>
         </template>
       </tr>
@@ -113,6 +125,9 @@ export default defineComponent({
     const download = () => {
       const header = ['Site', 'AccountNO', 'Currency']
       for (idx = 0; idx <= 12; idx++) {
+        if (props.showBalance) {
+          header.push('B' + idx)
+        }
         if (props.showCredit) {
           header.push('C' + idx)
         }
@@ -121,9 +136,6 @@ export default defineComponent({
         }
         if (props.showMovement) {
           header.push('M' + idx)
-        }
-        if (props.showBalance) {
-          header.push('B' + idx)
         }
       }
 

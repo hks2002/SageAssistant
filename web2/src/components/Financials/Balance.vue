@@ -23,10 +23,10 @@
         :label="$t('Year')"
         class="col-1"
       />
+      <q-toggle v-model="showBalance" label="Balance" class="col-1" />
       <q-toggle v-model="showCredit" label="Credit" class="col-1" />
       <q-toggle v-model="showDebit" label="Debit" class="col-1" />
       <q-toggle v-model="showMovement" label="Movement" class="col-1" />
-      <q-toggle v-model="showBalance" label="Balance" class="col-1" />
     </div>
     <Vue3Lottie
       animationLink="/json/waiting-input.json"
@@ -35,6 +35,14 @@
     />
     <q-list class="q-pa-sm" v-else>
       <div class="row" style="padding: 0px; height: 250px">
+        <echart-fiancial-account-balance-vue
+          :site="site"
+          cat="B"
+          :year="year"
+          :accountNO="accountNO"
+          class="col-3"
+          v-if="showBalance"
+        />
         <echart-fiancial-account-balance-vue
           :site="site"
           cat="C"
@@ -58,14 +66,6 @@
           :accountNO="accountNO"
           class="col-3"
           v-if="showMovement"
-        />
-        <echart-fiancial-account-balance-vue
-          :site="site"
-          cat="B"
-          :year="year"
-          :accountNO="accountNO"
-          class="col-3"
-          v-if="showBalance"
         />
       </div>
       <q-markup-table-balance-vue
