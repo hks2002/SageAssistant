@@ -1,20 +1,10 @@
 <template>
-  <q-card>
-    <!-- <Vue3Lottie
-      animationLink="/json/waiting-input.json"
-      :height="600"
-      :width="600"
-      class="fixed-center"
-      v-if="!customerCode && isAuthorised('GESITM')"
-      style="z-index: -1"
-    /> -->
-    <vue3-lottie
-      animationLink="/json/403.json"
-      :height="600"
-      :width="600"
-      class="fixed-center"
-      v-if="!isAuthorised('GESSIH')"
-    />
+  <vue3-lottie
+    animationLink="/json/403.json"
+    v-if="!isAuthorised('GESSIH')"
+    class="fixed-center"
+  />
+  <q-card v-else>
     <div class="row q-gutter-sm q-px-sm q-pt-sm">
       <q-select-input
         option-label="CustomerName"
@@ -24,10 +14,13 @@
         :label="$t('Search Your Customer (Code or Name)[%% for all]')"
         popup-content-class="text-secondary"
         class="col-grow"
-        :disable="!isAuthorised('GESSIH')"
         @input-value="checkInputAll"
       />
-      <q-toggle v-model="proSearch" label="Pro Search" class="col-1" />
+      <q-toggle
+        v-model="proSearch"
+        label="Pro Search"
+        class="col-1"
+      />
       <q-input
         v-model="dateFrom"
         outlined
@@ -35,7 +28,6 @@
         mask="date"
         type="date"
         :label="$t('From')"
-        :disable="!isAuthorised('GESSIH')"
         class="col-3"
       />
       <q-input
@@ -45,15 +37,20 @@
         mask="date"
         type="date"
         :label="$t('To')"
-        :disable="!isAuthorised('GESSIH')"
         class="col-3"
       />
     </div>
-    <q-list class="q-pa-sm">
+    <Vue3Lottie
+      animationLink="/json/waiting-input.json"
+      :style="{ height: tableHeight + 'px', width: tableWidth + 'px' }"
+      v-if="!customerCode"
+    />
+    <q-list class="q-pa-sm" v-else>
       <q-markup-table-invoice-pay-vue
         :customerCode="customerCode"
         :dateFrom="dateFrom"
         :dateTo="dateTo"
+        :site="site"
         :proSearch="proSearch"
         :style="{ height: tableHeight + 'px', width: tableWidth + 'px' }"
       />
@@ -65,6 +62,7 @@
 import { defineComponent, ref, onBeforeMount, onBeforeUnmount } from 'vue'
 import { useQuasar, date } from 'quasar'
 import { ebus } from 'boot/ebus'
+import { getCookies } from 'src/assets/storage'
 import { isAuthorised } from 'assets/auth'
 import { Vue3Lottie } from 'vue3-lottie'
 import QSelectInput from 'components/.controls/QSelectInput.vue'
@@ -90,6 +88,8 @@ export default defineComponent({
     const dateTo = ref(formatDate(nowTimeStamp, 'YYYY-MM-DD'))
     const proSearch = ref(false)
 
+    const site = ref(getCookies('site'))
+
     const tableHeight = ref(250)
     const tableWidth = ref(600)
 
@@ -98,10 +98,6 @@ export default defineComponent({
       if (inputText === '%%') {
         customerCode.value = '%%'
       }
-    }
-
-    const update = (Code) => {
-      customerCode.value = Code
     }
 
     onBeforeMount(() => {
@@ -113,16 +109,23 @@ export default defineComponent({
 
     // event handing
     ebus.on('searchCustomer', (Code) => {
-      update(Code)
+      customerCode.value = Code
     })
     onBeforeUnmount(() => {
       ebus.off('searchCustomer')
+    })
+    ebus.on('changeSite', (Code) => {
+      site.value = getCookies('site')
+    })
+    onBeforeUnmount(() => {
+      ebus.off('changeSite')
     })
 
     return {
       customerCode,
       dateFrom,
       dateTo,
+      site,
       isAuthorised,
       checkInputAll,
       proSearch,

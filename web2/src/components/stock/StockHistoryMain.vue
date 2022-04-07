@@ -1,5 +1,10 @@
 <template>
-  <q-card>
+  <vue3-lottie
+    animationLink="/json/403.json"
+    v-if="!isAuthorised('CONSSAR')"
+    class="fixed-center"
+  />
+  <q-card class="row q-gutter-sm q-pa-sm" v-else>
     <q-list class="row q-gutter-sm q-pa-sm">
       <q-input
         clearable

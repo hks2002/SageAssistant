@@ -1,5 +1,10 @@
 <template>
-  <q-card class="row q-gutter-sm q-pa-sm">
+  <vue3-lottie
+    animationLink="/json/403.json"
+    v-if="!isAuthorised('CONSSAR')"
+    class="fixed-center"
+  />
+  <q-card class="row q-gutter-sm q-pa-sm" v-else>
     <q-input
       :label="
         $t(
@@ -34,6 +39,7 @@ import {
   onBeforeUnmount
 } from 'vue'
 import { useQuasar } from 'quasar'
+import { isAuthorised } from 'assets/auth'
 import QMarkupTableStockSummaryVue from './QMarkupTableStockSummary.vue'
 
 export default defineComponent({
@@ -61,7 +67,8 @@ export default defineComponent({
     return {
       PNfilter,
       tableHeight,
-      tableWidth
+      tableWidth,
+      isAuthorised
     }
   }
 })

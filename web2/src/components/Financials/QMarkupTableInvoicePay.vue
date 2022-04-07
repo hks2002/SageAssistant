@@ -81,7 +81,6 @@ import { defineComponent, onMounted, ref, watch } from 'vue'
 import { notifyError } from 'assets/common'
 import { axios } from 'boot/axios'
 import { jsonToExcel } from 'assets/dataUtils'
-import { getCookies } from 'src/assets/storage'
 
 export default defineComponent({
   name: 'QMarkupTableInvoicePay',
@@ -104,6 +103,11 @@ export default defineComponent({
       type: Boolean,
       require: false,
       default: false
+    },
+    site: {
+      type: String,
+      require: false,
+      default: null
     }
   },
 
@@ -111,9 +115,6 @@ export default defineComponent({
     const invoicePayItems = ref([])
     const showLoading = ref(false)
     const colspan = ref(17)
-
-    const site = ref('')
-    site.value = getCookies('site')
 
     const doUpdate = () => {
       showLoading.value = true
@@ -126,7 +127,7 @@ export default defineComponent({
           '/Data/FinancialInvoicePay' +
             proSuffix +
             '?Site=' +
-            site.value +
+            props.site +
             '&CustomerCode=' +
             code +
             '&DateFrom=' +
@@ -188,7 +189,13 @@ export default defineComponent({
 
     // Don't use watchEffect, it run before Mounted.
     watch(
-      () => [props.customerCode, props.proSearch, props.dateFrom, props.dateTo],
+      () => [
+        props.customerCode,
+        props.proSearch,
+        props.dateFrom,
+        props.dateTo,
+        props.site
+      ],
       (...newAndold) => {
         // newAndold[1]:old
         // newAndold[0]:new

@@ -1,197 +1,200 @@
 <template>
-  <div class="row q-gutter-sm q-pa-sm">
+  <vue3-lottie
+    animationLink="/json/403.json"
+    v-if="!isAuthorised('GESSOH') && !isAuthorised('GESSQH')"
+    class="fixed-center"
+  />
+  <div v-else>
+    <div class="row q-gutter-sm q-pa-sm">
+      <q-input
+        v-model="categoryCode"
+        class="col-grow"
+        outlined
+        hide-hint
+        hide-bottom-space
+        debounce="1000"
+        :label="$t('Product Group2 Code')"
+        input-class="text-uppercase"
+        @update:model-value="doUpdate"
+      />
+      <q-input
+        v-model="dateFrom"
+        outlined
+        hide-hint
+        hide-bottom-space
+        class="col-3"
+        debounce="1000"
+        type="date"
+        :label="$t('From')"
+        @update:model-value="doUpdate"
+      />
+      <q-input
+        v-model="dateTo"
+        outlined
+        hide-hint
+        hide-bottom-space
+        class="col-3"
+        debounce="1000"
+        type="date"
+        :label="$t('To')"
+        @update:model-value="doUpdate"
+      />
+      <q-input
+        v-model="limitN"
+        outlined
+        hide-hint
+        hide-bottom-space
+        class="col-1"
+        debounce="1000"
+        type="number"
+        :label="$t('Limit last N Years')"
+        :rules="[
+          (val) => (val !== null && val !== '') || 'Please type last N limmit',
+          (val) => (val > 0 && val <= 10) || 'Limit between from 1 to 10'
+        ]"
+        @update:model-value="doUpdate"
+      />
+    </div>
+    <q-tabs
+      v-model="tab"
+      dense
+      align="left"
+      class="text-grey"
+      active-color="primary"
+      indicator-color="primary"
+      narrow-indicator
+      :style="'height:' + tabHeaderHeight + 'px'"
+      v-if="categoryCode"
+    >
+      <q-tab name="YourSite" label="Your-Site" />
+      <q-tab name="AllSites" label="All-Sites" />
+    </q-tabs>
+
     <Vue3Lottie
       animationLink="/json/waiting-input.json"
-      :height="600"
-      :width="600"
-      class="fixed-center"
-      v-if="!categoryCode && isAuthorised('GESPOH')"
+      :style="{ height: tableHeight + 250 + 'px', width: tableWidth + 'px' }"
+      v-if="!categoryCode"
     />
-    <q-input
-      v-model="categoryCode"
-      class="col-grow"
-      outlined
-      hide-hint
-      hide-bottom-space
-      debounce="1000"
-      :label="$t('Product Group2 Code')"
-      input-class="text-uppercase"
-      @update:model-value="doUpdate"
-      :disable="!isAuthorised('GESPOH')"
-    />
-    <q-input
-      v-model="dateFrom"
-      outlined
-      hide-hint
-      hide-bottom-space
-      class="col-3"
-      debounce="1000"
-      type="date"
-      :label="$t('From')"
-      @update:model-value="doUpdate"
-      :disable="!isAuthorised('GESPOH')"
-    />
-    <q-input
-      v-model="dateTo"
-      outlined
-      hide-hint
-      hide-bottom-space
-      class="col-3"
-      debounce="1000"
-      type="date"
-      :label="$t('To')"
-      @update:model-value="doUpdate"
-      :disable="!isAuthorised('GESPOH')"
-    />
-    <q-input
-      v-model="limitN"
-      outlined
-      hide-hint
-      hide-bottom-space
-      class="col-1"
-      debounce="1000"
-      type="number"
-      :label="$t('Limit last N Years')"
-      :rules="[
-        (val) => (val !== null && val !== '') || 'Please type last N limmit',
-        (val) => (val > 0 && val <= 10) || 'Limit between from 1 to 10'
-      ]"
-      @update:model-value="doUpdate"
-      :disable="!isAuthorised('GESPOH')"
-    />
+    <q-tab-panels v-model="tab" keep-alive v-else>
+      <q-tab-panel name="YourSite" class="q-pa-none">
+        <q-table
+          v-model:pagination="pagination"
+          row-key="index"
+          dense
+          :virtual-scroll-sticky-size-start="48"
+          :rows="analysisQuoteSalesCost"
+          :columns="columns"
+          :rows-per-page-options="[0]"
+          class="q-mx-sm q-mb-sm my-sticky"
+          :style="
+            'height:' + tableHeight + 'px;width:' + (pageBodyWidth - 16) + 'px'
+          "
+        >
+          <template v-slot:top>
+            <q-toolbar class="bg-teal text-white shadow-2">
+              <q-toolbar-title class="text-left"
+                >Products of group2 [{{ categoryCode }}] in {{ site }} from
+                {{ dateFrom }} to {{ dateTo }}
+                <q-btn dense flat icon="fas fa-download" @click="download()" />
+              </q-toolbar-title>
+            </q-toolbar>
+          </template>
+        </q-table>
+      </q-tab-panel>
+      <q-tab-panel name="AllSites" class="q-pa-none">
+        <q-table
+          v-model:pagination="pagination"
+          row-key="index"
+          dense
+          :virtual-scroll-sticky-size-start="48"
+          :rows="analysisQuoteSalesCostAllKeyed"
+          :columns="columnsAll"
+          :rows-per-page-options="[0]"
+          class="q-mx-sm q-mb-sm my-sticky"
+          :style="
+            'height:' + tableHeight + 'px;width:' + (pageBodyWidth - 16) + 'px'
+          "
+        >
+          <template v-slot:top>
+            <q-toolbar class="bg-teal text-white shadow-2">
+              <q-toolbar-title class="text-left"
+                >Products of group2 [{{ categoryCode }}] in all sites from
+                {{ dateFrom }} to {{ dateTo }}
+                <q-btn
+                  dense
+                  flat
+                  icon="fas fa-download"
+                  @click="downloadAll()"
+                />
+              </q-toolbar-title>
+            </q-toolbar>
+          </template>
+          <template v-slot:header="props">
+            <q-tr :props="props">
+              <q-th class="bg-primary text-white"> </q-th>
+              <q-th class="bg-primary text-white"> </q-th>
+              <q-th class="bg-primary text-white"> </q-th>
+              <q-th :colspan="siteN" class="bg-light-green text-white">
+                QCnt
+              </q-th>
+              <q-th :colspan="siteN" class="bg-green text-white"> QQty </q-th>
+              <q-th :colspan="siteN" class="bg-indigo-6 text-white">
+                MinQPrice
+              </q-th>
+              <q-th :colspan="siteN" class="bg-indigo-4 text-white">
+                AvgQPrice
+              </q-th>
+              <q-th :colspan="siteN" class="bg-indigo-2 text-white">
+                MaxQPrice
+              </q-th>
+              <template v-for="li in limitN" :key="li">
+                <q-th
+                  :colspan="siteN"
+                  :class="'bg-cyan-' + (15 - li) + ' text-white'"
+                >
+                  LastQPrice{{ li }}
+                </q-th>
+              </template>
+              <q-th :colspan="siteN" class="bg-light-green text-white">
+                SCnt
+              </q-th>
+              <q-th :colspan="siteN" class="bg-green text-white"> SQty </q-th>
+              <q-th :colspan="siteN" class="bg-indigo-6 text-white">
+                MinSPrice
+              </q-th>
+              <q-th :colspan="siteN" class="bg-indigo-4 text-white">
+                AvgSPrice
+              </q-th>
+              <q-th :colspan="siteN" class="bg-indigo-2 text-white">
+                MaxSPrice
+              </q-th>
+              <template v-for="li in limitN" :key="li">
+                <q-th
+                  :colspan="siteN"
+                  :class="'bg-blue-' + (15 - li) + ' text-white'"
+                >
+                  LastSPrice{{ li }}
+                </q-th>
+              </template>
+              <template v-for="li in limitN" :key="li">
+                <q-th
+                  :colspan="siteN"
+                  :class="'bg-orange-' + (15 - li) + ' text-white'"
+                >
+                  LastCost{{ li }}
+                </q-th>
+              </template>
+            </q-tr>
+            <q-tr :props="props">
+              <q-th v-for="col in props.cols" :key="col['name']" :props="props">
+                {{ col['label'] }}
+              </q-th>
+            </q-tr>
+          </template>
+        </q-table>
+      </q-tab-panel>
+    </q-tab-panels>
   </div>
-  <q-tabs
-    v-model="tab"
-    dense
-    align="left"
-    class="text-grey"
-    active-color="primary"
-    indicator-color="primary"
-    narrow-indicator
-    :style="'height:' + tabHeaderHeight + 'px'"
-    v-if="categoryCode"
-  >
-    <q-tab name="YourSite" label="Your-Site" />
-    <q-tab name="AllSites" label="All-Sites" />
-  </q-tabs>
-  <q-tab-panels v-model="tab" keep-alive v-if="categoryCode">
-    <q-tab-panel name="YourSite" class="q-pa-none">
-      <q-table
-        v-if="isAuthorised('GESSOH') || isAuthorised('GESSQH')"
-        v-model:pagination="pagination"
-        row-key="index"
-        dense
-        :virtual-scroll-sticky-size-start="48"
-        :rows="analysisQuoteSalesCost"
-        :columns="columns"
-        :rows-per-page-options="[0]"
-        class="q-mx-sm q-mb-sm my-sticky"
-        :style="
-          'height:' + tableHeight + 'px;width:' + (pageBodyWidth - 16) + 'px'
-        "
-      >
-        <template v-slot:top>
-          <q-toolbar class="bg-teal text-white shadow-2">
-            <q-toolbar-title class="text-left"
-              >Products of group2 [{{ categoryCode }}] in {{ site }} from
-              {{ dateFrom }} to {{ dateTo }}
-              <q-btn dense flat icon="fas fa-download" @click="download()" />
-            </q-toolbar-title>
-          </q-toolbar>
-        </template>
-      </q-table>
-      <exception :ErrorCode="403" v-else />
-    </q-tab-panel>
-    <q-tab-panel name="AllSites" class="q-pa-none">
-      <q-table
-        v-if="isAuthorised('GESSOH') || isAuthorised('GESSQH')"
-        v-model:pagination="pagination"
-        row-key="index"
-        dense
-        :virtual-scroll-sticky-size-start="48"
-        :rows="analysisQuoteSalesCostAllKeyed"
-        :columns="columnsAll"
-        :rows-per-page-options="[0]"
-        class="q-mx-sm q-mb-sm my-sticky"
-        :style="
-          'height:' + tableHeight + 'px;width:' + (pageBodyWidth - 16) + 'px'
-        "
-      >
-        <template v-slot:top>
-          <q-toolbar class="bg-teal text-white shadow-2">
-            <q-toolbar-title class="text-left"
-              >Products of group2 [{{ categoryCode }}] in all sites from
-              {{ dateFrom }} to {{ dateTo }}
-              <q-btn dense flat icon="fas fa-download" @click="downloadAll()" />
-            </q-toolbar-title>
-          </q-toolbar>
-        </template>
-        <template v-slot:header="props">
-          <q-tr :props="props">
-            <q-th class="bg-primary text-white"> </q-th>
-            <q-th class="bg-primary text-white"> </q-th>
-            <q-th class="bg-primary text-white"> </q-th>
-            <q-th :colspan="siteN" class="bg-light-green text-white">
-              QCnt
-            </q-th>
-            <q-th :colspan="siteN" class="bg-green text-white"> QQty </q-th>
-            <q-th :colspan="siteN" class="bg-indigo-6 text-white">
-              MinQPrice
-            </q-th>
-            <q-th :colspan="siteN" class="bg-indigo-4 text-white">
-              AvgQPrice
-            </q-th>
-            <q-th :colspan="siteN" class="bg-indigo-2 text-white">
-              MaxQPrice
-            </q-th>
-            <template v-for="li in limitN" :key="li">
-              <q-th
-                :colspan="siteN"
-                :class="'bg-cyan-' + (15 - li) + ' text-white'"
-              >
-                LastQPrice{{ li }}
-              </q-th>
-            </template>
-            <q-th :colspan="siteN" class="bg-light-green text-white">
-              SCnt
-            </q-th>
-            <q-th :colspan="siteN" class="bg-green text-white"> SQty </q-th>
-            <q-th :colspan="siteN" class="bg-indigo-6 text-white">
-              MinSPrice
-            </q-th>
-            <q-th :colspan="siteN" class="bg-indigo-4 text-white">
-              AvgSPrice
-            </q-th>
-            <q-th :colspan="siteN" class="bg-indigo-2 text-white">
-              MaxSPrice
-            </q-th>
-            <template v-for="li in limitN" :key="li">
-              <q-th
-                :colspan="siteN"
-                :class="'bg-blue-' + (15 - li) + ' text-white'"
-              >
-                LastSPrice{{ li }}
-              </q-th>
-            </template>
-            <template v-for="li in limitN" :key="li">
-              <q-th
-                :colspan="siteN"
-                :class="'bg-orange-' + (15 - li) + ' text-white'"
-              >
-                LastCost{{ li }}
-              </q-th>
-            </template>
-          </q-tr>
-          <q-tr :props="props">
-            <q-th v-for="col in props.cols" :key="col['name']" :props="props">
-              {{ col['label'] }}
-            </q-th>
-          </q-tr>
-        </template>
-      </q-table>
-      <exception :ErrorCode="403" v-else />
-    </q-tab-panel>
-  </q-tab-panels>
 </template>
 
 <script>
@@ -209,7 +212,6 @@ import { useQuasar, date } from 'quasar'
 import { getCookies } from 'assets/storage'
 import { jsonToExcel, jsonToTable } from 'assets/dataUtils'
 import { isAuthorised } from 'assets/auth'
-import Exception from 'pages/Exception.vue'
 import _forEach from 'lodash/forEach'
 import _groupBy from 'lodash/groupBy'
 import _map from 'lodash/map'
@@ -227,7 +229,6 @@ export default defineComponent({
     }
   },
   components: {
-    Exception,
     Vue3Lottie
   },
 

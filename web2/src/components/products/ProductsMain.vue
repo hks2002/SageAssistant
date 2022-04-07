@@ -1,81 +1,74 @@
 <!--  -->
 <template>
-  <Vue3Lottie
-    animationLink="/json/waiting-input.json"
-    :height="600"
-    :width="600"
-    class="fixed-center"
-    v-if="!pnRoot && isAuthorised('GESITM')"
-  />
-  <Vue3Lottie
+  <vue3-lottie
     animationLink="/json/403.json"
-    :height="600"
-    :width="600"
-    class="fixed-center"
     v-if="!isAuthorised('GESITM')"
+    class="fixed-center"
   />
-  <q-select-input
-    option-label="PN"
-    option-value="PNROOT"
-    data-url="/Data/PNHelper?PnOrPnRoot="
-    emit-to="searchPn"
-    :label="$t('Search Your Product')"
-    popup-content-class="text-secondary"
-    class="q-pa-sm"
-    :disable="!isAuthorised('GESITM')"
-  />
-  <div
-    class="row q-gutter-sm q-pa-sm"
-    style="height:200px;"
-    v-if="pnRoot"
-  >
-    <q-card class="col-grow">
-      <q-scroll-area style="padding:0px; height:200px;">
-        <q-list-pn-list :pnRoot="pnRoot" />
-      </q-scroll-area>
-    </q-card>
-    <q-card class="col-3">
-      <q-scroll-area style="padding:0px; height:200px;">
-        <echart-inventory-stock
-          :pnRoot="pnRoot"
-          style="padding:0px; height:200px;"
-          v-show="isAuthorised('CONSSDE')"
-        />
-      </q-scroll-area>
-    </q-card>
-    <q-card class="col-4">
-      <q-scroll-area style="padding:0px; height:200px;">
-        <echart-delivery-duration
-          :pnRoot="pnRoot"
-          style="padding:0px; height:200px;"
-          v-show="isAuthorised('GESSDH')"
-        />
-      </q-scroll-area>
-    </q-card>
-  </div>
-  <div class="row q-mt-md q-pa-sm">
-    <echart-sales-history
-      :pnRoot="pnRoot"
-      style="padding:0px; height:300px;"
-      class="col-grow"
-      v-show="isAuthorised('GESSOH')"
+  <div v-else>
+    <vue3-lottie
+      animationLink="/json/waiting-input.json"
+      v-if="!pnRoot"
+      class="fixed-center"
     />
-  </div>
-  <div class="row  q-pa-sm">
-    <echart-quote-history
-      :pnRoot="pnRoot"
-      style="padding:0px; height:300px;"
-      class="col-grow"
-      v-show="isAuthorised('GESSQH')"
+    <q-select-input
+      option-label="PN"
+      option-value="PNROOT"
+      data-url="/Data/PNHelper?PnOrPnRoot="
+      emit-to="searchPn"
+      :label="$t('Search Your Product')"
+      popup-content-class="text-secondary"
+      class="q-pa-sm"
     />
-  </div>
-  <div class="row  q-pa-sm">
-    <echart-cost-history
-      :pnRoot="pnRoot"
-      style="padding:0px; height:300px;"
-      class="col-grow"
-      v-show="isAuthorised('GESPOH')"
-    />
+    <div class="row q-gutter-sm q-pa-sm" style="height: 200px" v-if="pnRoot">
+      <q-card class="col-grow">
+        <q-scroll-area style="padding: 0px; height: 200px">
+          <q-list-pn-list :pnRoot="pnRoot" />
+        </q-scroll-area>
+      </q-card>
+      <q-card class="col-3">
+        <q-scroll-area style="padding: 0px; height: 200px">
+          <echart-inventory-stock
+            :pnRoot="pnRoot"
+            style="padding: 0px; height: 200px"
+            v-show="isAuthorised('CONSSDE')"
+          />
+        </q-scroll-area>
+      </q-card>
+      <q-card class="col-4">
+        <q-scroll-area style="padding: 0px; height: 200px">
+          <echart-delivery-duration
+            :pnRoot="pnRoot"
+            style="padding: 0px; height: 200px"
+            v-show="isAuthorised('GESSDH')"
+          />
+        </q-scroll-area>
+      </q-card>
+    </div>
+    <div class="row q-mt-md q-pa-sm" v-if="pnRoot">
+      <echart-sales-history
+        :pnRoot="pnRoot"
+        style="padding: 0px; height: 300px"
+        class="col-grow"
+        v-show="isAuthorised('GESSOH')"
+      />
+    </div>
+    <div class="row q-pa-sm" v-if="pnRoot">
+      <echart-quote-history
+        :pnRoot="pnRoot"
+        style="padding: 0px; height: 300px"
+        class="col-grow"
+        v-show="isAuthorised('GESSQH')"
+      />
+    </div>
+    <div class="row q-pa-sm" v-if="pnRoot">
+      <echart-cost-history
+        :pnRoot="pnRoot"
+        style="padding: 0px; height: 300px"
+        class="col-grow"
+        v-show="isAuthorised('GESPOH')"
+      />
+    </div>
   </div>
 </template>
 
@@ -135,5 +128,4 @@ export default defineComponent({
   }
 })
 </script>
-<style lang='scss' scoped>
-</style>
+<style lang="scss" scoped></style>

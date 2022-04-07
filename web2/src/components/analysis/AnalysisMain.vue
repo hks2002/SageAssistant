@@ -18,9 +18,7 @@
     <q-tab-panel name="QuoteSalesCost" style="padding: 0px">
       <quote-sales-cost
         :tabPanelHeight="tabPanelHeight"
-        v-if="isAuthorised('GESSOH') || isAuthorised('GESSQH')"
       />
-      <exception-vue :ErrorCode="403" v-else />
     </q-tab-panel>
   </q-tab-panels>
 </template>
@@ -30,14 +28,12 @@ import { defineComponent, ref, onBeforeMount } from 'vue'
 import { useQuasar } from 'quasar'
 import { isAuthorised } from 'assets/auth'
 import QuoteSalesCost from 'components/analysis/QuoteSalesCost.vue'
-import ExceptionVue from 'pages/Exception.vue'
 
 export default defineComponent({
   name: 'QTabsAnalysis',
 
   components: {
-    QuoteSalesCost,
-    ExceptionVue
+    QuoteSalesCost
   },
 
   setup(props, ctx) {

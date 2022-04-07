@@ -16,12 +16,10 @@
 
   <q-tab-panels v-model="tab" animated keep-alive>
     <q-tab-panel name="Count" style="padding: 0px">
-      <stock-summary-main v-if="isAuthorised('CONSSAR')" />
-      <exception :ErrorCode="403" v-else />
+      <stock-summary-main />
     </q-tab-panel>
     <q-tab-panel name="History" style="padding: 0px">
-      <stock-history-main v-if="isAuthorised('CONSSAR')" />
-      <exception :ErrorCode="403" v-else />
+      <stock-history-main />
     </q-tab-panel>
   </q-tab-panels>
 </template>
@@ -34,15 +32,13 @@ import { getCookies } from 'assets/storage'
 import { isAuthorised } from 'assets/auth'
 import StockSummaryMain from 'src/components/stock/StockSummaryMain.vue'
 import StockHistoryMain from 'src/components/stock/StockHistoryMain.vue'
-import Exception from 'pages/Exception.vue'
 
 export default defineComponent({
   name: 'StockMain',
 
   components: {
     StockSummaryMain,
-    StockHistoryMain,
-    Exception
+    StockHistoryMain
   },
 
   setup(props, ctx) {

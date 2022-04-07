@@ -1,121 +1,119 @@
 <!--  -->
 <template>
   <vue3-lottie
-    animationLink="/json/waiting-input.json"
-    :height="600"
-    :width="600"
-    class="fixed-center"
-    v-if="!supplierCode && isAuthorised('GESPOH')"
-  />
-  <vue3-lottie
     animationLink="/json/403.json"
-    :height="600"
-    :width="600"
     class="fixed-center"
     v-if="!isAuthorised('GESPOH')"
   />
-  <div class="row q-gutter-sm q-pa-sm">
-    <q-select-input
-      option-label="SupplierName"
-      option-value="SupplierCode"
-      data-url="/Data/SupplierHelper?SupplierCodeOrName="
-      emit-to="searchSupplier"
-      :label="$t('Search Your Suppliers (Code or Name)')"
-      popup-content-class="text-secondary"
-      class="col-grow"
-      :disable="!isAuthorised('GESPOH')"
+  <div v-else>
+    <div class="row q-gutter-sm q-pa-sm">
+      <q-select-input
+        option-label="SupplierName"
+        option-value="SupplierCode"
+        data-url="/Data/SupplierHelper?SupplierCodeOrName="
+        emit-to="searchSupplier"
+        :label="$t('Search Your Suppliers (Code or Name)')"
+        popup-content-class="text-secondary"
+        class="col-grow"
+        :disable="!isAuthorised('GESPOH')"
+      />
+      <div class="col-3">
+        <q-input
+          v-model="dateFrom"
+          outlined
+          debounce="1000"
+          mask="date"
+          type="date"
+          :label="$t('From')"
+          :disable="!isAuthorised('GESPOH')"
+        />
+      </div>
+      <div class="col-3">
+        <q-input
+          v-model="dateTo"
+          outlined
+          debounce="1000"
+          mask="date"
+          type="date"
+          :label="$t('To')"
+          :disable="!isAuthorised('GESPOH')"
+        />
+      </div>
+    </div>
+    <Vue3Lottie
+      animationLink="/json/waiting-input.json"
+      :style="{ height: '500px' }"
+      v-if="!supplierCode"
     />
-    <div class="col-3">
-      <q-input
-        v-model="dateFrom"
-        outlined
-        debounce="1000"
-        mask="date"
-        type="date"
-        :label="$t('From')"
-        :disable="!isAuthorised('GESPOH')"
+    <q-card-supplier-info
+      :supplierCode="supplierCode"
+      v-if="supplierCode"
+      class="q-mx-sm"
+    />
+    <q-list class="row q-mx-sm q-mt-sm" v-if="supplierCode">
+      <q-markup-table-supplier-open-items
+        :supplierCode="supplierCode"
+        :dateFrom="dateFrom"
+        :dateTo="dateTo"
+        class="col"
+        v-show="isAuthorised('GESPOH')"
       />
-    </div>
-    <div class="col-3">
-      <q-input
-        v-model="dateTo"
-        outlined
-        debounce="1000"
-        mask="date"
-        type="date"
-        :label="$t('To')"
-        :disable="!isAuthorised('GESPOH')"
+    </q-list>
+    <q-list class="row q-mx-sm q-mt-sm" v-if="supplierCode">
+      <echart-supplier-open-qty
+        :supplierCode="supplierCode"
+        :dateFrom="dateFrom"
+        :dateTo="dateTo"
+        style="padding: 0px; height: 200px"
+        class="col-6"
+        v-show="isAuthorised('GESPOH')"
       />
-    </div>
+      <echart-supplier-open-amount
+        :supplierCode="supplierCode"
+        :dateFrom="dateFrom"
+        :dateTo="dateTo"
+        style="padding: 0px; height: 200px"
+        class="col-6"
+        v-show="isAuthorised('GESPOH')"
+      />
+    </q-list>
+    <q-list class="row q-mx-sm q-mt-sm" v-if="supplierCode">
+      <echart-supplier-total-qty
+        :supplierCode="supplierCode"
+        :dateFrom="dateFrom"
+        :dateTo="dateTo"
+        style="padding: 0px; height: 200px"
+        class="col-6"
+        v-show="isAuthorised('GESPOH')"
+      />
+      <echart-supplier-total-amount
+        :supplierCode="supplierCode"
+        :dateFrom="dateFrom"
+        :dateTo="dateTo"
+        style="padding: 0px; height: 200px"
+        class="col-6"
+        v-show="isAuthorised('GESPOH')"
+      />
+    </q-list>
+    <q-list class="row q-mx-sm q-mt-sm" v-if="supplierCode">
+      <echart-supplier-delivery-history
+        :supplierCode="supplierCode"
+        :dateFrom="dateFrom"
+        :dateTo="dateTo"
+        style="padding: 0px; height: 200px"
+        class="col-6"
+        v-show="isAuthorised('GESPOH')"
+      />
+      <echart-supplier-delay-history
+        :supplierCode="supplierCode"
+        :dateFrom="dateFrom"
+        :dateTo="dateTo"
+        style="padding: 0px; height: 200px"
+        class="col-6"
+        v-show="isAuthorised('GESPOH')"
+      />
+    </q-list>
   </div>
-  <q-card-supplier-info
-    :supplierCode="supplierCode"
-    v-if="supplierCode"
-    class="q-mx-sm"
-  />
-  <q-list class="row q-mx-sm q-mt-sm">
-    <q-markup-table-supplier-open-items
-      :supplierCode="supplierCode"
-      :dateFrom="dateFrom"
-      :dateTo="dateTo"
-      class="col"
-      v-show="isAuthorised('GESPOH')"
-    />
-  </q-list>
-  <q-list class="row q-mx-sm q-mt-sm">
-    <echart-supplier-open-qty
-      :supplierCode="supplierCode"
-      :dateFrom="dateFrom"
-      :dateTo="dateTo"
-      style="padding:0px; height:200px;"
-      class="col-6"
-      v-show="isAuthorised('GESPOH')"
-    />
-    <echart-supplier-open-amount
-      :supplierCode="supplierCode"
-      :dateFrom="dateFrom"
-      :dateTo="dateTo"
-      style="padding:0px; height:200px;"
-      class="col-6"
-      v-show="isAuthorised('GESPOH')"
-    />
-  </q-list>
-  <q-list class="row q-mx-sm q-mt-sm">
-    <echart-supplier-total-qty
-      :supplierCode="supplierCode"
-      :dateFrom="dateFrom"
-      :dateTo="dateTo"
-      style="padding:0px; height:200px;"
-      class="col-6"
-      v-show="isAuthorised('GESPOH')"
-    />
-    <echart-supplier-total-amount
-      :supplierCode="supplierCode"
-      :dateFrom="dateFrom"
-      :dateTo="dateTo"
-      style="padding:0px; height:200px;"
-      class="col-6"
-      v-show="isAuthorised('GESPOH')"
-    />
-  </q-list>
-  <q-list class="row q-mx-sm q-mt-sm">
-    <echart-supplier-delivery-history
-      :supplierCode="supplierCode"
-      :dateFrom="dateFrom"
-      :dateTo="dateTo"
-      style="padding:0px; height:200px;"
-      class="col-6"
-      v-show="isAuthorised('GESPOH')"
-    />
-    <echart-supplier-delay-history
-      :supplierCode="supplierCode"
-      :dateFrom="dateFrom"
-      :dateTo="dateTo"
-      style="padding:0px; height:200px;"
-      class="col-6"
-      v-show="isAuthorised('GESPOH')"
-    />
-  </q-list>
 </template>
 
 <script>
@@ -188,5 +186,4 @@ export default defineComponent({
   }
 })
 </script>
-<style lang='scss' scoped>
-</style>
+<style lang="scss" scoped></style>
