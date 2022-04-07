@@ -22,15 +22,15 @@ public class FinancialControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
                 .andDo(MockMvcResultHandlers.print());
-                this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalance?Site=ZHU&Year=2022&Month=1"))
+                this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalance?Site=ZHU&Year=2022"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
                 .andDo(MockMvcResultHandlers.print());
-                this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalance?Site=ZHU&Year=2022&Month=1&AccountNO=xxxx"))
+                this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalance?Site=ZHU&Year=2022&AccountNO=xxxx"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
                 .andDo(MockMvcResultHandlers.print());
-                this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalance?Site=ZHU&Year=2022&Month=1&AccountNO=2131000"))
+                this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalance?Site=ZHU&Year=2022&&AccountNO=1002210"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
                 .andDo(MockMvcResultHandlers.print());
@@ -40,17 +40,17 @@ public class FinancialControllerTest {
     void testGetFinancialBalanceM() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalanceM"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string("Must set Year and Month"))
+                .andExpect(MockMvcResultMatchers.content().string("Must set Site and Year"))
                 .andDo(MockMvcResultHandlers.print());
-         this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalanceM?Site=ZHU&Year=2022&Month=1"))
+         this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalanceM?Site=ZHU&Year=2022"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string("Must set AccountNO, if more than one AccountNO, use , between AccountNOs"))
+                .andExpect(MockMvcResultMatchers.content().string("Must set AccountNO, if more than one AccountNO, use ',' between AccountNOs"))
                 .andDo(MockMvcResultHandlers.print());
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalanceM?Site=ZHU&Year=2022&Month=1&AccountNO=xxxx"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalanceM?Site=ZHU&Year=2022&AccountNO=xxxx"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string("0"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
                 .andDo(MockMvcResultHandlers.print());
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalanceM?Site=ZHU&Year=2022&Month=1&AccountNO=2131000"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalanceM?Site=ZHU&Year=2022&AccountNO=1002210"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
     }
@@ -59,17 +59,17 @@ public class FinancialControllerTest {
     void testGetFinancialBalanceB() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalanceB"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string("Must set Year and Month"))
+                .andExpect(MockMvcResultMatchers.content().string("Must set Site and Year"))
                 .andDo(MockMvcResultHandlers.print());
-         this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalanceB?Site=ZHU&Year=2022&Month=1"))
+         this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalanceB?Site=ZHU&Year=2022"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string("Must set AccountNO, if more than one AccountNO, use , between AccountNOs"))
+                .andExpect(MockMvcResultMatchers.content().string("Must set AccountNO, if more than one AccountNO, use ',' between AccountNOs"))
                 .andDo(MockMvcResultHandlers.print());
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalanceB?Site=ZHU&Year=2022&Month=1&AccountNO=xxxx"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalanceB?Site=ZHU&Year=2022&AccountNO=xxxx"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string("0"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
                 .andDo(MockMvcResultHandlers.print());
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalanceB?Site=ZHU&Year=2022&Month=1&AccountNO=2131000"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalanceB?Site=ZHU&Year=2022&AccountNO=2131000"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
     }
@@ -78,17 +78,17 @@ public class FinancialControllerTest {
     void testGetFinancialBalanceC() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalanceC"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string("Must set Year and Month"))
+                .andExpect(MockMvcResultMatchers.content().string("Must set Site and Year"))
                 .andDo(MockMvcResultHandlers.print());
-         this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalanceC?Site=ZHU&Year=2022&Month=1"))
+         this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalanceC?Site=ZHU&Year=2022"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string("Must set AccountNO, if more than one AccountNO, use , between AccountNOs"))
+                .andExpect(MockMvcResultMatchers.content().string("Must set AccountNO, if more than one AccountNO, use ',' between AccountNOs"))
                 .andDo(MockMvcResultHandlers.print());
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalanceC?Site=ZHU&Year=2022&Month=1&AccountNO=xxxx"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalanceC?Site=ZHU&Year=2022&AccountNO=xxxx"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string("0"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
                 .andDo(MockMvcResultHandlers.print());
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalanceC?Site=ZHU&Year=2022&Month=1&AccountNO=2131000"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalanceC?Site=ZHU&Year=2022&AccountNO=2131000"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
     }
@@ -97,17 +97,17 @@ public class FinancialControllerTest {
     void testGetFinancialBalanceD() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalanceD"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string("Must set Year and Month"))
+                .andExpect(MockMvcResultMatchers.content().string("Must set Site and Year"))
                 .andDo(MockMvcResultHandlers.print());
-         this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalanceD?Site=ZHU&Year=2022&Month=1"))
+         this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalanceD?Site=ZHU&Year=2022"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string("Must set AccountNO, if more than one AccountNO, use , between AccountNOs"))
+                .andExpect(MockMvcResultMatchers.content().string("Must set AccountNO, if more than one AccountNO, use ',' between AccountNOs"))
                 .andDo(MockMvcResultHandlers.print());
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalanceD?Site=ZHU&Year=2022&Month=1&AccountNO=xxxx"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalanceD?Site=ZHU&Year=2022&AccountNO=xxxx"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string("0"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
                 .andDo(MockMvcResultHandlers.print());
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalanceD?Site=ZHU&Year=2022&Month=1&AccountNO=2131000"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/Data/FinancialBalanceD?Site=ZHU&Year=2022&AccountNO=2131000"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
     }
