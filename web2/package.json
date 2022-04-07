@@ -1,6 +1,6 @@
 {
   "name": "web",
-  "version": "3.0.0402180818",
+  "version": "3.0.0407114815",
   "description": "An Assistant for Sage",
   "productName": "SageAssistantWeb",
   "author": "Robert Huang<r.huang@dedienne-aero.com><56649783@qq.com>",
@@ -14,7 +14,7 @@
     "@quasar/cli": "^1.2.1",
     "@quasar/extras": "^1.11.1",
     "@types/echarts": "^4.9.7",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "core-js": "^3.18.1",
     "echarts": "^5.2.1",
     "global": "^4.4.0",

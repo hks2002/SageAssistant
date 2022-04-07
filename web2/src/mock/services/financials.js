@@ -1,6 +1,142 @@
 import Mock from 'mockjs'
 import { getQueryParameter } from '../mockExt'
 
+Mock.mock(RegExp('^(/Data/FinancialBalanceC)' + '.*'), options => {
+  console.debug('\u001b[35m' + '[Mocking] ', 'FinancialBalanceC')
+
+  const Year = getQueryParameter(options, 'Year')
+  const AccountNO = getQueryParameter(options, 'AccountNO')
+
+  // list = {data:[{},{}]}
+  const list = Mock.mock({
+    'data|1-5': [
+      {
+        AccountNO: () => { return AccountNO + Mock.mock('@character') },
+        Currency: /RMB|USD/,
+        Year: Year,
+        'C0|1000-20000000': 1,
+        'C1|1000-20000000': 1,
+        'C2|1000-20000000': 1,
+        'C3|1000-20000000': 1,
+        'C4|1000-20000000': 1,
+        'C5|1000-20000000': 1,
+        'C6|1000-20000000': 1,
+        'C7|1000-20000000': 1,
+        'C8|1000-20000000': 1,
+        'C9|1000-20000000': 1,
+        'C10|1000-20000000': 1,
+        'C11|1000-20000000': 1,
+        'C12|1000-20000000': 1
+      }
+
+    ]
+  })
+
+  return list.data
+})
+
+Mock.mock(RegExp('^(/Data/FinancialBalanceD)' + '.*'), options => {
+  console.debug('\u001b[35m' + '[Mocking] ', 'FinancialBalanceD')
+
+  const Year = getQueryParameter(options, 'Year')
+  const AccountNO = getQueryParameter(options, 'AccountNO')
+
+  // list = {data:[{},{}]}
+  const list = Mock.mock({
+    'data|1-5': [
+      {
+        AccountNO: () => { return AccountNO + Mock.mock('@character') },
+        Currency: /RMB|USD/,
+        Year: Year,
+        'D0|1000-20000000': 1,
+        'D1|1000-20000000': 1,
+        'D2|1000-20000000': 1,
+        'D3|1000-20000000': 1,
+        'D4|1000-20000000': 1,
+        'D5|1000-20000000': 1,
+        'D6|1000-20000000': 1,
+        'D7|1000-20000000': 1,
+        'D8|1000-20000000': 1,
+        'D9|1000-20000000': 1,
+        'D10|1000-20000000': 1,
+        'D11|1000-20000000': 1,
+        'D12|1000-20000000': 1
+      }
+
+    ]
+  })
+
+  return list.data
+})
+
+Mock.mock(RegExp('^(/Data/FinancialBalanceM)' + '.*'), options => {
+  console.debug('\u001b[35m' + '[Mocking] ', 'FinancialBalanceM')
+
+  const Year = getQueryParameter(options, 'Year')
+  const AccountNO = getQueryParameter(options, 'AccountNO')
+
+  // list = {data:[{},{}]}
+  const list = Mock.mock({
+    'data|1-5': [
+      {
+        AccountNO: () => { return AccountNO + Mock.mock('@character') },
+        Currency: /RMB|USD/,
+        Year: Year,
+        'M0|1000-20000000': 1,
+        'M1|1000-20000000': 1,
+        'M2|1000-20000000': 1,
+        'M3|1000-20000000': 1,
+        'M4|1000-20000000': 1,
+        'M5|1000-20000000': 1,
+        'M6|1000-20000000': 1,
+        'M7|1000-20000000': 1,
+        'M8|1000-20000000': 1,
+        'M9|1000-20000000': 1,
+        'M10|1000-20000000': 1,
+        'M11|1000-20000000': 1,
+        'M12|1000-20000000': 1
+      }
+
+    ]
+  })
+
+  return list.data
+})
+
+Mock.mock(RegExp('^(/Data/FinancialBalanceB)' + '.*'), options => {
+  console.debug('\u001b[35m' + '[Mocking] ', 'FinancialBalanceB')
+
+  const Year = getQueryParameter(options, 'Year')
+  const AccountNO = getQueryParameter(options, 'AccountNO')
+
+  // list = {data:[{},{}]}
+  const list = Mock.mock({
+    'data|1-5': [
+      {
+        AccountNO: () => { return AccountNO + Mock.mock('@character') },
+        Currency: /RMB|USD/,
+        Year: Year,
+        'B0|1000-20000000': 1,
+        'B1|1000-20000000': 1,
+        'B2|1000-20000000': 1,
+        'B3|1000-20000000': 1,
+        'B4|1000-20000000': 1,
+        'B5|1000-20000000': 1,
+        'B6|1000-20000000': 1,
+        'B7|1000-20000000': 1,
+        'B8|1000-20000000': 1,
+        'B9|1000-20000000': 1,
+        'B10|1000-20000000': 1,
+        'B11|1000-20000000': 1,
+        'B12|1000-20000000': 1
+      }
+
+    ]
+  })
+
+  return list.data
+})
+
 Mock.mock(RegExp('^(/Data/FinancialInvoicePay)' + '.*'), options => {
   console.debug('\u001b[35m' + '[Mocking] ', 'FinancialInvoicePay')
 

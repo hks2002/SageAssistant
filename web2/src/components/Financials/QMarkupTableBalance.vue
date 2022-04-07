@@ -46,7 +46,7 @@
             <td class="text-right">{{ item['M' + (month - 1)] }}</td>
           </template>
           <template v-if="showBalance">
-            <td class="text-right">{{ item['D' + (month - 1)] }}</td>
+            <td class="text-right">{{ item['B' + (month - 1)] }}</td>
           </template>
         </template>
       </tr>
@@ -62,14 +62,14 @@ import { defineComponent, onMounted, ref, watch } from 'vue'
 import { notifyError } from 'assets/common'
 import { axios } from 'boot/axios'
 import { jsonToExcel } from 'assets/dataUtils'
-import { getCookies } from 'src/assets/storage'
 
 export default defineComponent({
   name: 'QMarkupTableBalance',
 
   props: {
-    accountNO: String,
-    year: String,
+    accountNO: { type: String, require: true, default: '' },
+    year: { type: String, require: true, default: '' },
+    site: { type: String, require: true, default: '' },
     showCredit: { type: Boolean, require: false, default: true },
     showDebit: { type: Boolean, require: false, default: true },
     showMovement: { type: Boolean, require: false, default: true },
@@ -80,9 +80,6 @@ export default defineComponent({
     const balanceItems = ref([])
     const showLoading = ref(false)
     const colspan = ref(56)
-
-    const site = ref('')
-    site.value = getCookies('site')
 
     const doUpdate = () => {
       showLoading.value = true
@@ -96,8 +93,8 @@ export default defineComponent({
         .get(
           '/Data/FinancialBalance' +
             '?Site=' +
-            site.value +
-            '&AccountNO' +
+            props.site +
+            '&AccountNO=' +
             props.accountNO +
             '&Year=' +
             props.year
@@ -139,14 +136,14 @@ export default defineComponent({
 
     onMounted(() => {
       console.debug('onMounted Balance')
-      if (props.accountNO && props.year) {
+      if (props.accountNO && props.year && props.site) {
         doUpdate()
       }
     })
 
     // Don't use watchEffect, it run before Mounted.
     watch(
-      () => [props.accountNO, props.year],
+      () => [props.accountNO, props.year, props.site],
       (...newAndold) => {
         // newAndold[1]:old
         // newAndold[0]:new
