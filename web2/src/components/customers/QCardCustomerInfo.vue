@@ -1,8 +1,8 @@
 <template>
   <q-card>
     <template
-      v-for="(info, index) in supplierInfo"
-      :key="info['SupplierCode']"
+      v-for="(info, index) in customerInfo"
+      :key="info['CustomerCode']"
     >
       <q-item
         class="text-h6 text-weight-bold q-pr-md q-pb-xs"
@@ -14,14 +14,14 @@
           class="q-pr-md q-pt-xs"
           color="teal"
         />
-        {{info['SupplierCode']}}
-        {{info['SupplierName0']}}
-        {{info['SupplierName1']}}
+        {{info['CustomerCode']}}
+        {{info['CustomerName0']}}
+        {{info['CustomerName1']}}
       </q-item>
     </template>
     <template
-      v-for="(info) in supplierInfo"
-      :key="info['SupplierCode']"
+      v-for="(info) in customerInfo"
+      :key="info['CustomerCode']"
     >
       <q-item class="q-pt-xs q-pb-xs">
         <q-icon
@@ -95,27 +95,27 @@ import { notifyError } from 'assets/common'
 import { axios } from 'boot/axios'
 
 export default defineComponent({
-  name: 'QCardSupplierInfo',
+  name: 'QCardCustomerInfo',
 
   props: {
-    supplierCode: String
+    customerCode: String
   },
 
   setup(props, ctx) {
-    const supplierInfo = ref([])
+    const customerInfo = ref([])
     const showLoading = ref(false)
 
     const doUpdate = () => {
       showLoading.value = true
 
       axios
-        .get('/Data/SupplierDetails?SupplierCode=' + props.supplierCode)
+        .get('/Data/CustomerDetails?CustomerCode=' + props.customerCode)
         .then((response) => {
-          supplierInfo.value = response.data
+          customerInfo.value = response.data
         })
         .catch((e) => {
           console.error(e)
-          notifyError('Loading Supplier Info Failed!')
+          notifyError('Loading Customer Info Failed!')
         })
         .finally(() => {
           showLoading.value = false
@@ -131,14 +131,14 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      console.debug('onMounted QItemSupplierInfo')
-      if (props.supplierCode) {
+      console.debug('onMounted QItemCustomerInfo')
+      if (props.customerCode) {
         doUpdate()
       }
     })
 
     watch(
-      () => [props.supplierCode],
+      () => [props.customerCode],
       (...newAndold) => {
         // newAndold[1]:old
         // newAndold[0]:new
@@ -150,7 +150,7 @@ export default defineComponent({
     )
 
     return {
-      supplierInfo,
+      customerInfo,
       showLoading,
       WebSiteUrl
     }

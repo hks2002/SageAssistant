@@ -104,6 +104,17 @@ const routes = [
     ]
   },
   {
+    path: '/Customers',
+    name: '/Customers',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      {
+        path: '',
+        component: () => import('pages/Customers.vue')
+      }
+    ]
+  },
+  {
     path: '/exception',
     name: '/exception',
     component: () => import('layouts/DefaultLayout.vue'),

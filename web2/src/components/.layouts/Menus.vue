@@ -1,11 +1,7 @@
 <template>
   <q-scroll-area class="fit">
     <q-list>
-      <MenuLink
-        v-for="link in Links"
-        :key="link.title"
-        v-bind="link"
-      />
+      <MenuLink v-for="link in Links" :key="link.title" v-bind="link" />
     </q-list>
   </q-scroll-area>
 </template>
@@ -50,10 +46,10 @@ const menus = [
   {
     title: ' Customeres',
     caption: '',
-    icon: 'fas fa-people-carry',
-    link: '/Customeres',
+    icon: 'fas fa-users',
+    link: '/Customers',
     split: false,
-    enable: false
+    enable: true
   },
   {
     title: 'Sales',
