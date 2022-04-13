@@ -24,13 +24,13 @@
         class="col-1"
       />
       <q-toggle v-model="showBalance" label="Balance" class="col-1" />
-      <q-toggle v-model="showCredit" label="Credit" class="col-1" />
       <q-toggle v-model="showDebit" label="Debit" class="col-1" />
+      <q-toggle v-model="showCredit" label="Credit" class="col-1" />
       <q-toggle v-model="showMovement" label="Movement" class="col-1" />
     </div>
     <Vue3Lottie
       animationLink="/json/waiting-input.json"
-      :style="{ height: tableHeight + 250 + 'px', width: tableWidth  + 'px' }"
+      :style="{ height: tableHeight + 250 + 'px', width: tableWidth + 'px' }"
       v-if="!accountNO"
     />
     <q-list class="q-pa-sm" v-else>
@@ -45,19 +45,19 @@
         />
         <echart-fiancial-account-balance-vue
           :site="site"
-          cat="C"
-          :year="year"
-          :accountNO="accountNO"
-          class="col-3"
-          v-if="showCredit"
-        />
-        <echart-fiancial-account-balance-vue
-          :site="site"
           cat="D"
           :year="year"
           :accountNO="accountNO"
           class="col-3"
           v-if="showDebit"
+        />
+        <echart-fiancial-account-balance-vue
+          :site="site"
+          cat="C"
+          :year="year"
+          :accountNO="accountNO"
+          class="col-3"
+          v-if="showCredit"
         />
         <echart-fiancial-account-balance-vue
           :site="site"
@@ -111,10 +111,10 @@ export default defineComponent({
     )
     const year = ref(formattedString.substring(0, 4))
 
-    const showCredit = ref(true)
-    const showDebit = ref(true)
-    const showMovement = ref(true)
     const showBalance = ref(true)
+    const showDebit = ref(true)
+    const showCredit = ref(true)
+    const showMovement = ref(true)
 
     const tableHeight = ref(250)
     const tableWidth = ref(600)

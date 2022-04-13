@@ -133,6 +133,7 @@ export default defineComponent({
           xAxis: {
             type: 'category',
             data: [
+              'Open',
               'Jan',
               'Feb',
               'Mar',
