@@ -186,7 +186,7 @@ export default defineComponent({
   }
 })
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .q-field__native > span {
   color: white;
 }

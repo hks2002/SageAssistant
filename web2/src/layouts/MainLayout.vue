@@ -18,7 +18,7 @@
     </q-drawer>
 
     <q-page-container expand>
-      <q-scroll-area :style="'height:'+ pageBodyHeight + 'px'">
+      <q-scroll-area :style="'height:' + pageBodyHeight + 'px'">
         <router-view />
       </q-scroll-area>
     </q-page-container>
@@ -37,9 +37,9 @@ import {
 } from 'vue'
 import { useQuasar } from 'quasar'
 import { ebus } from 'boot/ebus'
-import Menus from 'components/.layouts/Menus.vue'
-import PageFooter from 'components/.layouts/PageFooter.vue'
-import PageHeader from 'components/.layouts/PageHeader.vue'
+import Menus from './Menus.vue'
+import PageFooter from './PageFooter.vue'
+import PageHeader from './PageHeader.vue'
 
 export default defineComponent({
   name: 'MainLayout',

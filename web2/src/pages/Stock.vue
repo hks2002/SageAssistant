@@ -1,30 +1,72 @@
 <template>
   <q-page :key="timer">
-    <stock-main-vue />
+    <q-tabs
+      v-model="tab"
+      dense
+      align="left"
+      class="text-grey"
+      active-color="primary"
+      indicator-color="primary"
+      narrow-indicator
+    >
+      <q-tab name="Count" label="Count" />
+      <q-tab name="History" label="History" />
+    </q-tabs>
+
+    <q-separator />
+
+    <q-tab-panels v-model="tab" animated keep-alive>
+      <q-tab-panel name="Count" style="padding: 0px">
+        <stock-summary-main />
+      </q-tab-panel>
+      <q-tab-panel name="History" style="padding: 0px">
+        <stock-history-main />
+      </q-tab-panel>
+    </q-tab-panels>
   </q-page>
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onBeforeMount, onMounted } from 'vue'
+import { useQuasar } from 'quasar'
 import { ebus } from 'boot/ebus'
-import StockMainVue from 'src/components/stock/StockMain.vue'
+import { getCookies } from 'assets/storage'
+import { isAuthorised } from 'assets/auth'
+import StockSummaryMain from 'src/components/stock/StockSummaryMain.vue'
+import StockHistoryMain from 'src/components/stock/StockHistoryMain.vue'
 
 export default defineComponent({
   name: 'Stock',
 
   components: {
-    StockMainVue
+    StockSummaryMain,
+    StockHistoryMain
   },
 
   setup(props, ctx) {
     ebus.emit('closeLeftDrawer')
     ebus.emit('activePage', 'Stock')
 
+    const $q = useQuasar()
+    const tab = ref('Count')
+    const site = ref('')
+    site.value = getCookies('site')
+
+    onBeforeMount(() => {
+      console.debug('onBeforeMount TabsStock')
+      // tabPanelHeight.value = $q.pageBodyHeight - tabHeaderHeight.value
+    })
+
+    onMounted(() => {
+      console.debug('onMounted TabsStock')
+    })
+
     return {
-      timer: new Date().getTime()
+      timer: new Date().getTime(),
+      tab,
+      isAuthorised
     }
   }
 })
 </script>
-<style lang='scss' scoped>
-</style>
+<style lang="scss" scoped></style>

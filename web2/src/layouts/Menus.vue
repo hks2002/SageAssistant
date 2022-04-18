@@ -8,7 +8,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-import MenuLink from 'components/.layouts/MenuLink.vue'
+import MenuLink from './MenuLink.vue'
 
 const menus = [
   {
