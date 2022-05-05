@@ -1,14 +1,14 @@
 <!--  -->
 <template>
   <q-page :key="timer">
-    <vue3-lottie
+    <Vue3Lottie
       animationLink="/json/403.json"
       class="fixed-center"
       v-if="!isAuthorised('GESPOH')"
     />
     <div v-else>
       <div class="row q-gutter-sm q-pa-sm">
-        <q-select-input
+        <QSelectInput
           option-label="SupplierName"
           option-value="SupplierCode"
           data-url="/Data/SupplierHelper?SupplierCodeOrName="
@@ -108,8 +108,8 @@
   </q-page>
 </template>
 
-<script>
-import { defineComponent, ref, onBeforeUnmount } from 'vue'
+<script setup>
+import { ref, onBeforeUnmount } from 'vue'
 import { useQuasar, date } from 'quasar'
 
 import { isAuthorised } from 'assets/auth'
@@ -126,55 +126,31 @@ import EchartSupplierDeliveryHistory from 'components/echarts/EchartSupplierDeli
 import EchartSupplierDelayHistory from 'components/echarts/EchartSupplierDelayHistory.vue'
 import { Vue3Lottie } from 'vue3-lottie'
 
-export default defineComponent({
-  name: 'Suppliers',
-  components: {
-    QSelectInput,
-    QCardSupplierInfo,
-    QMarkupTableSupplierOpenItems,
-    EchartSupplierOpenQty,
-    EchartSupplierOpenAmount,
-    EchartSupplierTotalQty,
-    EchartSupplierTotalAmount,
-    EchartSupplierDeliveryHistory,
-    EchartSupplierDelayHistory,
-    Vue3Lottie
-  },
+ebus.emit('closeLeftDrawer')
+ebus.emit('activePage', 'Suppliers')
+const timer = new Date().getTime()
 
-  setup() {
-    ebus.emit('closeLeftDrawer')
-    ebus.emit('activePage', 'Suppliers')
-    const $q = useQuasar()
-    const { formatDate, addToDate } = date
-    const supplierCode = ref('')
+const $q = useQuasar()
+const { formatDate, addToDate } = date
+const supplierCode = ref('')
 
-    const nowTimeStamp = Date.now()
-    const fromTimeStamp = addToDate(nowTimeStamp, { years: -3 })
-    const dateFrom = ref(formatDate(fromTimeStamp, 'YYYY-MM-DD'))
-    const dateTo = ref(formatDate(nowTimeStamp, 'YYYY-MM-DD'))
+const nowTimeStamp = Date.now()
+const fromTimeStamp = addToDate(nowTimeStamp, { years: -3 })
+const dateFrom = ref(formatDate(fromTimeStamp, 'YYYY-MM-DD'))
+const dateTo = ref(formatDate(nowTimeStamp, 'YYYY-MM-DD'))
 
-    $q.loadingBar.stop()
+$q.loadingBar.stop()
 
-    const update = (Code) => {
-      supplierCode.value = Code
-    }
+const update = (Code) => {
+  supplierCode.value = Code
+}
 
-    // event handing
-    ebus.on('searchSupplier', (Code) => {
-      update(Code)
-    })
-    onBeforeUnmount(() => {
-      ebus.off('searchSupplier')
-    })
-
-    return {
-      timer: new Date().getTime(),
-      isAuthorised,
-      supplierCode,
-      dateFrom,
-      dateTo
-    }
-  }
+// event handing
+ebus.on('searchSupplier', (Code) => {
+  update(Code)
+})
+onBeforeUnmount(() => {
+  ebus.off('searchSupplier')
 })
 </script>
 <style lang="scss" scoped></style>

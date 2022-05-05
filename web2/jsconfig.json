@@ -28,6 +28,9 @@
       ]
     }
   },
+  "vueCompilerOptions": {
+    "experimentalDisableTemplateSupport": true
+  },
   "exclude": [
     "dist",
     ".quasar",

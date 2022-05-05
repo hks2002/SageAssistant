@@ -30,47 +30,27 @@
   </q-card>
 </template>
 
-<script>
-import {
-  defineComponent,
-  ref,
-  onMounted,
-  onBeforeMount,
-  onBeforeUnmount
-} from 'vue'
+<script setup>
+import { ref, onMounted, onBeforeMount } from 'vue'
 import { useQuasar } from 'quasar'
 import { isAuthorised } from 'assets/auth'
 import QMarkupTableStockSummaryVue from './QMarkupTableStockSummary.vue'
 
-export default defineComponent({
-  name: 'StockSummaryMain',
-  components: { QMarkupTableStockSummaryVue },
-  props: {},
-  setup(props, ctx) {
-    const $q = useQuasar()
+const $q = useQuasar()
 
-    const PNfilter = ref('')
+const PNfilter = ref('')
 
-    const tableHeight = ref(250)
-    const tableWidth = ref(600)
+const tableHeight = ref(250)
+const tableWidth = ref(600)
 
-    onBeforeMount(() => {
-      console.debug('onBeforeMount StockSummary')
-      // should consider element margin/padding value
-      tableWidth.value = $q.pageBodyWidth - 8 * 2
-      tableHeight.value = $q.pageBodyHeight - 36 - 72 - 8
-    })
-    onMounted(() => {
-      console.debug('onMounted StockSummary')
-    })
-
-    return {
-      PNfilter,
-      tableHeight,
-      tableWidth,
-      isAuthorised
-    }
-  }
+onBeforeMount(() => {
+  console.debug('onBeforeMount StockSummary')
+  // should consider element margin/padding value
+  tableWidth.value = $q.pageBodyWidth - 8 * 2
+  tableHeight.value = $q.pageBodyHeight - 36 - 72 - 8
+})
+onMounted(() => {
+  console.debug('onMounted StockSummary')
 })
 </script>
 <style lang="sass" scoped></style>

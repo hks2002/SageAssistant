@@ -1,22 +1,14 @@
 <template>
   <q-markup-table
     dense
-    v-if="supplierOpenItems.length>0"
-    style="height:250px"
+    v-if="supplierOpenItems.length > 0"
+    style="height: 250px"
   >
-    <thead style="position:sticky;top:0px;z-index:1">
+    <thead style="position: sticky; top: 0px; z-index: 1">
       <tr>
-        <td
-          colspan="11"
-          class="bg-teal text-h6 text-white shadow-2"
-        >
-          OpenItems(All-{{supplierOpenItems.length}})
-          <q-btn
-            dense
-            flat
-            icon="fas fa-download"
-            @click="download()"
-          />
+        <td colspan="11" class="bg-teal text-h6 text-white shadow-2">
+          OpenItems(All-{{ supplierOpenItems.length }})
+          <q-btn dense flat icon="fas fa-download" @click="download()" />
         </td>
       </tr>
       <tr class="bg-primary text-white">
@@ -34,114 +26,99 @@
       </tr>
     </thead>
     <tbody>
-      <tr
-        v-for="(item, index) in supplierOpenItems"
-        :key="index"
-      >
-        <td class="text-center">{{index}}</td>
-        <td>{{item['Site']}}</td>
-        <td>{{item['SupplierCode']}}</td>
-        <td>{{item['PurchaseNO']}}</td>
-        <td>{{item['ProjectNO']}}</td>
-        <td>{{item['PN']}}</td>
-        <td>{{item['Description']}}</td>
-        <td class="text-center">{{item['AckDate']}}</td>
-        <td class="text-center">{{item['ExpectDate']}}</td>
-        <td class="text-center">{{item['OrderDate']}}</td>
-        <td class="text-center">{{item['DaysDelay']}}</td>
+      <tr v-for="(item, index) in supplierOpenItems" :key="index">
+        <td class="text-center">{{ index }}</td>
+        <td>{{ item['Site'] }}</td>
+        <td>{{ item['SupplierCode'] }}</td>
+        <td>{{ item['PurchaseNO'] }}</td>
+        <td>{{ item['ProjectNO'] }}</td>
+        <td>{{ item['PN'] }}</td>
+        <td>{{ item['Description'] }}</td>
+        <td class="text-center">{{ item['AckDate'] }}</td>
+        <td class="text-center">{{ item['ExpectDate'] }}</td>
+        <td class="text-center">{{ item['OrderDate'] }}</td>
+        <td class="text-center">{{ item['DaysDelay'] }}</td>
       </tr>
     </tbody>
   </q-markup-table>
 </template>
 
-<script>
-import { defineComponent, onMounted, ref, watch } from 'vue'
+<script setup>
+import { onMounted, ref, watch } from 'vue'
 import { notifyError } from 'assets/common'
 import { axios } from 'boot/axios'
 import { jsonToExcel } from 'assets/dataUtils'
 
-export default defineComponent({
-  name: 'QMarkupTableSupplierOpenItems',
+const props = defineProps({
+  supplierCode: String,
+  dateFrom: String,
+  dateTo: String
+})
 
-  props: {
-    supplierCode: String,
-    dateFrom: String,
-    dateTo: String
-  },
+const supplierOpenItems = ref([])
+const showLoading = ref(false)
 
-  setup(props, ctx) {
-    const supplierOpenItems = ref([])
-    const showLoading = ref(false)
+const doUpdate = () => {
+  showLoading.value = true
 
-    const doUpdate = () => {
-      showLoading.value = true
-
-      axios
-        .get(
-          '/Data/SupplierOpenItems?SupplierCode=' +
-            props.supplierCode +
-            '&DateFrom=' +
-            props.dateFrom +
-            '&DateTo=' +
-            props.dateTo
-        )
-        .then((response) => {
-          supplierOpenItems.value = response.data
-        })
-        .catch((e) => {
-          console.error(e)
-          notifyError('Loading Supplier Open Items Failed!')
-        })
-        .finally(() => {
-          showLoading.value = false
-        })
-    }
-    const download = () => {
-      const header = [
-        'Site',
-        'SupplierCode',
-        'PurchaseNO',
-        'ProjectNO',
-        'PN',
-        'Description',
-        'AckDate',
-        'ExpectDate',
-        'OrderDate',
-        'DaysDelay'
-      ]
-      jsonToExcel(
-        header,
-        supplierOpenItems.value,
-        props.supplierCode + '-OpenItems'
-      )
-    }
-
-    onMounted(() => {
-      console.debug('onMounted SupplierOpenItems')
-      if (props.supplierCode) {
-        doUpdate()
-      }
-    })
-
-    // Don't use watchEffect, it run before Mounted.
-    watch(
-      () => [props.supplierCode, props.dateFrom, props.dateTo],
-      (...newAndold) => {
-        // newAndold[1]:old
-        // newAndold[0]:new
-        console.debug('watch:' + newAndold[1] + ' ---> ' + newAndold[0])
-        // supplierCode must not be null
-        if (newAndold[0][0]) {
-          doUpdate()
-        }
-      }
+  axios
+    .get(
+      '/Data/SupplierOpenItems?SupplierCode=' +
+        props.supplierCode +
+        '&DateFrom=' +
+        props.dateFrom +
+        '&DateTo=' +
+        props.dateTo
     )
+    .then((response) => {
+      supplierOpenItems.value = response.data
+    })
+    .catch((e) => {
+      console.error(e)
+      notifyError('Loading Supplier Open Items Failed!')
+    })
+    .finally(() => {
+      showLoading.value = false
+    })
+}
+const download = () => {
+  const header = [
+    'Site',
+    'SupplierCode',
+    'PurchaseNO',
+    'ProjectNO',
+    'PN',
+    'Description',
+    'AckDate',
+    'ExpectDate',
+    'OrderDate',
+    'DaysDelay'
+  ]
+  jsonToExcel(
+    header,
+    supplierOpenItems.value,
+    props.supplierCode + '-OpenItems'
+  )
+}
 
-    return {
-      supplierOpenItems,
-      showLoading,
-      download
-    }
+onMounted(() => {
+  console.debug('onMounted SupplierOpenItems')
+  if (props.supplierCode) {
+    doUpdate()
   }
 })
+
+// Don't use watchEffect, it run before Mounted.
+watch(
+  () => [props.supplierCode, props.dateFrom, props.dateTo],
+  (...newAndold) => {
+    // newAndold[1]:old
+    // newAndold[0]:new
+    console.debug('watch:' + newAndold[1] + ' ---> ' + newAndold[0])
+    // supplierCode must not be null
+    if (newAndold[0][0]) {
+      doUpdate()
+    }
+  }
+)
 </script>

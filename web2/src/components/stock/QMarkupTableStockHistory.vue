@@ -49,129 +49,109 @@
   </q-markup-table>
 </template>
 
-<script>
-import {
-  defineComponent,
-  ref,
-  watch,
-  onMounted,
-  onBeforeUnmount,
-  onBeforeMount
-} from 'vue'
+<script setup>
+import { ref, watch, onMounted, onBeforeUnmount, onBeforeMount } from 'vue'
 import { useQuasar } from 'quasar'
 import { axios } from 'boot/axios'
 import { notifyError } from 'assets/common'
 import { getCookies } from 'assets/storage'
 
 import { ebus } from 'boot/ebus'
-import { jsonToExcel, jsonToTable } from 'assets/dataUtils'
-import { isAuthorised } from 'assets/auth'
+import { jsonToExcel } from 'assets/dataUtils'
 
 import _groupBy from 'lodash/groupBy'
 import _sumBy from 'lodash/sumBy'
 import _uniq from 'lodash/uniq'
 import _map from 'lodash/map'
 
-export default defineComponent({
-  name: 'QMarkupTableStockHistory',
-  props: {
-    PnOrName: { type: String, require: false, default: '' },
-    dateFrom: String,
-    dateTo: String
-  },
-  setup(props, ctx) {
-    const $q = useQuasar()
-
-    const site = ref(getCookies('site'))
-    const stockHistory = ref([])
-
-    const doUpdate = () => {
-      axios
-        .get(
-          '/Data/StockHistory?Site=' +
-            site.value +
-            '&PnOrName=' +
-            props.PnOrName +
-            '&DateFrom=' +
-            props.dateFrom +
-            '&DateTo=' +
-            props.dateTo
-        )
-        .then((response) => {
-          stockHistory.value = response.data
-        })
-        .catch((e) => {
-          console.error(e)
-          notifyError('Loading StockHistory Failed!')
-        })
-        .finally(() => {})
-    }
-
-    const download = () => {
-      const header = [
-        'Location',
-        'Seq',
-        'PN',
-        'Description',
-        'Qty',
-        'Unit',
-        'Cost',
-        'ProjectNO',
-        'SourceNO',
-        'SourceLine',
-        'EntryNO',
-        'EntryLine',
-        'CreateUser',
-        'CreateDate'
-      ]
-      const strPNData = data.value
-      // PN with #
-      _forEach(strPNData, (value, index) => {
-        value.PN = '#' + value.PN
-      })
-      jsonToExcel(
-        header,
-        strPNData,
-        site.value + ' Stock History-' + props.dateFrom + '_' + props.dateTo
-      )
-    }
-
-    onBeforeMount(() => {
-      console.debug('onBeforeMount QMarkupTableStockHistory')
-    })
-
-    onMounted(() => {
-      doUpdate()
-    })
-
-    // event handing
-    ebus.on('changeSite', (newSite) => {
-      site.value = newSite
-      doUpdate()
-    })
-    onBeforeUnmount(() => {
-      ebus.off('changeSite')
-    })
-
-    // Don't use watchEffect, it run before Mounted.
-    watch(
-      () => [props.PnOrName, props.dateFrom, props.dateTo],
-      (...newAndold) => {
-        // newAndold[1]:old
-        // newAndold[0]:new
-        console.debug('watch:' + newAndold[1] + ' ---> ' + newAndold[0])
-        doUpdate()
-      }
-    )
-
-    return {
-      site,
-      stockHistory,
-      doUpdate,
-      download,
-      isAuthorised
-    }
-  }
+const props = defineProps({
+  PnOrName: { type: String, require: false, default: '' },
+  dateFrom: String,
+  dateTo: String
 })
+
+const $q = useQuasar()
+
+const site = ref(getCookies('site'))
+const stockHistory = ref([])
+
+const doUpdate = () => {
+  axios
+    .get(
+      '/Data/StockHistory?Site=' +
+        site.value +
+        '&PnOrName=' +
+        props.PnOrName +
+        '&DateFrom=' +
+        props.dateFrom +
+        '&DateTo=' +
+        props.dateTo
+    )
+    .then((response) => {
+      stockHistory.value = response.data
+    })
+    .catch((e) => {
+      console.error(e)
+      notifyError('Loading StockHistory Failed!')
+    })
+    .finally(() => {})
+}
+
+const download = () => {
+  const header = [
+    'Location',
+    'Seq',
+    'PN',
+    'Description',
+    'Qty',
+    'Unit',
+    'Cost',
+    'ProjectNO',
+    'SourceNO',
+    'SourceLine',
+    'EntryNO',
+    'EntryLine',
+    'CreateUser',
+    'CreateDate'
+  ]
+  const strPNData = data.value
+  // PN with #
+  _forEach(strPNData, (value, index) => {
+    value.PN = '#' + value.PN
+  })
+  jsonToExcel(
+    header,
+    strPNData,
+    site.value + ' Stock History-' + props.dateFrom + '_' + props.dateTo
+  )
+}
+
+onBeforeMount(() => {
+  console.debug('onBeforeMount QMarkupTableStockHistory')
+})
+
+onMounted(() => {
+  doUpdate()
+})
+
+// event handing
+ebus.on('changeSite', (newSite) => {
+  site.value = newSite
+  doUpdate()
+})
+onBeforeUnmount(() => {
+  ebus.off('changeSite')
+})
+
+// Don't use watchEffect, it run before Mounted.
+watch(
+  () => [props.PnOrName, props.dateFrom, props.dateTo],
+  (...newAndold) => {
+    // newAndold[1]:old
+    // newAndold[0]:new
+    console.debug('watch:' + newAndold[1] + ' ---> ' + newAndold[0])
+    doUpdate()
+  }
+)
 </script>
 <style lang="scss" scoped></style>

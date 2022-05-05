@@ -1,21 +1,9 @@
 <template>
-  <q-page
-    class="flex flex-center"
-    style="height:100%"
-  >
-    <login-Main-vue />
+  <q-page class="flex flex-center" style="height: 100%">
+    <LoginMainVue />
   </q-page>
 </template>
 
-<script>
-import { defineComponent } from 'vue'
+<script setup>
 import LoginMainVue from 'src/components/login/LoginMain.vue'
-
-export default defineComponent({
-  name: 'Login',
-  components: {
-    LoginMainVue
-  },
-  setup(props, ctx) {}
-})
 </script>

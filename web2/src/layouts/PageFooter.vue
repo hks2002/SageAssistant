@@ -1,37 +1,29 @@
 <!--  -->
 <template>
-  <q-footer
-    class="footer"
-    :style="'height:' + height +'px'"
-  >
+  <q-footer class="footer" :style="'height:' + height + 'px'">
     <q-bar class="fit flex-center footer">
       <div>
-        <span class="q-pa-ms">{{ $t("Developed by Dedienne China") }} </span>
+        <span class="q-pa-ms">{{ $t('Developed by Dedienne China') }} </span>
       </div>
     </q-bar>
   </q-footer>
 </template>
 
-<script>
-import { defineComponent, onMounted } from 'vue'
+<script setup>
+import { onMounted } from 'vue'
 
 // import axios from 'axios'
 
-export default defineComponent({
-  name: 'PageFooter',
-  props: {
-    height: {
-      type: Number,
-      required: false,
-      default: 18
-    }
-  },
-  setup() {
-    onMounted(() => {
-      console.debug('onMounted PageFooter')
-    })
-    return {}
+const props = defineProps({
+  height: {
+    type: Number,
+    required: false,
+    default: 18
   }
+})
+
+onMounted(() => {
+  console.debug('onMounted PageFooter')
 })
 </script>
 <style lang="scss" scoped>

@@ -69,107 +69,94 @@
   </q-markup-table>
 </template>
 
-<script>
-import { defineComponent, onMounted, ref, watch } from 'vue'
+<script setup>
+import { onMounted, ref, watch } from 'vue'
 import { notifyError } from 'assets/common'
 import { axios } from 'boot/axios'
 import { jsonToExcel } from 'assets/dataUtils'
 
-export default defineComponent({
-  name: 'QMarkupTableBalance',
+const props = defineProps({
+  accountNO: { type: String, require: true, default: '' },
+  year: { type: String, require: true, default: '' },
+  site: { type: String, require: true, default: '' },
+  showCredit: { type: Boolean, require: false, default: true },
+  showDebit: { type: Boolean, require: false, default: true },
+  showMovement: { type: Boolean, require: false, default: true },
+  showBalance: { type: Boolean, require: false, default: true }
+})
 
-  props: {
-    accountNO: { type: String, require: true, default: '' },
-    year: { type: String, require: true, default: '' },
-    site: { type: String, require: true, default: '' },
-    showCredit: { type: Boolean, require: false, default: true },
-    showDebit: { type: Boolean, require: false, default: true },
-    showMovement: { type: Boolean, require: false, default: true },
-    showBalance: { type: Boolean, require: false, default: true }
-  },
+const balanceItems = ref([])
+const showLoading = ref(false)
+const colspan = ref(56)
 
-  setup(props, ctx) {
-    const balanceItems = ref([])
-    const showLoading = ref(false)
-    const colspan = ref(56)
+const doUpdate = () => {
+  showLoading.value = true
+  colspan.value = 4
+  colspan.value = props.showCredit ? colspan.value + 13 : colspan.value
+  colspan.value = props.showDebit ? colspan.value + 13 : colspan.value
+  colspan.value = props.showMovement ? colspan.value + 13 : colspan.value
+  colspan.value = props.showBalance ? colspan.value + 13 : colspan.value
 
-    const doUpdate = () => {
-      showLoading.value = true
-      colspan.value = 4
-      colspan.value = props.showCredit ? colspan.value + 13 : colspan.value
-      colspan.value = props.showDebit ? colspan.value + 13 : colspan.value
-      colspan.value = props.showMovement ? colspan.value + 13 : colspan.value
-      colspan.value = props.showBalance ? colspan.value + 13 : colspan.value
-
-      axios
-        .get(
-          '/Data/FinancialBalance' +
-            '?Site=' +
-            props.site +
-            '&AccountNO=' +
-            props.accountNO +
-            '&Year=' +
-            props.year
-        )
-        .then((response) => {
-          balanceItems.value = response.data
-        })
-        .catch((e) => {
-          console.error(e)
-          notifyError('Loading Balance Failed!')
-        })
-        .finally(() => {
-          showLoading.value = false
-        })
-    }
-    const download = () => {
-      const header = ['Site', 'AccountNO', 'Currency']
-      for (idx = 0; idx <= 12; idx++) {
-        if (props.showBalance) {
-          header.push('B' + idx)
-        }
-        if (props.showCredit) {
-          header.push('C' + idx)
-        }
-        if (props.showDebit) {
-          header.push('D' + idx)
-        }
-        if (props.showMovement) {
-          header.push('M' + idx)
-        }
-      }
-
-      jsonToExcel(
-        header,
-        balanceItems.value,
-        'AccountNO:' + props.accountNO + ' Balance of ' + props.year
-      )
-    }
-
-    onMounted(() => {
-      console.debug('onMounted Balance')
-      if (props.accountNO && props.year && props.site) {
-        doUpdate()
-      }
-    })
-
-    // Don't use watchEffect, it run before Mounted.
-    watch(
-      () => [props.accountNO, props.year, props.site],
-      (...newAndold) => {
-        // newAndold[1]:old
-        // newAndold[0]:new
-        console.debug('watch:' + newAndold[1] + ' ---> ' + newAndold[0])
-        doUpdate()
-      }
+  axios
+    .get(
+      '/Data/FinancialBalance' +
+        '?Site=' +
+        props.site +
+        '&AccountNO=' +
+        props.accountNO +
+        '&Year=' +
+        props.year
     )
-
-    return {
-      balanceItems,
-      showLoading,
-      colspan,
-      download
+    .then((response) => {
+      balanceItems.value = response.data
+    })
+    .catch((e) => {
+      console.error(e)
+      notifyError('Loading Balance Failed!')
+    })
+    .finally(() => {
+      showLoading.value = false
+    })
+}
+const download = () => {
+  const header = ['Site', 'AccountNO', 'Currency']
+  for (idx = 0; idx <= 12; idx++) {
+    if (props.showBalance) {
+      header.push('B' + idx)
+    }
+    if (props.showCredit) {
+      header.push('C' + idx)
+    }
+    if (props.showDebit) {
+      header.push('D' + idx)
+    }
+    if (props.showMovement) {
+      header.push('M' + idx)
     }
   }
+
+  jsonToExcel(
+    header,
+    balanceItems.value,
+    'AccountNO:' + props.accountNO + ' Balance of ' + props.year
+  )
+}
+
+onMounted(() => {
+  console.debug('onMounted Balance')
+  if (props.accountNO && props.year && props.site) {
+    doUpdate()
+  }
 })
+
+// Don't use watchEffect, it run before Mounted.
+watch(
+  () => [props.accountNO, props.year, props.site],
+  (...newAndold) => {
+    // newAndold[1]:old
+    // newAndold[0]:new
+    console.debug('watch:' + newAndold[1] + ' ---> ' + newAndold[0])
+    doUpdate()
+  }
+)
 </script>

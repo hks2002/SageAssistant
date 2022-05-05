@@ -89,73 +89,62 @@
   </q-card>
 </template>
 
-<script>
+<script setup>
 import { defineComponent, onMounted, ref, watch, computed } from 'vue'
 import { notifyError } from 'assets/common'
 import { axios } from 'boot/axios'
 
-export default defineComponent({
-  name: 'QCardCustomerInfo',
+const props = defineProps({
+  customerCode: String
+})
 
-  props: {
-    customerCode: String
-  },
+const customerInfo = ref([])
+const showLoading = ref(false)
 
-  setup(props, ctx) {
-    const customerInfo = ref([])
-    const showLoading = ref(false)
+const doUpdate = () => {
+  showLoading.value = true
 
-    const doUpdate = () => {
-      showLoading.value = true
-
-      axios
-        .get('/Data/CustomerDetails?CustomerCode=' + props.customerCode)
-        .then((response) => {
-          customerInfo.value = response.data
-        })
-        .catch((e) => {
-          console.error(e)
-          notifyError('Loading Customer Info Failed!')
-        })
-        .finally(() => {
-          showLoading.value = false
-        })
-    }
-
-    const WebSiteUrl = (url) => {
-      if (url.toLowerCase().substr(0, 4) === 'http') {
-        return url
-      } else {
-        return 'http://' + url
-      }
-    }
-
-    onMounted(() => {
-      console.debug('onMounted QItemCustomerInfo')
-      if (props.customerCode) {
-        doUpdate()
-      }
+  axios
+    .get('/Data/CustomerDetails?CustomerCode=' + props.customerCode)
+    .then((response) => {
+      customerInfo.value = response.data
     })
+    .catch((e) => {
+      console.error(e)
+      notifyError('Loading Customer Info Failed!')
+    })
+    .finally(() => {
+      showLoading.value = false
+    })
+}
 
-    watch(
-      () => [props.customerCode],
-      (...newAndold) => {
-        // newAndold[1]:old
-        // newAndold[0]:new
-        console.debug('watch:' + newAndold[1] + ' ---> ' + newAndold[0])
-        if (newAndold[0][0]) {
-          doUpdate()
-        }
-      }
-    )
+const WebSiteUrl = (url) => {
+  if (url.toLowerCase().substr(0, 4) === 'http') {
+    return url
+  } else {
+    return 'http://' + url
+  }
+}
 
-    return {
-      customerInfo,
-      showLoading,
-      WebSiteUrl
-    }
+onMounted(() => {
+  console.debug('onMounted QItemCustomerInfo')
+  if (props.customerCode) {
+    doUpdate()
   }
 })
+
+watch(
+  () => [props.customerCode],
+  (...newAndold) => {
+    // newAndold[1]:old
+    // newAndold[0]:new
+    console.debug('watch:' + newAndold[1] + ' ---> ' + newAndold[0])
+    if (newAndold[0][0]) {
+      doUpdate()
+    }
+  }
+)
+
 </script>
 <style lang="sass">
 .q-item

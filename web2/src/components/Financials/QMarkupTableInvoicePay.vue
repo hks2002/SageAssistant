@@ -76,140 +76,127 @@
   </q-markup-table>
 </template>
 
-<script>
-import { defineComponent, onMounted, ref, watch } from 'vue'
+<script setup>
+import { onMounted, ref, watch } from 'vue'
 import { notifyError } from 'assets/common'
 import { axios } from 'boot/axios'
 import { jsonToExcel } from 'assets/dataUtils'
 
-export default defineComponent({
-  name: 'QMarkupTableInvoicePay',
-
-  props: {
-    customerCode: {
-      type: String,
-      require: false,
-      default: null
-    },
-    dateFrom: {
-      type: String,
-      require: true
-    },
-    dateTo: {
-      type: String,
-      require: true
-    },
-    proSearch: {
-      type: Boolean,
-      require: false,
-      default: false
-    },
-    site: {
-      type: String,
-      require: false,
-      default: null
-    }
+const props = defineProps({
+  customerCode: {
+    type: String,
+    require: false,
+    default: null
   },
-
-  setup(props, ctx) {
-    const invoicePayItems = ref([])
-    const showLoading = ref(false)
-    const colspan = ref(17)
-
-    const doUpdate = () => {
-      showLoading.value = true
-      const code = props.customerCode === '%%' ? '' : props.customerCode
-      const proSuffix = props.proSearch ? 'Pro' : ''
-      colspan.value = props.proSearch ? 23 : 17
-
-      axios
-        .get(
-          '/Data/FinancialInvoicePay' +
-            proSuffix +
-            '?Site=' +
-            props.site +
-            '&CustomerCode=' +
-            code +
-            '&DateFrom=' +
-            props.dateFrom +
-            '&DateTo=' +
-            props.dateTo
-        )
-        .then((response) => {
-          invoicePayItems.value = response.data
-        })
-        .catch((e) => {
-          console.error(e)
-          notifyError('Loading Invoice Pay Failed!')
-        })
-        .finally(() => {
-          showLoading.value = false
-        })
-    }
-    const download = () => {
-      const header = [
-        'Site',
-        'Customer',
-        'Name',
-        'InvoiceNO',
-        'Currency',
-        'Amount',
-        'AmountLocal',
-        'Pay',
-        'PayLocal',
-        'OrderNO',
-        'CreateDate',
-        'DueDate',
-        'PayDate',
-        'Fapiao',
-        'CustRef',
-        'Status'
-      ]
-      if (props.proSearch) {
-        header.push('MathedBy')
-        header.push('PayNO')
-        header.push('PayCurrency')
-        header.push('PayInPayNO')
-        header.push('Desc0')
-        header.push('Desc1')
-      }
-      jsonToExcel(
-        header,
-        invoicePayItems.value,
-        props.customerCode + '-Invoice Pay'
-      )
-    }
-
-    onMounted(() => {
-      console.debug('onMounted InvoicePay')
-      if (props.customerCode) {
-        doUpdate()
-      }
-    })
-
-    // Don't use watchEffect, it run before Mounted.
-    watch(
-      () => [
-        props.customerCode,
-        props.proSearch,
-        props.dateFrom,
-        props.dateTo,
-        props.site
-      ],
-      (...newAndold) => {
-        // newAndold[1]:old
-        // newAndold[0]:new
-        console.debug('watch:' + newAndold[1] + ' ---> ' + newAndold[0])
-        doUpdate()
-      }
-    )
-
-    return {
-      invoicePayItems,
-      showLoading,
-      colspan,
-      download
-    }
+  dateFrom: {
+    type: String,
+    require: true
+  },
+  dateTo: {
+    type: String,
+    require: true
+  },
+  proSearch: {
+    type: Boolean,
+    require: false,
+    default: false
+  },
+  site: {
+    type: String,
+    require: false,
+    default: null
   }
 })
+
+const invoicePayItems = ref([])
+const showLoading = ref(false)
+const colspan = ref(17)
+
+const doUpdate = () => {
+  showLoading.value = true
+  const code = props.customerCode === '%%' ? '' : props.customerCode
+  const proSuffix = props.proSearch ? 'Pro' : ''
+  colspan.value = props.proSearch ? 23 : 17
+
+  axios
+    .get(
+      '/Data/FinancialInvoicePay' +
+        proSuffix +
+        '?Site=' +
+        props.site +
+        '&CustomerCode=' +
+        code +
+        '&DateFrom=' +
+        props.dateFrom +
+        '&DateTo=' +
+        props.dateTo
+    )
+    .then((response) => {
+      invoicePayItems.value = response.data
+    })
+    .catch((e) => {
+      console.error(e)
+      notifyError('Loading Invoice Pay Failed!')
+    })
+    .finally(() => {
+      showLoading.value = false
+    })
+}
+const download = () => {
+  const header = [
+    'Site',
+    'Customer',
+    'Name',
+    'InvoiceNO',
+    'Currency',
+    'Amount',
+    'AmountLocal',
+    'Pay',
+    'PayLocal',
+    'OrderNO',
+    'CreateDate',
+    'DueDate',
+    'PayDate',
+    'Fapiao',
+    'CustRef',
+    'Status'
+  ]
+  if (props.proSearch) {
+    header.push('MathedBy')
+    header.push('PayNO')
+    header.push('PayCurrency')
+    header.push('PayInPayNO')
+    header.push('Desc0')
+    header.push('Desc1')
+  }
+  jsonToExcel(
+    header,
+    invoicePayItems.value,
+    props.customerCode + '-Invoice Pay'
+  )
+}
+
+onMounted(() => {
+  console.debug('onMounted InvoicePay')
+  if (props.customerCode) {
+    doUpdate()
+  }
+})
+
+// Don't use watchEffect, it run before Mounted.
+watch(
+  () => [
+    props.customerCode,
+    props.proSearch,
+    props.dateFrom,
+    props.dateTo,
+    props.site
+  ],
+  (...newAndold) => {
+    // newAndold[1]:old
+    // newAndold[0]:new
+    console.debug('watch:' + newAndold[1] + ' ---> ' + newAndold[0])
+    doUpdate()
+  }
+)
 </script>

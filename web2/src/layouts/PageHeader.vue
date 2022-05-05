@@ -81,9 +81,8 @@
   </q-header>
 </template>
 
-<script>
-import { defineComponent, ref, onBeforeUnmount, onMounted } from 'vue'
-import { useQuasar } from 'quasar'
+<script setup>
+import { ref, onBeforeUnmount, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { infoDialog, notifyError } from 'assets/common'
 import { ebus } from 'boot/ebus'
@@ -96,94 +95,77 @@ import {
 } from 'assets/storage'
 import { axios } from 'boot/axios'
 
-export default defineComponent({
-  name: 'PageHeader',
-  props: {
-    height: {
-      type: Number,
-      required: false,
-      default: 40
-    }
-  },
-  components: {},
-  setup() {
-    const $router = useRouter()
-
-    const site = ref(null)
-    const siteList = ref(null)
-    const userInfo = ref('Your name')
-    const sageInfo = ref('Sage')
-    const totalInformCount = ref(0)
-
-    const toggleLeftDrawer = () => {
-      ebus.emit('toggleLeftDrawer')
-    }
-
-    const setCookieSite = () => {
-      setCookies('site', site.value, 3600 * 24 * 7)
-      ebus.emit('changeSite', site.value)
-    }
-
-    const showHelp = () => {
-      infoDialog('In Developping')
-    }
-
-    const doLogout = () => {
-      removeToken()
-      $router.push('/Login')
-    }
-
-    const updateLoginData = () => {
-      const loginData = getLoginData()
-      if (loginData) {
-        userInfo.value = loginData.userInfo
-        sageInfo.value = loginData.sageInfo
-      }
-    }
-
-    updateLoginData()
-
-    if (getCookies('site')) {
-      site.value = getCookies('site')
-    } else {
-      site.value = 'ZHU'
-      setCookieSite()
-    }
-
-    onMounted(() => {
-      console.debug('onMounted PageHeader')
-
-      axios
-        .get('/Data/Sites')
-        .then((response) => {
-          siteList.value = response.data
-          setCookies('siteList', siteList.value, 3600 * 24 * 7)
-        })
-        .catch((e) => {
-          notifyError('Loading Sites Failed!')
-        })
-    })
-
-    // event handing
-    ebus.on('updateLoginData', () => {
-      updateLoginData()
-    })
-    onBeforeUnmount(() => {
-      ebus.off('updateLoginData')
-    })
-
-    return {
-      site,
-      siteList,
-      setCookieSite,
-      userInfo,
-      sageInfo,
-      totalInformCount,
-      toggleLeftDrawer,
-      showHelp,
-      doLogout
-    }
+const props = defineProps({
+  height: {
+    type: Number,
+    required: false,
+    default: 40
   }
+})
+
+const $router = useRouter()
+
+const site = ref(null)
+const siteList = ref(null)
+const userInfo = ref('Your name')
+const sageInfo = ref('Sage')
+const totalInformCount = ref(0)
+
+const toggleLeftDrawer = () => {
+  ebus.emit('toggleLeftDrawer')
+}
+
+const setCookieSite = () => {
+  setCookies('site', site.value, 3600 * 24 * 7)
+  ebus.emit('changeSite', site.value)
+}
+
+const showHelp = () => {
+  infoDialog('In Developping')
+}
+
+const doLogout = () => {
+  removeToken()
+  $router.push('/Login')
+}
+
+const updateLoginData = () => {
+  const loginData = getLoginData()
+  if (loginData) {
+    userInfo.value = loginData.userInfo
+    sageInfo.value = loginData.sageInfo
+  }
+}
+
+updateLoginData()
+
+if (getCookies('site')) {
+  site.value = getCookies('site')
+} else {
+  site.value = 'ZHU'
+  setCookieSite()
+}
+
+onMounted(() => {
+  console.debug('onMounted PageHeader')
+
+  axios
+    .get('/Data/Sites')
+    .then((response) => {
+      siteList.value = response.data
+      setCookies('siteList', siteList.value, 3600 * 24 * 7)
+    })
+    .catch((e) => {
+      notifyError('Loading Sites Failed!')
+    })
+})
+
+// event handing
+ebus.on('updateLoginData', () => {
+  updateLoginData()
+})
+onBeforeUnmount(() => {
+  ebus.off('updateLoginData')
 })
 </script>
 <style lang="scss" scoped>

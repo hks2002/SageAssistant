@@ -6,11 +6,10 @@
   </q-scroll-area>
 </template>
 
-<script>
-import { defineComponent } from 'vue'
+<script setup>
 import MenuLink from './MenuLink.vue'
 
-const menus = [
+const Links = [
   {
     title: 'Dashboard',
     caption: '',
@@ -116,18 +115,4 @@ const menus = [
     enable: true
   }
 ]
-
-export default defineComponent({
-  name: 'Menus',
-
-  components: {
-    MenuLink
-  },
-
-  setup() {
-    return {
-      Links: menus
-    }
-  }
-})
 </script>

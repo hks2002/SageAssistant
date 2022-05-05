@@ -7,24 +7,17 @@
   </q-page>
 </template>
 
-<script>
-import { defineComponent } from 'vue'
+<script setup>
 import { ebus } from 'boot/ebus'
 import { useI18n } from 'vue-i18n'
 import { useQuasar } from 'quasar'
 import { Vue3Lottie } from 'vue3-lottie'
 
-export default defineComponent({
-  name: 'PageIndex',
-  components: { Vue3Lottie },
-  setup() {
-    const $q = useQuasar()
-    // const { t } = useI18n({ useScope: 'global' })
-    ebus.emit('closeLeftDrawer')
-    ebus.emit('activePage', 'Analysis')
+const $q = useQuasar()
+// const { t } = useI18n({ useScope: 'global' })
+ebus.emit('closeLeftDrawer')
+ebus.emit('activePage', 'Analysis')
 
-    $q.loadingBar.stop()
-    // return { t }
-  }
-})
+$q.loadingBar.stop()
+// return { t }
 </script>

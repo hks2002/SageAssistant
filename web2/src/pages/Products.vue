@@ -74,8 +74,8 @@
   </q-page>
 </template>
 
-<script>
-import { defineComponent, ref, onBeforeUnmount } from 'vue'
+<script setup>
+import { ref, onBeforeUnmount } from 'vue'
 import { useQuasar } from 'quasar'
 import { ebus } from 'boot/ebus'
 import { isAuthorised } from 'assets/auth'
@@ -89,49 +89,27 @@ import EchartInventoryStock from 'components/echarts/EchartInventoryStock.vue'
 import EchartDeliveryDuration from 'components/echarts/EchartDeliveryDuration.vue'
 import QListPnList from 'components/products/QListPnList.vue'
 
-export default defineComponent({
-  name: 'Products',
+ebus.emit('closeLeftDrawer')
+ebus.emit('activePage', 'Products')
+const timer = new Date().getTime()
 
-  components: {
-    QSelectInput,
-    EchartSalesHistory,
-    EchartQuoteHistory,
-    EchartCostHistory,
-    EchartInventoryStock,
-    EchartDeliveryDuration,
-    QListPnList,
-    Vue3Lottie
-  },
+const $q = useQuasar()
+const pnRoot = ref('')
 
-  setup() {
-    ebus.emit('closeLeftDrawer')
-    ebus.emit('activePage', 'Products')
+$q.loadingBar.stop()
+ebus.emit('closeLeftDrawer')
+ebus.emit('activePage', 'Products')
 
-    const $q = useQuasar()
-    const pnRoot = ref('')
+const update = (newPNROOT) => {
+  pnRoot.value = newPNROOT
+}
 
-    $q.loadingBar.stop()
-    ebus.emit('closeLeftDrawer')
-    ebus.emit('activePage', 'Products')
-
-    const update = (newPNROOT) => {
-      pnRoot.value = newPNROOT
-    }
-
-    // event handing
-    ebus.on('searchPn', (PNROOT) => {
-      update(PNROOT)
-    })
-    onBeforeUnmount(() => {
-      ebus.off('searchPn')
-    })
-
-    return {
-      timer: new Date().getTime(),
-      isAuthorised,
-      pnRoot
-    }
-  }
+// event handing
+ebus.on('searchPn', (PNROOT) => {
+  update(PNROOT)
+})
+onBeforeUnmount(() => {
+  ebus.off('searchPn')
 })
 </script>
 <style lang="scss" scoped></style>

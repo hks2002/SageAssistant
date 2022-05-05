@@ -28,31 +28,12 @@
   </q-tab-panels>
 </template>
 
-<script>
-import { defineComponent, ref } from 'vue'
-import { isAuthorised } from 'assets/auth'
+<script setup>
+import { ref } from 'vue'
 import FapiaoVue from 'components/Financials/Fapiao.vue'
 import InvoicePayMainVue from 'src/components/Financials/InvoicePayMain.vue'
 import BalanceVue from 'src/components/Financials/Balance.vue'
 
-export default defineComponent({
-  name: 'FinancialsMain',
-
-  components: {
-    FapiaoVue,
-    InvoicePayMainVue,
-    BalanceVue
-  },
-
-  setup(props, ctx) {
-    const tab = ref('Fapiao')
-
-    return {
-      tab,
-      timer: new Date().getTime(),
-      isAuthorised
-    }
-  }
-})
+const tab = ref('Fapiao')
 </script>
 <style lang="scss" scoped></style>

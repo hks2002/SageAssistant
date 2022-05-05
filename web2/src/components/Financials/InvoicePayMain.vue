@@ -16,11 +16,7 @@
         class="col-grow"
         @input-value="checkInputAll"
       />
-      <q-toggle
-        v-model="proSearch"
-        label="Pro Search"
-        class="col-1"
-      />
+      <q-toggle v-model="proSearch" label="Pro Search" class="col-1" />
       <q-input
         v-model="dateFrom"
         outlined
@@ -58,8 +54,8 @@
   </q-card>
 </template>
 
-<script>
-import { defineComponent, ref, onBeforeMount, onBeforeUnmount } from 'vue'
+<script setup>
+import { ref, onBeforeMount, onBeforeUnmount } from 'vue'
 import { useQuasar, date } from 'quasar'
 import { ebus } from 'boot/ebus'
 import { getCookies } from 'src/assets/storage'
@@ -68,70 +64,46 @@ import { Vue3Lottie } from 'vue3-lottie'
 import QSelectInput from 'components/.controls/QSelectInput.vue'
 import QMarkupTableInvoicePayVue from './QMarkupTableInvoicePay.vue'
 
-export default defineComponent({
-  name: 'InvoicePayMain',
+const $q = useQuasar()
+const customerCode = ref(null)
+const { formatDate, addToDate } = date
 
-  components: {
-    QSelectInput,
-    Vue3Lottie,
-    QMarkupTableInvoicePayVue
-  },
+const nowTimeStamp = Date.now()
+const fromTimeStamp = addToDate(nowTimeStamp, { years: -3 })
+const dateFrom = ref(formatDate(fromTimeStamp, 'YYYY-MM-DD'))
+const dateTo = ref(formatDate(nowTimeStamp, 'YYYY-MM-DD'))
+const proSearch = ref(false)
 
-  setup(props, ctx) {
-    const $q = useQuasar()
-    const customerCode = ref(null)
-    const { formatDate, addToDate } = date
+const site = ref(getCookies('site'))
 
-    const nowTimeStamp = Date.now()
-    const fromTimeStamp = addToDate(nowTimeStamp, { years: -3 })
-    const dateFrom = ref(formatDate(fromTimeStamp, 'YYYY-MM-DD'))
-    const dateTo = ref(formatDate(nowTimeStamp, 'YYYY-MM-DD'))
-    const proSearch = ref(false)
+const tableHeight = ref(250)
+const tableWidth = ref(600)
 
-    const site = ref(getCookies('site'))
-
-    const tableHeight = ref(250)
-    const tableWidth = ref(600)
-
-    // check if searchAll
-    const checkInputAll = (inputText) => {
-      if (inputText === '%%') {
-        customerCode.value = '%%'
-      }
-    }
-
-    onBeforeMount(() => {
-      console.debug('onBeforeMount QCardInvoicePay')
-      // should consider element margin/padding value
-      tableWidth.value = $q.pageBodyWidth - 8 * 2
-      tableHeight.value = $q.pageBodyHeight - 36 - 72 - 8
-    })
-
-    // event handing
-    ebus.on('searchCustomer', (Code) => {
-      customerCode.value = Code
-    })
-    onBeforeUnmount(() => {
-      ebus.off('searchCustomer')
-    })
-    ebus.on('changeSite', (Code) => {
-      site.value = getCookies('site')
-    })
-    onBeforeUnmount(() => {
-      ebus.off('changeSite')
-    })
-
-    return {
-      customerCode,
-      dateFrom,
-      dateTo,
-      site,
-      isAuthorised,
-      checkInputAll,
-      proSearch,
-      tableHeight,
-      tableWidth
-    }
+// check if searchAll
+const checkInputAll = (inputText) => {
+  if (inputText === '%%') {
+    customerCode.value = '%%'
   }
+}
+
+onBeforeMount(() => {
+  console.debug('onBeforeMount QCardInvoicePay')
+  // should consider element margin/padding value
+  tableWidth.value = $q.pageBodyWidth - 8 * 2
+  tableHeight.value = $q.pageBodyHeight - 36 - 72 - 8
+})
+
+// event handing
+ebus.on('searchCustomer', (Code) => {
+  customerCode.value = Code
+})
+onBeforeUnmount(() => {
+  ebus.off('searchCustomer')
+})
+ebus.on('changeSite', (Code) => {
+  site.value = getCookies('site')
+})
+onBeforeUnmount(() => {
+  ebus.off('changeSite')
 })
 </script>

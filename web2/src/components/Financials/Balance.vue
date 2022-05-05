@@ -82,8 +82,8 @@
   </q-card>
 </template>
 
-<script>
-import { defineComponent, ref, onBeforeMount, onBeforeUnmount } from 'vue'
+<script setup>
+import { ref, onBeforeMount, onBeforeUnmount } from 'vue'
 import { useQuasar, date } from 'quasar'
 import { ebus } from 'boot/ebus'
 import { getCookies } from 'src/assets/storage'
@@ -92,62 +92,37 @@ import { Vue3Lottie } from 'vue3-lottie'
 import QMarkupTableBalanceVue from './QMarkupTableBalance.vue'
 import EchartFiancialAccountBalanceVue from 'src/components/echarts/EchartAccountBalance.vue'
 
-export default defineComponent({
-  name: 'Balance',
+const $q = useQuasar()
+const accountNO = ref(null)
+const nowTimeStamp = Date.now()
+const formattedString = date.formatDate(
+  nowTimeStamp,
+  'YYYY-MM-DDTHH:mm:ss.SSSZ'
+)
+const year = ref(formattedString.substring(0, 4))
 
-  components: {
-    Vue3Lottie,
-    QMarkupTableBalanceVue,
-    EchartFiancialAccountBalanceVue
-  },
+const showBalance = ref(true)
+const showDebit = ref(true)
+const showCredit = ref(true)
+const showMovement = ref(true)
 
-  setup(props, ctx) {
-    const $q = useQuasar()
-    const accountNO = ref(null)
-    const nowTimeStamp = Date.now()
-    const formattedString = date.formatDate(
-      nowTimeStamp,
-      'YYYY-MM-DDTHH:mm:ss.SSSZ'
-    )
-    const year = ref(formattedString.substring(0, 4))
+const tableHeight = ref(250)
+const tableWidth = ref(600)
 
-    const showBalance = ref(true)
-    const showDebit = ref(true)
-    const showCredit = ref(true)
-    const showMovement = ref(true)
+const site = ref(getCookies('site'))
 
-    const tableHeight = ref(250)
-    const tableWidth = ref(600)
+onBeforeMount(() => {
+  console.debug('onBeforeMount Balance')
+  // should consider element margin/padding value
+  tableWidth.value = $q.pageBodyWidth - 8 * 2
+  tableHeight.value = $q.pageBodyHeight - 36 - 72 - 8 - 250
+})
 
-    const site = ref(getCookies('site'))
-
-    onBeforeMount(() => {
-      console.debug('onBeforeMount Balance')
-      // should consider element margin/padding value
-      tableWidth.value = $q.pageBodyWidth - 8 * 2
-      tableHeight.value = $q.pageBodyHeight - 36 - 72 - 8 - 250
-    })
-
-    // event handing
-    ebus.on('changeSite', (Code) => {
-      site.value = getCookies('site')
-    })
-    onBeforeUnmount(() => {
-      ebus.off('changeSite')
-    })
-
-    return {
-      accountNO,
-      year,
-      site,
-      showCredit,
-      showDebit,
-      showBalance,
-      showMovement,
-      isAuthorised,
-      tableHeight,
-      tableWidth
-    }
-  }
+// event handing
+ebus.on('changeSite', (Code) => {
+  site.value = getCookies('site')
+})
+onBeforeUnmount(() => {
+  ebus.off('changeSite')
 })
 </script>

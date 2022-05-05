@@ -1,6 +1,6 @@
 <template>
   <Vue3Lottie
-    :animationLink="'/json/' + ErrorCode +'.json'"
+    :animationLink="'/json/' + ErrorCode + '.json'"
     :height="400"
     :width="400"
     background="transparent"
@@ -8,16 +8,8 @@
   />
 </template>
 
-<script>
-import { defineComponent } from 'vue'
+<script setup>
 import { Vue3Lottie } from 'vue3-lottie'
 
-export default defineComponent({
-  name: 'Exception',
-  props: ['ErrorCode'],
-  components: {
-    Vue3Lottie
-  },
-  setup(props) {}
-})
+const props = defineProps(['ErrorCode'])
 </script>

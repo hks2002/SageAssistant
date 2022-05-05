@@ -26,8 +26,8 @@
   </q-page>
 </template>
 
-<script>
-import { defineComponent, ref, onBeforeMount, onMounted } from 'vue'
+<script setup>
+import { ref, onBeforeMount, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import { ebus } from 'boot/ebus'
 import { getCookies } from 'assets/storage'
@@ -35,38 +35,22 @@ import { isAuthorised } from 'assets/auth'
 import StockSummaryMain from 'src/components/stock/StockSummaryMain.vue'
 import StockHistoryMain from 'src/components/stock/StockHistoryMain.vue'
 
-export default defineComponent({
-  name: 'Stock',
+ebus.emit('closeLeftDrawer')
+ebus.emit('activePage', 'Stock')
+const timer = new Date().getTime()
 
-  components: {
-    StockSummaryMain,
-    StockHistoryMain
-  },
+const $q = useQuasar()
+const tab = ref('Count')
+const site = ref('')
+site.value = getCookies('site')
 
-  setup(props, ctx) {
-    ebus.emit('closeLeftDrawer')
-    ebus.emit('activePage', 'Stock')
+onBeforeMount(() => {
+  console.debug('onBeforeMount TabsStock')
+  // tabPanelHeight.value = $q.pageBodyHeight - tabHeaderHeight.value
+})
 
-    const $q = useQuasar()
-    const tab = ref('Count')
-    const site = ref('')
-    site.value = getCookies('site')
-
-    onBeforeMount(() => {
-      console.debug('onBeforeMount TabsStock')
-      // tabPanelHeight.value = $q.pageBodyHeight - tabHeaderHeight.value
-    })
-
-    onMounted(() => {
-      console.debug('onMounted TabsStock')
-    })
-
-    return {
-      timer: new Date().getTime(),
-      tab,
-      isAuthorised
-    }
-  }
+onMounted(() => {
+  console.debug('onMounted TabsStock')
 })
 </script>
 <style lang="scss" scoped></style>

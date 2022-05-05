@@ -15,11 +15,8 @@
         align="justify"
         narrow-indicator
       >
-        <q-tab
-          v-if="true"
-          name="Infos"
-        >
-          <span>Infos({{  }})</span>
+        <q-tab v-if="true" name="Infos">
+          <span>Infos({{}})</span>
         </q-tab>
       </q-tabs>
       <q-separator />
@@ -28,31 +25,22 @@
   </q-menu>
 </template>
 
-<script>
-import { defineComponent, ref, onBeforeUnmount } from 'vue'
+<script setup>
+import { onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ebus from 'src/boot/ebus'
 import { useQuasar } from 'quasar'
 import { axios } from 'boot/axios'
 
-export default defineComponent({
-  name: 'PopMenus',
-  setup() {
-    const q = useQuasar()
-    const { route } = useRoute()
-    const { router } = useRouter()
-    q.loadingBar.stop()
+const q = useQuasar()
+const { route } = useRoute()
+const { router } = useRouter()
+q.loadingBar.stop()
 
-    // event handing
-    ebus.on('toggleLeftDrawer', toggleLeftDrawer)
-    onBeforeUnmount(() => {
-      bus.off('toggleLeftDrawer', toggleLeftDrawer)
-    })
-
-    // return them to vue template
-    return {}
-  }
+// event handing
+ebus.on('toggleLeftDrawer', toggleLeftDrawer)
+onBeforeUnmount(() => {
+  bus.off('toggleLeftDrawer', toggleLeftDrawer)
 })
 </script>
-<style lang='scss' scoped>
-</style>
+<style lang="scss" scoped></style>

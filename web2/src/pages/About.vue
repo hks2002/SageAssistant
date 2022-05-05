@@ -41,51 +41,40 @@
   </q-page>
 </template>
 
-<script>
-import { defineComponent, ref } from 'vue'
+<script setup>
+import { ref } from 'vue'
 import { useQuasar } from 'quasar'
 import { axios } from 'boot/axios'
 import _remove from 'lodash/remove'
 
-export default defineComponent({
-  name: 'About',
-  setup() {
-    const $q = useQuasar()
-    const srvName = ref('')
-    const srvVersion = ref('')
-    const srvProjectDependencies = ref([])
+const $q = useQuasar()
+const srvName = ref('')
+const srvVersion = ref('')
+const srvProjectDependencies = ref([])
+const productName = require('@/../package.json').productName
+const version = require('@/../package.json').version
+const author = require('@/../package.json').author
+const dependencies = require('@/../package.json').dependencies
 
-    axios
-      .get('/Data/SrvInfo')
-      .then((response) => {
-        srvName.value = response.data.name
-        srvVersion.value = response.data.version
-      })
-      .finally(() => {
-        $q.loadingBar.stop()
-      })
+axios
+  .get('/Data/SrvInfo')
+  .then((response) => {
+    srvName.value = response.data.name
+    srvVersion.value = response.data.version
+  })
+  .finally(() => {
+    $q.loadingBar.stop()
+  })
 
-    axios
-      .get('/Data/SrvProjectDependencies')
-      .then((response) => {
-        _remove(response.data, function (dep) {
-          return dep.groupId === 'SAP'
-        })
-        srvProjectDependencies.value = response.data
-      })
-      .finally(() => {
-        $q.loadingBar.stop()
-      })
-
-    return {
-      productName: require('@/../package.json').productName,
-      version: require('@/../package.json').version,
-      author: require('@/../package.json').author,
-      dependencies: require('@/../package.json').dependencies,
-      srvProjectDependencies,
-      srvName: srvName,
-      srvVersion: srvVersion
-    }
-  }
-})
+axios
+  .get('/Data/SrvProjectDependencies')
+  .then((response) => {
+    _remove(response.data, function (dep) {
+      return dep.groupId === 'SAP'
+    })
+    srvProjectDependencies.value = response.data
+  })
+  .finally(() => {
+    $q.loadingBar.stop()
+  })
 </script>
