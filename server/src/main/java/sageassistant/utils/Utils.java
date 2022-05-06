@@ -140,10 +140,37 @@ public class Utils {
 		// change / \ * ? to -
 		String newPn = pn.replaceAll("(\\\\|\\*|\\/|\\?)", "-");
 		log.debug("[makeShortPn00] " + newPn);
+		// remove Complete, case ignore
+		newPn = newPn.replaceAll("(?i)(-|_)*complete", "");
+		// remove history, case ignore
+		newPn = newPn.replaceAll("(?i)(-|_)*history", "");
+		// remove trolley, case ignore
+		newPn = newPn.replaceAll("(?i)(-|_)*trolley", "");
+		// remove full, case ignore
+		newPn = newPn.replaceAll("(?i)(-|_)*full", "");
+		// remove all, case ignore
+		newPn = newPn.replaceAll("(?i)(-|_)*all", "");
+		// remove tds, case ignore
+		newPn = newPn.replaceAll("(?i)(-|_)*tds", "");
+		// remove omsd, case ignore
+		newPn = newPn.replaceAll("(?i)omsd(-|_)*", "");
+		// remove cad, case ignore
+		newPn = newPn.replaceAll("(?i)(-|_)*cad", "");
+		// remove rev, case ignore
+		newPn = newPn.replaceAll("(?i)rev", "");
+		// remove dwg, case ignore
+		newPn = newPn.replaceAll("(?i)(-|_)*dwg", "");
+		// split by space and get the first words
+		newPn = newPn.split(" ")[0];
+		log.debug("[makeShortPn00] " + newPn);
+
 		// remove _-|__-- at tail
 		newPn = newPn.replaceAll("_+", "_");
 		newPn = newPn.replaceAll("-+", "-");
 		newPn = newPn.replaceAll("(.*?)(_-)$", "$1");
+		newPn = newPn.replaceAll("(.*?)(_)*$", "$1");
+		newPn = newPn.replaceAll("(.*?)(-)*$", "$1");
+
 		log.debug("[makeShortPn01] " + newPn);
 		// remove _DRAFT|_QU|_NQ|_NQD|_CPD_PRT anywhere
 		newPn = newPn.replaceAll("(.*)(_DRAFT|_QU|_NQD|_NQ|_CPD|_PRT)(.*)", "$1$3");
