@@ -33,7 +33,9 @@ const jsonToExcel = function (headers, jsonData, filename) {
     str += '<tr>'
     for (let i3 = 0, l3 = headers.length; i3 < l3; i3++) {
       // add \t to avoid number diaplay format change in excel
-      str += `<td>${jsonData[i2][headers[i3]] + '\t'}</td>`
+      jsonData[i2][headers[i3]]
+        ? str += `<td>${jsonData[i2][headers[i3]] + '\t'}</td>`
+        : str += '<td></td>'
     }
     str += '</tr>'
   }
