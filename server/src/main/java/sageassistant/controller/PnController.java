@@ -18,7 +18,7 @@ public class PnController {
 
 	@GetMapping("/Data/PNHelper")
 	public String getPNs(@RequestParam(value = "PnOrPnRoot", required = false, defaultValue = "%%") String pnOrPnRoot,
-			@RequestParam(value = "Count", required = false, defaultValue = "50") Integer count) {
+			@RequestParam(value = "Count", required = false, defaultValue = "200") Integer count) {
 		return Utils.listToString(pnService.findPnByStartWith(pnOrPnRoot, count));
 	}
 
