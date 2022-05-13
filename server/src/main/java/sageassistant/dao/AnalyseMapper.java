@@ -10,6 +10,6 @@ import sageassistant.model.AnalyseQuoteSalesCost;
 @Mapper
 public interface AnalyseMapper {
 	List<AnalyseQuoteSalesCost> analyseQuoteSalesCost(@Param("Site") String Site,
-			@Param("CategoryCode") String CategoryCode, @Param("DateFrom") String DateFrom,
+			@Param("CategoryCode") String CategoryCode, @Param("PnRoot") String PnRoot, @Param("DateFrom") String DateFrom,
 			@Param("DateTo") String DateTo, @Param("Limit") Integer Limit);
 }

@@ -3,7 +3,7 @@
 
 <mapper namespace="sageassistant.dao.AnalyseMapper">
 	<!--Open L2 Cache under Names pace: 1 Hour -->
-	<cache eviction="FIFO" flushInterval="3600000" readOnly="true" size="1024" />
+	<cache eviction="LRU" flushInterval="3600000" readOnly="true" size="10240" />
 	
 	<select id="analyseQuoteSalesCost" resultType="sageassistant.model.AnalyseQuoteSalesCost">
 	WITH 
@@ -47,10 +47,16 @@
 				LEFT JOIN EXPLOIT.ITMMASTER ITMMASTER 
 					ON SQUOTED.ITMREF_0 = ITMMASTER.ITMREF_0
 			WHERE SQUOTED.NETPRI_0 > 0
-				AND ITMMASTER.TSICOD_1 LIKE #{CategoryCode}
+				<if test="CategoryCode != null and CategoryCode != ''">
+					AND ITMMASTER.TSICOD_1 LIKE #{CategoryCode}
+				</if>
+				<if test="PnRoot != null and PnRoot != ''">
+					AND ITMMASTER.ITMREF_0 = #{PnRoot}
+				</if>
 				AND SQUOTE.SALFCY_0 = #{Site}
 				AND SQUOTED.SALFCY_0 = #{Site}
 				AND (SQUOTE.QUODAT_0 BETWEEN CONVERT(datetime, #{DateFrom},120) AND CONVERT(datetime, #{DateTo},120) )
+				AND (SQUOTED.QUODAT_0 BETWEEN CONVERT(datetime, #{DateFrom},120) AND CONVERT(datetime, #{DateTo},120) )
 				) AS T1	-- T1 Change Price to USD
 		WHERE #{Limit} >= T1.ROWNUM  -- change the number, and below LastQPN
 	) AS T2 -- T2 for PIVOT
@@ -95,11 +101,17 @@
 				LEFT JOIN EXPLOIT.ITMMASTER ITMMASTER
 					ON SORDERQ.ITMREF_0 = ITMMASTER.ITMREF_0
 			WHERE SORDERP.NETPRI_0 > 0
-				AND ITMMASTER.TSICOD_1 LIKE #{CategoryCode}
+				<if test="CategoryCode != null and CategoryCode != ''">
+					AND ITMMASTER.TSICOD_1 LIKE #{CategoryCode}
+				</if>
+				<if test="PnRoot != null and PnRoot != ''">
+					AND ITMMASTER.ITMREF_0 = #{PnRoot}
+				</if>
 				AND SORDER.SALFCY_0 = #{Site}
 				AND SORDERQ.SALFCY_0 = #{Site}
 				AND SORDERP.SALFCY_0 = #{Site}
 				AND (SORDER.ORDDAT_0 BETWEEN CONVERT(datetime, #{DateFrom},120) AND CONVERT(datetime, #{DateTo},120) )
+				AND (SORDERQ.ORDDAT_0 BETWEEN CONVERT(datetime, #{DateFrom},120) AND CONVERT(datetime, #{DateTo},120) )
 				) AS T1	-- T1 Change Price to USD
 		WHERE #{Limit}>=T1.ROWNUM -- change the number, and below LastSPN
 	) AS T2 -- T2 for PIVOT
@@ -127,11 +139,17 @@
 				LEFT JOIN EXPLOIT.ITMMASTER ITMMASTER
 					ON SORDERQ.ITMREF_0 = ITMMASTER.ITMREF_0
 			WHERE SORDERP.NETPRI_0 > 0
-				AND ITMMASTER.TSICOD_1 LIKE #{CategoryCode}
+				<if test="CategoryCode != null and CategoryCode != ''">
+					AND ITMMASTER.TSICOD_1 LIKE #{CategoryCode}
+				</if>
+				<if test="PnRoot != null and PnRoot != ''">
+					AND ITMMASTER.ITMREF_0 = #{PnRoot}
+				</if>
 				AND SORDER.SALFCY_0 = #{Site}
 				AND SORDERQ.SALFCY_0 = #{Site}
 				AND SORDERP.SALFCY_0 = #{Site}
 				AND (SORDER.ORDDAT_0 BETWEEN CONVERT(datetime, #{DateFrom},120) AND CONVERT(datetime, #{DateTo},120) )
+				AND (SORDERQ.ORDDAT_0 BETWEEN CONVERT(datetime, #{DateFrom},120) AND CONVERT(datetime, #{DateTo},120) )
 				) AS T1	-- T1 Change Price to USD
 		WHERE #{Limit}>=T1.ROWNUM  -- change the number, and below LastSPN
 	) AS T2 -- T2 for PIVOT
@@ -177,8 +195,13 @@
 						ON SORDERQ.YSOH_PJT_0 = PORDERP.PJT_0
 					 LEFT JOIN EXPLOIT.ITMMASTER ITMMASTER
 						ON SORDERQ.ITMREF_0 = ITMMASTER.ITMREF_0
-				WHERE 
-					ITMMASTER.TSICOD_1 LIKE #{CategoryCode}
+				WHERE 1=1
+					<if test="CategoryCode != null and CategoryCode != ''">
+						AND ITMMASTER.TSICOD_1 LIKE #{CategoryCode}
+					</if>
+					<if test="PnRoot != null and PnRoot != ''">
+						AND ITMMASTER.ITMREF_0 = #{PnRoot}
+					</if>
 					AND PORDER.POHFCY_0 = #{Site}
 					AND PORDERP.PRHFCY_0 = #{Site}
 					AND SORDERQ.SALFCY_0 = #{Site}
