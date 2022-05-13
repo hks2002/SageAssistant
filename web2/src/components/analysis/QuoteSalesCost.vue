@@ -18,11 +18,22 @@
         @update:model-value="doUpdate"
       />
       <q-input
+        v-model="pnRoot"
+        class="col-grow"
+        outlined
+        hide-hint
+        hide-bottom-space
+        debounce="1000"
+        :label="$t('PN Root Code')"
+        input-class="text-uppercase"
+        @update:model-value="doUpdate"
+      />
+      <q-input
         v-model="dateFrom"
         outlined
         hide-hint
         hide-bottom-space
-        class="col-3"
+        class="col-2"
         debounce="1000"
         type="date"
         :label="$t('From')"
@@ -33,7 +44,7 @@
         outlined
         hide-hint
         hide-bottom-space
-        class="col-3"
+        class="col-2"
         debounce="1000"
         type="date"
         :label="$t('To')"
@@ -47,7 +58,7 @@
         class="col-1"
         debounce="1000"
         type="number"
-        :label="$t('Limit last N Years')"
+        :label="$t('Limit last N Records')"
         :rules="[
           (val) => (val !== null && val !== '') || 'Please type last N limmit',
           (val) => (val > 0 && val <= 10) || 'Limit between from 1 to 10'
@@ -64,7 +75,7 @@
       indicator-color="primary"
       narrow-indicator
       :style="'height:' + tabHeaderHeight + 'px'"
-      v-if="categoryCode"
+      v-if="categoryCode || pnRoot"
     >
       <q-tab name="YourSite" label="Your-Site" />
       <q-tab name="AllSites" label="All-Sites" />
@@ -72,8 +83,8 @@
 
     <Vue3Lottie
       animationLink="/json/waiting-input.json"
-      :style="{ height: tableHeight + 250 + 'px', width: tableWidth + 'px' }"
-      v-if="!categoryCode"
+      :style="{ height: tableHeight + 250 + 'px' }"
+      v-if="!(categoryCode || pnRoot)"
     />
     <q-tab-panels v-model="tab" keep-alive v-else>
       <q-tab-panel name="YourSite" class="q-pa-none">
@@ -93,8 +104,8 @@
           <template v-slot:top>
             <q-toolbar class="bg-teal text-white shadow-2">
               <q-toolbar-title class="text-left"
-                >Products of group2 [{{ categoryCode }}] in {{ site }} from
-                {{ dateFrom }} to {{ dateTo }}
+                >Products of group2 [{{ categoryCode }}] and PN [{{ pnRoot }}]
+                in {{ site }} from {{ dateFrom }} to {{ dateTo }}
                 <q-btn dense flat icon="fas fa-download" @click="download()" />
               </q-toolbar-title>
             </q-toolbar>
@@ -118,8 +129,8 @@
           <template v-slot:top>
             <q-toolbar class="bg-teal text-white shadow-2">
               <q-toolbar-title class="text-left"
-                >Products of group2 [{{ categoryCode }}] in all sites from
-                {{ dateFrom }} to {{ dateTo }}
+                >Products of group2 [{{ categoryCode }}] and PN [{{ pnRoot }}]
+                in all sites from {{ dateFrom }} to {{ dateTo }}
                 <q-btn
                   dense
                   flat
@@ -240,6 +251,7 @@ const pagination = ref({
 })
 
 const categoryCode = ref('')
+const pnRoot = ref('')
 
 const nowTimeStamp = Date.now()
 const fromTimeStamp = addToDate(nowTimeStamp, { years: -3 })
@@ -252,7 +264,6 @@ const analysisQuoteSalesCostAllKeyed = ref([])
 
 const doUpdate = () => {
   categoryCode.value = categoryCode.value.toUpperCase()
-  if (!checkInput()) return
 
   doUpdateOne()
   doUpdateAll()
@@ -265,7 +276,7 @@ const doUpdateOne = () => {
   $q.loadingBar.start()
   axios
     .get(
-      `/Data/AnalysisQuoteSalesCost?Site=${site.value}&CategoryCode=${categoryCode.value}&DateFrom=${dateFrom.value}&DateTo=${dateTo.value}&Limit=${limitN.value}`
+      `/Data/AnalysisQuoteSalesCost?Site=${site.value}&CategoryCode=${categoryCode.value}&PnRoot=${pnRoot.value}&DateFrom=${dateFrom.value}&DateTo=${dateTo.value}&Limit=${limitN.value}`
     )
     .then((response) => {
       analysisQuoteSalesCost.value = response.data
@@ -283,10 +294,12 @@ const doUpdateOne = () => {
 }
 
 const doUpdateAll = () => {
+  if (!checkInput()) return
+
   $q.loadingBar.start()
   axios
     .get(
-      `/Data/AnalysisQuoteSalesCost?Site=ALL&CategoryCode=${categoryCode.value}&DateFrom=${dateFrom.value}&DateTo=${dateTo.value}&Limit=${limitN.value}`
+      `/Data/AnalysisQuoteSalesCost?Site=ALL&CategoryCode=${categoryCode.value}&PnRoot=${pnRoot.value}&DateFrom=${dateFrom.value}&DateTo=${dateTo.value}&Limit=${limitN.value}`
     )
     .then((response) => {
       analysisQuoteSalesCostAll = response.data
@@ -307,7 +320,7 @@ const doUpdateAll = () => {
 }
 
 const checkInput = () => {
-  if (categoryCode.value === '') return false
+  if (categoryCode.value === '' && pnRoot.value === '') return false
   if (limitN.value <= 0 || limitN.value > 10) return false
   return true
 }
@@ -468,7 +481,9 @@ const download = () => {
     analysisQuoteSalesCost.value,
     'Product group2 [' +
       categoryCode.value +
-      '] in ' +
+      '] and PN [' +
+      pnRoot.value +
+      'in ' +
       site.value +
       ' from ' +
       dateFrom.value +
@@ -702,6 +717,8 @@ const downloadAll = () => {
     analysisQuoteSalesCostAll,
     'Product group2 [' +
       categoryCode.value +
+      '] and PN [' +
+      pnRoot.value +
       '] in all sites' +
       ' from ' +
       dateFrom.value +
@@ -713,9 +730,7 @@ const downloadAll = () => {
 onBeforeMount(() => {
   console.log('onBeforeMount:')
   pageBodyWidth.value = $q.pageBodyWidth
-  console.log('tabPanelHeight:' + props.tabPanelHeight)
-  console.log('tabHeaderHeight.value:' + tabHeaderHeight.value)
-  console.log('$.pageBodyHeight:' + $q.pageBodyHeight)
+
   if (props.tabPanelHeight > 0) {
     tableHeight.value = props.tabPanelHeight - tabHeaderHeight.value - 80
   } else {

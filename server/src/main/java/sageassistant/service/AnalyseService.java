@@ -19,26 +19,47 @@ public class AnalyseService {
 
 	@Autowired
 	private AnalyseMapper analyseMapper;
-	
+
 	@Autowired
 	private CommonMapper commonMapper;
-	
-	public List<AnalyseQuoteSalesCost> analyseQuoteSalesCost(@Param("Site") String Site,
-			@Param("CategoryCode") String CategoryCode, @Param("DateFrom") String DateFrom,
-			@Param("DateTo") String DateTo, @Param("Limit") Integer Limit) {
-		return analyseMapper.analyseQuoteSalesCost(Site, CategoryCode, DateFrom, DateTo, Limit);
+
+	public List<AnalyseQuoteSalesCost> analyseQuoteSalesCost(
+			@Param("Site") String Site,
+			@Param("CategoryCode") String CategoryCode,
+			@Param("PnRoot") String PnRoot,
+			@Param("DateFrom") String DateFrom,
+			@Param("DateTo") String DateTo,
+			@Param("Limit") Integer Limit) {
+		return analyseMapper.analyseQuoteSalesCost(Site, CategoryCode, PnRoot, DateFrom, DateTo, Limit);
 	}
-	
 
 	public List<AnalyseQuoteSalesCost> analyseQuoteSalesCostAll(
-			@Param("CategoryCode") String CategoryCode, @Param("DateFrom") String DateFrom,
-			@Param("DateTo") String DateTo, @Param("Limit") Integer Limit) {
-		
+			@Param("CategoryCode") String CategoryCode,
+			@Param("PnRoot") String PnRoot,
+			@Param("DateFrom") String DateFrom,
+			@Param("DateTo") String DateTo,
+			@Param("Limit") Integer Limit) {
+
 		List<AnalyseQuoteSalesCost> listAll = new ArrayList<>();
-		for (String o : commonMapper.getAllSites() ) {
-			listAll.addAll(analyseMapper.analyseQuoteSalesCost(o, CategoryCode, DateFrom, DateTo, Limit));
+		for (String Site : commonMapper.getAllSites()) {
+			listAll.addAll(analyseMapper.analyseQuoteSalesCost(Site, CategoryCode, PnRoot, DateFrom, DateTo, Limit));
 		}
 		return listAll;
 	}
+
+	public String analyseQuoteSalesCostByTarget(
+			@Param("Site") String Site,
+			@Param("PnRoot") String PnRoot,
+			@Param("DateFrom") String DateFrom,
+			@Param("DateTo") String DateTo,
+			@Param("Limit") Integer Limit,
+			@Param("Target") String Target) {
+				List<AnalyseQuoteSalesCost> result = analyseMapper.analyseQuoteSalesCost(Site, "", PnRoot, DateFrom, DateTo, Limit);
+			if (result.size()>0) {
+			   return result.get(0).toString();
+			} else {
+				return "{}";
+			}
+			}
 
 }
