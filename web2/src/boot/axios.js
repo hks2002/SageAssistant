@@ -11,7 +11,7 @@ import common from 'assets/common'
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 axios.defaults.headers.accept = 'application/json'
 axios.defaults.withCredentials = true // Allow send cookies
-axios.defaults.timeout = 60000
+axios.defaults.timeout = 30000
 
 // Set request interceptors
 axios.interceptors.request.use(

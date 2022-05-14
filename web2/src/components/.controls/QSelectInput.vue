@@ -77,18 +77,7 @@ const props = defineProps({
 
 const model = ref(props.defaultValue)
 // Bug? Must initial enough spaces
-const options = ref([
-  { PN: '', PNROOT: '' },
-  { PN: '', PNROOT: '' },
-  { PN: '', PNROOT: '' },
-  { PN: '', PNROOT: '' },
-  { PN: '', PNROOT: '' },
-  { PN: '', PNROOT: '' },
-  { PN: '', PNROOT: '' },
-  { PN: '', PNROOT: '' },
-  { PN: '', PNROOT: '' },
-  { PN: '', PNROOT: '' }
-])
+const options = ref(null)
 
 const filterFnAutoselect = (val, update, abort) => {
   // This event before input event, call abort() at any time if you can't retrieve data somehow
