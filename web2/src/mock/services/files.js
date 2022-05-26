@@ -1,10 +1,10 @@
+import { getQueryParameters } from '@/assets/mockExt'
 import Mock from 'mockjs'
-import { getQueryParameter } from '../mockExt'
 
-Mock.mock(RegExp('^(/Data/AttachmentPath)' + '.*'), options => {
+Mock.mock(RegExp('^(/Data/AttachmentPath)' + '.*'), (options) => {
   console.debug('\u001b[35m' + '[Mocking] ', 'AttachmentPath')
 
-  const Pn = getQueryParameter(options, 'Pn')
+  const Pn = getQueryParameters(options, 'Pn')
 
   // list = {data:[{},{}]}
   const list = Mock.mock({
@@ -13,7 +13,8 @@ Mock.mock(RegExp('^(/Data/AttachmentPath)' + '.*'), options => {
         'ROWID|+1': 1,
         PN: Pn,
         Cat: /(Drawing|Manual|UNK)/,
-        DocType: /(PDF|JPG|JPEG|TIF|BMP|DOC|DOCX|XLS|XLSX|PPT|PPTX|ZIP|RAR|7Z|OTHER)/,
+        DocType:
+          /(PDF|JPG|JPEG|TIF|BMP|DOC|DOCX|XLS|XLSX|PPT|PPTX|ZIP|RAR|7Z|OTHER)/,
         Path: /\/File\/MockFile\/[A-Z]*\.(PDF|JPG|JPEG|TIF|BMP|DOC|DOCX|XLS|XLSX|PPT|PPTX|ZIP|RAR|7Z|OTHER)/
       }
     ]
@@ -22,7 +23,7 @@ Mock.mock(RegExp('^(/Data/AttachmentPath)' + '.*'), options => {
   return list.data
 })
 
-Mock.mock(RegExp('^(/File/MockFile)' + '.*'), options => {
+Mock.mock(RegExp('^(/File/MockFile)' + '.*'), (options) => {
   console.debug('\u001b[35m' + '[Mocking] ', 'MockFile')
 
   const ext = options.split('.')[1]
@@ -34,7 +35,7 @@ Mock.mock(RegExp('^(/File/MockFile)' + '.*'), options => {
   }
 })
 
-Mock.mock(RegExp('^(/Data/FileDelete)' + '.*'), options => {
+Mock.mock(RegExp('^(/Data/FileDelete)' + '.*'), () => {
   console.debug('\u001b[35m' + '[Mocking] ', 'FileDelete')
 
   return 'Delete with Success!'

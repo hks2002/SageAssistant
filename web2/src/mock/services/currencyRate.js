@@ -1,10 +1,10 @@
+import { getQueryParameters } from '@/assets/mockExt'
 import Mock from 'mockjs'
-import { getQueryParameter } from '../mockExt'
 
-Mock.mock(RegExp('^(/Data/CurrencyRateBatch)' + '.*'), options => {
+Mock.mock(RegExp('^(/Data/CurrencyRateBatch)' + '.*'), (options) => {
   console.debug('\u001b[35m' + '[Mocking] ', 'CurrencyRateBatch')
 
-  const query = getQueryParameter(options, 'query')
+  const query = getQueryParameters(options, 'query')
 
   const allq = query.split('_')
   const allres = []

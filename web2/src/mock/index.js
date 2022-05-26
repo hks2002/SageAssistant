@@ -4,20 +4,11 @@
 if (process.env.DEV) {
   console.debug('\u001b[35m' + '[Mock] ', 'Mounting')
 
-  require('./services/auth')
-  require('./services/currencyRate')
-  require('./services/files')
-  require('./services/products')
-  require('./services/sites')
-  require('./services/srvInfo')
-  require('./services/suppliers')
-  require('./services/todo')
-  require('./services/fapiao')
-  require('./services/invoice')
-  require('./services/stock')
-  require('./services/analysis')
-  require('./services/customers')
-  require('./services/financials')
-
+  // auto require all files in /src/mock/services
+  const mockfiles = require.context('/src/mock/services', false, /.js$/)
+  mockfiles.keys().forEach(key => {
+    const file = key.slice(2)
+    require(`/src/mock/services/${file}`)
+  })
   console.debug('\u001b[35m' + '[Mock] ', 'Mounted')
 }

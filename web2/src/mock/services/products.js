@@ -1,12 +1,12 @@
 import Mock from 'mockjs'
 import { orderBy } from 'lodash'
-import { getQueryParameter } from '../mockExt'
+import { getQueryParameters } from '@/assets/mockExt'
 
 // Mock.setup({ timeout: '500-1000' })
 Mock.mock(RegExp('^(/Data/PNHelper)' + '.*'), options => {
   console.debug('\u001b[35m' + '[Mocking] ', 'PNHelper')
 
-  const PnOrPnRoot = getQueryParameter(options, 'PnOrPnRoot')
+  const PnOrPnRoot = getQueryParameters(options, 'PN')
   const PnRoot = PnOrPnRoot.split('_')[0]
   const PnVer = PnOrPnRoot.split('_')[1]
 
@@ -30,7 +30,7 @@ Mock.mock(RegExp('^(/Data/PNHelper)' + '.*'), options => {
 Mock.mock(RegExp('^(/Data/PNsInFamily)' + '.*'), options => {
   console.debug('\u001b[35m' + '[Mocking] ', 'PNsInFamily')
 
-  const PnRoot = getQueryParameter(options, 'PnRoot')
+  const PnRoot = getQueryParameters(options, 'PnRoot')
 
   // list = {data:[{},{}]}
   const list = Mock.mock({
@@ -57,7 +57,7 @@ Mock.mock(RegExp('^(/Data/PNsInFamily)' + '.*'), options => {
 Mock.mock(RegExp('^(/Data/QuoteHistory)' + '.*'), options => {
   console.debug('\u001b[35m' + '[Mocking] ', 'QuoteHistory')
 
-  const PnRoot = getQueryParameter(options, 'PnRoot')
+  const PnRoot = getQueryParameters(options, 'PnRoot')
 
   // list = {data:[{},{}]}
   const list = Mock.mock({
@@ -86,7 +86,7 @@ Mock.mock(RegExp('^(/Data/QuoteHistory)' + '.*'), options => {
 Mock.mock(RegExp('^(/Data/SalesHistory)' + '.*'), options => {
   console.debug('\u001b[35m' + '[Mocking] ', 'SalesHistory')
 
-  const PnRoot = getQueryParameter(options, 'PnRoot')
+  const PnRoot = getQueryParameters(options, 'PnRoot')
 
   // list = {data:[{},{}]}
   const list = Mock.mock({
@@ -113,7 +113,7 @@ Mock.mock(RegExp('^(/Data/SalesHistory)' + '.*'), options => {
 Mock.mock(RegExp('^(/Data/CostHistory)' + '.*'), options => {
   console.debug('\u001b[35m' + '[Mocking] ', 'CostHistory')
 
-  const PnRoot = getQueryParameter(options, 'PnRoot')
+  const PnRoot = getQueryParameters(options, 'PnRoot')
 
   // list = {data:[{},{}]}
   const list = Mock.mock({
@@ -140,10 +140,29 @@ Mock.mock(RegExp('^(/Data/CostHistory)' + '.*'), options => {
   return orderBy(list.data, ['OrderDate'], ['asc'])
 })
 
+Mock.mock(RegExp('^(/Data/InventoryStock)' + '.*'), options => {
+  console.debug('\u001b[35m' + '[Mocking] ', 'InventoryStock')
+
+  const PnRoot = getQueryParameters(options, 'PnRoot')
+
+  // list = {data:[{},{}]}
+  const list = Mock.mock({
+    'data|1-10': [
+      {
+        StockSite: /(ZHU|HKG|SGP|TLS|MIA)/,
+        PN: () => { return PnRoot + '_' + Mock.mock('@character("ABCDEFG")') },
+        'Qty|1-365': 1
+      }
+    ]
+  })
+
+  return list.data
+})
+
 Mock.mock(RegExp('^(/Data/DeliveryDuration)' + '.*'), options => {
   console.debug('\u001b[35m' + '[Mocking] ', 'DeliveryDuration')
 
-  const PnRoot = getQueryParameter(options, 'PnRoot')
+  const PnRoot = getQueryParameters(options, 'PnRoot')
 
   // list = {data:[{},{}]}
   const list = Mock.mock({
