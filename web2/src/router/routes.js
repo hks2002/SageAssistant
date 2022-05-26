@@ -2,130 +2,132 @@ const routes = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/Index.vue') }]
+    children: [{ path: '', component: () => import('pages/IndexPage.vue') }]
   },
   {
     path: '/Login',
-    name: '/Login',
+    name: 'Login',
     component: () => import('layouts/DefaultLayout.vue'),
     children: [
       {
         path: '',
-        component: () => import('pages/Login.vue')
+        component: () => import('pages/LoginPage.vue')
       }
     ]
   },
   {
     path: '/About',
-    name: '/About',
+    name: 'About',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {
         path: '',
-        component: () => import('pages/About.vue')
+        component: () => import('pages/AboutPage.vue')
       }
     ]
   },
   {
     path: '/Todo',
-    name: '/Todo',
+    name: 'Todo',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {
         path: '',
-        component: () => import('pages/Todo.vue')
+        component: () => import('pages/TodoPage.vue')
       }
     ]
   },
   {
     path: '/Financials',
-    name: '/Financials',
+    name: 'Financials',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {
         path: '',
-        component: () => import('src/pages/Financials.vue')
+        component: () => import('src/pages/FinancialsPage.vue')
       }
     ]
   },
   {
     path: '/Analysis',
-    name: '/Analysis',
+    name: 'Analysis',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {
         path: '',
-        component: () => import('src/pages/Analysis.vue')
+        component: () => import('src/pages/AnalysisPage.vue')
       }
     ]
   },
   {
     path: '/Reports',
-    name: '/Reports',
+    name: 'Reports',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {
         path: '',
-        component: () => import('pages/Reports.vue')
+        component: () => import('pages/ReportsPage.vue')
       }
     ]
   },
   {
     path: '/Products',
-    name: '/Products',
+    name: 'Products',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {
         path: '',
-        component: () => import('pages/Products.vue')
+        component: () => import('pages/ProductsPage.vue')
       }
     ]
   },
   {
     path: '/Stock',
-    name: '/Stock',
+    name: 'Stock',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {
         path: '',
-        component: () => import('pages/Stock.vue')
+        component: () => import('pages/StockPage.vue')
       }
     ]
   },
   {
     path: '/Suppliers',
-    name: '/Suppliers',
+    name: 'Suppliers',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {
         path: '',
-        component: () => import('pages/Suppliers.vue')
+        component: () => import('pages/SuppliersPage.vue')
       }
     ]
   },
   {
     path: '/Customers',
-    name: '/Customers',
+    name: 'Customers',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {
         path: '',
-        component: () => import('pages/Customers.vue')
+        component: () => import('pages/CustomersPage.vue')
       }
     ]
   },
   {
     path: '/exception',
-    name: '/exception',
+    name: 'exception',
     component: () => import('layouts/DefaultLayout.vue'),
     children: [
       {
         path: ':ErrorCode',
-        component: () => import('pages/Exception.vue'),
+        component: () => import('pages/ExceptionPage.vue'),
         props: (route) => {
-          if (route.params.ErrorCode !== '403' &&
+          if (
+            route.params.ErrorCode !== '403' &&
             route.params.ErrorCode !== '404' &&
-            route.params.ErrorCode !== '500') {
+            route.params.ErrorCode !== '500'
+          ) {
             return { ErrorCode: '404' }
           } else {
             return { ErrorCode: route.params.ErrorCode }
