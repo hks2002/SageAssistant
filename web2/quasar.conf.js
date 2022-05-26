@@ -87,7 +87,6 @@ module.exports = configure(function (ctx) {
       },
 
       scopeHoisting: true,
-      beforeDev() { },
       afterBuild() {
         let pkg = fs.readFileSync('package.json')
         const timeStamp = moment().format('MMDDHHmmss')
@@ -96,9 +95,7 @@ module.exports = configure(function (ctx) {
         pkg.version = pkg.version.replace(/^(\d+\.\d+)(\S*)/, '$1')
         pkg.version = pkg.version + '.' + timeStamp
 
-        console.log(
-          '\u001b[35m Update package to ' + pkg.version + '\u001b[0m'
-        )
+        console.log('\u001b[35m Update package to ' + pkg.version + '\u001b[0m')
         fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2))
       },
       uglifyOptions: {
@@ -296,6 +293,5 @@ module.exports = configure(function (ctx) {
           .use(ESLintPlugin, [{ extensions: ['js'] }])
       }
     }
-
   }
 })

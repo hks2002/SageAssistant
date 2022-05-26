@@ -2,38 +2,12 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "src/*": [
-        "src/*"
-      ],
-      "app/*": [
-        "*"
-      ],
-      "components/*": [
-        "src/components/*"
-      ],
-      "layouts/*": [
-        "src/layouts/*"
-      ],
-      "pages/*": [
-        "src/pages/*"
-      ],
-      "assets/*": [
-        "src/assets/*"
-      ],
-      "boot/*": [
-        "src/boot/*"
-      ],
-      "vue$": [
-        "node_modules/vue/dist/vue.runtime.esm-bundler.js"
-      ]
-    }
+      // add webpack alias support for Auto Import/Path Intellisense
+      "@ctr/*": ["src/components/controls/*"],
+      "@/*": ["src/*"],
+      "app/*": ["*"]
+    },
+    "jsx": "preserve"
   },
-  "vueCompilerOptions": {
-    "experimentalDisableTemplateSupport": true
-  },
-  "exclude": [
-    "dist",
-    ".quasar",
-    "node_modules"
-  ]
+  "exclude": ["dist", ".quasar", "node_modules"]
 }
