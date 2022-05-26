@@ -1,8 +1,8 @@
-import { Notify, Dialog, QSpinnerBars, Loading } from 'quasar'
-import _ from 'lodash'
+import clone from 'lodash/clone'
+import { Dialog, Loading, Notify, QSpinnerBars } from 'quasar'
 
 export function resetObj(obj) {
-  const objClone = _.clone(obj)
+  const objClone = clone(obj)
   Object.keys(objClone).forEach((key) => {
     objClone[key] = null
   })
@@ -11,7 +11,7 @@ export function resetObj(obj) {
 
 export function resetArray(array) {
   if (array && array instanceof Array) {
-    const arrayClone = _.clone(array)
+    const arrayClone = clone(array)
     arrayClone.splice(0, arrayClone.length)
     return arrayClone
   }
@@ -108,7 +108,7 @@ export function confirmDialog(message, title) {
   })
 }
 
-export function infoDialog (message, title) {
+export function infoDialog(message, title) {
   if (!title) {
     title = 'Info'
   }

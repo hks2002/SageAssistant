@@ -198,7 +198,7 @@ const defaultLineSerial = function (index, value, labelFormatter, dimensions, en
     },
     tooltip: {
       trigger: 'item',
-      formatter: (params, ticket, callback) => jsonToMultLine(dimensions, params.data)
+      formatter: (params) => jsonToMultLine(dimensions, params.data)
     },
     dimensions: dimensions,
     encode: {
@@ -219,7 +219,7 @@ const defaultBarSerial = function (index, value, labelFormatter, dimensions, enc
     },
     tooltip: {
       trigger: 'item',
-      formatter: (params, ticket, callback) => jsonToMultLine(dimensions, params.data)
+      formatter: (params) => jsonToMultLine(dimensions, params.data)
     },
     dimensions: dimensions,
     encode: {
@@ -241,7 +241,7 @@ const defaultScatterSerial = function (index, value, labelFormatter, dimensions,
     },
     tooltip: {
       trigger: 'item',
-      formatter: (params, ticket, callback) => jsonToMultLine(dimensions, params.data)
+      formatter: (params) => jsonToMultLine(dimensions, params.data)
     },
     dimensions: dimensions,
     encode: {
@@ -265,7 +265,7 @@ const DefaultPieSerial = function (index, labelFormatter, dimensions, summed, en
     },
     tooltip: {
       trigger: 'item',
-      formatter: (params, ticket, callback) =>
+      formatter: (params) =>
         _get(params.data, summed) + '<br/>' + encode + ':' + _get(params.data, encode) + '<br/>'
     },
     labelLine: {

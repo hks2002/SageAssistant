@@ -1,5 +1,5 @@
 
-import { setSessionStorage, getSessionStorage } from 'assets/storage'
+import { setSessionStorage, getSessionStorage } from '@/assets/storage'
 import _indexOf from 'lodash/indexOf'
 
 export function setAuthority (json) {

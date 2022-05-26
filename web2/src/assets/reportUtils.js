@@ -1,6 +1,5 @@
-import { SessionStorage } from 'quasar'
-import { notifyError } from 'assets/common'
-import { axios } from 'boot/axios'
+import { notifyError } from '@/assets/common'
+import { axios } from '@/boot/axios'
 
 const validateInput = (rpt, value) => {
   let rtn = false
@@ -11,11 +10,13 @@ const validateInput = (rpt, value) => {
       const reg3 = /^[A-Z]REP[\d]{7}$/
       const reg4 = /^[A-Z]RCL[\d]{7}$/
       const reg5 = /^[A-Z]LC[\d]{6}$/
-      if (reg1.test(value.toUpperCase()) ||
-                reg2.test(value.toUpperCase()) ||
-                reg3.test(value.toUpperCase()) ||
-          reg4.test(value.toUpperCase()) ||
-          reg5.test(value.toUpperCase())) {
+      if (
+        reg1.test(value.toUpperCase()) ||
+        reg2.test(value.toUpperCase()) ||
+        reg3.test(value.toUpperCase()) ||
+        reg4.test(value.toUpperCase()) ||
+        reg5.test(value.toUpperCase())
+      ) {
         rtn = true
       }
       break
@@ -25,10 +26,12 @@ const validateInput = (rpt, value) => {
       const reg2 = /^[A-Z]DSR[P|C][\d]{6}$/
       const reg3 = /^[A-Z]REP[\d]{7}-[\d]{1,3}$/
       const reg4 = /^[A-Z]RCL[\d]{7}-[\d]{1,3}$/
-      if (reg1.test(value.toUpperCase()) ||
-                reg2.test(value.toUpperCase()) ||
-                reg3.test(value.toUpperCase()) ||
-                reg4.test(value.toUpperCase())) {
+      if (
+        reg1.test(value.toUpperCase()) ||
+        reg2.test(value.toUpperCase()) ||
+        reg3.test(value.toUpperCase()) ||
+        reg4.test(value.toUpperCase())
+      ) {
         rtn = true
       }
       break
@@ -43,8 +46,7 @@ const validateInput = (rpt, value) => {
     case 'Invoice': {
       const reg1 = /^[A-Z]FC[\d]{7}$/
       const reg2 = /^[A-Z]PC[\d]{6}$/
-      if (reg1.test(value.toUpperCase()) ||
-                reg2.test(value.toUpperCase())) {
+      if (reg1.test(value.toUpperCase()) || reg2.test(value.toUpperCase())) {
         rtn = true
       }
       break
@@ -55,11 +57,13 @@ const validateInput = (rpt, value) => {
       const reg3 = /^[A-Z]REP[\d]{7}$/
       const reg4 = /^[A-Z]RCL[\d]{7}$/
       const reg5 = /^[A-Z]LC[\d]{6}$/
-      if (reg1.test(value.toUpperCase()) ||
-              reg2.test(value.toUpperCase()) ||
-              reg3.test(value.toUpperCase()) ||
-              reg4.test(value.toUpperCase()) ||
-              reg5.test(value.toUpperCase())) {
+      if (
+        reg1.test(value.toUpperCase()) ||
+        reg2.test(value.toUpperCase()) ||
+        reg3.test(value.toUpperCase()) ||
+        reg4.test(value.toUpperCase()) ||
+        reg5.test(value.toUpperCase())
+      ) {
         rtn = true
       }
       break
@@ -88,8 +92,7 @@ const validateInput = (rpt, value) => {
     case 'WorkOrder': {
       const reg1 = /^[A-Z]OF[\d]{8}$/
       const reg2 = /^[A-Z]CC[\d]{6}-[\d]{1,3}$/
-      if (reg1.test(value.toUpperCase()) ||
-                reg2.test(value.toUpperCase())) {
+      if (reg1.test(value.toUpperCase()) || reg2.test(value.toUpperCase())) {
         rtn = true
       }
       break
@@ -97,8 +100,7 @@ const validateInput = (rpt, value) => {
     case 'SOA': {
       const reg1 = /^[A-Z]{3}$/
       const reg2 = /^[A-Z]{3}[\d]{5}$/
-      if (reg1.test(value.toUpperCase()) ||
-                reg2.test(value.toUpperCase())) {
+      if (reg1.test(value.toUpperCase()) || reg2.test(value.toUpperCase())) {
         rtn = true
       }
       break
@@ -162,8 +164,4 @@ const pdfArraybufferToBase64 = (buffer) => {
   return 'data:application/pdf;base64,' + window.btoa(binary)
 }
 
-export {
-  validateInput,
-  getFncForRpt,
-  pdfUrltoDataUri
-}
+export { validateInput, getFncForRpt, pdfUrltoDataUri }
