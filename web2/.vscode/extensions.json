@@ -1,14 +1,27 @@
 {
   "recommendations": [
     "dbaeumer.vscode-eslint",
-    "esbenp.prettier-vscode",
+    "pkief.material-icon-theme",
+    "wayou.vscode-todo-highlight",
     "mhutchie.git-graph",
-    "Vue.volar"
+    "esbenp.prettier-vscode",
+    "formulahendry.auto-rename-tag",
+    "formulahendry.auto-close-tag",
+    "christian-kohler.path-intellisense",
+    "steoates.autoimport",
+    "syler.sass-indented",
+    "sibiraj-s.vscode-scss-formatter",
+    "sdras.vue-vscode-snippets"
   ],
   "unwantedRecommendations": [
-    "octref.vetur",
+    "misterj.vue-volar-extention-pack",
     "hookyqr.beautify",
-    "dbaeumer.jshint",
-    "ms-vscode.vscode-typescript-tslint-plugin"
+    "octref.vetur",
+    "znck.vue-language-features",
+    "Wscats.vue",
+    "eamodio.gitlens",
+    "ms-azuretools.vscode-docker",
+    "firefox-devtools.vscode-firefox-debug",
+    "ms-edgedevtools.vscode-edge-devtools"
   ]
 }

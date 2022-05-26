@@ -1,21 +1,42 @@
 {
-  "editor.formatOnSave": true,
-  "editor.formatOnPaste": true,
-  "editor.renderWhitespace": "all",
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
-  },
-  "eslint.packageManager": "yarn",
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "vue"
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "vue"],
+  "editor.codeActionsOnSave": [
+    "source.fixAll.eslint",
+    "source.organizeImports"
   ],
-  "emmet.includeLanguages": {
-    "vue-html": "html",
-    "javascript": "javascriptreact"
+  // formatting, when
+  "editor.formatOnPaste": false,
+  "editor.formatOnSave": true,
+  "editor.formatOnType": false,
+  "editor.largeFileOptimizations": true,
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "editor.formatOnType": true,
-  "diffEditor.codeLens": true,
+  "[vue]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "path-intellisense.autoTriggerNextSuggestion": true,
+  "path-intellisense.mappings": {
+    "@": "${workspaceRoot}/src",
+    "@ctr": "${workspaceRoot}/src/components/controls",
+    "assets": "${workspaceRoot}/src/assets",
+    "boot": "${workspaceRoot}/src/boot",
+    "components": "${workspaceRoot}/src/components",
+    "layouts": "${workspaceRoot}/src/layouts",
+    "pages": "${workspaceRoot}/src/pages",
+    "stores": "${workspaceRoot}/src/stores"
+  },
+  "volar.autoCompleteRefs": true
 }
