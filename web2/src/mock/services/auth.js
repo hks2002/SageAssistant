@@ -1,3 +1,11 @@
+/***
+ * @Author         : Robert Huang<56649783@qq.com>
+ * @Date           : 2022-03-25 11:01:23
+ * @LastEditors    : Robert Huang<56649783@qq.com>
+ * @LastEditTime   : 2022-05-28 23:16:38
+ * @FilePath       : \web2\src\mock\services\auth.js
+ * @CopyRight      : Dedienne Aerospace China ZhuHai
+ */
 import { dataWithStatusCode, getPostParameters } from '@/assets/mockExt'
 import Mock from 'mockjs'
 

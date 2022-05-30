@@ -1,3 +1,11 @@
+/***
+ * @Author         : Robert Huang<56649783@qq.com>
+ * @Date           : 2022-05-20 12:50:44
+ * @LastEditors    : Robert Huang<56649783@qq.com>
+ * @LastEditTime   : 2022-05-28 23:04:21
+ * @FilePath       : \web2\src\assets\mockExt.js
+ * @CopyRight      : Dedienne Aerospace China ZhuHai
+ */
 import Mock from 'mockjs'
 import qs from 'qs'
 const Util = Mock.Util
@@ -167,8 +175,7 @@ const getQueryParameters = (options) => {
 // const params = getPostParameters(options)
 // params.xx  params.yy
 const getPostParameters = (options) => {
-  const postData = JSON.parse(options.postData)
-  const params = postData.params
+  const params = JSON.parse(options.postData)
   if (!params) {
     return {}
   }

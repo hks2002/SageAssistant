@@ -6,8 +6,9 @@
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli/quasar-conf-js
 
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-env node */
-const ESLintPlugin = require('eslint-webpack-plugin')
 const { configure } = require('quasar/wrappers')
 
 const fs = require('fs')
@@ -25,7 +26,7 @@ module.exports = configure(function (ctx) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli/boot-files
-    boot: ['i18n', 'axios', 'ebus', 'mock'],
+    boot: ['i18n', 'mock'],
 
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
     css: ['app.scss'],
@@ -34,19 +35,19 @@ module.exports = configure(function (ctx) {
     extras: [
       // 'ionicons-v4',
       // 'mdi-v5',
-      'fontawesome-v5',
+      'fontawesome-v6',
       // 'eva-icons',
       // 'themify',
       // 'line-awesome',
       // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
 
-      'roboto-font' // optional, you are not bound to it
-      // "material-icons", // optional, you are not bound to it
+      'roboto-font', // optional, you are not bound to it
+      'material-icons' // optional, you are not bound to it
     ],
 
     // Full list of options: https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
+      vueRouterMode: 'history', // available values: 'hash', 'history'
 
       // transpile: false,
 
@@ -64,29 +65,6 @@ module.exports = configure(function (ctx) {
       // Options below are automatically set depending on the env, set them if you want to override
       // extractCSS: false,
 
-      // https://v2.quasar.dev/quasar-cli/handling-webpack
-      // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
-      chainWebpack(chain) {
-        chain
-          .plugin('eslint-webpack-plugin')
-          .use(ESLintPlugin, [{ extensions: ['js', 'vue'] }])
-
-        // Vue3Lottie instead lottie-player, keep codes here for future,
-        // add cumstomer html tag for vue
-        // chain.module
-        //   .rule('vue')
-        //   .use('vue-loader')
-        //   .loader('vue-loader')
-        //   .tap((options) => {
-        //     options.compilerOptions = {
-        //       ...(options.compilerOptions || {}),
-        //       isCustomElement: (tag) => /^lottie-player/.test(tag)
-        //     }
-        //     return options
-        //   })
-      },
-
-      scopeHoisting: true,
       afterBuild() {
         let pkg = fs.readFileSync('package.json')
         const timeStamp = moment().format('MMDDHHmmss')
@@ -123,8 +101,10 @@ module.exports = configure(function (ctx) {
           ...cfg.resolve.alias, // This adds the existing alias
 
           // Add your own alias like this
-          '@': path.resolve(__dirname, './src')
+          '@': path.resolve(__dirname, './src'),
+          '@ctr': path.resolve(__dirname, './src/components/.controls')
         }
+        console.debug(' webpack-aliases:', cfg.resolve.alias)
       }
     },
 
@@ -148,7 +128,7 @@ module.exports = configure(function (ctx) {
     framework: {
       config: {},
 
-      iconSet: 'fontawesome-v5', // Quasar icon set
+      // iconSet: 'material-icons', // Quasar icon set
       // lang: 'en-US', // Quasar language pack
 
       // For special cases outside of where the auto-import stategy can have an impact
@@ -185,11 +165,7 @@ module.exports = configure(function (ctx) {
       maxAge: 1000 * 60 * 60 * 24 * 30,
       // Tell browser when a file from the server should expire from cache (in ms)
 
-      chainWebpackWebserver(chain) {
-        chain
-          .plugin('eslint-webpack-plugin')
-          .use(ESLintPlugin, [{ extensions: ['js', 'vue'] }])
-      },
+      chainWebpackWebserver(/* chain */) {},
 
       middlewares: [
         ctx.prod ? 'compression' : '',
@@ -280,17 +256,15 @@ module.exports = configure(function (ctx) {
       },
 
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
-      chainWebpackMain(chain) {
-        chain
-          .plugin('eslint-webpack-plugin')
-          .use(ESLintPlugin, [{ extensions: ['js'] }])
+      chainWebpackMain(/* chain */) {
+        // do something with the Electron main process Webpack cfg
+        // extendWebpackMain also available besides this chainWebpackMain
       },
 
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
-      chainWebpackPreload(chain) {
-        chain
-          .plugin('eslint-webpack-plugin')
-          .use(ESLintPlugin, [{ extensions: ['js'] }])
+      chainWebpackPreload(/* chain */) {
+        // do something with the Electron main process Webpack cfg
+        // extendWebpackPreload also available besides this chainWebpackPreload
       }
     }
   }

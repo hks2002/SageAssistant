@@ -1,6 +1,6 @@
 {
   "name": "web",
-  "version": "3.1.0514203448",
+  "version": "4.0.0514203448",
   "description": "An Assistant for Sage",
   "productName": "SageAssistantWeb",
   "author": "Robert Huang<r.huang@dedienne-aero.com><56649783@qq.com>",
@@ -10,7 +10,7 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "@quasar/extras": "^1.11.1",
+    "@quasar/extras": "^1.14.0",
     "axios": "^0.21.2",
     "core-js": "^3.18.1",
     "echarts": "^5.2.1",
@@ -18,28 +18,28 @@
     "lodash": "^4.17.21",
     "mitt": "^2.1.0",
     "pinia": "^2.0.14",
-    "quasar": "^2.1.0",
+    "quasar": "^2.7.1",
     "vue": "^3.0.0",
     "vue-i18n": "^9.1.6",
     "vue-router": "^4.0.0",
     "vue3-lottie": "^2.1.0"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.13.14",
+    "@quasar/app-webpack": "^3.5.3",
     "@quasar/cli": "^1.2.1",
     "@types/echarts": "^4.9.7",
-    "@babel/eslint-parser": "^7.13.14",
-    "@quasar/app-webpack": "^3.4.5",
     "@types/lodash": "^4.14.170",
-    "@typescript-eslint/parser": "^5.20.0",
     "@typescript-eslint/eslint-plugin": "^5.23.0",
+    "@typescript-eslint/parser": "^5.20.0",
     "eslint": "^8.13.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-quasar": "^1.1.0",
     "eslint-plugin-vue": "^8.6.0",
     "eslint-webpack-plugin": "^3.1.1",
-    "prettier": "^2.5.1",
     "mockjs": "^1.1.0",
-    "moment": "^2.29.3"
+    "moment": "^2.29.3",
+    "prettier": "^2.5.1"
   },
   "browserslist": [
     "last 10 Chrome versions",

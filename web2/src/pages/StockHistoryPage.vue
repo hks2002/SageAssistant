@@ -1,12 +1,12 @@
 <template>
-  <vue3-lottie
-    animationLink="/json/403.json"
-    v-if="!isAuthorised('CONSSAR')"
-    class="fixed-center"
-  />
-  <q-card class="row q-gutter-sm q-pa-sm" v-else>
-    <q-list class="row q-gutter-sm q-pa-sm">
+  <q-page>
+    <ExceptionLottie :ErrorCode="403" v-if="!isAuthorised('CONSSAR')" />
+    <q-list
+      class="row q-gutter-sm q-pt-sm q-px-sm"
+      v-if="isAuthorised('CONSSAR')"
+    >
       <q-input
+        dense
         clearable
         outlined
         hide-hint
@@ -21,6 +21,7 @@
       >
       </q-input>
       <q-input
+        dense
         outlined
         hide-bottom-space
         debounce="1000"
@@ -32,6 +33,7 @@
         @update:model-value="doUpdate"
       />
       <q-input
+        dense
         outlined
         hide-bottom-space
         debounce="1000"
@@ -43,47 +45,49 @@
         @update:model-value="doUpdate"
       />
     </q-list>
-    <q-list class="row q-gutter-sm q-px-sm">
-      <q-markup-table-stock-history-vue
+    <q-list class="row q-gutter-sm q-pa-sm" v-if="isAuthorised('CONSSAR')">
+      <QMarkupTableStockHistoryVue
         :PnOrName="PnOrName"
         :dateFrom="dateFrom"
         :dateTo="dateTo"
-        :style="{ height: tableHeight + 'px', width: tableWidth + 'px' }"
+        :style="{ height: tableHeight + 'px' }"
       />
     </q-list>
-  </q-card>
+  </q-page>
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeMount } from 'vue'
-import { useQuasar, date } from 'quasar'
-import { isAuthorised } from 'assets/auth'
-import QMarkupTableStockHistoryVue from './QMarkupTableStockHistory.vue'
+import { isAuthorised } from '@/assets/auth'
+import ExceptionLottie from '@/components/lottie/ExceptionLottie.vue'
+import QMarkupTableStockHistoryVue from '@/components/stock/QMarkupTableStockHistory'
+import { date, useQuasar } from 'quasar'
+import { computed, ref } from 'vue'
 
+/* eslint-disable */
+const props = defineProps({
+  pageHeight: { type: Number, default: 0 /* not passing  */ }
+})
+
+// common vars
 const $q = useQuasar()
 
-const tableHeight = ref(250)
-const tableWidth = ref(600)
-
+// page vars
+const PnOrName = ref('')
 const { formatDate, addToDate } = date
 const nowTimeStamp = Date.now()
 const fromTimeStamp = addToDate(nowTimeStamp, { months: -1 })
 const dateFrom = ref(formatDate(fromTimeStamp, 'YYYY-MM-DD'))
 const dateTo = ref(formatDate(nowTimeStamp, 'YYYY-MM-DD'))
 
-const PnOrName = ref('')
+// computed vars
+const tableHeight = computed(() => {
+  // should consider element margin/padding value
+  return props.pageHeight - 36 - 36
+})
+
+// actions
 const doUpdate = () => {
   // it doesn't need actually.
 }
-
-// 92 is the input height
-onBeforeMount(() => {
-  console.debug('onBeforeMount StockHistory')
-  // should consider element margin/padding value
-  tableWidth.value = $q.pageBodyWidth - 8 * 2
-  tableHeight.value = $q.pageBodyHeight - 36 - 72 - 8
-})
-
-onMounted(() => {})
 </script>
 <style lang="scss" scoped></style>

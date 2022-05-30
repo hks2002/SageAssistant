@@ -1,4 +1,11 @@
-<!--  -->
+<!--
+ * @Author         : Robert Huang<56649783@qq.com>
+ * @Date           : 2022-03-25 11:01:23
+ * @LastEditors    : Robert Huang<56649783@qq.com>
+ * @LastEditTime   : 2022-05-30 00:38:19
+ * @FilePath       : \web2\src\layouts\PageHeader.vue
+ * @CopyRight      : Dedienne Aerospace China ZhuHai
+-->
 <template>
   <q-header elevated :style="'height:' + height + 'px'">
     <q-toolbar>
@@ -17,6 +24,7 @@
         round
         size="sm"
         class="q-mr-xs"
+        @click="goHome"
       >
         <q-avatar dense>
           <img src="/imgs/logo.svg" style="background-color: white" />
@@ -26,10 +34,33 @@
       <div class="q-gutter-xs q-ml-sm row items-center no-wrap">
         <q-select
           dense
+          borderless
+          emit-value
+          map-options
+          options-dense
+          color="primary"
           v-model="site"
-          @update:model-value="setCookieSite"
           :options="siteList"
+          @update:model-value="setCookieSite"
         >
+          <template #selected-item="{ opt }">
+            <span class="text-white">{{ opt }}</span>
+          </template>
+        </q-select>
+        <q-select
+          dense
+          borderless
+          emit-value
+          map-options
+          options-dense
+          color="primary"
+          v-model="locale"
+          :options="langOptions"
+          @update:model-value="changeLanguage"
+        >
+          <template #selected-item="{ opt }">
+            <span class="text-white">{{ opt.label }}</span>
+          </template>
         </q-select>
         <q-btn
           type="a"
@@ -82,19 +113,23 @@
 </template>
 
 <script setup>
-import { ref, onBeforeUnmount, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { infoDialog, notifyError } from 'assets/common'
-import { ebus } from 'boot/ebus'
+import { axiosGet } from '@/assets/axiosActions'
+import { infoDialog } from '@/assets/common'
+import { ebus } from '@/assets/ebus'
 import {
-  getToken,
-  removeToken,
-  getLoginData,
   getCookies,
+  getLoginData,
+  removeToken,
   setCookies
-} from 'assets/storage'
-import { axios } from 'boot/axios'
+} from '@/assets/storage'
+import { usePagesStore } from '@/stores/pageManager'
+import { useQuasar } from 'quasar'
+import languages from 'quasar/lang/index.json'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
+/* eslint-disable */
 const props = defineProps({
   height: {
     type: Number,
@@ -103,14 +138,51 @@ const props = defineProps({
   }
 })
 
+// common vars
+const pagesStore = usePagesStore()
 const $router = useRouter()
+const $q = useQuasar()
 
+// header vars
 const site = ref(null)
 const siteList = ref(null)
 const userInfo = ref('Your name')
 const sageInfo = ref('Sage')
 const totalInformCount = ref(0)
 
+// languages vars
+const { locale, t } = useI18n()
+const appLanguages = languages.filter((lang) =>
+  ['en-US', 'zh-CN', 'fr', 'de'].includes(lang.isoName)
+)
+const langOptions = appLanguages.map((lang) => ({
+  label: lang.nativeName,
+  value: lang.isoName
+}))
+
+// events
+onMounted(() => {
+  if (getCookies('site')) {
+    site.value = getCookies('site')
+  } else {
+    site.value = 'ZHU'
+    setCookieSite()
+  }
+
+  axiosGet('/Data/Sites').then((data) => {
+    siteList.value = data
+    setCookies('siteList', siteList.value, 3600 * 24 * 7)
+  })
+
+  updateLoginData()
+  ebus.on('updateLoginData', updateLoginData)
+})
+
+onBeforeUnmount(() => {
+  ebus.off('updateLoginData', updateLoginData)
+})
+
+// actions
 const toggleLeftDrawer = () => {
   ebus.emit('toggleLeftDrawer')
 }
@@ -121,12 +193,17 @@ const setCookieSite = () => {
 }
 
 const showHelp = () => {
-  infoDialog('In Developping')
+  infoDialog(t('In Developping'))
+}
+
+const goHome = () => {
+  pagesStore.$reset()
+  $router.push({ name: 'Home' })
 }
 
 const doLogout = () => {
   removeToken()
-  $router.push('/Login')
+  $router.push({ name: 'Login' })
 }
 
 const updateLoginData = () => {
@@ -137,36 +214,23 @@ const updateLoginData = () => {
   }
 }
 
-updateLoginData()
+const changeLanguage = (val) => {
+  // This change $t() in template automaticly,
+  locale.value = val
+  // Json data import won't update automaticly,
+  // so send a signal
+  ebus.emit('changeLanguage')
 
-if (getCookies('site')) {
-  site.value = getCookies('site')
-} else {
-  site.value = 'ZHU'
-  setCookieSite()
+  // dynamic import, so loading on demand only
+  // save to cookies also
+  Promise.resolve(require('quasar/lang/' + val)).then((lang) => {
+    $q.lang.set(lang.default)
+    $q.cookies.set('locale', lang.default.isoName, {
+      path: '/',
+      expires: '7d'
+    })
+  })
 }
-
-onMounted(() => {
-  console.debug('onMounted PageHeader')
-
-  axios
-    .get('/Data/Sites')
-    .then((response) => {
-      siteList.value = response.data
-      setCookies('siteList', siteList.value, 3600 * 24 * 7)
-    })
-    .catch((e) => {
-      notifyError('Loading Sites Failed!')
-    })
-})
-
-// event handing
-ebus.on('updateLoginData', () => {
-  updateLoginData()
-})
-onBeforeUnmount(() => {
-  ebus.off('updateLoginData')
-})
 </script>
 <style lang="scss" scoped>
 .q-field__native > span {

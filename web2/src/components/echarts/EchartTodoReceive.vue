@@ -1,3 +1,11 @@
+<!--
+ * @Author         : Robert Huang<56649783@qq.com>
+ * @Date           : 2022-03-25 11:01:23
+ * @LastEditors    : Robert Huang<56649783@qq.com>
+ * @LastEditTime   : 2022-05-29 01:51:59
+ * @FilePath       : \web2\src\components\echarts\EchartTodoReceive.vue
+ * @CopyRight      : Dedienne Aerospace China ZhuHai
+-->
 <template>
   <q-item>
     <div id="EchartTodoReceive" style="height: 100%; width: 100%" />
@@ -8,33 +16,41 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue'
-import { date } from 'quasar'
-import { notifyError } from 'assets/common'
-import { useI18n } from 'vue-i18n'
-import { axios } from 'boot/axios'
-
+import { axiosGet } from '@/assets/axiosActions'
 import {
-  echarts,
-  defaultXAxisTime,
-  defaultTooltip,
-  defaultToolbox,
+  defaultDataZoom,
   defaultLegend,
-  defaultScatterSerial
-} from 'assets/echartsCfg.js'
-
+  defaultScatterSerial,
+  defaultToolbox,
+  defaultTooltip,
+  defaultXAxisTime,
+  echarts
+} from '@/assets/echartsCfg.js'
 import _groupBy from 'lodash/groupBy'
-import _forEach from 'lodash/forEach'
-import _sortBy from 'lodash/sortBy'
 import _map from 'lodash/map'
+import _sortBy from 'lodash/sortBy'
 import _uniq from 'lodash/uniq'
+import { date } from 'quasar'
+import {
+  computed,
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  ref,
+  watch
+} from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   site: String
 })
 
-const { t } = useI18n({ useScope: 'global' })
+// common vars
+const { t } = useI18n()
+const showLoading = ref(false)
 
+// echart vars
 let eChart = null
 let data = []
 let lengend = []
@@ -61,26 +77,34 @@ const dimensions = [
   'CreateUser',
   'DaysLeft'
 ]
-const showLoading = ref(false)
 
+// computed vars
+const title = computed(() => {
+  return (
+    t('BOMs purchased from suppliers and to be received ') +
+    ' [' +
+    props.site +
+    ']'
+  )
+})
+
+// actions
 const doUpdate = () => {
+  if (!props.site) return
+
   showLoading.value = true
 
-  axios
-    .get('/Data/TobeReceive?Site=' + props.site)
+  axiosGet('/Data/TobeReceive?Site=' + props.site)
     .then((response) => {
-      data = response.data
+      data = response
       prepareData()
       setEchart()
-    })
-    .catch((e) => {
-      console.error(e)
-      notifyError(t('Loading TobeReceive Failed!'))
     })
     .finally(() => {
       showLoading.value = false
     })
 }
+
 const prepareData = () => {
   const newDate = new Date()
   data.forEach((row) => {
@@ -92,7 +116,7 @@ const prepareData = () => {
   dataset = []
   series = []
 
-  _forEach(lengend, (value, index) => {
+  lengend.forEach((value, index) => {
     dataset[index] = { source: dataByLengend[value] }
     series[index] = defaultScatterSerial(
       index,
@@ -110,37 +134,21 @@ const setEchart = () => {
   eChart.setOption(
     {
       title: {
-        text:
-          t('BOMs purchased from suppliers and to be received by ') +
-          props.site,
+        text: title.value,
         left: 'center'
       },
       legend: defaultLegend,
-      toolbox: defaultToolbox(
-        dimensions,
-        data,
-        t('BOMs purchased from suppliers and to be received by ') + props.site
-      ),
+      toolbox: defaultToolbox(dimensions, data, title.value),
       tooltip: defaultTooltip,
       xAxis: defaultXAxisTime,
-      grid: [{ left: '5%', right: '5%' }],
+      grid: [{ left: 40, right: 40 }],
       yAxis: [
         {
           type: 'category',
           show: false
         }
       ],
-      dataZoom: [
-        {
-          type: 'slider',
-          xAxisIndex: [0],
-          height: 15
-        },
-        {
-          type: 'slider',
-          yAxisIndex: [0]
-        }
-      ],
+      dataZoom: defaultDataZoom('xy'),
       dataset: dataset,
       series: series
     },
@@ -148,26 +156,40 @@ const setEchart = () => {
   )
 }
 
-onMounted(() => {
-  console.debug('onMounted EchartTodoReceive')
-  echarts.init(document.getElementById('EchartTodoReceive')).dispose()
-  eChart = echarts.init(document.getElementById('EchartTodoReceive'))
+const resize = () => {
+  eChart.resize()
+}
 
-  if (props.site) {
-    doUpdate()
-  }
+// events
+onMounted(() => {
+  eChart = echarts.init(document.getElementById('EchartTodoReceive'))
+  doUpdate()
 })
 
-// Don't use watchEffect, it run before Mounted.
+onBeforeUnmount(() => {
+  eChart.dispose()
+})
+
+onActivated(() => {
+  // when use keep alive, must use activated/deactivated
+  window.addEventListener('resize', resize)
+  resize()
+})
+
+onDeactivated(() => {
+  // when use keep alive, must use activated/deactivated
+  window.removeEventListener('resize', resize)
+})
+
 watch(
+  // Don't use watchEffect, it run before Mounted.
   () => [props.site],
   (...newAndold) => {
     // newAndold[1]:old
     // newAndold[0]:new
     console.debug('watch:' + newAndold[1] + ' ---> ' + newAndold[0])
-    if (newAndold[0][0]) {
-      doUpdate()
-    }
+
+    doUpdate()
   }
 )
 </script>

@@ -101,28 +101,28 @@
 </template>
 
 <script setup>
-import { defineComponent, onMounted, ref, watch, computed } from 'vue'
-import { notifyError } from 'assets/common'
-import { axios } from 'boot/axios'
+import { axiosGet } from '@/assets/axiosActions'
+import { onMounted, ref, watch } from 'vue'
 
 const props = defineProps({
   supplierCode: String
 })
 
-const supplierInfo = ref([])
+//common vars
 const showLoading = ref(false)
 
+// component vars
+const supplierInfo = ref([])
+
+// actions
 const doUpdate = () => {
+  if (!props.supplierCode) return
+
   showLoading.value = true
 
-  axios
-    .get('/Data/SupplierDetails?SupplierCode=' + props.supplierCode)
+  axiosGet('/Data/SupplierDetails?SupplierCode=' + props.supplierCode)
     .then((response) => {
-      supplierInfo.value = response.data
-    })
-    .catch((e) => {
-      console.error(e)
-      notifyError('Loading Supplier Info Failed!')
+      supplierInfo.value = response
     })
     .finally(() => {
       showLoading.value = false
@@ -137,11 +137,9 @@ const WebSiteUrl = (url) => {
   }
 }
 
+// events
 onMounted(() => {
-  console.debug('onMounted QItemSupplierInfo')
-  if (props.supplierCode) {
-    doUpdate()
-  }
+  doUpdate()
 })
 
 watch(
@@ -150,13 +148,12 @@ watch(
     // newAndold[1]:old
     // newAndold[0]:new
     console.debug('watch:' + newAndold[1] + ' ---> ' + newAndold[0])
-    if (newAndold[0][0]) {
-      doUpdate()
-    }
+
+    doUpdate()
   }
 )
 </script>
-<style lang="sass">
+<style lang="sass" scoped>
 .q-item
   min-height: 24px
 </style>

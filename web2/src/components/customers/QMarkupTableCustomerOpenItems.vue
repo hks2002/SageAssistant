@@ -7,7 +7,7 @@
     <thead style="position: sticky; top: 0px; z-index: 1">
       <tr>
         <td colspan="11" class="bg-teal text-h6 text-white shadow-2">
-          OpenItems(All-{{ customerOpenItems.length }})
+          {{ $t('OpenItems') }}({{ $t('All') }}-{{ customerOpenItems.length }})
           <q-btn dense flat icon="fas fa-download" @click="download()" />
         </td>
       </tr>
@@ -44,10 +44,10 @@
 </template>
 
 <script setup>
-import { defineComponent, onMounted, ref, watch } from 'vue'
-import { notifyError } from 'assets/common'
-import { axios } from 'boot/axios'
+import { axiosGet } from '@/assets/axiosActions'
 import { jsonToExcel } from 'assets/dataUtils'
+import { onMounted, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   customerCode: String,
@@ -55,32 +55,33 @@ const props = defineProps({
   dateTo: String
 })
 
-const customerOpenItems = ref([])
+// common vars
+const { t } = useI18n()
 const showLoading = ref(false)
 
+// component vars
+const customerOpenItems = ref([])
+
+// actions
 const doUpdate = () => {
   showLoading.value = true
 
-  axios
-    .get(
-      '/Data/CustomerOpenItems?CustomerCode=' +
-        props.customerCode +
-        '&DateFrom=' +
-        props.dateFrom +
-        '&DateTo=' +
-        props.dateTo
-    )
+  axiosGet(
+    '/Data/CustomerOpenItems?CustomerCode=' +
+      props.customerCode +
+      '&DateFrom=' +
+      props.dateFrom +
+      '&DateTo=' +
+      props.dateTo
+  )
     .then((response) => {
-      customerOpenItems.value = response.data
-    })
-    .catch((e) => {
-      console.error(e)
-      notifyError('Loading Customer Open Items Failed!')
+      customerOpenItems.value = response
     })
     .finally(() => {
       showLoading.value = false
     })
 }
+
 const download = () => {
   const header = [
     'Site',
@@ -97,15 +98,13 @@ const download = () => {
   jsonToExcel(
     header,
     customerOpenItems.value,
-    props.customerCode + '-OpenItems'
+    props.customerCode + '-' + t('OpenItems')
   )
 }
 
+// events
 onMounted(() => {
-  console.debug('onMounted CustomerOpenItems')
-  if (props.customerCode) {
-    doUpdate()
-  }
+  doUpdate()
 })
 
 // Don't use watchEffect, it run before Mounted.
@@ -116,9 +115,8 @@ watch(
     // newAndold[0]:new
     console.debug('watch:' + newAndold[1] + ' ---> ' + newAndold[0])
     // customerCode must not be null
-    if (newAndold[0][0]) {
-      doUpdate()
-    }
+
+    doUpdate()
   }
 )
 </script>

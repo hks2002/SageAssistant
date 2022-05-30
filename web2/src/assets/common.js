@@ -1,3 +1,11 @@
+/***
+ * @Author         : Robert Huang<56649783@qq.com>
+ * @Date           : 2022-03-25 11:01:23
+ * @LastEditors    : Robert Huang<56649783@qq.com>
+ * @LastEditTime   : 2022-05-28 23:03:26
+ * @FilePath       : \web2\src\assets\common.js
+ * @CopyRight      : Dedienne Aerospace China ZhuHai
+ */
 import clone from 'lodash/clone'
 import { Dialog, Loading, Notify, QSpinnerBars } from 'quasar'
 

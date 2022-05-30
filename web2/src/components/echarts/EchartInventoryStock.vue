@@ -1,3 +1,11 @@
+<!--
+ * @Author         : Robert Huang<56649783@qq.com>
+ * @Date           : 2022-03-25 11:01:23
+ * @LastEditors    : Robert Huang<56649783@qq.com>
+ * @LastEditTime   : 2022-05-29 01:00:54
+ * @FilePath       : \web2\src\components\echarts\EchartInventoryStock.vue
+ * @CopyRight      : Dedienne Aerospace China ZhuHai
+-->
 <template>
   <q-item>
     <div id="EchartInventoryStock" style="height: 100%; width: 100%" />
@@ -8,32 +16,30 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
-import { notifyError } from 'assets/common'
-import { useI18n } from 'vue-i18n'
-import { axios } from 'boot/axios'
-
-import _groupBy from 'lodash/groupBy'
-import _forEach from 'lodash/forEach'
-import _sumBy from 'lodash/sumBy'
-import _uniq from 'lodash/uniq'
-import _map from 'lodash/map'
-import _get from 'lodash/get'
-
+import { axiosGet } from '@/assets/axiosActions'
 import {
-  echarts,
-  defaultTooltip,
-  defaultToolbox,
+  defaultBarStackedSerial,
   defaultLegend,
-  defaultBarStackedSerial
-} from 'assets/echartsCfg.js'
+  defaultToolbox,
+  defaultTooltip,
+  echarts
+} from '@/assets/echartsCfg.js'
+import _forEach from 'lodash/forEach'
+import _groupBy from 'lodash/groupBy'
+import _map from 'lodash/map'
+import _uniq from 'lodash/uniq'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   pnRoot: String
 })
 
-const { t } = useI18n({ useScope: 'global' })
+// common vars
+const { t } = useI18n()
+const showLoading = ref(false)
 
+// echart vars
 let eChart = null
 let data = []
 let lengend = []
@@ -42,21 +48,18 @@ let bars = []
 let dataset = []
 let series = []
 const dimensions = ['PN', 'StockSite', 'Qty']
-const showLoading = ref(false)
 
+// actions
 const doUpdate = (pnRoot) => {
+  if (!props.pnRoot) return
+
   showLoading.value = true
 
-  axios
-    .get('/Data/InventoryStock?PnRoot=' + pnRoot)
+  axiosGet('/Data/InventoryStock?PnRoot=' + pnRoot)
     .then((response) => {
-      data = response.data
+      data = response
       prepareData()
       setEchart()
-    })
-    .catch((e) => {
-      console.error(e)
-      notifyError(t('Loading Inventory Stock Summary Failed!'))
     })
     .finally(() => {
       showLoading.value = false
@@ -94,6 +97,7 @@ const setEchart = () => {
       tooltip: defaultTooltip,
       legend: defaultLegend,
       toolbox: defaultToolbox(dimensions, data, t('Stock Info')),
+      grid: { bottom: 20, top: 40, right: 20 },
       xAxis: {
         type: 'category',
         data: bars
@@ -120,12 +124,14 @@ const setEchart = () => {
   )
 }
 
+// events
 onMounted(() => {
-  console.debug('onMounted EchartInventoryStock')
   eChart = echarts.init(document.getElementById('EchartInventoryStock'))
-  if (props.pnRoot) {
-    doUpdate(props.pnRoot)
-  }
+  doUpdate(props.pnRoot)
+})
+
+onBeforeUnmount(() => {
+  eChart.dispose()
 })
 
 // Don't use watchEffect, it run before Mounted.
@@ -133,9 +139,8 @@ watch(
   () => props.pnRoot,
   (newVal, oldVal) => {
     console.debug('watch:' + oldVal + ' ---> ' + newVal)
-    if (newVal) {
-      doUpdate(newVal)
-    }
+
+    doUpdate(newVal)
   }
 )
 </script>

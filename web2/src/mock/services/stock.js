@@ -1,11 +1,17 @@
+/***
+ * @Author         : Robert Huang<56649783@qq.com>
+ * @Date           : 2022-03-25 11:01:23
+ * @LastEditors    : Robert Huang<56649783@qq.com>
+ * @LastEditTime   : 2022-05-28 23:17:12
+ * @FilePath       : \web2\src\mock\services\stock.js
+ * @CopyRight      : Dedienne Aerospace China ZhuHai
+ */
 import { getQueryParameters } from '@/assets/mockExt'
 import _forEach from 'lodash/forEach'
 import Mock from 'mockjs'
 
 Mock.mock(RegExp('^(/Data/StockSummary)' + '.*'), () => {
   console.debug('\u001b[35m' + '[Mocking] ', 'StockSummary')
-
-  // const Site = getQueryParameter(options, 'site')
 
   // list = {data:[{},{}]}
   const list = Mock.mock({
@@ -36,10 +42,10 @@ Mock.mock(RegExp('^(/Data/StockSummary)' + '.*'), () => {
 Mock.mock(RegExp('^(/Data/StockHistory)' + '.*'), (options) => {
   console.debug('\u001b[35m' + '[Mocking] ', 'StockHistory')
 
-  // const Site = getQueryParameter(options, 'site')
-  const PnOrName = getQueryParameters(options, 'PnOrName')
-  const DateFrom = getQueryParameters(options, 'DateFrom')
-  const DateTo = getQueryParameters(options, 'DateTo')
+  const query = getQueryParameters(options)
+  const PnOrName = query['PnOrName']
+  const DateFrom = query['DateFrom']
+  const DateTo = query['DateTo']
 
   // list = {data:[{},{}]}
   if (DateFrom || DateTo) {

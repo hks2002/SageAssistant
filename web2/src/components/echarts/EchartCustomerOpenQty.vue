@@ -8,23 +8,27 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue'
-import { notifyError } from 'assets/common'
-import { useI18n } from 'vue-i18n'
-import { axios } from 'boot/axios'
-
+import { axiosGet } from '@/assets/axiosActions'
 import {
-  echarts,
-  defaultTooltip,
-  defaultToolbox,
+  defaultBarSerial,
   defaultLegend,
-  defaultBarSerial
-} from 'assets/echartsCfg.js'
-
-import _groupBy from 'lodash/groupBy'
+  defaultToolbox,
+  defaultTooltip,
+  echarts
+} from '@/assets/echartsCfg.js'
 import _forEach from 'lodash/forEach'
-import _uniq from 'lodash/uniq'
+import _groupBy from 'lodash/groupBy'
 import _map from 'lodash/map'
+import _uniq from 'lodash/uniq'
+import {
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  ref,
+  watch
+} from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   customerCode: String,
@@ -32,8 +36,11 @@ const props = defineProps({
   dateTo: String
 })
 
-const { t } = useI18n({ useScope: 'global' })
+// common vars
+const { t } = useI18n()
+const showLoading = ref(false)
 
+// echart vars
 let eChart = null
 let data = []
 let lengend = []
@@ -42,21 +49,18 @@ let sites = []
 let dataset = []
 let series = []
 const dimensions = ['Site', 'CustomerCode', 'CountType', 'Qty']
-const showLoading = ref(false)
 
+// actions
 const doUpdate = () => {
+  if (!props.customerCode) return
+
   showLoading.value = true
 
-  axios
-    .get('/Data/CustomerOpenQty?CustomerCode=' + props.customerCode)
+  axiosGet('/Data/CustomerOpenQty?CustomerCode=' + props.customerCode)
     .then((response) => {
-      data = response.data
+      data = response
       prepareData()
       setEchart()
-    })
-    .catch((e) => {
-      console.error(e)
-      notifyError(t('Loading Customer Open Qty Failed!'))
     })
     .finally(() => {
       showLoading.value = false
@@ -121,24 +125,44 @@ const setEchart = () => {
   )
 }
 
+const resize = () => {
+  eChart.resize()
+}
+
+// events
 onMounted(() => {
-  console.debug('onMounted EchartCustomerOpenQty')
-  eChart = echarts.init(document.getElementById('EchartCustomerOpenQty'))
-  if (props.customerCode) {
-    doUpdate()
-  }
+  eChart = echarts.init(document.getElementById('EchartCustomerOpenQty'))  
+  // when not use keep alive, use mounted/unmounted
+  window.addEventListener('resize', resize)
+  doUpdate()
 })
 
-// Don't use watchEffect, it run before Mounted.
+onBeforeUnmount(() => {
+  // when not use keep alive, use mounted/unmounted
+  window.removeEventListener('resize', resize)
+  eChart.dispose()
+})
+
+onActivated(() => {
+  // when use keep alive, must use activated/deactivated
+  window.addEventListener('resize', resize)
+  resize()
+})
+
+onDeactivated(() => {
+  // when use keep alive, must use activated/deactivated
+  window.removeEventListener('resize', resize)
+})
+
 watch(
+  // Don't use watchEffect, it run before Mounted.
   () => [props.customerCode, props.dateFrom, props.dateTo],
   (...newAndold) => {
     // newAndold[1]:old
     // newAndold[0]:new
     console.debug('watch:' + newAndold[1] + ' ---> ' + newAndold[0])
-    if (newAndold[0][0]) {
-      doUpdate()
-    }
+
+    doUpdate()
   }
 )
 </script>

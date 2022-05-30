@@ -1,4 +1,11 @@
-<!--  -->
+<!--
+ * @Author         : Robert Huang<56649783@qq.com>
+ * @Date           : 2022-03-25 11:01:23
+ * @LastEditors    : Robert Huang<56649783@qq.com>
+ * @LastEditTime   : 2022-05-28 22:58:34
+ * @FilePath       : \web2\src\layouts\PageFooter.vue
+ * @CopyRight      : Dedienne Aerospace China ZhuHai
+-->
 <template>
   <q-footer class="footer" :style="'height:' + height + 'px'">
     <q-bar class="fit flex-center footer">
@@ -10,20 +17,13 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
-
-// import axios from 'axios'
-
+/* eslint-disable */
 const props = defineProps({
   height: {
     type: Number,
     required: false,
     default: 18
   }
-})
-
-onMounted(() => {
-  console.debug('onMounted PageFooter')
 })
 </script>
 <style lang="scss" scoped>

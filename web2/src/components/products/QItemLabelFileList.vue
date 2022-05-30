@@ -1,47 +1,49 @@
 <template>
   <q-item-label class="relative-position">
-    <q-btn
-      v-for="file in files"
-      :key="file.ROWID"
-      type="a"
-      :icon="getDocIcon(file.DocType)"
-      class="q-mr-sm"
-      @click="clickBtn(file.Path)"
-      dense
-    >
-      <q-badge v-if="file.Cat === 'Drawing'" floating>D</q-badge>
-      <q-badge v-else-if="file.Cat === 'Manual'" floating>M</q-badge>
-      <q-badge v-else-if="file.Cat === 'Certificate'" floating>C</q-badge>
-      <q-badge v-else floating>?</q-badge>
-      <q-tooltip v-if="file.Cat === 'Drawing'" floating
-        >Drawing:{{ file.File }}</q-tooltip
+    <div class="q-gutter-sm">
+      <q-btn
+        v-for="file in files"
+        :key="file.ROWID"
+        type="a"
+        size="xs"
+        :icon="getDocIcon(file.DocType)"
+        @click="clickBtn(file.Path)"
+        dense
       >
-      <q-tooltip v-else-if="file.Cat === 'Manual'" floating
-        >Manual:{{ file.File }}</q-tooltip
-      >
-      <q-tooltip v-else-if="file.Cat === 'Certificate'" floating
-        >Certificate:{{ file.File }}</q-tooltip
-      >
-      <q-tooltip v-else floating>Unknown Category:{{ file.File }}</q-tooltip>
-      <q-menu touch-position context-menu>
-        <q-btn
-          icon="fas fa-trash-alt"
-          color="teal"
-          class="q-mr-sm"
-          @click="doDeleteFile(file.Path)"
-          dense
-        />
-      </q-menu>
-    </q-btn>
+        <q-badge v-if="file.Cat === 'Drawing'" floating>D</q-badge>
+        <q-badge v-else-if="file.Cat === 'Manual'" floating>M</q-badge>
+        <q-badge v-else-if="file.Cat === 'Certificate'" floating>C</q-badge>
+        <q-badge v-else floating>?</q-badge>
+        <q-tooltip v-if="file.Cat === 'Drawing'" floating
+          >Drawing:{{ file.File }}</q-tooltip
+        >
+        <q-tooltip v-else-if="file.Cat === 'Manual'" floating
+          >Manual:{{ file.File }}</q-tooltip
+        >
+        <q-tooltip v-else-if="file.Cat === 'Certificate'" floating
+          >Certificate:{{ file.File }}</q-tooltip
+        >
+        <q-tooltip v-else floating>Unknown Category:{{ file.File }}</q-tooltip>
+        <q-menu touch-position context-menu>
+          <q-btn
+            icon="fas fa-trash-alt"
+            color="teal"
+            size="sm"
+            @click="doDeleteFile(file.Path)"
+            dense
+          />
+        </q-menu>
+      </q-btn>
 
-    <q-btn
-      v-if="pn"
-      icon="fas fa-file-medical"
-      color="teal"
-      class="q-mr-sm"
-      dense
-      @click="showFileUploader = true"
-    />
+      <q-btn
+        v-if="pn"
+        icon="fas fa-file-medical"
+        color="teal"
+        size="sm"
+        dense
+        @click="showFileUploader = true"
+      />
+    </div>
     <q-dialog v-model="showFileUploader">
       <q-card>
         <q-card-section>
@@ -77,9 +79,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { axios } from '@/assets/axios'
 import { notifyError, notifySuccess } from 'assets/common'
-import { axios } from 'boot/axios'
+import { onMounted, ref, watch } from 'vue'
 
 const props = defineProps({
   pn: String,
@@ -167,7 +169,6 @@ const doUpdate = (pn) => {
 }
 
 onMounted(() => {
-  console.debug('onMounted')
   if (props.pn) {
     doUpdate(props.pn)
   }

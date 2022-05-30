@@ -1,5 +1,13 @@
+/***
+ * @Author         : Robert Huang<56649783@qq.com>
+ * @Date           : 2022-03-25 11:01:23
+ * @LastEditors    : Robert Huang<56649783@qq.com>
+ * @LastEditTime   : 2022-05-28 23:04:29
+ * @FilePath       : \web2\src\assets\reportUtils.js
+ * @CopyRight      : Dedienne Aerospace China ZhuHai
+ */
+import { axios } from '@/assets/axios'
 import { notifyError } from '@/assets/common'
-import { axios } from '@/boot/axios'
 
 const validateInput = (rpt, value) => {
   let rtn = false

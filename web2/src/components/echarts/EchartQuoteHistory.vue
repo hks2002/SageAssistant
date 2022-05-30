@@ -1,3 +1,11 @@
+<!--
+ * @Author         : Robert Huang<56649783@qq.com>
+ * @Date           : 2022-03-25 11:01:23
+ * @LastEditors    : Robert Huang<56649783@qq.com>
+ * @LastEditTime   : 2022-05-29 01:01:26
+ * @FilePath       : \web2\src\components\echarts\EchartQuoteHistory.vue
+ * @CopyRight      : Dedienne Aerospace China ZhuHai
+-->
 <template>
   <q-item>
     <div id="EchartQuoteHistory" style="height: 100%; width: 100%" />
@@ -8,36 +16,43 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue'
-import { notifyError } from 'assets/common'
-import { useI18n } from 'vue-i18n'
-import { axios } from 'boot/axios'
-
+import { axiosGet } from '@/assets/axiosActions'
 import {
-  echarts,
-  defaultXAxisTime,
-  defaultYAxisUSD,
-  defaultTooltip,
+  AttachedPieSerial,
   defaultDataZoom,
-  defaultToolbox,
   defaultLegend,
   defaultLineSerial,
-  AttachedPieSerial
-} from 'assets/echartsCfg.js'
-
-import _groupBy from 'lodash/groupBy'
+  defaultToolbox,
+  defaultTooltip,
+  defaultXAxisTime,
+  defaultYAxisUSD,
+  echarts
+} from '@/assets/echartsCfg.js'
 import _forEach from 'lodash/forEach'
+import _get from 'lodash/get'
+import _groupBy from 'lodash/groupBy'
+import _map from 'lodash/map'
 import _sumBy from 'lodash/sumBy'
 import _uniq from 'lodash/uniq'
-import _map from 'lodash/map'
-import _get from 'lodash/get'
+import {
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  ref,
+  watch
+} from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   pnRoot: String
 })
 
-const { t } = useI18n({ useScope: 'global' })
+// common vars
+const { t } = useI18n()
+const showLoading = ref(false)
 
+// echart vars
 let eChart = null
 let data = []
 let lengend = []
@@ -62,21 +77,18 @@ const dimensions = [
   'OrderNO'
 ]
 let dataZoomStartValue = '1900-01-01'
-const showLoading = ref(false)
 
+// actions
 const doUpdate = () => {
+  if (!props.pnRoot) return
+
   showLoading.value = true
 
-  axios
-    .get('/Data/QuoteHistory?PnRoot=' + props.pnRoot)
+  axiosGet('/Data/QuoteHistory?PnRoot=' + props.pnRoot)
     .then((response) => {
-      data = response.data
+      data = response
       prepareData()
       setEchart()
-    })
-    .catch((e) => {
-      console.error(e)
-      notifyError(t('Loading Quotes History Failed!'))
     })
     .finally(() => {
       showLoading.value = false
@@ -97,7 +109,7 @@ const prepareData = () => {
   dataset = []
   series = []
 
-  _forEach(dataByLengend, (value, index, array) => {
+  _forEach(dataByLengend, (value) => {
     const o = {}
     Object.defineProperty(o, 'SalesSite', {
       enumerable: true,
@@ -110,7 +122,7 @@ const prepareData = () => {
     dataCountedByLengend.push(o)
   })
 
-  _forEach(lengend, (value, index) => {
+  lengend.forEach((value, index) => {
     dataset[index] = { source: dataByLengend[value] }
     series[index] = defaultLineSerial(
       index,
@@ -149,7 +161,7 @@ const setEchart = () => {
       grid: [{ left: '5%', right: '25%' }],
       toolbox: defaultToolbox(dimensions, data, t('Quotes History')),
       tooltip: defaultTooltip,
-      dataZoom: defaultDataZoom(dataZoomStartValue),
+      dataZoom: defaultDataZoom('x', dataZoomStartValue),
       xAxis: defaultXAxisTime,
       yAxis: defaultYAxisUSD,
       dataset: dataset,
@@ -159,24 +171,40 @@ const setEchart = () => {
   )
 }
 
+const resize = () => {
+  eChart.resize()
+}
+
+// events
 onMounted(() => {
-  console.debug('onMounted EchartQuoteHistory')
   eChart = echarts.init(document.getElementById('EchartQuoteHistory'))
-  if (props.pnRoot) {
-    doUpdate(props.pnRoot)
-  }
+  doUpdate(props.pnRoot)
 })
 
-// Don't use watchEffect, it run before Mounted.
+onBeforeUnmount(() => {
+  eChart.dispose()
+})
+
+onActivated(() => {
+  // when use keep alive, must use activated/deactivated
+  window.addEventListener('resize', resize)
+  resize()
+})
+
+onDeactivated(() => {
+  // when use keep alive, must use activated/deactivated
+  window.removeEventListener('resize', resize)
+})
+
 watch(
+  // Don't use watchEffect, it run before Mounted.
   () => [props.pnRoot],
   (...newAndold) => {
     // newAndold[1]:old
     // newAndold[0]:new
     console.debug('watch:' + newAndold[1] + ' ---> ' + newAndold[0])
-    if (newAndold[0][0]) {
-      doUpdate()
-    }
+
+    doUpdate()
   }
 )
 </script>

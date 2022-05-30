@@ -1,3 +1,11 @@
+/***
+ * @Author         : Robert Huang<56649783@qq.com>
+ * @Date           : 2022-03-25 11:01:23
+ * @LastEditors    : Robert Huang<56649783@qq.com>
+ * @LastEditTime   : 2022-05-28 23:17:18
+ * @FilePath       : \web2\src\mock\services\suppliers.js
+ * @CopyRight      : Dedienne Aerospace China ZhuHai
+ */
 import { getQueryParameters } from '@/assets/mockExt'
 import { orderBy } from 'lodash'
 import Mock from 'mockjs'
@@ -5,7 +13,8 @@ import Mock from 'mockjs'
 Mock.mock(RegExp('^(/Data/SupplierHelper)' + '.*'), (options) => {
   console.debug('\u001b[35m' + '[Mocking] ', 'SupplierHelper')
 
-  const CodeOrName = getQueryParameters(options, 'SupplierCodeOrName')
+  const query = getQueryParameters(options)
+  const CodeOrName = query['SupplierName']
 
   // list = {data:[{},{}]}
   const list = Mock.mock({
@@ -25,7 +34,8 @@ Mock.mock(RegExp('^(/Data/SupplierHelper)' + '.*'), (options) => {
 Mock.mock(RegExp('^(/Data/SupplierDetails)' + '.*'), (options) => {
   console.debug('\u001b[35m' + '[Mocking] ', 'SupplierDetails')
 
-  const SupplierCode = getQueryParameters(options, 'SupplierCode')
+  const query = getQueryParameters(options)
+  const SupplierCode = query['SupplierCode']
   // list = {data:[{},{}]}
   const list = Mock.mock({
     'data|1-2': [
@@ -71,8 +81,8 @@ Mock.mock(RegExp('^(/Data/SupplierDetails)' + '.*'), (options) => {
 Mock.mock(RegExp('^(/Data/SupplierDeliveryHistory)' + '.*'), (options) => {
   console.debug('\u001b[35m' + '[Mocking] ', 'SupplierDeliveryHistory')
 
-  const SupplierCode = getQueryParameters(options, 'SupplierCode')
-
+  const query = getQueryParameters(options)
+  const SupplierCode = query['SupplierCode']
   // list = {data:[{},{}]}
   const list = Mock.mock({
     'data|1-500': [
@@ -110,8 +120,8 @@ Mock.mock(RegExp('^(/Data/SupplierDeliveryHistory)' + '.*'), (options) => {
 Mock.mock(RegExp('^(/Data/SupplierDelayHistory)' + '.*'), (options) => {
   console.debug('\u001b[35m' + '[Mocking] ', 'SupplierDelayHistory')
 
-  const SupplierCode = getQueryParameters(options, 'SupplierCode')
-
+  const query = getQueryParameters(options)
+  const SupplierCode = query['SupplierCode']
   // list = {data:[{},{}]}
   const list = Mock.mock({
     'data|1-500': [
@@ -150,8 +160,8 @@ Mock.mock(RegExp('^(/Data/SupplierDelayHistory)' + '.*'), (options) => {
 Mock.mock(RegExp('^(/Data/SupplierOpenAmount)' + '.*'), (options) => {
   console.debug('\u001b[35m' + '[Mocking] ', 'SupplierOpenAmount')
 
-  const SupplierCode = getQueryParameters(options, 'SupplierCode')
-
+  const query = getQueryParameters(options)
+  const SupplierCode = query['SupplierCode']
   // list = {data:[{},{}]}
   const list = Mock.mock({
     'data|1-5': [
@@ -204,7 +214,8 @@ Mock.mock(RegExp('^(/Data/SupplierOpenAmount)' + '.*'), (options) => {
 Mock.mock(RegExp('^(/Data/SupplierOpenItems)' + '.*'), (options) => {
   console.debug('\u001b[35m' + '[Mocking] ', 'SupplierOpenItems')
 
-  const SupplierCode = getQueryParameters(options, 'SupplierCode')
+  const query = getQueryParameters(options)
+  const SupplierCode = query['SupplierCode']
   // list = {data:[{},{}]}
   const list = Mock.mock({
     'data|1-50': [
@@ -239,7 +250,8 @@ Mock.mock(RegExp('^(/Data/SupplierOpenItems)' + '.*'), (options) => {
 Mock.mock(RegExp('^(/Data/SupplierOpenQty)' + '.*'), (options) => {
   console.debug('\u001b[35m' + '[Mocking] ', 'SupplierOpenQty')
 
-  const SupplierCode = getQueryParameters(options, 'SupplierCode')
+  const query = getQueryParameters(options)
+  const SupplierCode = query['SupplierCode']
   // list = {data:[{},{}]}
   const list = Mock.mock({
     'data|1-5': [
@@ -308,7 +320,8 @@ Mock.mock(RegExp('^(/Data/SupplierOpenQty)' + '.*'), (options) => {
 Mock.mock(RegExp('^(/Data/SupplierTotalAmount)' + '.*'), (options) => {
   console.debug('\u001b[35m' + '[Mocking] ', 'SupplierTotalAmount')
 
-  const SupplierCode = getQueryParameters(options, 'SupplierCode')
+  const query = getQueryParameters(options)
+  const SupplierCode = query['SupplierCode']
   // list = {data:[{},{}]}
   const list = Mock.mock({
     'data|1-5': [
@@ -361,7 +374,8 @@ Mock.mock(RegExp('^(/Data/SupplierTotalAmount)' + '.*'), (options) => {
 Mock.mock(RegExp('^(/Data/SupplierTotalQty)' + '.*'), (options) => {
   console.debug('\u001b[35m' + '[Mocking] ', 'SupplierTotalQty')
 
-  const SupplierCode = getQueryParameters(options, 'SupplierCode')
+  const query = getQueryParameters(options)
+  const SupplierCode = query['SupplierCode']
   // list = {data:[{},{}]}
   const list = Mock.mock({
     'data|1-5': [

@@ -1,9 +1,20 @@
+/***
+ * @Author         : Robert Huang<56649783@qq.com>
+ * @Date           : 2022-03-25 11:01:23
+ * @LastEditors    : Robert Huang<56649783@qq.com>
+ * @LastEditTime   : 2022-05-28 23:16:50
+ * @FilePath       : \web2\src\mock\services\fapiao.js
+ * @CopyRight      : Dedienne Aerospace China ZhuHai
+ */
 import { getQueryParameters } from '@/assets/mockExt'
 import Mock from 'mockjs'
 
+// 发票代码
 Mock.mock(RegExp('^(/Fapiao/Lbdm)' + '.*'), (options) => {
   console.debug('\u001b[35m' + '[Mocking] ', 'fapiaoLbdm')
-  const Lbdm = getQueryParameters(options, 'Lbdm')
+
+  const query = getQueryParameters(options)
+  const Lbdm = query['Lbdm']
   // list = {data:[]}
   const list = Mock.mock({
     'data|1-10': [
@@ -20,9 +31,12 @@ Mock.mock(RegExp('^(/Fapiao/Lbdm)' + '.*'), (options) => {
   return list.data
 })
 
+// 发票号码
 Mock.mock(RegExp('^(/Fapiao/Fphm)' + '.*'), (options) => {
   console.debug('\u001b[35m' + '[Mocking] ', 'fapiaoFphm')
-  const Fphm = getQueryParameters(options, 'Fphm')
+
+  const query = getQueryParameters(options)
+  const Fphm = query['Fphm']
   // list = {data:[]}
   const list = Mock.mock({
     'data|1-10': [
@@ -41,8 +55,10 @@ Mock.mock(RegExp('^(/Fapiao/Fphm)' + '.*'), (options) => {
 
 Mock.mock(RegExp('^(/Fapiao/Header)' + '.*'), (options) => {
   console.debug('\u001b[35m' + '[Mocking] ', 'fapiaoHeader')
-  const Lbdm = getQueryParameters(options, 'Lbdm')
-  const fphm = getQueryParameters(options, 'fphm')
+
+  const query = getQueryParameters(options)
+  const Lbdm = query['Lbdm']
+  const Fphm = query['Fphm']
   // list = {data:[{}]}
   const list = Mock.mock({
     'data|1-2': [
@@ -50,7 +66,7 @@ Mock.mock(RegExp('^(/Fapiao/Header)' + '.*'), (options) => {
         rowid: 1,
         fpzl: /(专用发票|普通发票)/,
         lbdm: Lbdm,
-        fphm: fphm,
+        fphm: Fphm,
         kprq: () => {
           return Mock.mock('@date')
         },
@@ -96,7 +112,8 @@ Mock.mock(RegExp('^(/Fapiao/Header)' + '.*'), (options) => {
         skr: () => {
           return Mock.mock('@cname')
         },
-        fpzt: /(正常发票|作废发票)/
+        fpzt: /(正常发票|作废发票)/,
+        checkDate: Mock.mock('@date')
       }
     ]
   })
@@ -106,15 +123,17 @@ Mock.mock(RegExp('^(/Fapiao/Header)' + '.*'), (options) => {
 
 Mock.mock(RegExp('^(/Fapiao/Body)' + '.*'), (options) => {
   console.debug('\u001b[35m' + '[Mocking] ', 'fapiaoBody')
-  const Lbdm = getQueryParameters(options, 'Lbdm')
-  const fphm = getQueryParameters(options, 'fphm')
+
+  const query = getQueryParameters(options)
+  const Lbdm = query['Lbdm']
+  const Fphm = query['Fphm']
   // list = {data:[{},{}]}
   const list = Mock.mock({
     'data|1-10': [
       {
         rowid: 1,
         lbdm: Lbdm,
-        fphm: fphm,
+        fphm: Fphm,
         xh: () => {
           return Mock.mock({ 'number|1-100': 100 }).number
         },

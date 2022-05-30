@@ -7,7 +7,7 @@
     <thead style="position: sticky; top: 0px; z-index: 1">
       <tr>
         <td colspan="11" class="bg-teal text-h6 text-white shadow-2">
-          OpenItems(All-{{ supplierOpenItems.length }})
+          {{ $t('OpenItems') }}({{ $t('All') }}-{{ supplierOpenItems.length }})
           <q-btn dense flat icon="fas fa-download" @click="download()" />
         </td>
       </tr>
@@ -44,10 +44,10 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue'
-import { notifyError } from 'assets/common'
-import { axios } from 'boot/axios'
+import { axiosGet } from '@/assets/axiosActions'
 import { jsonToExcel } from 'assets/dataUtils'
+import { onMounted, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   supplierCode: String,
@@ -55,32 +55,35 @@ const props = defineProps({
   dateTo: String
 })
 
-const supplierOpenItems = ref([])
+// common vars
+const {t} = useI18n()
 const showLoading = ref(false)
 
+// component vars
+const supplierOpenItems = ref([])
+
+// actions
 const doUpdate = () => {
+  if (!props.supplierCode) return
+
   showLoading.value = true
 
-  axios
-    .get(
-      '/Data/SupplierOpenItems?SupplierCode=' +
-        props.supplierCode +
-        '&DateFrom=' +
-        props.dateFrom +
-        '&DateTo=' +
-        props.dateTo
-    )
+  axiosGet(
+    '/Data/SupplierOpenItems?SupplierCode=' +
+      props.supplierCode +
+      '&DateFrom=' +
+      props.dateFrom +
+      '&DateTo=' +
+      props.dateTo
+  )
     .then((response) => {
-      supplierOpenItems.value = response.data
-    })
-    .catch((e) => {
-      console.error(e)
-      notifyError('Loading Supplier Open Items Failed!')
+      supplierOpenItems.value = response
     })
     .finally(() => {
       showLoading.value = false
     })
 }
+
 const download = () => {
   const header = [
     'Site',
@@ -97,15 +100,13 @@ const download = () => {
   jsonToExcel(
     header,
     supplierOpenItems.value,
-    props.supplierCode + '-OpenItems'
+    props.supplierCode + '-' + t('OpenItems')
   )
 }
 
+// events
 onMounted(() => {
-  console.debug('onMounted SupplierOpenItems')
-  if (props.supplierCode) {
-    doUpdate()
-  }
+  doUpdate()
 })
 
 // Don't use watchEffect, it run before Mounted.
@@ -116,9 +117,8 @@ watch(
     // newAndold[0]:new
     console.debug('watch:' + newAndold[1] + ' ---> ' + newAndold[0])
     // supplierCode must not be null
-    if (newAndold[0][0]) {
-      doUpdate()
-    }
+
+    doUpdate()
   }
 )
 </script>

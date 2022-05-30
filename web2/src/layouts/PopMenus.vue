@@ -1,4 +1,11 @@
-<!--  -->
+<!--
+ * @Author         : Robert Huang<56649783@qq.com>
+ * @Date           : 2022-03-25 11:01:23
+ * @LastEditors    : Robert Huang<56649783@qq.com>
+ * @LastEditTime   : 2022-05-28 23:02:22
+ * @FilePath       : \web2\src\layouts\PopMenus.vue
+ * @CopyRight      : Dedienne Aerospace China ZhuHai
+-->
 <template>
   <q-menu
     :offset="[0, 36]"
@@ -26,11 +33,10 @@
 </template>
 
 <script setup>
+import ebus from '@/assets/ebus'
+import { useQuasar } from 'quasar'
 import { onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import ebus from 'src/boot/ebus'
-import { useQuasar } from 'quasar'
-import { axios } from 'boot/axios'
 
 const q = useQuasar()
 const { route } = useRoute()

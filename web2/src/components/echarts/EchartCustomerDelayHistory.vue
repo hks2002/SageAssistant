@@ -8,27 +8,31 @@
 </template>
 
 <script setup>
-import { defineComponent, onMounted, ref, watch } from 'vue'
-import { date } from 'quasar'
-import { notifyError } from 'assets/common'
-import { useI18n } from 'vue-i18n'
-import { axios } from 'boot/axios'
-
+import { axiosGet } from '@/assets/axiosActions'
 import {
-  echarts,
-  defaultTooltip,
-  defaultToolbox,
-  defaultLegend,
   defaultDataZoom,
+  defaultLegend,
+  defaultToolbox,
+  defaultTooltip,
   defaultXAxisTime,
-  mergerOption,
-  jsonToMultLine
-} from 'assets/echartsCfg.js'
-
-import _groupBy from 'lodash/groupBy'
+  echarts,
+  jsonToMultLine,
+  mergerOption
+} from '@/assets/echartsCfg.js'
 import _forEach from 'lodash/forEach'
-import _uniq from 'lodash/uniq'
+import _groupBy from 'lodash/groupBy'
 import _map from 'lodash/map'
+import _uniq from 'lodash/uniq'
+import { date } from 'quasar'
+import {
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  ref,
+  watch
+} from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   customerCode: String,
@@ -36,15 +40,17 @@ const props = defineProps({
   dateTo: String
 })
 
-const { t } = useI18n({ useScope: 'global' })
+// common vars
+const { t } = useI18n()
+const showLoading = ref(false)
 
+// echart vars
 let eChart = null
 let data = []
 let lengend = []
 let dataByLengend = []
 let dataset = []
 let series = []
-
 const dimensions = [
   'Site',
   'CustomerCode',
@@ -58,31 +64,31 @@ const dimensions = [
   'DeliveryNO',
   'DaysDelay'
 ]
-const showLoading = ref(false)
 
+// actions
 const doUpdate = () => {
-  if (!date.isValid(props.dateFrom) || !date.isValid(props.dateTo)) {
+  if (
+    !props.customerCode ||
+    !date.isValid(props.dateFrom) ||
+    !date.isValid(props.dateTo)
+  ) {
     return
   }
+
   showLoading.value = true
 
-  axios
-    .get(
-      '/Data/CustomerDelayHistory?CustomerCode=' +
-        props.customerCode +
-        '&DateFrom=' +
-        props.dateFrom +
-        '&DateTo=' +
-        props.dateTo
-    )
+  axiosGet(
+    '/Data/CustomerDelayHistory?CustomerCode=' +
+      props.customerCode +
+      '&DateFrom=' +
+      props.dateFrom +
+      '&DateTo=' +
+      props.dateTo
+  )
     .then((response) => {
-      data = response.data
+      data = response
       prepareData()
       setEchart()
-    })
-    .catch((e) => {
-      console.error(e)
-      notifyError(t('Loading Customer Delay History Failed!'))
     })
     .finally(() => {
       showLoading.value = false
@@ -106,13 +112,13 @@ const prepareData = () => {
       symbolSize: 5,
       tooltip: {
         trigger: 'item',
-        formatter: (params, ticket, callback) => {
+        formatter: (params) => {
           return jsonToMultLine(dimensions, params.data)
         }
       },
       dimensions: dimensions,
       encode: {
-        x: 'ExpectDate',
+        x: 'ShipDate',
         y: 'DaysDelay'
       }
     }
@@ -141,7 +147,7 @@ const setEchart = () => {
         t('Delay History') + '(' + props.dateFrom + '-->' + props.dateTo + ')'
       ),
       tooltip: defaultTooltip,
-      dataZoom: defaultDataZoom(),
+      dataZoom: defaultDataZoom('x'),
       xAxis: mergerOption(defaultXAxisTime, { name: 'Except' }),
       yAxis: {
         min: 0,
@@ -161,24 +167,44 @@ const setEchart = () => {
   )
 }
 
+const resize = () => {
+  eChart.resize()
+}
+
+// events
 onMounted(() => {
-  console.debug('onMounted EchartCustomerDelayHistory')
   eChart = echarts.init(document.getElementById('EchartCustomerDelayHistory'))
-  if (props.customerCode) {
-    doUpdate()
-  }
+  // when not use keep alive, use mounted/unmounted
+  window.addEventListener('resize', resize)
+  doUpdate()
 })
 
-// Don't use watchEffect, it run before Mounted.
+onBeforeUnmount(() => {
+  // when not use keep alive, use mounted/unmounted
+  window.removeEventListener('resize', resize)
+  eChart.dispose()
+})
+
+onActivated(() => {
+  // when use keep alive, must use activated/deactivated
+  window.addEventListener('resize', resize)
+  resize()
+})
+
+onDeactivated(() => {
+  // when use keep alive, must use activated/deactivated
+  window.removeEventListener('resize', resize)
+})
+
 watch(
+  // Don't use watchEffect, it run before Mounted.
   () => [props.customerCode, props.dateFrom, props.dateTo],
   (...newAndold) => {
     // newAndold[1]:old
     // newAndold[0]:new
     console.debug('watch:' + newAndold[1] + ' ---> ' + newAndold[0])
-    if (newAndold[0][0]) {
-      doUpdate()
-    }
+
+    doUpdate()
   }
 )
 </script>

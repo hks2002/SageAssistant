@@ -8,33 +8,39 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue'
-import { date } from 'quasar'
-import { notifyError } from 'assets/common'
-import { useI18n } from 'vue-i18n'
-import { axios } from 'boot/axios'
-
+import { axiosGet } from '@/assets/axiosActions'
 import {
-  echarts,
-  defaultTooltip,
-  defaultToolbox,
+  defaultBarStackedSerial,
   defaultLegend,
-  defaultBarStackedSerial
+  defaultToolbox,
+  defaultTooltip,
+  echarts
 } from 'assets/echartsCfg.js'
-
-import _groupBy from 'lodash/groupBy'
 import _forEach from 'lodash/forEach'
-import _uniq from 'lodash/uniq'
+import _groupBy from 'lodash/groupBy'
 import _map from 'lodash/map'
+import _uniq from 'lodash/uniq'
+import { date } from 'quasar'
+import {
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  ref,
+  watch
+} from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   supplierCode: String,
   dateFrom: String,
   dateTo: String
 })
+// common vars
+const { t } = useI18n()
+const showLoading = ref(false)
 
-const { t } = useI18n({ useScope: 'global' })
-
+// echart vars
 let eChart = null
 let data = []
 let lengend = []
@@ -43,32 +49,31 @@ let sites = []
 let dataset = []
 let series = []
 const dimensions = ['Site', 'SupplierCode', 'Amount', 'Currency', 'USD', 'Rate']
-const showLoading = ref(false)
 
+// actions
 const doUpdate = () => {
-  if (!date.isValid(props.dateFrom) || !date.isValid(props.dateTo)) {
+  if (
+    !props.supplierCode ||
+    !date.isValid(props.dateFrom) ||
+    !date.isValid(props.dateTo)
+  ) {
     return
   }
 
   showLoading.value = true
 
-  axios
-    .get(
-      '/Data/SupplierTotalAmount?SupplierCode=' +
-        props.supplierCode +
-        '&DateFrom=' +
-        props.dateFrom +
-        '&DateTo=' +
-        props.dateTo
-    )
+  axiosGet(
+    '/Data/SupplierTotalAmount?SupplierCode=' +
+      props.supplierCode +
+      '&DateFrom=' +
+      props.dateFrom +
+      '&DateTo=' +
+      props.dateTo
+  )
     .then((response) => {
-      data = response.data
+      data = response
       prepareData()
       setEchart()
-    })
-    .catch((e) => {
-      console.error(e)
-      notifyError(t('Loading Supplier Total Amount Failed!'))
     })
     .finally(() => {
       showLoading.value = false
@@ -131,24 +136,44 @@ const setEchart = () => {
   )
 }
 
+const resize = () => {
+  eChart.resize()
+}
+
+// events
 onMounted(() => {
-  console.debug('onMounted EchartSupplierTotalAmount')
   eChart = echarts.init(document.getElementById('EchartSupplierTotalAmount'))
-  if (props.supplierCode) {
-    doUpdate()
-  }
+  // when not use keep alive, use mounted/unmounted
+  window.addEventListener('resize', resize)
+  doUpdate()
 })
 
-// Don't use watchEffect, it run before Mounted.
+onBeforeUnmount(() => {
+  // when not use keep alive, use mounted/unmounted
+  window.removeEventListener('resize', resize)
+  eChart.dispose()
+})
+
+onActivated(() => {
+  // when use keep alive, must use activated/deactivated
+  window.addEventListener('resize', resize)
+  resize()
+})
+
+onDeactivated(() => {
+  // when use keep alive, must use activated/deactivated
+  window.removeEventListener('resize', resize)
+})
+
 watch(
+  // Don't use watchEffect, it run before Mounted.
   () => [props.supplierCode, props.dateFrom, props.dateTo],
   ([newVal0, newVal1, newVal2], [oldVal0, oldVal1, oldVal2]) => {
     console.debug('watch:' + oldVal0 + ' ---> ' + newVal0)
     console.debug('watch:' + oldVal1 + ' ---> ' + newVal1)
     console.debug('watch:' + oldVal2 + ' ---> ' + newVal2)
-    if (newVal0) {
-      doUpdate()
-    }
+
+    doUpdate()
   }
 )
 </script>

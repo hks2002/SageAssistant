@@ -1,10 +1,19 @@
+<!--
+ * @Author         : Robert Huang<56649783@qq.com>
+ * @Date           : 2022-04-01 16:30:58
+ * @LastEditors    : Robert Huang<56649783@qq.com>
+ * @LastEditTime   : 2022-05-29 03:12:44
+ * @FilePath       : \web2\src\components\stock\QMarkupTableStockHistory.vue
+ * @CopyRight      : Dedienne Aerospace China ZhuHai
+-->
 <template>
   <q-markup-table dense bordered class="col-grow">
     <thead style="position: sticky; top: 0px; z-index: 1">
       <tr>
         <td colspan="17" class="bg-teal text-white shadow-2">
-          {{ site }} Stock History
-          <span v-if="PnOrName">of {{ PnOrName }} </span> from {{ dateFrom }} to
+          {{ site }} {{ $t('Stock History') }}
+          <span v-if="PnOrName">of {{ PnOrName }} </span> {{ $t('from') }}
+          {{ dateFrom }} {{ $t('to') }}
           {{ dateTo }}
           <q-btn dense flat icon="fas fa-download" @click="download()" />
         </td>
@@ -46,23 +55,19 @@
         <td class="text-center">{{ item['CreateDate'] }}</td>
       </tr>
     </tbody>
+    <q-inner-loading :showing="showLoading">
+      <q-spinner-ios size="50px" color="primary" />
+    </q-inner-loading>
   </q-markup-table>
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onBeforeUnmount, onBeforeMount } from 'vue'
-import { useQuasar } from 'quasar'
-import { axios } from 'boot/axios'
-import { notifyError } from 'assets/common'
-import { getCookies } from 'assets/storage'
-
-import { ebus } from 'boot/ebus'
-import { jsonToExcel } from 'assets/dataUtils'
-
-import _groupBy from 'lodash/groupBy'
-import _sumBy from 'lodash/sumBy'
-import _uniq from 'lodash/uniq'
-import _map from 'lodash/map'
+import { axiosGet } from '@/assets/axiosActions'
+import { jsonToExcel } from '@/assets/dataUtils'
+import { ebus } from '@/assets/ebus'
+import { getCookies } from '@/assets/storage'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   PnOrName: { type: String, require: false, default: '' },
@@ -70,31 +75,34 @@ const props = defineProps({
   dateTo: String
 })
 
-const $q = useQuasar()
-
+// common vars
+const { t } = useI18n()
+const showLoading = ref(false)
 const site = ref(getCookies('site'))
+
+// component vars
 const stockHistory = ref([])
 
+// actions
 const doUpdate = () => {
-  axios
-    .get(
-      '/Data/StockHistory?Site=' +
-        site.value +
-        '&PnOrName=' +
-        props.PnOrName +
-        '&DateFrom=' +
-        props.dateFrom +
-        '&DateTo=' +
-        props.dateTo
-    )
-    .then((response) => {
-      stockHistory.value = response.data
+  showLoading.value = true
+
+  axiosGet(
+    '/Data/StockHistory?Site=' +
+      site.value +
+      '&PnOrName=' +
+      props.PnOrName +
+      '&DateFrom=' +
+      props.dateFrom +
+      '&DateTo=' +
+      props.dateTo
+  )
+    .then((data) => {
+      stockHistory.value = data
     })
-    .catch((e) => {
-      console.error(e)
-      notifyError('Loading StockHistory Failed!')
+    .finally(() => {
+      showLoading.value = false
     })
-    .finally(() => {})
 }
 
 const download = () => {
@@ -116,36 +124,33 @@ const download = () => {
   ]
   const strPNData = data.value
   // PN with #
-  _forEach(strPNData, (value, index) => {
+  _forEach(strPNData, (value) => {
     value.PN = '#' + value.PN
   })
   jsonToExcel(
     header,
     strPNData,
-    site.value + ' Stock History-' + props.dateFrom + '_' + props.dateTo
+    site.value + t(' Stock History-') + props.dateFrom + '_' + props.dateTo
   )
 }
 
-onBeforeMount(() => {
-  console.debug('onBeforeMount QMarkupTableStockHistory')
-})
-
+// events
 onMounted(() => {
   doUpdate()
 })
 
-// event handing
 ebus.on('changeSite', (newSite) => {
   site.value = newSite
   doUpdate()
 })
+
 onBeforeUnmount(() => {
   ebus.off('changeSite')
 })
 
-// Don't use watchEffect, it run before Mounted.
 watch(
-  () => [props.PnOrName, props.dateFrom, props.dateTo],
+  // Don't use watchEffect, it run before Mounted.
+  () => [props.PnOrName + props.dateFrom + props.dateTo],
   (...newAndold) => {
     // newAndold[1]:old
     // newAndold[0]:new

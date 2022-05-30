@@ -77,10 +77,9 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue'
-import { notifyError } from 'assets/common'
-import { axios } from 'boot/axios'
+import { axiosGet } from '@/assets/axiosActions'
 import { jsonToExcel } from 'assets/dataUtils'
+import { onMounted, ref, watch } from 'vue'
 
 const props = defineProps({
   customerCode: {
@@ -108,35 +107,37 @@ const props = defineProps({
   }
 })
 
-const invoicePayItems = ref([])
+// common vars
 const showLoading = ref(false)
+
+// components vars
+const invoicePayItems = ref([])
 const colspan = ref(17)
 
+// actions
 const doUpdate = () => {
+  if (!props.customerCode) return
+
   showLoading.value = true
+
   const code = props.customerCode === '%%' ? '' : props.customerCode
   const proSuffix = props.proSearch ? 'Pro' : ''
   colspan.value = props.proSearch ? 23 : 17
 
-  axios
-    .get(
-      '/Data/FinancialInvoicePay' +
-        proSuffix +
-        '?Site=' +
-        props.site +
-        '&CustomerCode=' +
-        code +
-        '&DateFrom=' +
-        props.dateFrom +
-        '&DateTo=' +
-        props.dateTo
-    )
+  axiosGet(
+    '/Data/FinancialInvoicePay' +
+      proSuffix +
+      '?Site=' +
+      props.site +
+      '&CustomerCode=' +
+      code +
+      '&DateFrom=' +
+      props.dateFrom +
+      '&DateTo=' +
+      props.dateTo
+  )
     .then((response) => {
-      invoicePayItems.value = response.data
-    })
-    .catch((e) => {
-      console.error(e)
-      notifyError('Loading Invoice Pay Failed!')
+      invoicePayItems.value = response
     })
     .finally(() => {
       showLoading.value = false
@@ -176,11 +177,9 @@ const download = () => {
   )
 }
 
+// events
 onMounted(() => {
-  console.debug('onMounted InvoicePay')
-  if (props.customerCode) {
-    doUpdate()
-  }
+  doUpdate()
 })
 
 // Don't use watchEffect, it run before Mounted.

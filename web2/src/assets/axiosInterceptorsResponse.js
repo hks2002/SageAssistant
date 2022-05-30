@@ -1,4 +1,12 @@
-import { i18n } from '@/boot/i18n'
+/***
+ * @Author         : Robert Huang<56649783@qq.com>
+ * @Date           : 2022-05-20 12:50:44
+ * @LastEditors    : Robert Huang<56649783@qq.com>
+ * @LastEditTime   : 2022-05-28 23:03:21
+ * @FilePath       : \web2\src\assets\axiosInterceptorsResponse.js
+ * @CopyRight      : Dedienne Aerospace China ZhuHai
+ */
+import { i18n } from '@/assets/i18n'
 import axios from 'axios'
 import { Notify } from 'quasar'
 

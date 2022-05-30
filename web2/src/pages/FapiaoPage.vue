@@ -1,24 +1,40 @@
 <template>
-  <div class="row">
-    <q-card flat class="col-6 q-pa-xs">
-      <q-card-section class="row">
-        <q-select-input
-          class="col-5 q-pr-md"
+  <q-page class="row q-gutter-sm q-pa-sm">
+    <q-card flat class="col-6">
+      <q-card-section
+        class="row q-gutter-sm q-px-sm"
+        v-if="isAuthorised('GESSIH')"
+      >
+        <QSelectAxiosVue
           data-url="/Fapiao/Lbdm?Lbdm="
-          emit-to="searchFapiaoLbdm"
           :label="$t('发票代码')"
-          :default-value="Lbdm"
+          input-style="font-weight:bolder;font-size:25px;text-transform:uppercase"
+          popup-content-style="font-weight:bold;font-size:25px"
           popup-content-class="text-secondary"
-          :disable="!isAuthorised('GESSIH')"
+          class="col-3"
+          v-model="Lbdm"
+          @update:model-value="searchFapiao"
         />
-        <q-select-input
-          class="col-5 q-pr-md"
+        <QSelectAxiosVue
           data-url="/Fapiao/Fphm?Fphm="
-          emit-to="searchFapiaoFphm"
           :label="$t('发票号码')"
-          :default-value="Fphm"
+          input-style="font-weight:bolder;font-size:25px;text-transform:uppercase"
+          popup-content-style="font-weight:bold;font-size:25px"
           popup-content-class="text-secondary"
-          :disable="!isAuthorised('GESSIH')"
+          class="col-3"
+          v-model="Fphm"
+          @update:model-value="searchFapiao"
+        />
+        <q-btn dense icon="translate" color="primary" label="OCR" />
+        <q-toggle v-model="isChecked" color="primary" :label="$t('Checked')" />
+        <q-input
+          dense
+          outlined
+          debounce="1000"
+          mask="date"
+          type="date"
+          :label="$t('Check Date')"
+          v-model="FapiaoHeader.checkDate"
         />
       </q-card-section>
       <q-separator inset />
@@ -99,7 +115,10 @@
 
           <q-separator inset />
 
-          <q-item v-ripple v-if="FapiaoHeader.gfsh != '914404006981669765'">
+          <q-item
+            v-ripple
+            v-if="FapiaoHeader.gfmc != '珠海德定安航空地面设备有限公司'"
+          >
             <q-item-section side> 购方名称 </q-item-section>
             <q-item-section>
               {{ FapiaoHeader.gfmc }}
@@ -111,13 +130,25 @@
               {{ FapiaoHeader.gfsh }}
             </q-item-section>
           </q-item>
-          <q-item v-ripple v-if="FapiaoHeader.gfsh != '914404006981669765'">
+          <q-item
+            v-ripple
+            v-if="
+              FapiaoHeader.gfdzdh.replace(' ', '') !=
+              '珠海市金湾区红旗镇金粮路5号厂房A一楼东侧0756-8818892'
+            "
+          >
             <q-item-section side> 购方地址电话 </q-item-section>
             <q-item-section>
               {{ FapiaoHeader.gfdzdh }}
             </q-item-section>
           </q-item>
-          <q-item v-ripple v-if="FapiaoHeader.gfsh != '914404006981669765'">
+          <q-item
+            v-ripple
+            v-if="
+              FapiaoHeader.gfsh.replace(' ', '') !=
+              '中国银行珠海拱北支行678257743778'
+            "
+          >
             <q-item-section side> 购方银行账号 </q-item-section>
             <q-item-section>
               {{ FapiaoHeader.gfyhzh }}
@@ -240,16 +271,17 @@
       </q-card-section>
     </q-card>
 
-    <q-card flat class="col-6 q-pa-xs">
-      <q-card-section class="row">
-        <q-select-input
-          class="col-5 q-pr-md"
+    <q-card flat class="col-grow">
+      <q-card-section class="row" v-if="isAuthorised('GESSIH')">
+        <QSelectAxiosVue
           data-url="/Data/InvoiceNO?InvoiceNO="
-          emit-to="searchInvoiceNO"
           :label="$t('InvoiceNO')"
-          :default-value="InvoiceNO"
+          input-style="font-weight:bolder;font-size:25px;text-transform:uppercase"
+          popup-content-style="font-weight:bold;font-size:25px"
           popup-content-class="text-secondary"
-          :disable="!isAuthorised('GESSIH')"
+          class="col-5"
+          v-model="InvoiceNO"
+          @update:model-value="searchInvoice"
         />
       </q-card-section>
       <q-separator inset />
@@ -407,19 +439,24 @@
         </q-inner-loading>
       </q-card-section>
     </q-card>
-  </div>
+  </q-page>
 </template>
 
 <script setup>
-import { ref, onBeforeUnmount, toRaw } from 'vue'
-import { axios } from 'boot/axios'
-import { notifyError } from 'assets/common'
-import { ebus } from 'boot/ebus'
-import { isAuthorised } from 'assets/auth'
-import QSelectInput from 'components/.controls/QSelectInputSimple.vue'
+import { isAuthorised } from '@/assets/auth'
+import { axiosGet } from '@/assets/axiosActions'
+import QSelectAxiosVue from '@/components/.controls/QSelectAxios.vue'
+import { computed, ref, toRaw } from 'vue'
 
-const Lbdm = ref('')
-const Fphm = ref('')
+// common vars
+const showLoadingFapiaoHeader = ref(false)
+const showLoadingFapiaoBody = ref(false)
+const showLoadingInvoiceHeader = ref(false)
+const showLoadingInvoiceBody = ref(false)
+
+// page vars
+const Lbdm = ref('') /** 发票代码 */
+const Fphm = ref('') /** 发票号码 */
 const InvoiceNO = ref('')
 const FapiaoHeader = ref({
   fpzl: '',
@@ -440,7 +477,8 @@ const FapiaoHeader = ref({
   kpr: '',
   fhr: '',
   skr: '',
-  fpzt: ''
+  fpzt: '',
+  checkDate: ''
 })
 const FapiaoBody = ref([
   {
@@ -485,50 +523,43 @@ const InvoiceBody = ref([
     TaxRate: ''
   }
 ])
-const showLoadingFapiaoHeader = ref(false)
-const showLoadingFapiaoBody = ref(false)
-const showLoadingInvoiceHeader = ref(false)
-const showLoadingInvoiceBody = ref(false)
 
-const doUpdateFapiaoHeader = async (onlyFphm) => {
+// computed vars
+const isChecked = computed(() => {
+  return FapiaoHeader.value.checkDate ? true : false
+})
+// actions
+const doUpdateFapiaoHeader = async (withLbdm) => {
   showLoadingFapiaoHeader.value = true
+
   let url = '/Fapiao/Header?Fphm=' + Fphm.value
-  if (!onlyFphm) {
+  if (withLbdm === 'withLbdm') {
     url += '&Lbdm=' + Lbdm.value
   }
 
-  axios
-    .get(url)
+  axiosGet(url)
     .then((response) => {
       // Fapiao aways be array, even on recorder
-      if (response.data.length > 0) {
-        FapiaoHeader.value = response.data[0] // Only one
+      if (response.length > 0) {
+        FapiaoHeader.value = response[0] // Only one
       }
-    })
-    .catch((e) => {
-      console.error(e)
-      notifyError('Loading Fapiao Failed!')
     })
     .finally(() => {
       showLoadingFapiaoHeader.value = false
     })
 }
 
-const doUpdateFapiaoBody = async (onlyFphm) => {
+const doUpdateFapiaoBody = async (withLbdm) => {
   showLoadingFapiaoBody.value = true
+
   let url = '/Fapiao/Body?Fphm=' + Fphm.value
-  if (!onlyFphm) {
+  if (withLbdm === 'withLbdm') {
     url += '&Lbdm=' + Lbdm.value
   }
 
-  axios
-    .get(url)
+  axiosGet(url)
     .then((response) => {
-      FapiaoBody.value = response.data
-    })
-    .catch((e) => {
-      console.error(e)
-      notifyError('Loading Fapiao Failed!')
+      FapiaoBody.value = response
     })
     .finally(() => {
       showLoadingFapiaoBody.value = false
@@ -537,21 +568,17 @@ const doUpdateFapiaoBody = async (onlyFphm) => {
 
 const doUpdateInvoiceHeader = async (byType) => {
   showLoadingInvoiceHeader.value = true
+
   let url = ''
-  if (byType === 'Invoice') {
+  if (byType === 'byInvoice') {
     url = '/Data/InvoiceHeaderByInvoiceNO?InvoiceNO=' + InvoiceNO.value
   }
-  if (byType === 'Fapiao') {
+  if (byType === 'byFapiao') {
     url = '/Data/InvoiceHeaderByFaPiao?FaPiao=' + Fphm.value
   }
-  axios
-    .get(url)
+  axiosGet(url)
     .then((response) => {
-      InvoiceHeader.value = response.data
-    })
-    .catch((e) => {
-      console.error(e)
-      notifyError('Loading Invoice Failed!')
+      InvoiceHeader.value = response
     })
     .finally(() => {
       showLoadingInvoiceHeader.value = false
@@ -560,21 +587,17 @@ const doUpdateInvoiceHeader = async (byType) => {
 
 const doUpdateInvoiceBody = async (byType) => {
   showLoadingInvoiceBody.value = true
+
   let url = ''
-  if (byType === 'Invoice') {
+  if (byType === 'byInvoice') {
     url = '/Data/InvoiceBodyByInvoiceNO?InvoiceNO=' + InvoiceNO.value
   }
-  if (byType === 'Fapiao') {
+  if (byType === 'byFapiao') {
     url = '/Data/InvoiceBodyByFaPiao?FaPiao=' + Fphm.value
   }
-  axios
-    .get(url)
+  axiosGet(url)
     .then((response) => {
-      InvoiceBody.value = response.data
-    })
-    .catch((e) => {
-      console.error(e)
-      notifyError('Loading Invoice Failed!')
+      InvoiceBody.value = response
     })
     .finally(() => {
       showLoadingInvoiceBody.value = false
@@ -648,45 +671,29 @@ const notMatchClass = (val1, val2) => {
 }
 
 // event handing
-ebus.on('searchInvoiceNO', async (invoiceNo) => {
-  InvoiceNO.value = invoiceNo
+const searchInvoice = async () => {
   if (InvoiceNO.value) {
-    await doUpdateInvoiceHeader('Invoice')
+    await doUpdateInvoiceHeader('byInvoice')
     Fphm.value = InvoiceHeader.value.FaPiao
-    doUpdateInvoiceBody('Invoice')
+    doUpdateInvoiceBody('byInvoice')
+
     // lbdm value need get from query fapiao header, then show it.
-    await doUpdateFapiaoHeader(true)
+    await doUpdateFapiaoHeader('notWithLbdm')
     Lbdm.value = FapiaoHeader.value.lbdm
-    doUpdateFapiaoBody(false)
+    doUpdateFapiaoBody('withLbdm')
   }
-})
-onBeforeUnmount(() => {
-  ebus.off('searchInvoiceNO')
-})
-ebus.on('searchFapiaoLbdm', async (lbdm) => {
-  Lbdm.value = lbdm
-  if (Lbdm.value !== '' && Fphm.value !== '') {
-    await doUpdateFapiaoHeader() // top lbdm
-    doUpdateFapiaoBody(false)
-    await doUpdateInvoiceHeader('Fapiao')
+}
+
+const searchFapiao = async () => {
+  if (Fphm.value !== '') {
+    await doUpdateFapiaoHeader() // top lbdm, only one
+    Lbdm.value !== ''
+      ? doUpdateFapiaoBody('withLbdm')
+      : doUpdateFapiaoBody('notWithLbdm')
+
+    await doUpdateInvoiceHeader('byFapiao')
     InvoiceNO.value = InvoiceHeader.value.InvoiceNO
-    doUpdateInvoiceBody('Fapiao')
+    doUpdateInvoiceBody('byFapiao')
   }
-})
-onBeforeUnmount(() => {
-  ebus.off('searchFapiaoLbdm')
-})
-ebus.on('searchFapiaoFphm', async (fphm) => {
-  Fphm.value = fphm
-  if (Lbdm.value !== '' && Fphm.value !== '') {
-    await doUpdateFapiaoHeader() // top lbdm
-    doUpdateFapiaoBody(false)
-    await doUpdateInvoiceHeader('Fapiao')
-    InvoiceNO.value = InvoiceHeader.value.InvoiceNO
-    doUpdateInvoiceBody('Fapiao')
-  }
-})
-onBeforeUnmount(() => {
-  ebus.off('searchFapiaoFphm')
-})
+}
 </script>

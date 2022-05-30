@@ -1,25 +1,22 @@
 <template>
   <q-list>
-    <q-item v-if="pnRoot">
-      <q-item-section>
-        <q-item-label
-          class="text-teal"
-          style="font-weight: bolder; font-size: 30px"
-          >Part Number Info
-        </q-item-label>
-      </q-item-section>
+    <q-item dense class="q-px-sm q-pt-none" v-if="pnRoot">
+      <q-item-label
+        class="text-teal"
+        style="font-weight: bolder; font-size: 20px"
+        >Part Number Info
+      </q-item-label>
     </q-item>
     <template v-for="Pn in pnsInFamily" :key="Pn.ROWID">
-      <q-item>
+      <q-item dese class="q-px-sm q-pt-none">
         <q-item-section :class="labClass(Pn.Status)" style="padding: 0px">
-          <q-item-label style="font-weight: bolder; font-size: 25px">{{
+          <q-item-label style="font-weight: bolder; font-size: 20px">{{
             Pn.PN
           }}</q-item-label>
           <q-item-label v-if="Pn.Desc1">{{ Pn.Desc1 }}</q-item-label>
           <q-item-label v-if="Pn.Desc2">{{ Pn.Desc2 }}</q-item-label>
           <q-item-label v-if="Pn.Desc3">{{ Pn.Desc3 }}</q-item-label>
-          <q-item-label v-if="Pn.Comment">{{ Pn.Comment }}</q-item-label>
-          <q-item-label-file-list :pn="Pn.PN" />
+          <QItemLabelFileList :pn="Pn.PN" />
         </q-item-section>
         <q-item-section :class="labClass(Pn.Status)" side top>
           <q-item-label style="font-size: 18px">{{
@@ -27,8 +24,10 @@
           }}</q-item-label>
           <q-item-label style="font-size: 18px">{{ Pn.Cat }}</q-item-label>
           <q-item-label>
-            <q-badge color="purple" v-if="Pn.Status === 1">Active</q-badge>
-          </q-item-label>
+            <q-badge color="purple" v-if="Pn.Status === 1"
+              >Active</q-badge
+            > </q-item-label
+          ><q-item-label v-if="Pn.Comment">{{ Pn.Comment }}</q-item-label>
         </q-item-section>
       </q-item>
     </template>
@@ -39,11 +38,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
-import { notifyError } from 'assets/common'
-import { axios } from 'boot/axios'
-
-import QItemLabelFileList from 'components/products/QItemLabelFileList'
+import { axios } from '@/assets/axios'
+import { notifyError } from '@/assets/common'
+import QItemLabelFileList from '@/components/products/QItemLabelFileList'
+import { onMounted, ref, watch } from 'vue'
 
 const props = defineProps({
   pnRoot: String
@@ -60,13 +58,6 @@ const labClass = (status) => {
   }
 }
 
-const btnColor = (status) => {
-  if (status === 1) {
-    return '#4caf50'
-  } else {
-    return '#858c85'
-  }
-}
 const doUpdate = (pnRoot) => {
   showLoading.value = true
 
@@ -75,7 +66,7 @@ const doUpdate = (pnRoot) => {
     .then((response) => {
       pnsInFamily.value = response.data
     })
-    .catch((e) => {
+    .catch(() => {
       notifyError('Loading PN Failed!')
     })
     .finally(() => {

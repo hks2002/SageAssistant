@@ -3,14 +3,15 @@
     <thead style="position: sticky; top: 0px; z-index: 1">
       <tr>
         <td colspan="2" class="bg-teal text-white shadow-2 col-grow">
-          Stock count result of {{ site }}, Total Qty:{{ S2N(sumQty, 0) }} Total
-          cost:{{ S2N(sumCost) }}, Products Qty:{{
+          {{ $t('Stock count result of') }} {{ site }}, {{ $t('Total Qty') }}:{{
+            S2N(sumQty, 0)
+          }}
+          {{ $t('Total cost') }}:{{ S2N(sumCost) }}, {{ $t('Products Qty') }}:{{
             S2N(sumProductQty, 0)
           }}
-          Products cost:{{ S2N(sumProductCost) }}, Others Qty:{{
-            S2N(sumOtherQty, 0)
-          }}
-          Others cost:{{ S2N(sumOtherCost) }}
+          {{ $t('Products cost') }}:{{ S2N(sumProductCost) }},
+          {{ $t('Others Qty') }}:{{ S2N(sumOtherQty, 0) }}
+          {{ $t('Others cost') }}:{{ S2N(sumOtherCost) }}
           <q-btn
             dense
             flat
@@ -41,7 +42,7 @@
               <q-tooltip>
                 {{ subitem['Description'] }}
                 <div v-if="subitem['OptionPN']">
-                  Option PN:{{ subitem['OptionPN'] }}
+                  {{ $t('Option PN') }}:{{ subitem['OptionPN'] }}
                 </div>
               </q-tooltip>
               <span
@@ -54,25 +55,23 @@
         </td>
       </tr>
     </tbody>
+    <q-inner-loading :showing="showLoading">
+      <q-spinner-ios size="50px" color="primary" />
+    </q-inner-loading>
   </q-markup-table>
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onBeforeMount, onBeforeUnmount } from 'vue'
-import { axios } from 'boot/axios'
-import { notifyError } from 'assets/common'
-import { getCookies } from 'assets/storage'
-import { useQuasar, Dialog, date } from 'quasar'
-import { ebus } from 'boot/ebus'
+import { axiosGet } from '@/assets/axiosActions'
+import { ebus } from '@/assets/ebus'
 import { jsonToExcel, jsonToTable } from 'assets/dataUtils'
-import { isAuthorised } from 'assets/auth'
-
-import _groupBy from 'lodash/groupBy'
+import { getCookies } from 'assets/storage'
 import _forEach from 'lodash/forEach'
-import _filter from 'lodash/filter'
+import _groupBy from 'lodash/groupBy'
 import _sumBy from 'lodash/sumBy'
-import _uniq from 'lodash/uniq'
-import _map from 'lodash/map'
+import { date, Dialog } from 'quasar'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   PNfilter: {
@@ -82,12 +81,12 @@ const props = defineProps({
   }
 })
 
-const $q = useQuasar()
-const { formatDate } = date
+// common vars
+const { t } = useI18n()
+const showLoading = ref(false)
+const site = ref(getCookies('site'))
 
-const site = ref('')
-site.value = getCookies('site')
-
+// component vars
 let data = []
 const sumQty = ref('')
 const sumCost = ref('')
@@ -98,13 +97,15 @@ const sumOtherCost = ref('')
 
 const dataByFirstChar = ref([])
 
-const PNfilter = ref('')
+const { formatDate } = date
 
+// actions
 const doUpdate = () => {
-  axios
-    .get('/Data/StockSummary?Site=' + site.value)
+  showLoading.value = true
+
+  axiosGet('/Data/StockSummary?Site=' + site.value)
     .then((response) => {
-      data = response.data
+      data = response
       dataByFirstChar.value = _groupBy(data, 'A')
       sumQty.value = _sumBy(data, 'Qty')
       sumCost.value = _sumBy(data, 'Cost')
@@ -129,42 +130,15 @@ const doUpdate = () => {
         }
       })
     })
-    .catch((e) => {
-      console.error(e)
-      notifyError('Loading StockSummary Failed!')
+    .finally(() => {
+      showLoading.value = false
     })
-    .finally(() => {})
-}
-
-const doFilterPN = () => {
-  if (props.PNfilter !== '') {
-    console.debug(PNfilter.value)
-
-    const filterData = _filter(data, function (item) {
-      const pn = item.PN.replace(/,|\.| |-|_|\/|\\/g, '')
-      const pnfilter = props.PNfilter.replace(
-        /,|\.| |-|_|\/|\\/g,
-        ''
-      ).toUpperCase()
-      if (item.OptionPN) {
-        // item maybe doesn't have OptionPN field
-        const pnoption = item.OptionPN.replace(/,|\.| |-|_|\/|\\/g, '')
-        return pn.indexOf(pnfilter) !== -1 || pnoption.indexOf(pnfilter) !== -1
-      } else {
-        return pn.indexOf(pnfilter) !== -1
-      }
-    })
-    dataByFirstChar.value = _groupBy(filterData, 'A')
-  } else {
-    dataByFirstChar.value = _groupBy(data, 'A')
-  }
 }
 
 const showHistory = (pn) => {
-  axios
-    .get('/Data/StockHistory?Site=' + site.value + '&PnOrName=' + pn)
-    .then((response) => {
-      const history = response.data
+  axiosGet('/Data/StockHistory?Site=' + site.value + '&PnOrName=' + pn).then(
+    (response) => {
+      const history = response
       const header = [
         'Location',
         'Seq',
@@ -181,7 +155,7 @@ const showHistory = (pn) => {
       const message = jsonToTable(
         header,
         history,
-        pn + ' Stock History at ' + site.value
+        pn + t(' Stock History at ') + site.value
       )
 
       Dialog.create({
@@ -198,12 +172,8 @@ const showHistory = (pn) => {
         .onDismiss(() => {
           // console.log('I am triggered on both OK and Cancel')
         })
-    })
-    .catch((e) => {
-      console.error(e)
-      notifyError('Loading StockSummary Failed!')
-    })
-    .finally(() => {})
+    }
+  )
 }
 
 const download = () => {
@@ -220,7 +190,7 @@ const download = () => {
   ]
   const strPNData = data
   // PN with #
-  _forEach(strPNData, (value, index) => {
+  _forEach(strPNData, (value) => {
     value.PN = '#' + value.PN
   })
   jsonToExcel(header, strPNData, site.value + ' Stock Count-' + nowTime)
@@ -242,11 +212,7 @@ const S2N = (S, n) => {
   }
 }
 
-onBeforeMount(() => {
-  console.debug('onBeforeMount QMarkupTableStockSummary')
-})
 onMounted(() => {
-  console.debug('onMounted QMarkupTableStockSummary')
   doUpdate()
 })
 
@@ -255,6 +221,7 @@ ebus.on('changeSite', (newSite) => {
   site.value = newSite
   doUpdate()
 })
+
 onBeforeUnmount(() => {
   ebus.off('changeSite')
 })

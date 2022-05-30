@@ -1,3 +1,11 @@
+<!--
+ * @Author         : Robert Huang<56649783@qq.com>
+ * @Date           : 2022-03-25 11:01:23
+ * @LastEditors    : Robert Huang<56649783@qq.com>
+ * @LastEditTime   : 2022-05-29 01:00:39
+ * @FilePath       : \web2\src\components\echarts\EchartDeliveryDuration.vue
+ * @CopyRight      : Dedienne Aerospace China ZhuHai
+-->
 <template>
   <q-item>
     <div id="EchartDeliveryDuration" style="height: 100%; width: 100%" />
@@ -8,33 +16,31 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
-import { notifyError } from 'assets/common'
-import { useI18n } from 'vue-i18n'
-import { axios } from 'boot/axios'
-
-import _groupBy from 'lodash/groupBy'
-import _forEach from 'lodash/forEach'
-import _sumBy from 'lodash/sumBy'
-import _uniq from 'lodash/uniq'
-import _map from 'lodash/map'
-import _get from 'lodash/get'
-
+import { axiosGet } from '@/assets/axiosActions'
 import {
-  echarts,
-  defaultTooltip,
-  defaultToolbox,
   defaultLegend,
   defaultLineSerial,
-  defaultXAxisTime
-} from 'assets/echartsCfg.js'
+  defaultToolbox,
+  defaultTooltip,
+  defaultXAxisTime,
+  echarts
+} from '@/assets/echartsCfg.js'
+import _forEach from 'lodash/forEach'
+import _groupBy from 'lodash/groupBy'
+import _map from 'lodash/map'
+import _uniq from 'lodash/uniq'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   pnRoot: String
 })
 
-const { t } = useI18n({ useScope: 'global' })
+// common vars
+const { t } = useI18n()
+const showLoading = ref(false)
 
+// echart vars
 let eChart = null
 let data = []
 let lengend = []
@@ -42,21 +48,18 @@ let dataByLengend = []
 let dataset = []
 let series = []
 const dimensions = ['SalesSite', 'PN', 'OrderDate', 'ShipDate', 'Duration']
-const showLoading = ref(false)
 
+// actions
 const doUpdate = (pnRoot) => {
+  if (!props.pnRoot) return
+
   showLoading.value = true
 
-  axios
-    .get('/Data/DeliveryDuration?PnRoot=' + pnRoot)
+  axiosGet('/Data/DeliveryDuration?PnRoot=' + pnRoot)
     .then((response) => {
-      data = response.data
+      data = response
       prepareData()
       setEchart()
-    })
-    .catch((e) => {
-      console.error(e)
-      notifyError(t('Loading Delivery Duration Failed!'))
     })
     .finally(() => {
       showLoading.value = false
@@ -93,6 +96,7 @@ const setEchart = () => {
       tooltip: defaultTooltip,
       legend: defaultLegend,
       toolbox: defaultToolbox(dimensions, data, t('Delivery Duration')),
+      grid: { bottom: 40, top: 40, right: 20 },
       xAxis: defaultXAxisTime,
       yAxis: {
         type: 'value',
@@ -117,15 +121,18 @@ const setEchart = () => {
 }
 
 onMounted(() => {
-  console.debug('onMounted EchartDeliveryDuration')
   eChart = echarts.init(document.getElementById('EchartDeliveryDuration'))
   if (props.pnRoot) {
     doUpdate(props.pnRoot)
   }
 })
 
-// Don't use watchEffect, it run before Mounted.
+onBeforeUnmount(() => {
+  eChart.dispose()
+})
+
 watch(
+  // Don't use watchEffect, it run before Mounted.
   () => props.pnRoot,
   (newVal, oldVal) => {
     console.debug('watch:' + oldVal + ' ---> ' + newVal)

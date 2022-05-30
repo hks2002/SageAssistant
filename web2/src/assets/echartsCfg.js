@@ -1,18 +1,26 @@
+/***
+ * @Author         : Robert Huang<56649783@qq.com>
+ * @Date           : 2022-03-25 11:01:23
+ * @LastEditors    : Robert Huang<56649783@qq.com>
+ * @LastEditTime   : 2022-05-28 23:04:03
+ * @FilePath       : \web2\src\assets\echartsCfg.js
+ * @CopyRight      : Dedienne Aerospace China ZhuHai
+ */
 const echarts = require('echarts/lib/echarts')
+import { jsonToExcel, jsonToMultLine, jsonToTable } from 'assets/dataUtils.js'
+import { BarChart, LineChart, PieChart, ScatterChart } from 'echarts/charts'
 import {
-  GridComponent,
-  ToolboxComponent,
   DataZoomComponent,
+  GridComponent,
   LegendComponent,
   TitleComponent,
+  ToolboxComponent,
   TooltipComponent
 } from 'echarts/components'
-import {
-  BarChart,
-  LineChart,
-  PieChart,
-  ScatterChart
-} from 'echarts/charts'
+import _cloneDeep from 'lodash/cloneDeep'
+import _get from 'lodash/get'
+import _merge from 'lodash/merge'
+import { date, Dialog } from 'quasar'
 
 echarts.use([
   GridComponent,
@@ -26,13 +34,6 @@ echarts.use([
   PieChart,
   ScatterChart
 ])
-
-import _cloneDeep from 'lodash/cloneDeep'
-import _merge from 'lodash/merge'
-import _get from 'lodash/get'
-
-import { jsonToExcel, jsonToTable, jsonToMultLine } from 'assets/dataUtils.js'
-import { Dialog, date } from 'quasar'
 
 // --------------------------------- default setting ------------------------------
 const defaultSeriesColor = [
@@ -103,24 +104,60 @@ const defaultYAxisUSD = {
   }
 }
 
-const defaultDataZoom = function (startValue) {
-  if (startValue) {
-    return [{
-      type: 'slider',
-      height: 15,
-      bottom: '5px',
-      startValue: startValue,
-      end: 100
-    }]
-  } else {
-    return [{
-      type: 'slider',
-      height: 15,
-      bottom: '5px',
-      start: 0,
-      end: 100
-    }]
+const defaultDataZoom = function (axises, xStartValue, yStartValue) {
+  const dataZoom = []
+  if (axises.toLowerCase().indexOf('x') > -1) {
+    if (xStartValue) {
+      dataZoom.push({
+        type: 'slider',
+        height: 15,
+        bottom: '5px',
+        startValue: xStartValue,
+        end: 100,
+        xAxisIndex: [0]
+      })
+    } else {
+      dataZoom.push({
+        type: 'slider',
+        height: 15,
+        bottom: '5px',
+        startValue: 0,
+        end: 100,
+        xAxisIndex: [0]
+      })
+    }
+
+    dataZoom.push({
+      type: 'inside',
+      xAxisIndex: [0]
+    })
   }
+  if (axises.toLowerCase().indexOf('y') > -1) {
+    if (yStartValue) {
+      dataZoom.push({
+        type: 'slider',
+        width: 10,
+        startValue: yStartValue,
+        end: 100,
+        yAxisIndex: [0]
+      })
+    } else {
+      dataZoom.push({
+        type: 'slider',
+        width: 10,
+        startValue: 0,
+        end: 100,
+        yAxisIndex: [0]
+      })
+    }
+
+    dataZoom.push({
+      type: 'inside',
+      yAxisIndex: [0]
+    })
+  }
+
+  return dataZoom
 }
 
 const defaultToolbox = function (headers, data, title) {
@@ -144,13 +181,16 @@ const defaultToolbox = function (headers, data, title) {
             html: true,
             fullWidth: true,
             fullHeight: true
-          }).onOk(() => {
-            // console.log('OK')
-          }).onCancel(() => {
-            // console.log('Cancel')
-          }).onDismiss(() => {
-            // console.log('I am triggered on both OK and Cancel')
           })
+            .onOk(() => {
+              // console.log('OK')
+            })
+            .onCancel(() => {
+              // console.log('Cancel')
+            })
+            .onDismiss(() => {
+              // console.log('I am triggered on both OK and Cancel')
+            })
         }
       },
       saveAsImage: {
@@ -186,7 +226,14 @@ const defaultEchartOption = {
   tooltip: defaultTooltip
 }
 
-const defaultLineSerial = function (index, value, labelFormatter, dimensions, encodeX, encodeY) {
+const defaultLineSerial = function (
+  index,
+  value,
+  labelFormatter,
+  dimensions,
+  encodeX,
+  encodeY
+) {
   return {
     type: 'line',
     datasetIndex: index,
@@ -207,7 +254,14 @@ const defaultLineSerial = function (index, value, labelFormatter, dimensions, en
     }
   }
 }
-const defaultBarSerial = function (index, value, labelFormatter, dimensions, encodeX, encodeY) {
+const defaultBarSerial = function (
+  index,
+  value,
+  labelFormatter,
+  dimensions,
+  encodeX,
+  encodeY
+) {
   return {
     type: 'bar',
     datasetIndex: index,
@@ -229,7 +283,14 @@ const defaultBarSerial = function (index, value, labelFormatter, dimensions, enc
   }
 }
 
-const defaultScatterSerial = function (index, value, labelFormatter, dimensions, encodeX, encodeY) {
+const defaultScatterSerial = function (
+  index,
+  value,
+  labelFormatter,
+  dimensions,
+  encodeX,
+  encodeY
+) {
   return {
     type: 'scatter',
     datasetIndex: index,
@@ -251,11 +312,34 @@ const defaultScatterSerial = function (index, value, labelFormatter, dimensions,
   }
 }
 
-const defaultBarStackedSerial = function (index, value, labelFormatter, dimensions, encodeX, encodeY) {
-  return mergerOption(defaultBarSerial(index, value, labelFormatter, dimensions, encodeX, encodeY), { stack: 'total' })
+const defaultBarStackedSerial = function (
+  index,
+  value,
+  labelFormatter,
+  dimensions,
+  encodeX,
+  encodeY
+) {
+  return mergerOption(
+    defaultBarSerial(
+      index,
+      value,
+      labelFormatter,
+      dimensions,
+      encodeX,
+      encodeY
+    ),
+    { stack: 'total' }
+  )
 }
 
-const DefaultPieSerial = function (index, labelFormatter, dimensions, summed, encode) {
+const DefaultPieSerial = function (
+  index,
+  labelFormatter,
+  dimensions,
+  summed,
+  encode
+) {
   return {
     type: 'pie',
     datasetIndex: index,
@@ -266,10 +350,14 @@ const DefaultPieSerial = function (index, labelFormatter, dimensions, summed, en
     tooltip: {
       trigger: 'item',
       formatter: (params) =>
-        _get(params.data, summed) + '<br/>' + encode + ':' + _get(params.data, encode) + '<br/>'
+        _get(params.data, summed) +
+        '<br/>' +
+        encode +
+        ':' +
+        _get(params.data, encode) +
+        '<br/>'
     },
-    labelLine: {
-    },
+    labelLine: {},
     dimensions: dimensions,
     encode: {
       value: encode
@@ -277,11 +365,20 @@ const DefaultPieSerial = function (index, labelFormatter, dimensions, summed, en
   }
 }
 
-const AttachedPieSerial = function (index, labelFormatter, dimensions, summed, encode) {
-  return mergerOption(DefaultPieSerial(index, labelFormatter, dimensions, summed, encode), { center: ['88%', '50%'] })
+const AttachedPieSerial = function (
+  index,
+  labelFormatter,
+  dimensions,
+  summed,
+  encode
+) {
+  return mergerOption(
+    DefaultPieSerial(index, labelFormatter, dimensions, summed, encode),
+    { center: ['88%', '50%'] }
+  )
 }
 
-function mergerOption (defaultOption, clientOption) {
+function mergerOption(defaultOption, clientOption) {
   const defaultOptionClone = _cloneDeep(defaultOption)
   return _merge(defaultOptionClone, clientOption)
 }

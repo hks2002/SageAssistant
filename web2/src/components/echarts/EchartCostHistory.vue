@@ -1,3 +1,11 @@
+<!--
+ * @Author         : Robert Huang<56649783@qq.com>
+ * @Date           : 2022-03-25 11:01:23
+ * @LastEditors    : Robert Huang<56649783@qq.com>
+ * @LastEditTime   : 2022-05-29 04:06:41
+ * @FilePath       : \web2\src\components\echarts\EchartCostHistory.vue
+ * @CopyRight      : Dedienne Aerospace China ZhuHai
+-->
 <template>
   <q-item>
     <div id="EchartCostHistory" style="height: 100%; width: 100%" />
@@ -8,7 +16,7 @@
 </template>
 
 <script setup>
-import { notifyError } from 'assets/common'
+import { axiosGet } from '@/assets/axiosActions'
 import {
   defaultDataZoom,
   defaultLegend,
@@ -18,23 +26,33 @@ import {
   defaultXAxisTime,
   defaultYAxisUSD,
   echarts
-} from 'assets/echartsCfg.js'
-import { axios } from 'boot/axios'
+} from '@/assets/echartsCfg.js'
+import { notifyError } from 'assets/common'
 import _forEach from 'lodash/forEach'
 import _get from 'lodash/get'
 import _groupBy from 'lodash/groupBy'
 import _map from 'lodash/map'
 import _sumBy from 'lodash/sumBy'
 import _uniq from 'lodash/uniq'
-import { onMounted, ref, watch } from 'vue'
+import {
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  ref,
+  watch
+} from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   pnRoot: String
 })
 
-const { t } = useI18n({ useScope: 'global' })
+// common vars
+const { t } = useI18n()
+const showLoading = ref(false)
 
+// echart vars
 let eChart = null
 let data = []
 let lengend = []
@@ -68,15 +86,16 @@ const miniDemensions = [
   'USD'
 ]
 let dataZoomStartValue = '1900-01-01'
-const showLoading = ref(false)
 
+// actions
 const doUpdate = () => {
+  if (!props.pnRoot) return
+
   showLoading.value = true
 
-  axios
-    .get('/Data/CostHistory?PnRoot=' + props.pnRoot)
+  axiosGet('/Data/CostHistory?PnRoot=' + props.pnRoot)
     .then((response) => {
-      data = response.data
+      data = response
       prepareData()
       setEchart()
     })
@@ -103,7 +122,7 @@ const prepareData = () => {
   dataBySiteProject = _groupBy(data, function (n) {
     return _get(n, 'PurchaseSite') + _get(n, 'ProjectNO')
   })
-  _forEach(dataBySiteProject, (value, index, array) => {
+  _forEach(dataBySiteProject, (value) => {
     const o = {}
     Object.defineProperty(o, 'PurchaseSite', {
       enumerable: true,
@@ -148,14 +167,15 @@ const setEchart = () => {
   eChart.setOption(
     {
       title: {
-        text: 'Sales Order Cost History',
-        subtext:
-          'Currency Rate Data From State Administration of Foreign Exchange',
+        text: t('Sales Order Cost History'),
+        subtext: t(
+          'Currency Rate Data From State Administration of Foreign Exchange'
+        ),
         left: 'center'
       },
       legend: defaultLegend,
       grid: [{ left: '5%', right: '25%' }],
-      toolbox: defaultToolbox(dimensions, data, 'Cost History'),
+      toolbox: defaultToolbox(dimensions, data, t('Cost History')),
       tooltip: defaultTooltip,
       dataZoom: defaultDataZoom(dataZoomStartValue),
       xAxis: defaultXAxisTime,
@@ -167,24 +187,40 @@ const setEchart = () => {
   )
 }
 
+const resize = () => {
+  eChart.resize()
+}
+
+// events
 onMounted(() => {
-  console.debug('onMounted EchartCostHistory')
   eChart = echarts.init(document.getElementById('EchartCostHistory'))
-  if (props.pnRoot) {
-    doUpdate(props.pnRoot)
-  }
+  doUpdate()
 })
 
-// Don't use watchEffect, it run before Mounted.
+onBeforeUnmount(() => {
+  eChart.dispose()
+})
+
+onActivated(() => {
+  // when use keep alive, must use activated/deactivated
+  window.addEventListener('resize', resize)
+  resize()
+})
+
+onDeactivated(() => {
+  // when use keep alive, must use activated/deactivated
+  window.removeEventListener('resize', resize)
+})
+
 watch(
+  // Don't use watchEffect, it run before Mounted.
   () => [props.pnRoot],
   (...newAndold) => {
     // newAndold[1]:old
     // newAndold[0]:new
     console.debug('watch:' + newAndold[1] + ' ---> ' + newAndold[0])
-    if (newAndold[0][0]) {
-      doUpdate()
-    }
+
+    doUpdate()
   }
 )
 </script>

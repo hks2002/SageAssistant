@@ -1,6 +1,6 @@
 const jsonToTable = function (headers, jsonData, title) {
   let table =
-    '<div class="q-markup-table q-table__container q-table__card q-table--horizontal-separator q-table--dense q-table--no-wrap q-pr-sm q-pl-sm"><table class="q-table">'
+    '<div class="q-markup-table q-table__container q-table__card q-table--horizontal-separator q-table--dense q-table--no-wrap q-pa-none"><table class="q-table">'
   table += '<thead style="position: sticky; top: 0px; z-index: 1;">'
   table += '<tr><th colspan="' + headers.length + '" style="padding: 0px;">'
   table +=

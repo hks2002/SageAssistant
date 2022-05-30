@@ -1,91 +1,93 @@
 <template>
-  <q-card style="width: 60vw; min-width: 300px" :flat="!isLgXs">
-    <q-card-section :horizontal="isLgXs">
-      <!-- horizontal=true make col inactive -->
-      <q-card-section class="col-8">
-        <!-- horizontal true make col doesn't works -->
-        <Vue3Lottie
-          animationLink="/json/working-on-laptop-in-office.json"
-          background="transparent"
-        />
-      </q-card-section>
-      <q-separator v-if="isLgXs" vertical inset />
-      <q-card-section align="center" class="col-4">
+  <q-page class="flex flex-center" style="height: 100%">
+    <q-card style="width: 60vw; min-width: 300px" :flat="!isLgXs">
+      <q-card-section :horizontal="isLgXs">
         <!-- horizontal=true make col inactive -->
-        <div class="text-h3 text-primary">
-          {{ $t('Sage Assistant') }}
-        </div>
-        <q-banner
-          dense
-          class="bg-white text-red text-subtitle1"
-          style="min-height: 100px"
-        >
-          {{ $t(loginMessage) }}
-        </q-banner>
-        <q-form>
-          <!--  -->
-          <q-input
-            v-model="username"
-            standout="bg-teal text-white"
-            bottom-slots
-            :label="$t('Your PC Account')"
-            autocomplete="username"
-            @keydown="checkEnterKey($event)"
+        <q-card-section class="col-8">
+          <!-- horizontal true make col doesn't works -->
+          <Vue3Lottie
+            animationLink="/json/working-on-laptop-in-office.json"
+            background="transparent"
+          />
+        </q-card-section>
+        <q-separator v-if="isLgXs" vertical inset />
+        <q-card-section align="center" class="col-4">
+          <!-- horizontal=true make col inactive -->
+          <div class="text-h3 text-primary">
+            {{ $t('Sage Assistant') }}
+          </div>
+          <q-banner
+            dense
+            class="bg-white text-red text-subtitle1"
+            style="min-height: 100px"
           >
-            <template v-slot:prepend>
-              <q-icon name="fas fa-user" />
-            </template>
-          </q-input>
-          <!--  -->
-          <q-input
-            v-model="password"
-            clearable
-            class="login-input"
-            standout="bg-teal text-white"
-            bottom-slots
-            :label="$t('Password')"
-            :type="isPwd ? 'password' : 'text'"
-            autocomplete="current-password"
-            @keydown="checkEnterKey($event)"
-          >
-            <template v-slot:prepend>
-              <q-icon name="fas fa-key" />
-            </template>
-            <template v-slot:append>
-              <q-icon
-                :name="isPwd ? 'fas fa-eye-slash' : 'fas fa-eye'"
-                class="cursor-pointer"
-                v-on:click="isPwd = !isPwd"
-              />
-            </template>
-          </q-input>
+            {{ $t(loginMessage) }}
+          </q-banner>
+          <q-form>
+            <!--  -->
+            <q-input
+              v-model="username"
+              standout="bg-teal text-white"
+              bottom-slots
+              :label="$t('Your PC Account')"
+              autocomplete="username"
+              @keydown="checkEnterKey($event)"
+            >
+              <template v-slot:prepend>
+                <q-icon name="fas fa-user" />
+              </template>
+            </q-input>
+            <!--  -->
+            <q-input
+              v-model="password"
+              clearable
+              class="login-input"
+              standout="bg-teal text-white"
+              bottom-slots
+              :label="$t('Password')"
+              :type="isPwd ? 'password' : 'text'"
+              autocomplete="current-password"
+              @keydown="checkEnterKey($event)"
+            >
+              <template v-slot:prepend>
+                <q-icon name="fas fa-key" />
+              </template>
+              <template v-slot:append>
+                <q-icon
+                  :name="isPwd ? 'fas fa-eye-slash' : 'fas fa-eye'"
+                  class="cursor-pointer"
+                  v-on:click="isPwd = !isPwd"
+                />
+              </template>
+            </q-input>
 
-          <!--  -->
-          <q-btn
-            :loading="loading"
-            class="login-btn bg-login-card-input"
-            text-color="white"
-            unelevated
-            label
-            style="font-size: large"
-            @click="doLogin"
-          >
-            {{ $t('Login') }}
-          </q-btn>
-        </q-form>
+            <!--  -->
+            <q-btn
+              :loading="loading"
+              class="login-btn bg-login-card-input"
+              text-color="white"
+              unelevated
+              label
+              style="font-size: large"
+              @click="doLogin"
+            >
+              {{ $t('Login') }}
+            </q-btn>
+          </q-form>
+        </q-card-section>
       </q-card-section>
-    </q-card-section>
-  </q-card>
+    </q-card>
+  </q-page>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { setAuthority } from '@/assets/auth'
+import { axios } from '@/assets/axios'
+import { ebus } from '@/assets/ebus'
+import { removeToken, setLoginData, setToken } from '@/assets/storage'
 import { useQuasar } from 'quasar'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { ebus } from 'boot/ebus'
-import { axios } from 'boot/axios'
-import { setToken, removeToken, setLoginData } from 'assets/storage'
-import { setAuthority } from 'assets/auth'
 import { Vue3Lottie } from 'vue3-lottie'
 
 const $q = useQuasar()
@@ -150,7 +152,7 @@ const doLogin = async () => {
       { headers: { authorization: auth } }
     )
     .then(
-      (response) => {
+      () => {
         setToken(auth)
         fetchLoginData()
         fetchAuthorityData()
@@ -202,19 +204,17 @@ const fetchLoginData = async () => {
 }
 
 const fetchAuthorityData = async () => {
-  await axios
-    .get(
-      "/api1/syracuse/collaboration/syracuse/pages('x3.erp.EXPLOIT.home.$navigation')",
-      {}
-    )
-    .then(
-      (response) => {
-        setAuthority(response.data)
-      },
-      (error) => {
-        console.debug(error)
-      }
-    )
+  await axiosGet(
+    "/api1/syracuse/collaboration/syracuse/pages('x3.erp.EXPLOIT.home.$navigation')",
+    {}
+  ).then(
+    (response) => {
+      setAuthority(response)
+    },
+    (error) => {
+      console.debug(error)
+    }
+  )
 }
 </script>
 

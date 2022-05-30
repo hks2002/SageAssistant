@@ -1,5 +1,13 @@
-import { ebus } from '@/boot/ebus'
-import { i18n } from '@/boot/i18n'
+/***
+ * @Author         : Robert Huang<56649783@qq.com>
+ * @Date           : 2022-05-26 14:52:28
+ * @LastEditors    : Robert Huang<56649783@qq.com>
+ * @LastEditTime   : 2022-05-28 23:12:00
+ * @FilePath       : \web2\src\stores\pageManager.js
+ * @CopyRight      : Dedienne Aerospace China ZhuHai
+ */
+import { ebus } from '@/assets/ebus'
+import { i18n } from '@/assets/i18n'
 import { defineStore } from 'pinia'
 
 const { t } = i18n.global

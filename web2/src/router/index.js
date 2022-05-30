@@ -1,3 +1,11 @@
+/***
+ * @Author         : Robert Huang<56649783@qq.com>
+ * @Date           : 2022-03-25 11:01:23
+ * @LastEditors    : Robert Huang<56649783@qq.com>
+ * @LastEditTime   : 2022-05-28 23:11:39
+ * @FilePath       : \web2\src\router\index.js
+ * @CopyRight      : Dedienne Aerospace China ZhuHai
+ */
 import { getToken } from '@/assets/storage'
 import { usePagesStore } from '@/stores/pageManager'
 import { route } from 'quasar/wrappers'
@@ -40,10 +48,21 @@ export default route(function (/* { store, ssrContext } */) {
   const pagesStore = usePagesStore()
 
   Router.beforeEach((to, from, next) => {
-    // if page is Login, allowed it always.
-    if (to.path === '/Login') return next()
     // if not get login token, redirect to login
-    if (!process.env.DEV && !getToken()) return next('/Login')
+    if (!process.env.DEV && !getToken()) {
+      next('/Login')
+      return
+    }
+
+    // these pages skip pagesManage
+    if (
+      to.path === '/Login' ||
+      to.path === '/WaitInput ' ||
+      to.path.startsWith('/Report/')
+    ) {
+      next()
+      return
+    }
 
     // forward, backward doesn't have name, get name from matched array
     const idx = to.matched.findIndex((r) => r.name === to.name)
@@ -71,7 +90,7 @@ export default route(function (/* { store, ssrContext } */) {
     } else {
       console.error('Router Error:', to)
     }
-
-    return Router
   })
+
+  return Router
 })

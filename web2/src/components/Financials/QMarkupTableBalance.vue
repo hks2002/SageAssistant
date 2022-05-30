@@ -70,10 +70,9 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue'
-import { notifyError } from 'assets/common'
-import { axios } from 'boot/axios'
+import { axiosGet } from '@/assets/axiosActions'
 import { jsonToExcel } from 'assets/dataUtils'
+import { onMounted, ref, watch } from 'vue'
 
 const props = defineProps({
   accountNO: { type: String, require: true, default: '' },
@@ -85,39 +84,42 @@ const props = defineProps({
   showBalance: { type: Boolean, require: false, default: true }
 })
 
-const balanceItems = ref([])
+// common vars
 const showLoading = ref(false)
+
+// components vars
+const balanceItems = ref([])
 const colspan = ref(56)
 
+// actions
 const doUpdate = () => {
+  if (!props.accountNO || !props.year || !props.site) return
+
   showLoading.value = true
+
   colspan.value = 4
   colspan.value = props.showCredit ? colspan.value + 13 : colspan.value
   colspan.value = props.showDebit ? colspan.value + 13 : colspan.value
   colspan.value = props.showMovement ? colspan.value + 13 : colspan.value
   colspan.value = props.showBalance ? colspan.value + 13 : colspan.value
 
-  axios
-    .get(
-      '/Data/FinancialBalance' +
-        '?Site=' +
-        props.site +
-        '&AccountNO=' +
-        props.accountNO +
-        '&Year=' +
-        props.year
-    )
+  axiosGet(
+    '/Data/FinancialBalance' +
+      '?Site=' +
+      props.site +
+      '&AccountNO=' +
+      props.accountNO +
+      '&Year=' +
+      props.year
+  )
     .then((response) => {
-      balanceItems.value = response.data
-    })
-    .catch((e) => {
-      console.error(e)
-      notifyError('Loading Balance Failed!')
+      balanceItems.value = response
     })
     .finally(() => {
       showLoading.value = false
     })
 }
+
 const download = () => {
   const header = ['Site', 'AccountNO', 'Currency']
   for (idx = 0; idx <= 12; idx++) {
@@ -142,11 +144,9 @@ const download = () => {
   )
 }
 
+// events
 onMounted(() => {
-  console.debug('onMounted Balance')
-  if (props.accountNO && props.year && props.site) {
-    doUpdate()
-  }
+  doUpdate()
 })
 
 // Don't use watchEffect, it run before Mounted.

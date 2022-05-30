@@ -1,35 +1,40 @@
 <template>
-  <vue3-lottie
-    animationLink="/json/403.json"
-    v-if="!isAuthorised('GESSOH') && !isAuthorised('GESSQH')"
-    class="fixed-center"
-  />
-  <div v-else>
-    <div class="row q-gutter-sm q-pa-sm">
+  <q-page>
+    <WaitInputLottieVue
+      v-if="!categoryCode && !pnRoot && isAuthorised('GESSQH')"
+    />
+    <ExceptionLottieVue :ErrorCode="403" v-if="!isAuthorised('GESSQH')" />
+
+    <div class="row q-gutter-sm q-pa-sm" v-if="isAuthorised('GESSQH')">
       <q-input
         v-model="categoryCode"
         class="col-grow"
+        dense
         outlined
         hide-hint
         hide-bottom-space
+        clearable
         debounce="1000"
         :label="$t('Product Group2 Code')"
-        input-class="text-uppercase"
+        input-style="font-weight:bolder;font-size:25px;text-transform:uppercase"
         @update:model-value="doUpdate"
       />
       <q-input
         v-model="pnRoot"
         class="col-grow"
+        dense
         outlined
         hide-hint
         hide-bottom-space
+        clearable
         debounce="1000"
         :label="$t('PN Root Code')"
-        input-class="text-uppercase"
+        input-style="font-weight:bolder;font-size:25px;text-transform:uppercase"
         @update:model-value="doUpdate"
       />
       <q-input
         v-model="dateFrom"
+        dense
         outlined
         hide-hint
         hide-bottom-space
@@ -41,6 +46,7 @@
       />
       <q-input
         v-model="dateTo"
+        dense
         outlined
         hide-hint
         hide-bottom-space
@@ -52,6 +58,7 @@
       />
       <q-input
         v-model="limitN"
+        dense
         outlined
         hide-hint
         hide-bottom-space
@@ -74,19 +81,12 @@
       active-color="primary"
       indicator-color="primary"
       narrow-indicator
-      :style="'height:' + tabHeaderHeight + 'px'"
-      v-if="categoryCode || pnRoot"
     >
       <q-tab name="YourSite" label="Your-Site" />
       <q-tab name="AllSites" label="All-Sites" />
     </q-tabs>
 
-    <Vue3Lottie
-      animationLink="/json/waiting-input.json"
-      :style="{ height: tableHeight + 250 + 'px' }"
-      v-if="!(categoryCode || pnRoot)"
-    />
-    <q-tab-panels v-model="tab" keep-alive v-else>
+    <q-tab-panels v-model="tab" keep-alive>
       <q-tab-panel name="YourSite" class="q-pa-none">
         <q-table
           v-model:pagination="pagination"
@@ -96,10 +96,9 @@
           :rows="analysisQuoteSalesCost"
           :columns="columns"
           :rows-per-page-options="[0]"
+          :loading="showLoading"
           class="q-mx-sm q-mb-sm my-sticky"
-          :style="
-            'height:' + tableHeight + 'px;width:' + (pageBodyWidth - 16) + 'px'
-          "
+          :style="{ height: tableHeight + 'px' }"
         >
           <template v-slot:top>
             <q-toolbar class="bg-teal text-white shadow-2">
@@ -109,6 +108,11 @@
                 <q-btn dense flat icon="fas fa-download" @click="download()" />
               </q-toolbar-title>
             </q-toolbar>
+          </template>
+          <template v-slot:loading>
+            <q-inner-loading showing>
+              <q-spinner-ios size="50px" color="primary" />
+            </q-inner-loading>
           </template>
         </q-table>
       </q-tab-panel>
@@ -121,10 +125,9 @@
           :rows="analysisQuoteSalesCostAllKeyed"
           :columns="columnsAll"
           :rows-per-page-options="[0]"
+          :loading="showLoading"
           class="q-mx-sm q-mb-sm my-sticky"
-          :style="
-            'height:' + tableHeight + 'px;width:' + (pageBodyWidth - 16) + 'px'
-          "
+          :style="{ height: tableHeight + 'px' }"
         >
           <template v-slot:top>
             <q-toolbar class="bg-teal text-white shadow-2">
@@ -202,43 +205,40 @@
               </q-th>
             </q-tr>
           </template>
+          <template v-slot:loading>
+            <q-inner-loading showing>
+              <q-spinner-ios size="50px" color="primary" />
+            </q-inner-loading>
+          </template>
         </q-table>
       </q-tab-panel>
     </q-tab-panels>
-  </div>
+  </q-page>
 </template>
 
 <script setup>
-import { ref, onBeforeUnmount, onBeforeMount, onMounted } from 'vue'
-import { axios } from 'boot/axios'
-import { ebus } from 'boot/ebus'
-import { useQuasar, date } from 'quasar'
-import { getCookies } from 'assets/storage'
-import { jsonToExcel, jsonToTable } from 'assets/dataUtils'
+import { axiosGet } from '@/assets/axiosActions'
+import { ebus } from '@/assets/ebus'
+import ExceptionLottieVue from '@/components/lottie/ExceptionLottie.vue'
+import WaitInputLottieVue from '@/components/lottie/WaitInputLottie.vue'
 import { isAuthorised } from 'assets/auth'
-import _forEach from 'lodash/forEach'
+import { jsonToExcel } from 'assets/dataUtils'
+import { getCookies } from 'assets/storage'
 import _groupBy from 'lodash/groupBy'
 import _map from 'lodash/map'
 import _values from 'lodash/values'
-import { Vue3Lottie } from 'vue3-lottie'
+import { date } from 'quasar'
+import { computed, onBeforeUnmount, ref } from 'vue'
 
+/* eslint-disable */
 const props = defineProps({
-  // if mount to tabpanel
-  tabPanelHeight: {
-    type: Number,
-    required: false,
-    default: 0
-  }
+  pageHeight: { type: Number, default: 0 /* not passing  */ }
 })
-const timer = new Date().getTime()
 
-const $q = useQuasar()
-const tabHeaderHeight = ref(36)
-const tableHeight = ref(250)
-const pageBodyWidth = ref(600)
+// common vars
+const showLoading = ref(false)
 
-const { formatDate, addToDate } = date
-
+// page vars
 const site = ref('')
 site.value = getCookies('site')
 const siteList = ref([])
@@ -253,77 +253,17 @@ const pagination = ref({
 const categoryCode = ref('')
 const pnRoot = ref('')
 
+const { formatDate, addToDate } = date
 const nowTimeStamp = Date.now()
 const fromTimeStamp = addToDate(nowTimeStamp, { years: -3 })
 const dateFrom = ref(formatDate(fromTimeStamp, 'YYYY-MM-DD'))
 const dateTo = ref(formatDate(nowTimeStamp, 'YYYY-MM-DD'))
+
 const limitN = ref(3)
+
 const analysisQuoteSalesCost = ref([])
 let analysisQuoteSalesCostAll = []
 const analysisQuoteSalesCostAllKeyed = ref([])
-
-const doUpdate = () => {
-  categoryCode.value = categoryCode.value.toUpperCase()
-
-  doUpdateOne()
-  doUpdateAll()
-}
-
-const doUpdateOne = () => {
-  categoryCode.value = categoryCode.value.toUpperCase()
-  if (!checkInput()) return
-
-  $q.loadingBar.start()
-  axios
-    .get(
-      `/Data/AnalysisQuoteSalesCost?Site=${site.value}&CategoryCode=${categoryCode.value}&PnRoot=${pnRoot.value}&DateFrom=${dateFrom.value}&DateTo=${dateTo.value}&Limit=${limitN.value}`
-    )
-    .then((response) => {
-      analysisQuoteSalesCost.value = response.data
-      analysisQuoteSalesCost.value.forEach((row, index) => {
-        row.index = index + 1
-      })
-    })
-    .catch((e) => {
-      console.error(e)
-      notifyError('Loading AnalysisQuoteSalesCost Failed!')
-    })
-    .finally(() => {
-      $q.loadingBar.stop()
-    })
-}
-
-const doUpdateAll = () => {
-  if (!checkInput()) return
-
-  $q.loadingBar.start()
-  axios
-    .get(
-      `/Data/AnalysisQuoteSalesCost?Site=ALL&CategoryCode=${categoryCode.value}&PnRoot=${pnRoot.value}&DateFrom=${dateFrom.value}&DateTo=${dateTo.value}&Limit=${limitN.value}`
-    )
-    .then((response) => {
-      analysisQuoteSalesCostAll = response.data
-      analysisQuoteSalesCostAllKeyed.value = _values(
-        _groupBy(analysisQuoteSalesCostAll, 'PN')
-      )
-      analysisQuoteSalesCostAllKeyed.value.forEach((row, index) => {
-        row.index = index + 1
-      })
-    })
-    .catch((e) => {
-      console.error(e)
-      notifyError('Loading AnalysisQuoteSalesCost Failed!')
-    })
-    .finally(() => {
-      $q.loadingBar.stop()
-    })
-}
-
-const checkInput = () => {
-  if (categoryCode.value === '' && pnRoot.value === '') return false
-  if (limitN.value <= 0 || limitN.value > 10) return false
-  return true
-}
 
 const columns = [
   {
@@ -386,112 +326,6 @@ const columns = [
     headerClasses: 'bg-info text-white'
   }
 ]
-for (let i = 0; i < limitN.value; ++i) {
-  const o = {
-    name: 'LastQPrice' + (i + 1),
-    label: 'LastQPrice' + (i + 1),
-    align: 'right',
-    format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
-    field: (row) => row['LastQPrice' + (i + 1)],
-    headerClasses: 'bg-info text-white'
-  }
-  columns.push(o)
-}
-let o = {}
-o = {
-  name: 'SCnt',
-  label: 'SCnt',
-  align: 'center',
-  field: (row) => row.SCnt,
-  headerClasses: 'bg-positive text-white'
-}
-columns.push(o)
-o = {
-  name: 'SQty',
-  label: 'SQty',
-  align: 'center',
-  field: (row) => row.SQty,
-  headerClasses: 'bg-positive text-white'
-}
-columns.push(o)
-o = {
-  name: 'MinSPrice',
-  label: 'MinSPrice',
-  align: 'right',
-  format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
-  field: (row) => row.AvgSPrice,
-  headerClasses: 'bg-accent text-white'
-}
-columns.push(o)
-o = {
-  name: 'AvgSPrice',
-  label: 'AvgSPrice',
-  align: 'right',
-  format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
-  field: (row) => row.AvgSPrice,
-  headerClasses: 'bg-accent text-white'
-}
-columns.push(o)
-o = {
-  name: 'MaxSPrice',
-  label: 'MaxSPrice',
-  align: 'right',
-  format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
-  field: (row) => row.MaxSPrice,
-  headerClasses: 'bg-accent text-white'
-}
-columns.push(o)
-for (let i = 0; i < limitN.value; ++i) {
-  const o = {
-    name: 'LastSPrice' + (i + 1),
-    label: 'LastSPrice' + (i + 1),
-    align: 'right',
-    format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
-    field: (row) => row['LastSPrice' + (i + 1)],
-    headerClasses: 'bg-accent text-white'
-  }
-  columns.push(o)
-}
-for (let i = 0; i < limitN.value; ++i) {
-  const o = {
-    name: 'LastPJT' + (i + 1),
-    label: 'LastPJT' + (i + 1),
-    align: 'right',
-    field: (row) => row['LastPJT' + (i + 1)],
-    headerClasses: 'bg-warning text-white'
-  }
-  columns.push(o)
-}
-for (let i = 0; i < limitN.value; ++i) {
-  const o = {
-    name: 'LastCost' + (i + 1),
-    label: 'LastCost' + (i + 1),
-    align: 'right',
-    format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
-    field: (row) => row['LastCost' + (i + 1)],
-    headerClasses: 'bg-primary text-white'
-  }
-  columns.push(o)
-}
-
-const download = () => {
-  const header = _map(columns, 'name')
-  jsonToExcel(
-    header,
-    analysisQuoteSalesCost.value,
-    'Product group2 [' +
-      categoryCode.value +
-      '] and PN [' +
-      pnRoot.value +
-      'in ' +
-      site.value +
-      ' from ' +
-      dateFrom.value +
-      ' to ' +
-      dateTo.value
-  )
-}
-
 const columnsAll = [
   {
     name: '#',
@@ -516,6 +350,180 @@ const columnsAll = [
   }
 ]
 
+// computed vars
+const tableHeight = computed(() => {
+  // should consider element margin/padding value
+  return props.pageHeight - 64 - 36
+})
+
+// actions
+const doUpdate = () => {
+  doUpdateOne()
+  doUpdateAll()
+}
+
+const doUpdateOne = () => {
+  if (!checkInput()) return
+
+  showLoading.value = true
+
+  axiosGet(
+    `/Data/AnalysisQuoteSalesCost?Site=${site.value}&CategoryCode=${categoryCode.value}&PnRoot=${pnRoot.value}&DateFrom=${dateFrom.value}&DateTo=${dateTo.value}&Limit=${limitN.value}`
+  )
+    .then((response) => {
+      analysisQuoteSalesCost.value = response
+      analysisQuoteSalesCost.value.forEach((row, index) => {
+        row.index = index + 1
+      })
+    })
+    .finally(() => {
+      showLoading.value = false
+    })
+}
+
+const doUpdateAll = () => {
+  if (!checkInput()) return
+
+  showLoading.value = true
+
+  axiosGet(
+    `/Data/AnalysisQuoteSalesCost?Site=ALL&CategoryCode=${categoryCode.value}&PnRoot=${pnRoot.value}&DateFrom=${dateFrom.value}&DateTo=${dateTo.value}&Limit=${limitN.value}`
+  )
+    .then((response) => {
+      analysisQuoteSalesCostAll = response
+      analysisQuoteSalesCostAllKeyed.value = _values(
+        _groupBy(analysisQuoteSalesCostAll, 'PN')
+      )
+      analysisQuoteSalesCostAllKeyed.value.forEach((row, index) => {
+        row.index = index + 1
+      })
+    })
+    .finally(() => {
+      showLoading.value = false
+    })
+}
+
+const checkInput = () => {
+  if (categoryCode.value === '' && pnRoot.value === '') return false
+  if (limitN.value <= 0 || limitN.value > 10) return false
+
+  if (categoryCode.value) {
+    categoryCode.value = categoryCode.value.toUpperCase()
+  }
+  if (pnRoot.value) {
+    pnRoot.value = pnRoot.value.toUpperCase()
+  }
+  return true
+}
+
+const addColumns = () => {
+  for (let i = 0; i < limitN.value; ++i) {
+    const o = {
+      name: 'LastQPrice' + (i + 1),
+      label: 'LastQPrice' + (i + 1),
+      align: 'right',
+      format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+      field: (row) => row['LastQPrice' + (i + 1)],
+      headerClasses: 'bg-info text-white'
+    }
+    columns.push(o)
+  }
+  let o = {}
+  o = {
+    name: 'SCnt',
+    label: 'SCnt',
+    align: 'center',
+    field: (row) => row.SCnt,
+    headerClasses: 'bg-positive text-white'
+  }
+  columns.push(o)
+  o = {
+    name: 'SQty',
+    label: 'SQty',
+    align: 'center',
+    field: (row) => row.SQty,
+    headerClasses: 'bg-positive text-white'
+  }
+  columns.push(o)
+  o = {
+    name: 'MinSPrice',
+    label: 'MinSPrice',
+    align: 'right',
+    format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+    field: (row) => row.AvgSPrice,
+    headerClasses: 'bg-accent text-white'
+  }
+  columns.push(o)
+  o = {
+    name: 'AvgSPrice',
+    label: 'AvgSPrice',
+    align: 'right',
+    format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+    field: (row) => row.AvgSPrice,
+    headerClasses: 'bg-accent text-white'
+  }
+  columns.push(o)
+  o = {
+    name: 'MaxSPrice',
+    label: 'MaxSPrice',
+    align: 'right',
+    format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+    field: (row) => row.MaxSPrice,
+    headerClasses: 'bg-accent text-white'
+  }
+  columns.push(o)
+  for (let i = 0; i < limitN.value; ++i) {
+    const o = {
+      name: 'LastSPrice' + (i + 1),
+      label: 'LastSPrice' + (i + 1),
+      align: 'right',
+      format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+      field: (row) => row['LastSPrice' + (i + 1)],
+      headerClasses: 'bg-accent text-white'
+    }
+    columns.push(o)
+  }
+  for (let i = 0; i < limitN.value; ++i) {
+    const o = {
+      name: 'LastPJT' + (i + 1),
+      label: 'LastPJT' + (i + 1),
+      align: 'right',
+      field: (row) => row['LastPJT' + (i + 1)],
+      headerClasses: 'bg-warning text-white'
+    }
+    columns.push(o)
+  }
+  for (let i = 0; i < limitN.value; ++i) {
+    const o = {
+      name: 'LastCost' + (i + 1),
+      label: 'LastCost' + (i + 1),
+      align: 'right',
+      format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+      field: (row) => row['LastCost' + (i + 1)],
+      headerClasses: 'bg-primary text-white'
+    }
+    columns.push(o)
+  }
+}
+
+const download = () => {
+  const header = _map(columns, 'name')
+  jsonToExcel(
+    header,
+    analysisQuoteSalesCost.value,
+    'Product group2 [' +
+      categoryCode.value +
+      '] and PN [' +
+      pnRoot.value +
+      'in ' +
+      site.value +
+      ' from ' +
+      dateFrom.value +
+      ' to ' +
+      dateTo.value
+  )
+}
+
 // get value from the array data which contains all sites
 const getSiteValue = (array, site, key) => {
   for (let i = 0; i < array.length; i++) {
@@ -524,165 +532,168 @@ const getSiteValue = (array, site, key) => {
     }
   }
 }
-for (let i = 0; i < siteN; ++i) {
-  let o = {}
-  o = {
-    name: 'QCnt' + siteList.value[i],
-    label: siteList.value[i],
-    align: 'center',
-    field: (row) => getSiteValue(row, siteList.value[i], 'QCnt'),
-    headerClasses: 'bg-light-green text-white'
-  }
-  columnsAll.push(o)
-}
-for (let i = 0; i < siteN; ++i) {
-  let o = {}
-  o = {
-    name: 'QQty' + siteList.value[i],
-    label: siteList.value[i],
-    align: 'center',
-    field: (row) => getSiteValue(row, siteList.value[i], 'QQty'),
-    headerClasses: 'bg-green text-white'
-  }
-  columnsAll.push(o)
-}
-for (let i = 0; i < siteN; ++i) {
-  let o = {}
-  o = {
-    name: 'MinQPrice' + siteList.value[i],
-    label: siteList.value[i],
-    align: 'right',
-    format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
-    field: (row) => getSiteValue(row, siteList.value[i], 'MinQPrice'),
-    headerClasses: 'bg-indigo-6 text-white'
-  }
-  columnsAll.push(o)
-}
-for (let i = 0; i < siteN; ++i) {
-  let o = {}
-  o = {
-    name: 'AvgQPrice' + siteList.value[i],
-    label: siteList.value[i],
-    align: 'right',
-    format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
-    field: (row) => getSiteValue(row, siteList.value[i], 'AvgQPrice'),
-    headerClasses: 'bg-indigo-4 text-white'
-  }
-  columnsAll.push(o)
-}
-for (let i = 0; i < siteN; ++i) {
-  let o = {}
-  o = {
-    name: 'MaxQPrice' + siteList.value[i],
-    label: siteList.value[i],
-    align: 'right',
-    format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
-    field: (row) => getSiteValue(row, siteList.value[i], 'MaxQPrice'),
-    headerClasses: 'bg-indigo-2 text-white'
-  }
-  columnsAll.push(o)
-}
-for (let ii = 0; ii < limitN.value; ++ii) {
+
+const addColumnsAll = () => {
   for (let i = 0; i < siteN; ++i) {
     let o = {}
     o = {
-      name: 'LastQPrice' + (ii + 1) + siteList.value[i],
+      name: 'QCnt' + siteList.value[i],
       label: siteList.value[i],
-      align: 'right',
-      format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
-      field: (row) =>
-        getSiteValue(row, siteList.value[i], 'LastQPrice' + (ii + 1)),
-      headerClasses: 'bg-cyan-' + (14 - ii) + ' text-white'
+      align: 'center',
+      field: (row) => getSiteValue(row, siteList.value[i], 'QCnt'),
+      headerClasses: 'bg-light-green text-white'
     }
     columnsAll.push(o)
   }
-}
-for (let i = 0; i < siteN; ++i) {
-  let o = {}
-  o = {
-    name: 'SCnt' + siteList.value[i],
-    label: siteList.value[i],
-    align: 'center',
-    field: (row) => getSiteValue(row, siteList.value[i], 'SCnt'),
-    headerClasses: 'bg-light-green text-white'
-  }
-  columnsAll.push(o)
-}
-for (let i = 0; i < siteN; ++i) {
-  let o = {}
-  o = {
-    name: 'SQty' + siteList.value[i],
-    label: siteList.value[i],
-    align: 'center',
-    field: (row) => getSiteValue(row, siteList.value[i], 'SQty'),
-    headerClasses: 'bg-green text-white'
-  }
-  columnsAll.push(o)
-}
-for (let i = 0; i < siteN; ++i) {
-  let o = {}
-  o = {
-    name: 'MinSPrice' + siteList.value[i],
-    label: siteList.value[i],
-    align: 'right',
-    format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
-    field: (row) => getSiteValue(row, siteList.value[i], 'MinSPrice'),
-    headerClasses: 'bg-indigo-6 text-white'
-  }
-  columnsAll.push(o)
-}
-for (let i = 0; i < siteN; ++i) {
-  let o = {}
-  o = {
-    name: 'AvgSPrice' + siteList.value[i],
-    label: siteList.value[i],
-    align: 'right',
-    format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
-    field: (row) => getSiteValue(row, siteList.value[i], 'AvgSPrice'),
-    headerClasses: 'bg-indigo-4 text-white'
-  }
-  columnsAll.push(o)
-}
-for (let i = 0; i < siteN; ++i) {
-  let o = {}
-  o = {
-    name: 'MaxSPrice' + siteList.value[i],
-    label: siteList.value[i],
-    align: 'right',
-    format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
-    field: (row) => getSiteValue(row, siteList.value[i], 'MaxSPrice'),
-    headerClasses: 'bg-indigo-2 text-white'
-  }
-  columnsAll.push(o)
-}
-for (let ii = 0; ii < limitN.value; ++ii) {
   for (let i = 0; i < siteN; ++i) {
     let o = {}
     o = {
-      name: 'LastSPrice' + (ii + 1) + siteList.value[i],
+      name: 'QQty' + siteList.value[i],
       label: siteList.value[i],
-      align: 'right',
-      format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
-      field: (row) =>
-        getSiteValue(row, siteList.value[i], 'LastSPrice' + (ii + 1)),
-      headerClasses: 'bg-blue-' + (14 - ii) + ' text-white'
+      align: 'center',
+      field: (row) => getSiteValue(row, siteList.value[i], 'QQty'),
+      headerClasses: 'bg-green text-white'
     }
     columnsAll.push(o)
   }
-}
-for (let ii = 0; ii < limitN.value; ++ii) {
   for (let i = 0; i < siteN; ++i) {
     let o = {}
     o = {
-      name: 'LastCost' + (ii + 1) + siteList.value[i],
+      name: 'MinQPrice' + siteList.value[i],
       label: siteList.value[i],
       align: 'right',
       format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
-      field: (row) =>
-        getSiteValue(row, siteList.value[i], 'LastCost' + (ii + 1)),
-      headerClasses: 'bg-orange-' + (14 - ii) + ' text-white'
+      field: (row) => getSiteValue(row, siteList.value[i], 'MinQPrice'),
+      headerClasses: 'bg-indigo-6 text-white'
     }
     columnsAll.push(o)
+  }
+  for (let i = 0; i < siteN; ++i) {
+    let o = {}
+    o = {
+      name: 'AvgQPrice' + siteList.value[i],
+      label: siteList.value[i],
+      align: 'right',
+      format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+      field: (row) => getSiteValue(row, siteList.value[i], 'AvgQPrice'),
+      headerClasses: 'bg-indigo-4 text-white'
+    }
+    columnsAll.push(o)
+  }
+  for (let i = 0; i < siteN; ++i) {
+    let o = {}
+    o = {
+      name: 'MaxQPrice' + siteList.value[i],
+      label: siteList.value[i],
+      align: 'right',
+      format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+      field: (row) => getSiteValue(row, siteList.value[i], 'MaxQPrice'),
+      headerClasses: 'bg-indigo-2 text-white'
+    }
+    columnsAll.push(o)
+  }
+  for (let ii = 0; ii < limitN.value; ++ii) {
+    for (let i = 0; i < siteN; ++i) {
+      let o = {}
+      o = {
+        name: 'LastQPrice' + (ii + 1) + siteList.value[i],
+        label: siteList.value[i],
+        align: 'right',
+        format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+        field: (row) =>
+          getSiteValue(row, siteList.value[i], 'LastQPrice' + (ii + 1)),
+        headerClasses: 'bg-cyan-' + (14 - ii) + ' text-white'
+      }
+      columnsAll.push(o)
+    }
+  }
+  for (let i = 0; i < siteN; ++i) {
+    let o = {}
+    o = {
+      name: 'SCnt' + siteList.value[i],
+      label: siteList.value[i],
+      align: 'center',
+      field: (row) => getSiteValue(row, siteList.value[i], 'SCnt'),
+      headerClasses: 'bg-light-green text-white'
+    }
+    columnsAll.push(o)
+  }
+  for (let i = 0; i < siteN; ++i) {
+    let o = {}
+    o = {
+      name: 'SQty' + siteList.value[i],
+      label: siteList.value[i],
+      align: 'center',
+      field: (row) => getSiteValue(row, siteList.value[i], 'SQty'),
+      headerClasses: 'bg-green text-white'
+    }
+    columnsAll.push(o)
+  }
+  for (let i = 0; i < siteN; ++i) {
+    let o = {}
+    o = {
+      name: 'MinSPrice' + siteList.value[i],
+      label: siteList.value[i],
+      align: 'right',
+      format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+      field: (row) => getSiteValue(row, siteList.value[i], 'MinSPrice'),
+      headerClasses: 'bg-indigo-6 text-white'
+    }
+    columnsAll.push(o)
+  }
+  for (let i = 0; i < siteN; ++i) {
+    let o = {}
+    o = {
+      name: 'AvgSPrice' + siteList.value[i],
+      label: siteList.value[i],
+      align: 'right',
+      format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+      field: (row) => getSiteValue(row, siteList.value[i], 'AvgSPrice'),
+      headerClasses: 'bg-indigo-4 text-white'
+    }
+    columnsAll.push(o)
+  }
+  for (let i = 0; i < siteN; ++i) {
+    let o = {}
+    o = {
+      name: 'MaxSPrice' + siteList.value[i],
+      label: siteList.value[i],
+      align: 'right',
+      format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+      field: (row) => getSiteValue(row, siteList.value[i], 'MaxSPrice'),
+      headerClasses: 'bg-indigo-2 text-white'
+    }
+    columnsAll.push(o)
+  }
+  for (let ii = 0; ii < limitN.value; ++ii) {
+    for (let i = 0; i < siteN; ++i) {
+      let o = {}
+      o = {
+        name: 'LastSPrice' + (ii + 1) + siteList.value[i],
+        label: siteList.value[i],
+        align: 'right',
+        format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+        field: (row) =>
+          getSiteValue(row, siteList.value[i], 'LastSPrice' + (ii + 1)),
+        headerClasses: 'bg-blue-' + (14 - ii) + ' text-white'
+      }
+      columnsAll.push(o)
+    }
+  }
+  for (let ii = 0; ii < limitN.value; ++ii) {
+    for (let i = 0; i < siteN; ++i) {
+      let o = {}
+      o = {
+        name: 'LastCost' + (ii + 1) + siteList.value[i],
+        label: siteList.value[i],
+        align: 'right',
+        format: (val) => (isNaN(parseInt(val, 10)) ? '' : parseInt(val, 10)),
+        field: (row) =>
+          getSiteValue(row, siteList.value[i], 'LastCost' + (ii + 1)),
+        headerClasses: 'bg-orange-' + (14 - ii) + ' text-white'
+      }
+      columnsAll.push(o)
+    }
   }
 }
 
@@ -727,22 +738,11 @@ const downloadAll = () => {
   )
 }
 
-onBeforeMount(() => {
-  console.log('onBeforeMount:')
-  pageBodyWidth.value = $q.pageBodyWidth
+// run funs
+addColumns()
+addColumnsAll()
 
-  if (props.tabPanelHeight > 0) {
-    tableHeight.value = props.tabPanelHeight - tabHeaderHeight.value - 80
-  } else {
-    tableHeight.value = $q.pageBodyHeight - tabHeaderHeight.value
-  }
-  console.log('tableHeight:' + tableHeight.value)
-})
-
-onMounted(() => {
-  console.log('onMounted:')
-})
-// event handing
+// events
 ebus.on('changeSite', (newSite) => {
   site.value = newSite
   doUpdateOne()
@@ -751,6 +751,7 @@ onBeforeUnmount(() => {
   ebus.off('changeSite')
 })
 </script>
+
 <style lang="sass">
 .q-table--dense .q-table__top
   padding: 0

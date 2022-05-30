@@ -1,5 +1,5 @@
-import { Cookies, LocalStorage, SessionStorage } from 'quasar'
 import _merge from 'lodash/merge'
+import { Cookies, LocalStorage, SessionStorage } from 'quasar'
 
 export const storageKey = {
   loginData: 'loginData',
@@ -7,21 +7,21 @@ export const storageKey = {
 }
 
 // Cookies
-export function setCookies (key, val) {
+export function setCookies(key, val) {
   Cookies.set(key, val, { expires: 24 * 3600 })
 }
 
-export function getCookies (key) {
+export function getCookies(key) {
   return Cookies.get(key)
 }
 // Cookies
 
 // SessionStorage
-export function setSessionStorage (key, val) {
+export function setSessionStorage(key, val) {
   SessionStorage.set(key, val)
 }
 
-export function getSessionStorage (key) {
+export function getSessionStorage(key) {
   return SessionStorage.getItem(key)
 }
 // SessionStorage

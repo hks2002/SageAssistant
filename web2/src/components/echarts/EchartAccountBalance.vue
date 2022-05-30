@@ -8,14 +8,20 @@
 </template>
 
 <script setup>
-import { notifyError } from 'assets/common'
-import { defaultToolbox, defaultTooltip, echarts } from 'assets/echartsCfg.js'
-import { axios } from 'boot/axios'
+import { axiosGet } from '@/assets/axiosActions'
+import { defaultToolbox, defaultTooltip, echarts } from '@/assets/echartsCfg.js'
 import _forEach from 'lodash/forEach'
 import _groupBy from 'lodash/groupBy'
 import _map from 'lodash/map'
 import _uniq from 'lodash/uniq'
-import { onMounted, ref, watch } from 'vue'
+import {
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  ref,
+  watch
+} from 'vue'
 
 const props = defineProps({
   accountNO: { type: String, require: true, default: '' },
@@ -24,6 +30,10 @@ const props = defineProps({
   cat: { type: String, require: true, default: '' }
 })
 
+// common vars
+const showLoading = ref(false)
+
+// echart vars
 let eChart = null
 let data = []
 let lengend = []
@@ -47,29 +57,26 @@ for (let i = 0; i <= 12; i++) {
   dimensions.push(props.cat + i)
 }
 
-const showLoading = ref(false)
-
+// actions
 const doUpdate = () => {
+  if (!props.site || !props.year || !props.cat || !props.accountNO) return
+
   showLoading.value = true
-  axios
-    .get(
-      '/Data/FinancialBalance' +
-        props.cat +
-        '?Site=' +
-        props.site +
-        '&Year=' +
-        props.year +
-        '&AccountNO=' +
-        props.accountNO
-    )
+
+  axiosGet(
+    '/Data/FinancialBalance' +
+      props.cat +
+      '?Site=' +
+      props.site +
+      '&Year=' +
+      props.year +
+      '&AccountNO=' +
+      props.accountNO
+  )
     .then((response) => {
-      data = response.data
+      data = response
       prepareData()
       setEchart()
-    })
-    .catch((e) => {
-      console.error(e)
-      notifyError(t('Loading Account Balance Failed!'))
     })
     .finally(() => {
       showLoading.value = false
@@ -77,7 +84,7 @@ const doUpdate = () => {
 }
 
 const prepareData = () => {
-  _forEach(data, (value, index) => {
+  _forEach(data, (value) => {
     value.AccountAndCurrency = value.AccountNO + value.Currency
   })
   lengend = _uniq(_map(data, 'AccountAndCurrency'))
@@ -144,7 +151,7 @@ const setEchart = () => {
       yAxis: {
         type: 'value',
         axisLabel: {
-          formatter: function (value, index) {
+          formatter: function (value) {
             if (value >= 1000000) {
               value = value / 1000000 + 'M'
             } else if (value >= 1000 && value < 1000000) {
@@ -167,30 +174,40 @@ const setEchart = () => {
   )
 }
 
+const resize = () => {
+  eChart.resize()
+}
+
+// events
 onMounted(() => {
-  console.debug('onMounted EchartAccoutBalance')
   eChart = echarts.init(document.getElementById(eChartId))
-  if (props.site && props.year && props.cat && props.accountNO) {
-    doUpdate()
-  }
+  doUpdate()
 })
 
-// Don't use watchEffect, it run before Mounted.
+onBeforeUnmount(() => {
+  eChart.dispose()
+})
+
+onActivated(() => {
+  // when use keep alive, must use activated/deactivated
+  window.addEventListener('resize', resize)
+  resize()
+})
+
+onDeactivated(() => {
+  // when use keep alive, must use activated/deactivated
+  window.removeEventListener('resize', resize)
+})
+
 watch(
+  // Don't use watchEffect, it run before Mounted.
   () => [props.site, props.year, props.cat, props.accountNO],
   (...newAndold) => {
     // newAndold[1]:old
     // newAndold[0]:new
     console.debug('watch:' + newAndold[1] + ' ---> ' + newAndold[0])
 
-    if (
-      newAndold[0][0] &&
-      newAndold[0][1] &&
-      newAndold[0][2] &&
-      newAndold[0][3]
-    ) {
-      doUpdate()
-    }
+    doUpdate()
   }
 )
 </script>

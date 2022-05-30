@@ -1,39 +1,35 @@
 <template>
-  <vue3-lottie
-    animationLink="/json/403.json"
-    v-if="!isAuthorised('GESSIH')"
-    class="fixed-center"
-  />
-  <q-card v-else>
-    <div class="row q-gutter-sm q-px-sm q-pt-sm">
+  <q-page>
+    <WaitInputLottieVue v-if="!accountNO && isAuthorised('GESSIH')" />
+    <ExceptionLottieVue :ErrorCode="403" v-if="!isAuthorised('GESSIH')" />
+
+    <div class="row q-gutter-sm q-px-sm q-pt-sm" v-if="isAuthorised('GESSIH')">
       <q-input
         v-model="accountNO"
+        dense
         outlined
         debounce="1000"
         :label="$t('AccountNO')"
         hint="such as: 1001000 or 1001000,1001001,1001002"
         hide-hint
         hide-bottom-space
+        input-style="font-weight:bolder;font-size:25px;text-transform:uppercase"
         class="col-grow"
       />
       <q-input
         v-model="year"
+        dense
         outlined
         debounce="1000"
         :label="$t('Year')"
         class="col-1"
       />
-      <q-toggle v-model="showBalance" label="Balance" class="col-1" />
-      <q-toggle v-model="showDebit" label="Debit" class="col-1" />
-      <q-toggle v-model="showCredit" label="Credit" class="col-1" />
-      <q-toggle v-model="showMovement" label="Movement" class="col-1" />
+      <q-toggle v-model="showBalance" dense label="Balance" class="col-1" />
+      <q-toggle v-model="showDebit" dense label="Debit" class="col-1" />
+      <q-toggle v-model="showCredit" dense label="Credit" class="col-1" />
+      <q-toggle v-model="showMovement" dense label="Movement" class="col-1" />
     </div>
-    <Vue3Lottie
-      animationLink="/json/waiting-input.json"
-      :style="{ height: tableHeight + 250 + 'px', width: tableWidth + 'px' }"
-      v-if="!accountNO"
-    />
-    <q-list class="q-pa-sm" v-else>
+    <q-list class="q-pa-sm" v-if="accountNO">
       <div class="row" style="padding: 0px; height: 250px">
         <echart-fiancial-account-balance-vue
           :site="site"
@@ -76,23 +72,32 @@
         :showCredit="showCredit"
         :showDebit="showDebit"
         :showMovement="showMovement"
-        :style="{ height: tableHeight + 'px', width: tableWidth + 'px' }"
+        :style="{ height: tableHeight + 'px' }"
       />
     </q-list>
-  </q-card>
+  </q-page>
 </template>
 
 <script setup>
-import { ref, onBeforeMount, onBeforeUnmount } from 'vue'
-import { useQuasar, date } from 'quasar'
-import { ebus } from 'boot/ebus'
-import { getCookies } from 'src/assets/storage'
-import { isAuthorised } from 'assets/auth'
-import { Vue3Lottie } from 'vue3-lottie'
-import QMarkupTableBalanceVue from './QMarkupTableBalance.vue'
-import EchartFiancialAccountBalanceVue from 'src/components/echarts/EchartAccountBalance.vue'
+import { isAuthorised } from '@/assets/auth'
+import { ebus } from '@/assets/ebus'
+import { getCookies } from '@/assets/storage'
+import EchartFiancialAccountBalanceVue from '@/components/echarts/EchartAccountBalance.vue'
+import QMarkupTableBalanceVue from '@/components/Financials/QMarkupTableBalance.vue'
+import ExceptionLottieVue from '@/components/lottie/ExceptionLottie.vue'
+import WaitInputLottieVue from '@/components/lottie/WaitInputLottie.vue'
+import { date } from 'quasar'
+import { computed, onBeforeUnmount, ref } from 'vue'
 
-const $q = useQuasar()
+/* eslint-disable */
+const props = defineProps({
+  pageHeight: { type: Number, default: 0 /* not passing  */ }
+})
+
+// common vars
+const site = ref(getCookies('site'))
+
+// page vars
 const accountNO = ref(null)
 const nowTimeStamp = Date.now()
 const formattedString = date.formatDate(
@@ -106,22 +111,17 @@ const showDebit = ref(true)
 const showCredit = ref(true)
 const showMovement = ref(true)
 
-const tableHeight = ref(250)
-const tableWidth = ref(600)
-
-const site = ref(getCookies('site'))
-
-onBeforeMount(() => {
-  console.debug('onBeforeMount Balance')
-  // should consider element margin/padding value
-  tableWidth.value = $q.pageBodyWidth - 8 * 2
-  tableHeight.value = $q.pageBodyHeight - 36 - 72 - 8 - 250
+// computed vars
+const tableHeight = computed(() => {
+  /** 56: QSelect height, 16: padding height */
+  return props.pageHeight - 56 - 8
 })
 
-// event handing
-ebus.on('changeSite', (Code) => {
+// events
+ebus.on('changeSite', () => {
   site.value = getCookies('site')
 })
+
 onBeforeUnmount(() => {
   ebus.off('changeSite')
 })
