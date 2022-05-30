@@ -18,7 +18,7 @@ public class SupplierController {
 
 	@GetMapping("/Data/SupplierHelper")
 	public String getSupplierName(
-			@RequestParam(value = "SupplierCodeOrName", required = false, defaultValue = "%%") String SupplierCodeOrName,
+			@RequestParam(value = "SupplierName", required = false, defaultValue = "%%") String SupplierCodeOrName,
 			@RequestParam(value = "Count", required = false, defaultValue = "50") Integer count) {
 		return Utils.listToString(SupplierService.getSupplierByCodeOrName(SupplierCodeOrName, count));
 	}

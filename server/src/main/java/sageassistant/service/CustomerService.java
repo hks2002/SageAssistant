@@ -32,6 +32,16 @@ public class CustomerService {
 	private CustomerMapper CustomerMapper;
 
 	public List<CustomerName> getCustomerByCodeOrName(String cond, Integer count) {
+		if (cond.equal("%%")) {
+			List<CustomerName> list = new ArrayList<>()
+			
+			CustomerName o;
+			o.CustomerCode = "%%";
+			o.CustomerName = "%%";
+			list.add(o);
+			return list;
+		}
+		
 		PageHelper.startPage(1, count);
 		List<CustomerName> listPage = CustomerMapper.findCustomerByCodeOrName("%" + cond + "%");
 

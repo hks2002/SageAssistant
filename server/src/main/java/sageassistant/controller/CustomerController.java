@@ -18,7 +18,7 @@ public class CustomerController {
 
 	@GetMapping("/Data/CustomerHelper")
 	public String getCustomerName(
-			@RequestParam(value = "CustomerCodeOrName", required = false, defaultValue = "%%") String CustomerCodeOrName,
+			@RequestParam(value = "CustomerName", required = false, defaultValue = "%%") String CustomerCodeOrName,
 			@RequestParam(value = "Count", required = false, defaultValue = "50") Integer count) {
 		return Utils.listToString(CustomerService.getCustomerByCodeOrName(CustomerCodeOrName, count));
 	}
