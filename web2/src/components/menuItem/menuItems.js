@@ -178,7 +178,7 @@ export default [
       {
         path: '/QuoteSalesCost',
         name: 'Quote Sales Cost',
-        title: t('Quote Sales Cost'),
+        title: t('QuoteSalesCost'),
         caption: '',
         icon: 'fas fa-search-dollar',
         split: false,

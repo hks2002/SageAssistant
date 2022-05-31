@@ -7,7 +7,7 @@
  * @CopyRight      : Dedienne Aerospace China ZhuHai
  */
 import { axios } from '@/assets/axios'
-import { notifyError } from 'assets/common'
+import { notifyError } from '@/assets/common'
 import { SessionStorage } from 'quasar'
 
 const getSageSessionUrl = async (fnc) => {
@@ -35,7 +35,7 @@ const getSageSessionUrl = async (fnc) => {
       if (response.status === 200) {
         if (response.data.sap.target.type === 'box') {
           notifyError(response.data.sap.target.box.li)
-          return '/#/exception/403'
+          return '/#/Exception/403'
         }
         SessionStorage.set('lastSessionType', fnc)
         SessionStorage.set('lastSessionUrl', location)
@@ -50,13 +50,13 @@ const getSageSessionUrl = async (fnc) => {
         return location
       } else {
         SessionStorage.set('lastSessionSuccessed', false)
-        return '/#/exception/500'
+        return '/#/Exception/500'
       }
     })
     .catch((error) => {
       console.log(error)
       SessionStorage.set('lastSessionSuccessed', false)
-      return '/#/exception/500'
+      return '/#/Exception/500'
     })
 
   return sageSessionUrl
@@ -319,7 +319,7 @@ const getSagePrintUUID = async (sageSessionUrl) => {
       (error) => {
         console.log(error)
         SessionStorage.set('lastSessionSuccessed', false)
-        return '/#/exception/500'
+        return '/#/Exception/500'
       }
     )
   return sagePrintUUID
@@ -355,12 +355,12 @@ const getSageReportUrl = async (printUUID) => {
         (response) => response.headers.location,
         (error) => {
           console.log(error)
-          return '/#/exception/500'
+          return '/#/Exception/500'
         }
       )
     return sageReportUrl
   } else {
-    return '/#/exception/500'
+    return '/#/Exception/500'
   }
 }
 

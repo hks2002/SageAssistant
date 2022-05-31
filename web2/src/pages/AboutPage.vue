@@ -42,10 +42,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useQuasar } from 'quasar'
-import { axios } from '@/assets/axios'
+import { axiosGet } from '@/assets/axiosActions'
 import _remove from 'lodash/remove'
+import { useQuasar } from 'quasar'
+import { ref } from 'vue'
 
 const $q = useQuasar()
 const srvName = ref('')
@@ -56,20 +56,18 @@ const version = require('@/../package.json').version
 // const author = require('@/../package.json').author
 const dependencies = require('@/../package.json').dependencies
 
-axios
-  .get('/Data/SrvInfo')
+axiosGet('/Data/SrvInfo')
   .then((response) => {
-    srvName.value = response.data.name
-    srvVersion.value = response.data.version
+    srvName.value = response.name
+    srvVersion.value = response.version
   })
   .finally(() => {
     $q.loadingBar.stop()
   })
 
-axios
-  .get('/Data/SrvProjectDependencies')
+axiosGet('/Data/SrvProjectDependencies')
   .then((response) => {
-    _remove(response.data, function (dep) {
+    _remove(response, function (dep) {
       return dep.groupId === 'SAP'
     })
     srvProjectDependencies.value = response.data
