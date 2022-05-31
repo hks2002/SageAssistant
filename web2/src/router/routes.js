@@ -53,7 +53,7 @@ const routes = [
     children: [
       {
         path: '',
-        component: () => import('src/pages/FapiaoPage.vue')
+        component: () => import('pages/FapiaoPage.vue')
       }
     ]
   },
@@ -64,7 +64,7 @@ const routes = [
     children: [
       {
         path: '',
-        component: () => import('src/pages/InvoicePayPage.vue')
+        component: () => import('pages/InvoicePayPage.vue')
       }
     ]
   },
@@ -75,7 +75,7 @@ const routes = [
     children: [
       {
         path: '',
-        component: () => import('src/pages/BalancePage.vue')
+        component: () => import('pages/BalancePage.vue')
       }
     ]
   },
@@ -86,7 +86,7 @@ const routes = [
     children: [
       {
         path: '',
-        component: () => import('src/pages/QuoteSalesCostPage.vue')
+        component: () => import('pages/QuoteSalesCostPage.vue')
       }
     ]
   },
