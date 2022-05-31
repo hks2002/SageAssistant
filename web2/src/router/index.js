@@ -16,7 +16,6 @@ import {
   createWebHistory
 } from 'vue-router'
 import routes from './routes'
-
 /*
  * If not building with SSR mode, you can
  * directly export the Router instantiation;
@@ -29,7 +28,7 @@ import routes from './routes'
 export default route(function (/* { store, ssrContext } */) {
   const createHistory = process.env.SERVER
     ? createMemoryHistory
-    : process.env.VUE_ROUTER_MODE === 'history'
+    : process.env.VUE_ROUTER_MODE === 'history' /* ❗️ Leave this as is ❗️  */
     ? createWebHistory
     : createWebHashHistory
 
@@ -47,48 +46,44 @@ export default route(function (/* { store, ssrContext } */) {
 
   const pagesStore = usePagesStore()
 
-  Router.beforeEach((to, from, next) => {
-    // if not get login token, redirect to login
-    if (!process.env.DEV && !getToken()) {
-      next('/Login')
-      return
-    }
+  Router.beforeEach(async (to, from, next) => {
+    const token = getToken()
 
-    // these pages skip pagesManage
-    if (
-      to.path === '/Login' ||
-      to.path === '/WaitInput ' ||
-      to.path.startsWith('/Report/')
-    ) {
-      next()
-      return
-    }
-
-    // forward, backward doesn't have name, get name from matched array
-    const idx = to.matched.findIndex((r) => r.name === to.name)
-
-    if (idx >= 0) {
-      const name = to.matched[idx].name || to.matched[0].name
-
-      const query = to.query
-      const params = to.params
-
-      const queryStr = JSON.stringify(query).slice(1, -1)
-      const paramsStr = JSON.stringify(params).slice(1, -1)
-      const nameWithParams = name + queryStr + paramsStr
-
-      pagesStore.hasPage(nameWithParams)
-        ? pagesStore.setActivePage(nameWithParams)
-        : pagesStore.addPage({
-            id: nameWithParams,
-            name: name,
-            query: query,
-            params: params
-          })
-      // default
-      next()
+    if (!token) {
+      // if not get login token, redirect to login //
+      if (to.path !== '/Login') {
+        next({ path: '/Login' })
+      } else {
+        next()
+      }
     } else {
-      console.error('Router Error:', to)
+      // skip some pages for pagesManage, only routes urls in SPA, not include other page's in server
+      // forward, backward doesn't have name, get name from matched array
+      const idx =
+        to.path === '/Login' ||
+        to.path === '/WaitInput' ||
+        to.path.startsWith('/Exception')
+          ? -1
+          : to.matched.findIndex((r) => r.name === to.name)
+      if (idx >= 0) {
+        const name = to.matched[idx].name || to.matched[0].name
+        const query = to.query
+        const params = to.params
+        const queryStr = JSON.stringify(query).slice(1, -1)
+        const paramsStr = JSON.stringify(params).slice(1, -1)
+        const nameWithParams = name + queryStr + paramsStr
+        pagesStore.hasPage(nameWithParams)
+          ? pagesStore.setActivePage(nameWithParams)
+          : pagesStore.addPage({
+              id: nameWithParams,
+              name: name,
+              query: query,
+              params: params
+            })
+      }
+
+      // default, alway pass it
+      next()
     }
   })
 

@@ -47,7 +47,10 @@ module.exports = configure(function (ctx) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
-      vueRouterMode: 'history', // available values: 'hash', 'history'
+      // available values: 'hash', 'history'
+      // ❗️❗️❗️ if set to 'history', and have 404 page, please set nginx try_files ❗️❗️❗️
+      // search 'vue history nginx' for more infomation
+      vueRouterMode: 'hash',
 
       // transpile: false,
 
@@ -57,15 +60,13 @@ module.exports = configure(function (ctx) {
       // transpileDependencies: [],
 
       // rtl: false, // https://v2.quasar.dev/options/rtl-support
-      preloadChunks: true,
       showProgress: true,
       gzip: true,
       analyze: false,
 
       // Options below are automatically set depending on the env, set them if you want to override
       // extractCSS: false,
-
-      afterBuild() {
+      beforeBuild() {
         let pkg = fs.readFileSync('package.json')
         const timeStamp = moment().format('MMDDHHmmss')
         pkg = JSON.parse(pkg)
@@ -73,8 +74,12 @@ module.exports = configure(function (ctx) {
         pkg.version = pkg.version.replace(/^(\d+\.\d+)(\S*)/, '$1')
         pkg.version = pkg.version + '.' + timeStamp
 
-        console.log('\u001b[35m Update package to ' + pkg.version + '\u001b[0m')
         fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2))
+      },
+      afterBuild() {
+        let pkg = fs.readFileSync('package.json')
+        pkg = JSON.parse(pkg)
+        console.log('\u001b[35m Update package to ' + pkg.version + '\u001b[0m')
       },
       uglifyOptions: {
         compress: {

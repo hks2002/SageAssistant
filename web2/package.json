@@ -1,6 +1,6 @@
 {
   "name": "web",
-  "version": "4.0.0514203448",
+  "version": "4.0.0531234314",
   "description": "An Assistant for Sage",
   "productName": "SageAssistantWeb",
   "author": "Robert Huang<r.huang@dedienne-aero.com><56649783@qq.com>",
@@ -21,7 +21,7 @@
     "quasar": "^2.7.1",
     "vue": "^3.0.0",
     "vue-i18n": "^9.1.6",
-    "vue-router": "^4.0.0",
+    "vue-router": "^4.0.15",
     "vue3-lottie": "^2.1.0"
   },
   "devDependencies": {
