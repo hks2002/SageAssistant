@@ -2,14 +2,14 @@
  * @Author         : Robert Huang<56649783@qq.com>
  * @Date           : 2022-05-30 14:54:16
  * @LastEditors    : Robert Huang<56649783@qq.com>
- * @LastEditTime   : 2022-05-30 15:03:52
+ * @LastEditTime   : 2022-05-31 11:49:44
  * @FilePath       : \web2\src\pages\WaitInputPage.vue
  * @CopyRight      : Dedienne Aerospace China ZhuHai
 -->
 <template>
-  <page>
+  <q-page>
     <WaitInputLottieVue />
-  </page>
+  </q-page>
 </template>
 
 <script setup>

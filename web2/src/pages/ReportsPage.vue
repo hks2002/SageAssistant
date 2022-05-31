@@ -449,7 +449,7 @@ import { ref } from 'vue'
 
 const $q = useQuasar()
 
-const UrlShow = ref('/WaitInput')
+const UrlShow = ref('/#/WaitInput')
 const UrlExport = ref('about:blank')
 
 const COCProj = ref('')
@@ -520,7 +520,7 @@ const showPdf = async (rpt, fromWhere) => {
       isValid = false
   }
   if (isValid === false) {
-    UrlShow.value = '/WaitInput'
+    UrlShow.value = '/#/Exception/500'
     return
   }
 
@@ -546,7 +546,7 @@ const exportWord = (rpt) => {
 
 // It also caintains some old reports, they are changed to SageUrl, stop use them now.
 const getSageAssistantUrl = (rpt, type) => {
-  let url = '/WaitInput'
+  let url = '/#/WaitInput'
   switch (rpt) {
     case 'COC':
       url = '/Report/COC/' + type + '?ProjectNO=' + COCProj.value.toUpperCase()
@@ -618,7 +618,7 @@ const getSageAssistantUrl = (rpt, type) => {
         SiteAndBPCode.value.slice(3, 8).toUpperCase()
       break
     default:
-      url = '/WaitInput'
+      url = '/#/Exception/500'
   }
   return url
 }
@@ -638,7 +638,7 @@ const getSageUrl = async (rpt, val) => {
   $q.loading.show({
     message: 'Getting report data...',
     spinner: QSpinnerGears,
-    spinnerColor: 'indigo-3'
+    spinnerColor: 'indigo-5'
   })
 
   const rtn = await doActionsForSagePrint(sageSessionUrl, rpt, val)
@@ -649,7 +649,7 @@ const getSageUrl = async (rpt, val) => {
   $q.loading.show({
     message: 'Getting report data...',
     spinner: QSpinnerGears,
-    spinnerColor: 'indigo-5'
+    spinnerColor: 'indigo-9'
   })
   const printUUID = await getSagePrintUUID(sageSessionUrl)
   if (regException.test(printUUID)) {
@@ -659,7 +659,7 @@ const getSageUrl = async (rpt, val) => {
   $q.loading.show({
     message: 'Printing report in server...',
     spinner: QSpinnerGears,
-    spinnerColor: 'indigo-7'
+    spinnerColor: 'green'
   })
   const reportUrl = await getSageReportUrl(printUUID)
   return reportUrl
