@@ -445,11 +445,11 @@ import {
   getSageSessionUrl
 } from '@/assets/sageSvcs'
 import { QSpinnerGears, SessionStorage, useQuasar } from 'quasar'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const $q = useQuasar()
 
-const UrlShow = ref('/#/WaitInput')
+const UrlShow = ref('about:blank')
 const UrlExport = ref('about:blank')
 
 const COCProj = ref('')
@@ -463,6 +463,11 @@ const ReceiptNO = ref('')
 const PurchaseSiteVendorCodeDuration = ref('')
 const ProjectOrWorkOrderNO = ref('')
 const SiteAndBPCode = ref('')
+
+onMounted(() => {
+  // must change it once, other wise it doesn't show in iframe
+  UrlShow.value = '/#/WaitInput'
+})
 
 // clean last session status
 SessionStorage.set('lastSessionSuccessed', false)
@@ -520,7 +525,6 @@ const showPdf = async (rpt, fromWhere) => {
       isValid = false
   }
   if (isValid === false) {
-    UrlShow.value = '/#/Exception/500'
     return
   }
 
