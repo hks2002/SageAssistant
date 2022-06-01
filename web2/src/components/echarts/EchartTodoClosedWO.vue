@@ -135,7 +135,7 @@ const setEchart = () => {
           show: false
         }
       ],
-     dataZoom: defaultDataZoom('xy'),
+      dataZoom: defaultDataZoom('xy'),
       dataset: dataset,
       series: series
     },

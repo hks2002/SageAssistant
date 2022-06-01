@@ -131,7 +131,7 @@ const resize = () => {
 
 // events
 onMounted(() => {
-  eChart = echarts.init(document.getElementById('EchartCustomerOpenQty'))  
+  eChart = echarts.init(document.getElementById('EchartCustomerOpenQty'))
   // when not use keep alive, use mounted/unmounted
   window.addEventListener('resize', resize)
   doUpdate()
