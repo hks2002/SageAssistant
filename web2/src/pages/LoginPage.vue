@@ -83,10 +83,11 @@
 <script setup>
 import { setAuthority } from '@/assets/auth'
 import { axios } from '@/assets/axios'
+import { axiosGet, axiosPost } from '@/assets/axiosActions'
 import { ebus } from '@/assets/ebus'
 import { removeToken, setLoginData, setToken } from '@/assets/storage'
 import { useQuasar } from 'quasar'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Vue3Lottie } from 'vue3-lottie'
 
@@ -98,6 +99,10 @@ const username = ref('')
 const password = ref('')
 const loading = ref(false)
 const loginMessage = ref('')
+
+onMounted(() => {
+  removeToken()
+})
 
 // This function is from Sage login page, login.js
 const authToken = (type, login, password) => {
@@ -143,24 +148,32 @@ const checkEnterKey = (event) => {
 
 const doLogin = async () => {
   loading.value = true
-  const auth = authToken('basic', username.value, password.value)
+  const token = authToken('basic', username.value, password.value)
 
-  await axios
-    .post(
-      '/auth/login/submit',
-      { username: username.value },
-      { headers: { authorization: auth } }
-    )
+  await axiosPost(
+    '/auth/login/submit',
+    { username: username.value },
+    { headers: { authorization: token } }
+  )
     .then(
-      () => {
-        setToken(auth)
-        fetchLoginData()
-        fetchAuthorityData()
-        $router.push('/')
+      (data) => {
+        if (data === '') {
+          /* empty means succuss */
+          setToken(token)
+          fetchLoginData()
+          fetchAuthorityData()
+          $router.push({ name: 'Home' })
+        } else {
+          removeToken()
+          const reg = /(?<=login_onload\().*(?=\))/
+
+          const txt = reg.exec(data)[0]
+          loginMessage.value = JSON.parse(txt).errorMessage
+        }
       },
-      (error) => {
+      () => {
         removeToken()
-        loginMessage.value = error.data.$diagnoses[0].$message
+        loginMessage.value = t('Wrong happans!')
       }
     )
     .finally(() => {
@@ -171,50 +184,32 @@ const doLogin = async () => {
 
 const fetchLoginData = async () => {
   // post must have {}, if data is empty, otherwise forbidden
+  // sage return 201 status, don't use axiosPost
   await axios
     .post(
       '/api1/syracuse/collaboration/syracuse/userProfiles/$template/$workingCopies',
       {}
     )
-    .then(
-      (response) => {
-        const loginData = {}
-        loginData.userInfo =
-          response.data.user.firstName +
-          ' ' +
-          response.data.user.lastName +
-          '(' +
-          response.data.user.email +
-          ')'
-        loginData.sageInfo =
-          response.data.productName +
-          ' ' +
-          response.data.selectedEndpoint.description
-        loginData.userId = response.data.user.$uuid
-        loginData.roleId = response.data.selectedRole.$uuid
-        loginData.locale = response.data.selectedLocale.code
-        loginData.localeDesc = response.data.selectedLocale.description
-        setLoginData(loginData)
-        ebus.emit('updateLoginData')
-      },
-      (error) => {
-        console.debug(error)
-      }
-    )
+    .then((response) => {
+      const data = response.data
+      const loginData = {}
+      loginData.userInfo = `${data.user.firstName} ${data.user.lastName}(${data.user.email})`
+      loginData.sageInfo = `${data.productName} ${data.selectedEndpoint.description}`
+      loginData.userId = data.user.$uuid
+      loginData.roleId = data.selectedRole.$uuid
+      loginData.locale = data.selectedLocale.code
+      loginData.localeDesc = data.selectedLocale.description
+      setLoginData(loginData)
+      ebus.emit('updateLoginData')
+    })
 }
 
 const fetchAuthorityData = async () => {
   await axiosGet(
-    "/api1/syracuse/collaboration/syracuse/pages('x3.erp.EXPLOIT.home.$navigation')",
-    {}
-  ).then(
-    (response) => {
-      setAuthority(response)
-    },
-    (error) => {
-      console.debug(error)
-    }
-  )
+    "/api1/syracuse/collaboration/syracuse/pages('x3.erp.EXPLOIT.home.$navigation')"
+  ).then((response) => {
+    setAuthority(response)
+  })
 }
 </script>
 
