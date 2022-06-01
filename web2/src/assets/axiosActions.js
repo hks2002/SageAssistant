@@ -17,7 +17,7 @@ const { t } = i18n.global
  * Error   204
  */
 
-const axiosGet = (url, params) => {
+const axiosGet = async (url, params) => {
   /* Don't forget return Axios result: return axios */
   return axios.get(url, { params: params }).then((resp) => {
     const entity = url.replace('/Data/', '')
@@ -49,7 +49,39 @@ const axiosGet = (url, params) => {
   })
 }
 
-const axiosDelete = (url, params) => {
+const axiosPost = async (url, data, axiosConfig) => {
+  /* Don't forget return Axios result: return axios */
+  return axios.post(url, data, axiosConfig).then((resp) => {
+    const entity = url.replace('/Data/', '')
+
+    if (resp.status == 200) {
+      /* Success */
+      return resp.data
+    } else if (resp.status == 204) {
+      /* Error */
+      Notify.create({
+        type: 'negative',
+        message: t('Post ' + entity + ' Failed')
+      })
+
+      return new Promise((res, rej) => {
+        rej('Failed')
+      })
+    } else {
+      /* Unsupport */
+      Notify.create({
+        type: 'negative',
+        message: t('Contact your admin')
+      })
+
+      return new Promise((res, rej) => {
+        rej('Failed')
+      })
+    }
+  })
+}
+
+const axiosDelete = async (url, params) => {
   const entity = url.replace('/Data/', '')
 
   if (Object.keys(params).length == 0) {
@@ -100,7 +132,7 @@ const axiosDelete = (url, params) => {
   }
 }
 
-const axiosCreate = (url, data) => {
+const axiosCreate = async (url, data) => {
   const entity = url.replace('/Data/', '')
 
   if (Object.keys(data).length == 0) {
@@ -151,7 +183,7 @@ const axiosCreate = (url, data) => {
   }
 }
 
-const axiosModify = (url, params, data) => {
+const axiosModify = async (url, params, data) => {
   const entity = url.replace('/Data/', '')
 
   if (Object.keys(params).length == 0) {
@@ -211,4 +243,4 @@ const axiosModify = (url, params, data) => {
     })
   }
 }
-export { axiosGet, axiosDelete, axiosCreate, axiosModify }
+export { axiosGet, axiosPost, axiosDelete, axiosCreate, axiosModify }
