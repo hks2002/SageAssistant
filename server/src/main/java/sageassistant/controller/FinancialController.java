@@ -1,7 +1,5 @@
 package sageassistant.controller;
 
-import java.util.List;
-
 //import org.apache.logging.log4j.LogManager;
 //import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import sageassistant.model.FinancialBalance;
 import sageassistant.service.FinancialService;
 import sageassistant.utils.Utils;
 
@@ -28,9 +25,9 @@ public class FinancialController {
 			@RequestParam(value = "AccountNO", required = false, defaultValue = "") String AccountNO) {
 
 		if (AccountNO.equals("")) {
-				return financialService.getAccoutBalanceForAll(Site, Year).toString();
+			return financialService.getAccoutBalanceForAll(Site, Year).toString();
 		} else {
-				return financialService.getAccoutBalanceForAccountNO(Site, Year, AccountNO).toString();
+			return financialService.getAccoutBalanceForAccountNO(Site, Year, AccountNO).toString();
 		}
 	}
 
@@ -78,7 +75,7 @@ public class FinancialController {
 			return "Must set AccountNO, if more than one AccountNO, use ',' between AccountNOs";
 		}
 		return Utils.listToString(financialService.getAccoutBalanceForAccountNOByCat(Site, Year, Cat,
-		AccountNO));
+				AccountNO));
 	}
 
 	@GetMapping("/Data/FinancialInvoicePay")

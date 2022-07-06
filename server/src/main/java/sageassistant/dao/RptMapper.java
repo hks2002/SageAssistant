@@ -25,7 +25,8 @@ import sageassistant.model.RptWorkOrderSfichsui;
 public interface RptMapper {
 	List<RptCOC> findCOCByProjectNO(@Param("ProjectNO") String ProjectNO);
 
-	List<RptCOCSerialLot> findCOCSerialLotByProjectNOAndPn(@Param("ProjectNO") String ProjectNO, @Param("PN") String PN);
+	List<RptCOCSerialLot> findCOCSerialLotByProjectNOAndPn(@Param("ProjectNO") String ProjectNO,
+			@Param("PN") String PN);
 
 	List<RptPurchase> findPurchaseByPurchaseNO(@Param("PurchaseNO") String PurchaseNO);
 
@@ -42,19 +43,20 @@ public interface RptMapper {
 	List<RptInvoice> findInvoiceByInvoiceNO(@Param("InvoiceNO") String InvoiceNO);
 
 	List<RptInvoicePackage> findInvoicePackageByInvoiceNO(@Param("InvoiceNO") String InvoiceNO);
-	
+
 	List<RptInvoicePay> findInvoicePayByInvoiceNO(@Param("InvoiceNO") String InvoiceNO);
-	
+
 	List<RptInvoice2> findInvoice2ByOrderNO(@Param("OrderNO") String OrderNO);
 
 	List<RptInvoicePay> findInvoice2PayByOrderNO(@Param("OrderNO") String OrderNO);
-	
+
 	List<RptDelivery> findDeliveryByDeliveryNO(@Param("DeliveryNo") String DeliveryNo);
 
 	List<RptReceipt> findReceiptByReceiptNO(@Param("ReceiptNO") String ReceiptNO);
-	
-	List<RptReceipt> findReceiptByPurchaseSiteVenderCodeDuration(@Param("PurchaseSite") String PurchaseSite, @Param("VendorCode") String VendorCode, @Param("StartDay") String StartDay, @Param("EndDay") String EndDay);
+
+	List<RptReceipt> findReceiptByPurchaseSiteVenderCodeDuration(@Param("PurchaseSite") String PurchaseSite,
+			@Param("VendorCode") String VendorCode, @Param("StartDay") String StartDay, @Param("EndDay") String EndDay);
 
 	List<RptSOA> findSOABySiteAndBPCode(@Param("Site") String Site, @Param("BPCode") String BPCode);
-	
+
 }
