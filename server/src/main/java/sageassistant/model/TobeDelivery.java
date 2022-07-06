@@ -24,32 +24,12 @@ public class TobeDelivery extends ModelTemplate {
 	private Date RequestDate;
 	private Date PlanedDate;
 
-	public String getCurrency() {
-		return Currency;
+	public String getProjectNO() {
+		return ProjectNO;
 	}
 
-	public String getCustomerCode() {
-		return CustomerCode;
-	}
-
-	public String getCustomerName() {
-		return CustomerName;
-	}
-
-	public String getDescription() {
-		return Description;
-	}
-
-	public BigDecimal getNetPrice() {
-		return NetPrice;
-	}
-
-	public Date getOrderDate() {
-		return OrderDate;
-	}
-
-	public String getOrderType() {
-		return OrderType;
+	public void setProjectNO(String projectNO) {
+		ProjectNO = projectNO;
 	}
 
 	public String getOrderNO() {
@@ -60,80 +40,100 @@ public class TobeDelivery extends ModelTemplate {
 		OrderNO = orderNO;
 	}
 
-	public String getPN() {
-		return PN;
-	}
-
-	public String getProjectNO() {
-		return ProjectNO;
-	}
-
-	public Integer getQty() {
-		return Qty;
-	}
-
-	public Float getRate() {
-		return Rate;
-	}
-
-	public Date getRequestDate() {
-		return RequestDate;
-	}
-
-	public BigDecimal getUSD() {
-		return USD;
-	}
-
-	public void setCurrency(String currency) {
-		Currency = currency;
-	}
-
-	public void setCustomerCode(String customerCode) {
-		CustomerCode = customerCode;
-	}
-
-	public void setCustomerName(String customerName) {
-		CustomerName = customerName;
-	}
-
-	public void setDescription(String description) {
-		Description = description;
-	}
-
-	public void setNetPrice(BigDecimal netPrice) {
-		NetPrice = netPrice;
-	}
-
-	public void setOrderDate(Date orderDate) {
-		OrderDate = orderDate;
+	public String getOrderType() {
+		return OrderType;
 	}
 
 	public void setOrderType(String orderType) {
 		OrderType = orderType;
 	}
 
+	public String getPN() {
+		return PN;
+	}
+
 	public void setPN(String pN) {
 		PN = pN;
 	}
 
-	public void setProjectNo(String projectNO) {
-		ProjectNO = projectNO;
+	public Integer getQty() {
+		return Qty;
 	}
 
 	public void setQty(Integer qty) {
 		Qty = qty;
 	}
 
-	public void setRate(Float rate) {
-		Rate = rate;
+	public String getDescription() {
+		return Description;
 	}
 
-	public void setRequestDate(Date requestDate) {
-		RequestDate = requestDate;
+	public void setDescription(String description) {
+		Description = description;
+	}
+
+	public String getCustomerCode() {
+		return CustomerCode;
+	}
+
+	public void setCustomerCode(String customerCode) {
+		CustomerCode = customerCode;
+	}
+
+	public String getCustomerName() {
+		return CustomerName;
+	}
+
+	public void setCustomerName(String customerName) {
+		CustomerName = customerName;
+	}
+
+	public String getCurrency() {
+		return Currency;
+	}
+
+	public void setCurrency(String currency) {
+		Currency = currency;
+	}
+
+	public BigDecimal getNetPrice() {
+		return NetPrice;
+	}
+
+	public void setNetPrice(BigDecimal netPrice) {
+		NetPrice = netPrice;
+	}
+
+	public BigDecimal getUSD() {
+		return USD;
 	}
 
 	public void setUSD(BigDecimal uSD) {
 		USD = uSD;
+	}
+
+	public Float getRate() {
+		return Rate;
+	}
+
+	public void setRate(Float rate) {
+		Rate = rate;
+	}
+
+	public Date getOrderDate() {
+		return OrderDate;
+	}
+
+	public void setOrderDate(Date orderDate) {
+		OrderDate = orderDate;
+	}
+
+	public Date getRequestDate() {
+		return RequestDate;
+	}
+
+	public void setRequestDate(Date requestDate) {
+		RequestDate = requestDate;
 	}
 
 	public Date getPlanedDate() {
@@ -143,4 +143,5 @@ public class TobeDelivery extends ModelTemplate {
 	public void setPlanedDate(Date planedDate) {
 		PlanedDate = planedDate;
 	}
+
 }

@@ -27,63 +27,72 @@ import sageassistant.utils.Utils;
 @Service
 public class CustomerService {
 	private static final Logger log = LogManager.getLogger();
-	
+
 	@Autowired
-	private CustomerMapper CustomerMapper;
+	private CustomerMapper customerMapper;
+
+	@Autowired
+	private CurrencyService currencyService;
 
 	public List<CustomerName> getCustomerByCodeOrName(String cond, Integer count) {
-		if (cond.equal("%%")) {
-			List<CustomerName> list = new ArrayList<>()
-			
-			CustomerName o;
-			o.CustomerCode = "%%";
-			o.CustomerName = "%%";
+		if (cond.equals("%%")) {
+			List<CustomerName> list = new ArrayList<>();
+
+			CustomerName o = new CustomerName();
+			o.setCustomerrCode("%%");
+			o.setCustomerName("");
 			list.add(o);
 			return list;
 		}
-		
+
 		PageHelper.startPage(1, count);
-		List<CustomerName> listPage = CustomerMapper.findCustomerByCodeOrName("%" + cond + "%");
+		List<CustomerName> listPage = customerMapper.findCustomerByCodeOrName("%" + cond + "%");
 
 		return listPage;
 	}
 
 	public List<CustomerSummaryAmount> getCustomerTotalAmount(String CustomerCode, String DateFrom, String DateTo) {
-		List<CustomerSummaryAmount> listPage = CustomerMapper.findCustomerTotalAmount(CustomerCode, DateFrom, DateTo);
+		List<CustomerSummaryAmount> listPage = customerMapper.findCustomerTotalAmount(CustomerCode, DateFrom, DateTo);
 
 		for (CustomerSummaryAmount o : listPage) {
-			String key=o.getCurrency()+"USD"+Utils.formatDate(new Date());
-			log.debug("key:"+key);
+			String key = o.getCurrency() + "USD" + Utils.formatDate(new Date());
+			log.debug("key:" + key);
 			try {
-				o.setRate(Float.parseFloat(CurrencyService.cache.get(key)));
-				log.debug("Rate:"+o.getRate());
+				o.setRate(Float.parseFloat(currencyService.cache.get(key)));
+				log.debug("Rate:" + o.getRate());
 			} catch (NumberFormatException e) {
 				log.error(e.getMessage());
 			} catch (ExecutionException e) {
 				log.error(e.getMessage());
 			}
-			o.setUSD(o.getAmount().multiply( new BigDecimal(o.getRate())));
+			o.setUSD(o.getAmount().multiply(new BigDecimal(o.getRate())));
 		}
 
 		return listPage;
 	}
 
-	public List<CustomerSummaryQty> getCustomerTotalProjectQty(@Param("CustomerCode") String CustomerCode, String DateFrom, String DateTo) {
-		return CustomerMapper.findCustomerTotalProjectQty(CustomerCode, DateFrom, DateTo);
+	public List<CustomerSummaryQty> getCustomerTotalProjectQty(@Param("CustomerCode") String CustomerCode,
+			String DateFrom, String DateTo) {
+		return customerMapper.findCustomerTotalProjectQty(CustomerCode, DateFrom, DateTo);
 	}
-	
-	public List<CustomerSummaryQty> getCustomerTotalItemQty(@Param("CustomerCode") String CustomerCode, String DateFrom, String DateTo) {
-		return CustomerMapper.findCustomerTotalItemQty(CustomerCode, DateFrom, DateTo);
+
+	public List<CustomerSummaryQty> getCustomerTotalItemQty(@Param("CustomerCode") String CustomerCode, String DateFrom,
+			String DateTo) {
+		return customerMapper.findCustomerTotalItemQty(CustomerCode, DateFrom, DateTo);
 	}
-	
-	public List<CustomerSummaryQty> getCustomerTotalProductQty(@Param("CustomerCode") String CustomerCode, String DateFrom, String DateTo) {
-		return CustomerMapper.findCustomerTotalProductQty(CustomerCode, DateFrom, DateTo);
+
+	public List<CustomerSummaryQty> getCustomerTotalProductQty(@Param("CustomerCode") String CustomerCode,
+			String DateFrom, String DateTo) {
+		return customerMapper.findCustomerTotalProductQty(CustomerCode, DateFrom, DateTo);
 	}
-	
-	public List<CustomerSummaryQty> getCustomerTotalQty(@Param("CustomerCode") String CustomerCode, String DateFrom, String DateTo) {
-		List<CustomerSummaryQty> listProject = CustomerMapper.findCustomerTotalProjectQty(CustomerCode, DateFrom, DateTo);
-		List<CustomerSummaryQty> listProduct = CustomerMapper.findCustomerTotalProductQty(CustomerCode, DateFrom, DateTo);
-		List<CustomerSummaryQty> listItem = CustomerMapper.findCustomerTotalItemQty(CustomerCode, DateFrom, DateTo);
+
+	public List<CustomerSummaryQty> getCustomerTotalQty(@Param("CustomerCode") String CustomerCode, String DateFrom,
+			String DateTo) {
+		List<CustomerSummaryQty> listProject = customerMapper.findCustomerTotalProjectQty(CustomerCode, DateFrom,
+				DateTo);
+		List<CustomerSummaryQty> listProduct = customerMapper.findCustomerTotalProductQty(CustomerCode, DateFrom,
+				DateTo);
+		List<CustomerSummaryQty> listItem = customerMapper.findCustomerTotalItemQty(CustomerCode, DateFrom, DateTo);
 
 		List<CustomerSummaryQty> listAll = new ArrayList<>();
 
@@ -92,48 +101,49 @@ public class CustomerService {
 		}
 		for (CustomerSummaryQty o : listProduct) {
 			listAll.add(o);
-		}for (CustomerSummaryQty o : listItem) {
+		}
+		for (CustomerSummaryQty o : listItem) {
 			listAll.add(o);
 		}
 		return listAll;
 	}
-	
+
 	public List<CustomerSummaryAmount> getCustomerOpenAmount(String CustomerCode) {
-		List<CustomerSummaryAmount> listPage = CustomerMapper.findCustomerOpenAmount(CustomerCode);
+		List<CustomerSummaryAmount> listPage = customerMapper.findCustomerOpenAmount(CustomerCode);
 
 		for (CustomerSummaryAmount o : listPage) {
-			String key=o.getCurrency()+"USD"+Utils.formatDate(new Date());
-			log.debug("key:"+key);
+			String key = o.getCurrency() + "USD" + Utils.formatDate(new Date());
+			log.debug("key:" + key);
 			try {
-				o.setRate(Float.parseFloat(CurrencyService.cache.get(key)));
-				log.debug("Rate:"+o.getRate());
+				o.setRate(Float.parseFloat(currencyService.cache.get(key)));
+				log.debug("Rate:" + o.getRate());
 			} catch (NumberFormatException e) {
 				log.error(e.getMessage());
 			} catch (ExecutionException e) {
 				log.error(e.getMessage());
 			}
-			o.setUSD(o.getAmount().multiply( new BigDecimal(o.getRate())));
+			o.setUSD(o.getAmount().multiply(new BigDecimal(o.getRate())));
 		}
 
 		return listPage;
 	}
-	
-	public List<CustomerSummaryQty> getCustomerOpenProjectQty(@Param("CustomerCode") String CustomerCode){
-		return CustomerMapper.findCustomerOpenProjectQty(CustomerCode);
+
+	public List<CustomerSummaryQty> getCustomerOpenProjectQty(@Param("CustomerCode") String CustomerCode) {
+		return customerMapper.findCustomerOpenProjectQty(CustomerCode);
 	}
-	
-	public List<CustomerSummaryQty> getCustomerOpenItemQty(@Param("CustomerCode") String CustomerCode){
-		return CustomerMapper.findCustomerOpenItemQty(CustomerCode);
+
+	public List<CustomerSummaryQty> getCustomerOpenItemQty(@Param("CustomerCode") String CustomerCode) {
+		return customerMapper.findCustomerOpenItemQty(CustomerCode);
 	}
-	
-	public List<CustomerSummaryQty> getCustomerOpenProductQty(@Param("CustomerCode") String CustomerCode){
-		return CustomerMapper.findCustomerOpenProductQty(CustomerCode);
+
+	public List<CustomerSummaryQty> getCustomerOpenProductQty(@Param("CustomerCode") String CustomerCode) {
+		return customerMapper.findCustomerOpenProductQty(CustomerCode);
 	}
-	
-	public List<CustomerSummaryQty> getCustomerOpenQty(@Param("CustomerCode") String CustomerCode){
-		List<CustomerSummaryQty> listProject = CustomerMapper.findCustomerOpenProjectQty(CustomerCode);
-		List<CustomerSummaryQty> listProduct = CustomerMapper.findCustomerOpenProductQty(CustomerCode);
-		List<CustomerSummaryQty> listItem = CustomerMapper.findCustomerOpenItemQty(CustomerCode);
+
+	public List<CustomerSummaryQty> getCustomerOpenQty(@Param("CustomerCode") String CustomerCode) {
+		List<CustomerSummaryQty> listProject = customerMapper.findCustomerOpenProjectQty(CustomerCode);
+		List<CustomerSummaryQty> listProduct = customerMapper.findCustomerOpenProductQty(CustomerCode);
+		List<CustomerSummaryQty> listItem = customerMapper.findCustomerOpenItemQty(CustomerCode);
 
 		List<CustomerSummaryQty> listAll = new ArrayList<>();
 
@@ -142,26 +152,29 @@ public class CustomerService {
 		}
 		for (CustomerSummaryQty o : listProduct) {
 			listAll.add(o);
-		}for (CustomerSummaryQty o : listItem) {
+		}
+		for (CustomerSummaryQty o : listItem) {
 			listAll.add(o);
 		}
 		return listAll;
 	}
-	
-	public List<CustomerDeliveryHistory> getCustomerDeliveryHistory(@Param("CustomerCode") String CustomerCode, String DateFrom, String DateTo) {
-		return CustomerMapper.findCustomerDeliveryHistory(CustomerCode, DateFrom, DateTo);
+
+	public List<CustomerDeliveryHistory> getCustomerDeliveryHistory(@Param("CustomerCode") String CustomerCode,
+			String DateFrom, String DateTo) {
+		return customerMapper.findCustomerDeliveryHistory(CustomerCode, DateFrom, DateTo);
 	}
-	
-	public List<CustomerDelayHistory> getCustomerDelayHistory(@Param("CustomerCode") String CustomerCode, String DateFrom, String DateTo) {
-		return CustomerMapper.findCustomerDelayHistory(CustomerCode, DateFrom, DateTo);
+
+	public List<CustomerDelayHistory> getCustomerDelayHistory(@Param("CustomerCode") String CustomerCode,
+			String DateFrom, String DateTo) {
+		return customerMapper.findCustomerDelayHistory(CustomerCode, DateFrom, DateTo);
 	}
-	
-	public List<CustomerOpenItems> getCustomerOpenItems(@Param("CustomerCode") String CustomerCode){
-		return CustomerMapper.findCustomerOpenItems(CustomerCode);
+
+	public List<CustomerOpenItems> getCustomerOpenItems(@Param("CustomerCode") String CustomerCode) {
+		return customerMapper.findCustomerOpenItems(CustomerCode);
 	}
-	
-	public List<CustomerDetails> getCustomerDetails(@Param("CustomerCode") String CustomerCode){
-		return CustomerMapper.findCustomerDetailsByCode(CustomerCode);
+
+	public List<CustomerDetails> getCustomerDetails(@Param("CustomerCode") String CustomerCode) {
+		return customerMapper.findCustomerDetailsByCode(CustomerCode);
 	}
 
 }
