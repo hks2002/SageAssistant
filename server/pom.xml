@@ -76,7 +76,7 @@
 			<artifactId>mssql-jdbc</artifactId>
 		</dependency>
 
-        <!-- h2 database for self db-->
+		<!-- h2 database for self db-->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
