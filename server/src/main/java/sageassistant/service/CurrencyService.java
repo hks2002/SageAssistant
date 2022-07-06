@@ -2,11 +2,13 @@ package sageassistant.service;
 
 import java.text.NumberFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONArray;
@@ -14,23 +16,30 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
+import sageassistant.dao.CurrencyMapper;
+import sageassistant.model.CurrencyHistory;
+
 @Service
 public class CurrencyService {
 	private static final Logger log = LogManager.getLogger();
 
 	private static HashMap<String, String> dafaultRate = new HashMap<String, String>();
+	static HttpService httpService;
 
 	@Autowired
-	static HttpService httpService;
+	private CurrencyMapper currencyMapper;
+
+	@Value("${currency.from}")
+	private String currencyFrom;
 
 	/**
 	 * google guava cache
 	 */
-	public static LoadingCache<String, String> cache = CacheBuilder.newBuilder()
+	public LoadingCache<String, String> cache = CacheBuilder.newBuilder()
 			.build(new CacheLoader<String, String>() {
 				@Override
 				public String load(String key) {
-					return getFromUrl(key);
+					return currencyFrom.equals("sage") ? getFromSage(key) : getFromUrl(key);
 				}
 			});
 
@@ -51,7 +60,7 @@ public class CurrencyService {
 	/*
 	 * key like RMBUSD2010-10-10, if not find, return "0"
 	 */
-	public static String getCurrencyRate(String key) {
+	public String getCurrencyRate(String key) {
 		try {
 			return cache.get(key);
 		} catch (ExecutionException e) {
@@ -64,7 +73,7 @@ public class CurrencyService {
 	 * key like RMBUSD2010-10-10_RMBUSD2010-10-11_RMBUSD2010-10-12, if not find,
 	 * return "0"
 	 */
-	public static String getCurrencyRateBatch(String key) {
+	public String getCurrencyRateBatch(String key) {
 		try {
 			String[] q = key.split("_");
 			JSONArray all = new JSONArray();
@@ -83,21 +92,19 @@ public class CurrencyService {
 	/*
 	 * key like RMBUSD2010-10-10, if not find, return "0"
 	 */
-	private static String getFromUrl(String key) {
-		log.debug("key:" + key);
-
+	private String getFromUrl(String key) {
 		if (key.length() != 16) {
 			return "0";
 		}
 
 		String Sour = key.substring(0, 3);
 		if (Sour.equals("CNY")) {
-			Sour="RMB";
+			Sour = "RMB";
 		}
 		String Dest = key.substring(3, 6);
 		String Date = key.substring(6, 16);
 
-		if (Sour.equals(Dest) ) {
+		if (Sour.equals(Dest)) {
 			return "1";
 		}
 
@@ -110,6 +117,7 @@ public class CurrencyService {
 		if (responseText.equals("")) {
 			responseText = "";
 		}
+		log.debug("responseText:" + responseText);
 		// responseText like [[100,"USD","694.97","RMB"],[100,"EUR","771.95","RMB"]]
 		JSONArray jsonArrayOuter = JSONArray.parseArray(responseText);
 
@@ -117,16 +125,24 @@ public class CurrencyService {
 		for (int i = 0, l = jsonArrayOuter.size(); i < l; i++) {
 			JSONArray jsonArrayInner = jsonArrayOuter.getJSONArray(i);
 
+			// get RMBUSD, it could used for others currency
 			if (jsonArrayInner.getString(1).equals("USD") && jsonArrayInner.getString(3).equals("RMB")) {
 				rateRMBUSD = jsonArrayInner.getIntValue(0) / jsonArrayInner.getFloat(2);
+				rate = rateRMBUSD;
+				log.debug("rateRMBUSD:" + rateRMBUSD);
 			}
 
+			// calulate by RMBUSD for other currency
 			if (jsonArrayInner.getString(1).equals(Sour) && jsonArrayInner.getString(3).equals("RMB")) {
 				rate = jsonArrayInner.getFloat(2) / jsonArrayInner.getIntValue(0) * rateRMBUSD;
+				log.debug("rate1:" + rate);
 				break;
-			} else if (jsonArrayInner.getString(3).equals(Sour) && jsonArrayInner.getString(1).equals("RMB")) { // backup
-																												// of if
+			}
+			// calulate by RMBUSD for other currency
+			if (jsonArrayInner.getString(1).equals("RMB") && jsonArrayInner.getString(3).equals(Sour)) {
+				// backup of if
 				rate = jsonArrayInner.getIntValue(0) / jsonArrayInner.getFloat(2) * rateRMBUSD;
+				log.debug("rate2:" + rate);
 				break;
 			}
 		}
@@ -137,6 +153,33 @@ public class CurrencyService {
 
 		if (rateStr.equals("0") && dafaultRate.containsKey(Sour + Dest)) {
 			rateStr = dafaultRate.get(Sour + Dest);
+		}
+		return rateStr;
+	}
+
+	private String getFromSage(String key) {
+		if (key.length() != 16) {
+			return "0";
+		}
+
+		String Sour = key.substring(0, 3);
+		if (Sour.equals("CNY")) {
+			Sour = "RMB";
+		}
+		String Dest = key.substring(3, 6);
+		String Date = key.substring(6, 16);
+
+		if (Sour.equals(Dest)) {
+			return "1";
+		}
+
+		List<CurrencyHistory> list = currencyMapper.findCurrencyRate(Sour, Dest, Date);
+
+		String rateStr = "0";
+		if (list.size() == 0 && dafaultRate.containsKey(Sour + Dest)) {
+			rateStr = dafaultRate.get(Sour + Dest);
+		} else {
+			rateStr = list.get(0).getRate().toString();
 		}
 		return rateStr;
 	}

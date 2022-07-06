@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sageassistant.dao.CurrencyMapper">
+	<!--Open L2 Cache under Names pace: 1 day -->
+	<cache eviction="FIFO" flushInterval="86400000" readOnly="true" size="1024" />
+	
+	<select id="findCurrencyRate" resultType="sageassistant.model.CurrencyHistory">
+	SELECT * FROM (
+		SELECT 
+			CUR_0 AS Sour,
+			CURDEN_0 AS Dist,
+			CHGRAT_0 AS Rate,
+			CHGSTRDAT_0 AS StartDate,
+			LEAD(CHGSTRDAT_0,1,GETDATE()) OVER (PARTITION BY CUR_0,CURDEN_0 ORDER BY CHGSTRDAT_0 ASC) AS EndDate
+		FROM EXPLOIT.TABCHANGE 
+		WHERE 
+		CUR_0=#{Sour} AND CURDEN_0=#{Dest}
+    ) AS T1
+    WHERE 
+	    CONVERT(datetime, #{Date},120) != T1.EndDate 
+	    AND CONVERT(datetime, #{Date},120) BETWEEN T1.StartDate AND T1.EndDate
+	</select>
+	
+</mapper>
