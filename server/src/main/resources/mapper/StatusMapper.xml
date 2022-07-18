@@ -473,6 +473,6 @@
 		) AS T8
 		ON T4.PurchaseNO = T8.PurchaseNO AND T4.PurchaseLine = T8.PurchaseLine
 
-		ORDER BY T1.DaysLeft ASC, T1.ItemNO ASC, T2.BomSeq ASC, T7.ItemNO ASC
+		ORDER BY T1.DaysLeft ASC, T1.ItemNO ASC, T2.BomSeq ASC, T7.ItemNO ASC, T4.PurchaseNO ASC, T6.ClaimNO ASC
 	 </select>
 </mapper>
