@@ -24,8 +24,14 @@ public class TobeTracking extends ModelTemplate {
 	private Date OrderRequestDate;
 	private Date OrderPlanedDate;
 	private String OrderSADFlag;
+	private Date OrderSADDate;
 	private String OrderProductFlag;
+	private Date OrderProductDate;
 	private String OrderDeliveryFlag;
+	private String ProjectStatus;
+	private String ProjectBlockReason;
+	private String ProjectComment;
+	private String ProjectAction;
 	private Integer DaysLeft;
 	private String BomProjectNO;
 	private String WorkOrderNO;
@@ -50,6 +56,7 @@ public class TobeTracking extends ModelTemplate {
 	private String VendorName;
 	private Date PurchaseAckDate;
 	private Date PurchaseExpectDate;
+	private String PurchaseComment;
 	private Date PurchaseDate;
 	private String PurchaseUser;
 	private String ReceiptNO;
@@ -110,10 +117,6 @@ public class TobeTracking extends ModelTemplate {
 	private String ClaimNC11Type;
 	private Date ClaimNC11Date;
 	private String ClaimNC11Desc;
-	private String ProjectNote;
-	private String PurchaseNote;
-	private String NoteBy;
-	private Date NoteDate;
 
 	public Integer getItemNO() {
 		return ItemNO;
@@ -251,6 +254,14 @@ public class TobeTracking extends ModelTemplate {
 		OrderSADFlag = orderSADFlag;
 	}
 
+	public Date getOrderSADDate() {
+		return OrderSADDate;
+	}
+
+	public void setOrderSADDate(Date orderSADDate) {
+		OrderSADDate = orderSADDate;
+	}
+
 	public String getOrderProductFlag() {
 		return OrderProductFlag;
 	}
@@ -259,12 +270,52 @@ public class TobeTracking extends ModelTemplate {
 		OrderProductFlag = orderProductFlag;
 	}
 
+	public Date getOrderProductDate() {
+		return OrderProductDate;
+	}
+
+	public void setOrderProductDate(Date orderProductDate) {
+		OrderProductDate = orderProductDate;
+	}
+
 	public String getOrderDeliveryFlag() {
 		return OrderDeliveryFlag;
 	}
 
 	public void setOrderDeliveryFlag(String orderDeliveryFlag) {
 		OrderDeliveryFlag = orderDeliveryFlag;
+	}
+
+	public String getProjectStatus() {
+		return ProjectStatus;
+	}
+
+	public void setProjectStatus(String projectStatus) {
+		ProjectStatus = projectStatus;
+	}
+
+	public String getProjectBlockReason() {
+		return ProjectBlockReason;
+	}
+
+	public void setProjectBlockReason(String projectBlockReason) {
+		ProjectBlockReason = projectBlockReason;
+	}
+
+	public String getProjectComment() {
+		return ProjectComment;
+	}
+
+	public void setProjectComment(String projectComment) {
+		ProjectComment = projectComment;
+	}
+
+	public String getProjectAction() {
+		return ProjectAction;
+	}
+
+	public void setProjectAction(String projectAction) {
+		ProjectAction = projectAction;
 	}
 
 	public Integer getDaysLeft() {
@@ -457,6 +508,14 @@ public class TobeTracking extends ModelTemplate {
 
 	public void setPurchaseExpectDate(Date purchaseExpectDate) {
 		PurchaseExpectDate = purchaseExpectDate;
+	}
+
+	public String getPurchaseComment() {
+		return PurchaseComment;
+	}
+
+	public void setPurchaseComment(String purchaseComment) {
+		PurchaseComment = purchaseComment;
 	}
 
 	public Date getPurchaseDate() {
@@ -938,37 +997,4 @@ public class TobeTracking extends ModelTemplate {
 	public void setClaimNC11Desc(String claimNC11Desc) {
 		ClaimNC11Desc = claimNC11Desc;
 	}
-
-	public String getProjectNote() {
-		return ProjectNote;
-	}
-
-	public void setProjectNote(String projectNote) {
-		ProjectNote = projectNote;
-	}
-
-	public String getPurchaseNote() {
-		return PurchaseNote;
-	}
-
-	public void setPurchaseNote(String purchaseNote) {
-		PurchaseNote = purchaseNote;
-	}
-
-	public String getNoteBy() {
-		return NoteBy;
-	}
-
-	public void setNoteBy(String noteBy) {
-		NoteBy = noteBy;
-	}
-
-	public Date getNoteDate() {
-		return NoteDate;
-	}
-
-	public void setNoteDate(Date noteDate) {
-		NoteDate = noteDate;
-	}
-
 }

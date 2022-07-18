@@ -101,50 +101,8 @@ public class StatusService {
 	}
 
 	public List<TobeTracking> findTobeTracking(String site) {
-
 		List<TobeTracking> listPage = statusMapper.findTobeTracking(site);
 
-		String listTracking = "";
-		for (TobeTracking o : listPage) {
-			listTracking.concat("'").concat(o.getTrackingNO()).concat("',");
-			listTracking.concat("'").concat(o.getTrackingNO() + "_QC").concat("',");
-			listTracking.concat("'").concat(o.getPurchaseNO() + "_" + o.getPurchaseLine()).concat("',");
-		}
-		if (listTracking.length() > 0) {
-			listTracking = listTracking.substring(0, listTracking.length() - 1);
-		}
-
-		List<TrackingNotes> notes = findTrackingNotes(listTracking);
-
-		for (TobeTracking o : listPage) {
-			// Order Line
-			for (int i = 0; i < notes.size(); i++) {
-				if (notes.get(i).getTrackCode().equals(o.getTrackingNO())) {
-					o.setProjectNote(notes.get(i).getNote());
-					o.setNoteBy(notes.get(i).getNoteBy());
-					o.setNoteDate(notes.get(i).getNoteDate());
-					break;
-				}
-			}
-			// QC Order Line
-			for (int i = 0; i < notes.size(); i++) {
-				if (notes.get(i).getTrackCode().equals(o.getTrackingNO() + "_QC")) {
-					o.setProjectNote(notes.get(i).getNote());
-					o.setNoteBy(notes.get(i).getNoteBy());
-					o.setNoteDate(notes.get(i).getNoteDate());
-					break;
-				}
-			}
-			// purchase line
-			for (int i = 0; i < notes.size(); i++) {
-				if (notes.get(i).getTrackCode().equals(o.getPurchaseNO() + "_" + o.getPurchaseLine())) {
-					o.setPurchaseNote(notes.get(i).getNote());
-					o.setNoteBy(notes.get(i).getNoteBy());
-					o.setNoteDate(notes.get(i).getNoteDate());
-					break;
-				}
-			}
-		}
 		return listPage;
 	}
 

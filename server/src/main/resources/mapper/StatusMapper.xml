@@ -3,7 +3,7 @@
 
 <mapper namespace="sageassistant.dao.StatusMapper">
 	<!--Open L2 Cache under Names pace: 1 Hour-->
-	<cache eviction="LRU" flushInterval="3600000" readOnly="true" size="1024"/>
+	<cache eviction="LRU" flushInterval="3600000" readOnly="true" size="1024" />
 	<select id="findTobeDeliveryBySite" parameterType="String" resultType="sageassistant.model.TobeDelivery">
 		SELECT DISTINCT
 			IIF(SORDERQ.YSOQ_PJTORI_0='',SORDERQ.YSOH_PJT_0,SORDERQ.YSOQ_PJTORI_0) AS ProjectNO,
@@ -69,7 +69,7 @@
 		WHERE PORDERQ.LINCLEFLG_0 != 2
 		   AND PORDERQ.PRHFCY_0=#{site}
 		ORDER BY PORDERQ.EXTRCPDAT_0 ASC
-	</select>	
+	</select>
 	<select id="findTobeDealWithOrderLineBySite" parameterType="String" resultType="sageassistant.model.TobeDealWithOrderLine">
 		SELECT DISTINCT
 			SORDERP.SOHNUM_0 AS SalesOrderNO,
@@ -154,7 +154,7 @@
 			AND PORDERP.POHNUM_0 IS NULL
 			AND MFGMAT.MFGFCY_0 = 'ZHU'
 		</select>
-	 <select id="findTobeClosedWOBySite" parameterType="String" resultType="sageassistant.model.TobeClosedWO">
+	<select id="findTobeClosedWOBySite" parameterType="String" resultType="sageassistant.model.TobeClosedWO">
 	 	SELECT DISTINCT 
 			IIF(SORDERQ.YSOQ_PJTORI_0='',SORDERQ.YSOH_PJT_0,SORDERQ.YSOQ_PJTORI_0) AS ProjectNO,
 			SORDERQ.SOHNUM_0 AS OrderNO,
@@ -194,7 +194,7 @@
 			AND MFGITM.ITMSTA_0 !=3
 		ORDER BY SORDER.ORDDAT_0 DESC
 	 </select>
-	 <select id="findTobeTracking" useCache="false" parameterType="String" resultType="sageassistant.model.TobeTracking">
+	<select id="findTobeTracking" useCache="false" parameterType="String" resultType="sageassistant.model.TobeTracking">
 		SELECT DISTINCT
 		    T1.ItemNO,
 			T1.OrderNO,
@@ -213,8 +213,14 @@
 			T1.OrderRequestDate,
 			T1.OrderPlanedDate,
 			T1.OrderSADFlag,
+			T1.OrderSADDate,
 			T1.OrderProductFlag,
+			T1.OrderProductDate,
 			T1.OrderDeliveryFlag,
+			T1.ProjectStatus,
+			T1.ProjectBlockReason,
+			T1.ProjectComment,
+			T1.ProjectAction,
 			T1.DaysLeft,
 			T2.BomProjectNO,
 			T2.WorkOrderNO,
@@ -237,7 +243,8 @@
 			T4.VendorCode,
 			T4.VendorName,
 			T4.PurchaseAckDate,
-			T4.PurchaseExpectDate,
+			T4.PurchaseExpectDate,			
+			T4.PurchaseComment,
 			T4.PurchaseDate,
 			T4.PurchaseUser,
 			T5.ReceiptNO,
@@ -264,15 +271,20 @@
 							SORDERQ.SOHNUM_0 + '-' + CAST(SORDERQ.YSOH_ITEM_0 AS VARCHAR)
 				))) AS TrackingNO,
 				SORDERQ.YSOH_PJT_0 AS OrderProjectNO,
-				(CASE WHEN SORDERQ.YSOQ_STA_0 =1 THEN SORDER.SOHTYP_0 + '-Methods' 
-				WHEN SORDERQ.YSOQ_STA_0 =2 THEN SORDER.SOHTYP_0 + '-InteralProd'
-				WHEN SORDERQ.YSOQ_STA_0 =3 THEN SORDER.SOHTYP_0 + '-ExternalProd'
-				WHEN SORDERQ.YSOQ_STA_0 =4 THEN SORDER.SOHTYP_0 + '-Design'
-				WHEN SORDERQ.YSOQ_STA_0 =5 THEN SORDER.SOHTYP_0 + '-Stock'
-				WHEN SORDERQ.YSOQ_STA_0 =6 THEN SORDER.SOHTYP_0 + '-Trading'
-				WHEN SORDERQ.YSOQ_STA_0 =7 THEN SORDER.SOHTYP_0 + '-Services'
-				WHEN SORDERQ.YSOQ_STA_0 =8 THEN SORDER.SOHTYP_0 + '-SalesAdmin' 
-				ELSE SORDER.SOHTYP_0 + '-UNK' END) AS OrderType,
+				CASE 
+				    WHEN SORDERQ.YSOQ_STA_0 =1 THEN SORDER.SOHTYP_0 + '-Methods' 
+					WHEN SORDERQ.YSOQ_STA_0 =2 THEN SORDER.SOHTYP_0 + '-InteralProd'
+					WHEN SORDERQ.YSOQ_STA_0 =3 THEN SORDER.SOHTYP_0 + '-ExternalProd'
+					WHEN SORDERQ.YSOQ_STA_0 =4 THEN SORDER.SOHTYP_0 + '-Design'
+					WHEN SORDERQ.YSOQ_STA_0 =5 THEN SORDER.SOHTYP_0 + '-Stock'
+					WHEN SORDERQ.YSOQ_STA_0 =6 THEN SORDER.SOHTYP_0 + '-Trading'
+					WHEN SORDERQ.YSOQ_STA_0 =7 THEN SORDER.SOHTYP_0 + '-Services'
+					WHEN SORDERQ.YSOQ_STA_0 =8 THEN SORDER.SOHTYP_0 + '-SalesAdmin' 
+					ELSE SORDER.SOHTYP_0 + '-UNK' END AS OrderType,
+				SORDERQ.YWR_STA_0 AS ProjectStatus,
+				SORDERQ.YWR_CBLOC_0 AS ProjectBlockReason,
+				RTRIM(LTRIM(SORDERQ.YWR_COM_0)) AS ProjectComment,
+				RTRIM(LTRIM(SORDERQ.YWR_ACT_0)) AS ProjectAction,
 				IIF(SORDERQ.ECCVALMAJ_0!='', SORDERP.ITMREF_0 + '_' + SORDERQ.ECCVALMAJ_0, SORDERP.ITMREF_0) AS OrderPN,
 				SORDERP.ITMDES_0 AS OrderPNDesc,
 				SORDERQ.QTY_0 AS OrderQTY,
@@ -284,7 +296,9 @@
 				SORDERQ.DEMDLVDAT_0 AS OrderRequestDate,
 				SORDERQ.YSOQ_DLIVP_0 AS OrderPlanedDate,
 				SORDERQ.YSOQ_ADV_0 AS OrderSADFlag,
+				SORDERQ.YSOQ_DADV_0 AS OrderSADDate,
 				SORDERQ.YSOQ_PRD_0 AS OrderProductFlag,
+				IIF(SORDERQ.YSOQ_DPRD_0 ='1753-01-01',NULL,SORDERQ.YSOQ_DPRD_0) AS OrderProductDate,
 				SORDERQ.YSOQ_VAL_0 AS OrderDeliveryFlag,
 				DATEDIFF(day, GETDATE(),SORDERQ.DEMDLVDAT_0) AS DaysLeft
 			FROM EXPLOIT.SORDERQ AS SORDERQ
@@ -343,8 +357,9 @@
 					PORDERQ.PUU_0 AS PurchaseUnit,
 					PORDER.BPSNUM_0 AS VendorCode,
 					PORDER.BPRNAM_0 AS VendorName,
-					IIF(PORDERQ.LINOCNDAT_0='1753-01-01','',PORDERQ.LINOCNDAT_0) AS PurchaseAckDate,
+					IIF(PORDERQ.LINOCNDAT_0='1753-01-01',NULL,PORDERQ.LINOCNDAT_0) AS PurchaseAckDate,
 					PORDERQ.EXTRCPDAT_0 AS PurchaseExpectDate,
+					RTRIM(LTRIM(PORDERQ.YFIABCOM_0)) AS PurchaseComment,
 					PORDER.ORDDAT_0 AS PurchaseDate,
 					PORDER.CREUSR_0 AS PurchaseUser
 				FROM  EXPLOIT.PORDERP AS PORDERP
