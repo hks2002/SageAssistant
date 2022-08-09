@@ -3,7 +3,7 @@
 
 <mapper namespace="sageassistant.dao.PnMapper">
 	<!--Open L2 Cache under Names pace: 1 Hour-->
-	<cache eviction="LRU" flushInterval="3600000" readOnly="true" size="1024"/>
+	<cache eviction="LRU" flushInterval="3600000" readOnly="true" size="1024" />
 	<select id="findPnByLike" parameterType="String" resultType="sageassistant.model.PnRootPn">
 		SELECT DISTINCT
 		    ITMMASTER.ITMREF_0 AS PNROOT,
@@ -94,8 +94,8 @@
 		WHERE
 		     SORDERP.NETPRI_0 > 0   AND ITMMASTER.ITMREF_0 = #{pnRoot}
 		ORDER BY OrderDate ASC
-    </select>  
-    <select id="findQuoteHistoryByPnRoot" parameterType="String" resultType="sageassistant.model.QuoteHistory">
+    </select>
+	<select id="findQuoteHistoryByPnRoot" parameterType="String" resultType="sageassistant.model.QuoteHistory">
 	    SELECT
 		    SQUOTED.SALFCY_0 AS SalesSite,
 		    SQUOTED.SQHNUM_0 AS QuoteNO,
@@ -118,7 +118,7 @@
 		    SQUOTED.NETPRI_0 > 0   AND ITMMASTER.ITMREF_0 = #{pnRoot}
 		ORDER BY QuoteDate ASC
      </select>
-     <select id="findCostHistoryByPnRoot" parameterType="String" resultType="sageassistant.model.CostHistory">
+	<select id="findCostHistoryByPnRoot" parameterType="String" resultType="sageassistant.model.CostHistory">
 	    SELECT DISTINCT
 			PORDERP.PRHFCY_0 AS PurchaseSite,
 			IIF(SORDERQ.YSOQ_PJTORI_0='', SORDERQ.YSOH_PJT_0, SORDERQ.YSOQ_PJTORI_0) AS ProjectNO,
@@ -145,7 +145,7 @@
 			WHERE ITMMASTER.ITMREF_0 = #{pnRoot} AND PORDERP.NETPRI_0 > 0
 			ORDER BY OrderDate ASC
      </select>
-     <select id="findDeliveryDurationByPnRoot" parameterType="String" resultType="sageassistant.model.DeliveryDuration">
+	<select id="findDeliveryDurationByPnRoot" parameterType="String" resultType="sageassistant.model.DeliveryDuration">
 		SELECT SORDERP.SALFCY_0 AS SalesSite,
 				ITMMASTER.ITMREF_0 AS PN,
 				SORDER.ORDDAT_0 AS OrderDate,
@@ -159,8 +159,9 @@
 		WHERE 
 		    ITMMASTER.ITMREF_0=#{pnRoot}
 		    AND DateDiff(day, SORDER.ORDDAT_0,SORDER.SHIDAT_0) != 0
+		ORDER BY SORDER.SHIDAT_0 ASC
      </select>
-      <select id="findObseletPnBySite" parameterType="String" resultType="sageassistant.model.PnStatus">
+	<select id="findObseletPnBySite" parameterType="String" resultType="sageassistant.model.PnStatus">
         SELECT
 		   IIF(ITMMASTER.ECCFLG_0=2, ITMMASTER.ITMREF_0 + '_' + ECCSTA.ECCVALMAJ_0, ITMMASTER.ITMREF_0) AS PN,
 		   ITMMASTER.ITMDES1_0 AS Desc1,
@@ -189,5 +190,5 @@
 				ON ITMMASTER.ITMREF_0 = SORDERQ.ITMREF_0
 		WHERE 
 		  SORDERQ.SOQSTA_0 != 3 AND SORDERQ.SALFCY_0 = #{site}
-    </select> 
+    </select>
 </mapper>
