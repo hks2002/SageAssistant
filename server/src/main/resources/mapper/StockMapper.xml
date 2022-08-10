@@ -3,7 +3,7 @@
 
 <mapper namespace="sageassistant.dao.StockMapper">
 	<!--Open L2 Cache under Names pace: 1 Hour-->
-	<cache eviction="LRU" flushInterval="3600000" readOnly="true" size="1024"/>
+	<cache eviction="LRU" flushInterval="3600000" readOnly="true" size="1024" />
 	<select id="checkPN" parameterType="String" resultType="java.lang.String">
 		SELECT TOP 1
 			ITMMASTER.ITMREF_0
@@ -65,7 +65,9 @@
 				STOCK.ITMREF_0
 	</select>
 	<select id="findStockSummaryBySite" parameterType="String" resultType="sageassistant.model.StockSummary">
-		SELECT DISTINCT
+		SELECT T1.*, T2.Cost
+		FROM (
+			SELECT DISTINCT
 			LEFT(ITMMASTER.TSICOD_0,1) AS G,
 			LEFT(ITMMASTER.ITMREF_0,1) AS A,
 			STOCK.LOC_0 AS Location,
@@ -100,16 +102,21 @@
 						AND T2.ITMREFBPS_0 != STOCK.ITMREF_0
 				) AS T0 
 			FOR XML PATH('')),1,1,'') AS OptionPN,
-			SUM(STOCK.QTYSTU_0) OVER (PARTITION BY STOCK.STOFCY_0,STOCK.ITMREF_0 ) AS Qty,
-			SUM(STOCOST.CST_0) OVER (PARTITION BY STOCK.STOFCY_0,STOCK.ITMREF_0 ) AS Cost
+			SUM(STOCK.QTYSTU_0) OVER (PARTITION BY STOCK.STOFCY_0,STOCK.ITMREF_0 ) AS Qty
 		FROM STOCK
 		LEFT JOIN ITMMASTER
 			ON ITMMASTER.ITMREF_0 = STOCK.ITMREF_0
-		LEFT JOIN STOCOST
-			ON STOCOST.ITMREF_0 = STOCK.ITMREF_0
 		WHERE
-			STOCK.STOFCY_0=#{Site}
-			AND STOCOST.STOFCY_0=#{Site}
+			STOCK.STOFCY_0 = #{Site}
+		) AS T1
+		LEFT JOIN (
+			SELECT DISTINCT 
+				STOCOST.ITMREF_0 AS PN,
+				SUM(STOCOST.CST_0) OVER (PARTITION BY STOCOST.STOFCY_0,STOCOST.ITMREF_0 ) AS Cost
+			FROM STOCOST
+			WHERE STOCOST.STOFCY_0 = #{Site}
+		) AS T2
+		ON T1.PN = T2.PN
 		ORDER BY PN
 	</select>
 	<!-- STOJOU.VCRTYPREG_0 0:无， 6: Receive 10: workorder 17: Supplier Invoice -->
@@ -136,7 +143,7 @@
 		WHERE
 			STOJOU.STOFCY_0=#{Site}
 			AND (STOJOU.CREDAT_0 BETWEEN CONVERT(datetime, #{DateFrom},120) AND CONVERT(datetime, #{DateTo},120) )
-			<if test = " PnOrName != '%%' ">
+		<if test=" PnOrName != '%%' ">
 			AND
 			(
 			ITMMASTER.ITMDES1_0 LIKE #{PnOrName} OR
@@ -145,7 +152,7 @@
 			STOJOU.ITMREF_0 LIKE #{PnOrName}
 			)
 			</if>
-			AND STOJOU.VCRTYPREG_0 != 17
+		AND STOJOU.VCRTYPREG_0 != 17
 		ORDER BY STOJOU.CREDAT_0 DESC
 	</select>
 
