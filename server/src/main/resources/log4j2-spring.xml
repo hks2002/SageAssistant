@@ -4,23 +4,22 @@
 <Configuration status="OFF">
 	<Properties>
 		<Property name="LOG_HOME">/var/log/SageAssistant</Property>
-		<Property name="patternCosole">%d{HH:mm:ss.SSS} [%-5level] [%c{36}] %msg%n</Property>
+		<Property name="patternConsole">%d{HH:mm:ss.SSS} [%-5level] [%c{36}] %msg%n</Property>
 		<Property name="patternFile">%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] [%c{36}] %msg%n</Property>
 	</Properties>
 	<Appenders>
 		<Console name="Console" target="SYSTEM_OUT">
-			<ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+			<ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY" />
 			<PatternLayout>
-				<Pattern>${patternCosole}</Pattern>
+				<Pattern>${patternConsole}</Pattern>
 			</PatternLayout>
 		</Console>
-		<RollingFile name="RollingFile" fileName="${LOG_HOME}/sageassistant.log"
-			filePattern="${LOG_HOME}/sageassistant.%d{yyyy-MM-dd}.log" append="true">
-			<ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+		<RollingFile name="RollingFile" fileName="${LOG_HOME}/sageassistant.log" filePattern="${LOG_HOME}/sageassistant.%d{yyyy-MM-dd}.log" append="true">
+			<ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY" />
 			<PatternLayout>
 				<Pattern>${patternFile}</Pattern>
 			</PatternLayout>
-			
+
 			<Policies>
 				<!-- Apply policies every 1 day -->
 				<TimeBasedTriggeringPolicy modulate="true" interval="1" />
@@ -38,33 +37,33 @@
 			<AppenderRef ref="Console" />
 			<AppenderRef ref="RollingFile" />
 		</Root>
-		<Logger name="com.zaxxer" level="INFO" additivity="false">
+		<Logger name="sageassistant" level="INFO" additivity="false">
+			<AppenderRef ref="RollingFile" />
+		</Logger>
+		<Logger name="com.zaxxer" level="DEBUG" additivity="false">
 			<AppenderRef ref="Console" />
 			<AppenderRef ref="RollingFile" />
 		</Logger>
 		<Logger name="org.mybatis" level="INFO" additivity="false">
 			<AppenderRef ref="Console" />
-			<AppenderRef ref="RollingFile" />
 		</Logger>
 		<Logger name="org.hibernate" level="INFO" additivity="false">
 			<AppenderRef ref="Console" />
-			<AppenderRef ref="RollingFile" />
 		</Logger>
 		<Logger name="org.springframework" level="INFO" additivity="false">
 			<AppenderRef ref="Console" />
-			<AppenderRef ref="RollingFile" />
 		</Logger>
-		<Logger name="com.crystaldecisions" level="WARN" additivity="false">
+		<Logger name="com.crystaldecisions.reports.common" level="ERROR" additivity="false">
 			<AppenderRef ref="Console" />
-			<AppenderRef ref="RollingFile" />
 		</Logger>
-		<Logger name="com.crystaldecisions12" level="WARN" additivity="false">
+		<Logger name="com.crystaldecisions12.reports.common" level="ERROR" additivity="false">
 			<AppenderRef ref="Console" />
-			<AppenderRef ref="RollingFile" />
 		</Logger>
-		<Logger name="com.businessobjects" level="WARN" additivity="false">
+		<Logger name="com.businessobjects" level="ERROR" additivity="false">
 			<AppenderRef ref="Console" />
-			<AppenderRef ref="RollingFile" />
+		</Logger>
+		<Logger name="com.businessobjects.reports.reportconverter.v12.V12Converter" level="ERROR" additivity="false">
+			<AppenderRef ref="Console" />
 		</Logger>
 	</Loggers>
 </Configuration>
