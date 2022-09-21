@@ -194,8 +194,8 @@
 			AND MFGITM.ITMSTA_0 !=3
 		ORDER BY SORDER.ORDDAT_0 DESC
 	 </select>
-	<select id="findTobeTracking" useCache="false" parameterType="String" resultType="sageassistant.model.TobeTracking">
-		SELECT DISTINCT
+	<select id="findTobeTracking" parameterType="String" resultType="sageassistant.model.TobeTracking">
+		SELECT DISTINCT 
 		    T1.ItemNO,
 			T1.OrderNO,
 			T7.ItemNO AS OrderLine,
