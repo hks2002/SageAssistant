@@ -88,11 +88,8 @@
 		INNER JOIN SORDERQ
 		    ON SORDERQ.SOHNUM_0 = SORDERP.SOHNUM_0
 		        AND SORDERQ.SOPLIN_0 = SORDERP.SOPLIN_0
-
-		LEFT JOIN ITMMASTER
-		    ON SORDERP.ITMREF_0 = ITMMASTER.ITMREF_0
 		WHERE
-		     SORDERP.NETPRI_0 > 0   AND ITMMASTER.ITMREF_0 = #{pnRoot}
+		     SORDERP.NETPRI_0 > 0   AND SORDERP.ITMREF_0 = #{pnRoot}
 		ORDER BY OrderDate ASC
     </select>
 	<select id="findQuoteHistoryByPnRoot" parameterType="String" resultType="sageassistant.model.QuoteHistory">
@@ -112,10 +109,8 @@
 		FROM SQUOTE
 		LEFT JOIN SQUOTED
 		    ON SQUOTED.SQHNUM_0=SQUOTE.SQHNUM_0
-		LEFT JOIN ITMMASTER
-		    ON SQUOTED.ITMREF_0=ITMMASTER.ITMREF_0
 		WHERE 
-		    SQUOTED.NETPRI_0 > 0   AND ITMMASTER.ITMREF_0 = #{pnRoot}
+		    SQUOTED.NETPRI_0 > 0   AND SQUOTED.ITMREF_0 = #{pnRoot}
 		ORDER BY QuoteDate ASC
      </select>
 	<select id="findCostHistoryByPnRoot" parameterType="String" resultType="sageassistant.model.CostHistory">
@@ -140,24 +135,20 @@
 					  ON PORDERQ.POHNUM_0 = PORDERP.POHNUM_0 AND PORDERQ.POPLIN_0 = PORDERP.POPLIN_0
 				INNER JOIN PORDER
 					  ON PORDER.POHNUM_0 = PORDERP.POHNUM_0
-			    LEFT JOIN ITMMASTER
-				      ON ITMMASTER.ITMREF_0 = SORDERQ.ITMREF_0
-			WHERE ITMMASTER.ITMREF_0 = #{pnRoot} AND PORDERP.NETPRI_0 > 0
+			WHERE SORDERQ.ITMREF_0 = #{pnRoot} AND PORDERP.NETPRI_0 > 0
 			ORDER BY OrderDate ASC
      </select>
 	<select id="findDeliveryDurationByPnRoot" parameterType="String" resultType="sageassistant.model.DeliveryDuration">
 		SELECT SORDERP.SALFCY_0 AS SalesSite,
-				ITMMASTER.ITMREF_0 AS PN,
+		        SORDERP.ITMREF_0 AS PN,
 				SORDER.ORDDAT_0 AS OrderDate,
 				SORDER.SHIDAT_0 AS ShipDate,
 				DateDiff(day, SORDER.ORDDAT_0,SORDER.SHIDAT_0) AS Duration
 		FROM SORDER
 		    LEFT JOIN SORDERP
 		    ON SORDERP.SOHNUM_0=SORDER.SOHNUM_0
-		    LEFT JOIN ITMMASTER
-		    ON SORDERP.ITMREF_0=ITMMASTER.ITMREF_0
 		WHERE 
-		    ITMMASTER.ITMREF_0=#{pnRoot}
+		    SORDERP.ITMREF_0=#{pnRoot}
 		    AND DateDiff(day, SORDER.ORDDAT_0,SORDER.SHIDAT_0) != 0
 		ORDER BY SORDER.SHIDAT_0 ASC
      </select>

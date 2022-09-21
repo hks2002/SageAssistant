@@ -4,7 +4,7 @@
 <mapper namespace="sageassistant.dao.CurrencyMapper">
 	<!--Open L2 Cache under Names pace: 1 day -->
 	<cache eviction="FIFO" flushInterval="86400000" readOnly="true" size="1024" />
-	
+
 	<select id="findCurrencyRate" resultType="sageassistant.model.CurrencyHistory">
 	SELECT * FROM (
 		SELECT 
@@ -18,8 +18,8 @@
 		CUR_0=#{Sour} AND CURDEN_0=#{Dest}
     ) AS T1
     WHERE 
-	    CONVERT(datetime, #{Date},120) != T1.EndDate 
-	    AND CONVERT(datetime, #{Date},120) BETWEEN T1.StartDate AND T1.EndDate
+		CONVERT(datetime, #{Date},120) >= T1.StartDate
+	    AND T1.EndDate > CONVERT(datetime, #{Date},120)
 	</select>
-	
+
 </mapper>

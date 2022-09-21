@@ -43,12 +43,12 @@ public class AnalyseController {
 		String categoryCode = CategoryCode;
 
 		if (Site.equals("ALL")) {
-			return analyseService.analyseQuoteSalesCostAll(categoryCode, PnRoot,DateFrom, DateTo, limit).toString();
+			return analyseService.analyseQuoteSalesCostAll(categoryCode, PnRoot, DateFrom, DateTo, limit).toString();
 		} else {
 			return analyseService.analyseQuoteSalesCost(Site, categoryCode, PnRoot, DateFrom, DateTo, limit).toString();
 		}
 	}
-	
+
 	@GetMapping("/Data/AnalysisQuoteSalesCostByTarget")
 	public String analyseQuoteSalesCostByTarget(
 			@RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
@@ -70,5 +70,44 @@ public class AnalyseController {
 		String jsonTxt = analyseService.analyseQuoteSalesCostByTarget(Site, PnRoot, DateFrom, DateTo, limit, Target);
 		JSONObject json = JSON.parseObject(jsonTxt, JSONObject.class);
 		return json.getString(Target);
+	}
+
+	@GetMapping("/Data/AnalysePurchase")
+	public String analysePurchase(
+			@RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
+			@RequestParam(value = "PN", required = false, defaultValue = "") String PnRoot,
+			@RequestParam(value = "Currency", required = false, defaultValue = "USD") String Currency,
+			@RequestParam(value = "Target", required = false, defaultValue = "NetPrice") String Target,
+			@RequestParam(value = "LastN", required = false, defaultValue = "1") String LastN) {
+		if (PnRoot.isEmpty()) {
+			return "url:/Data/AnalysePurchase?Site=SITE&PN=PN&Currency=USD&Target=NetPrice&LastN=1\nAvailable Target:NetPrice,ProjectNO,PurchaseDate,PurchaseNO,PurchaseDate";
+		}
+		return analyseService.analysePurchase(Site, PnRoot, Currency, Target, LastN);
+	}
+
+	@GetMapping("/Data/AnalyseQuote")
+	public String analyseQuote(
+			@RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
+			@RequestParam(value = "PN", required = false, defaultValue = "") String PnRoot,
+			@RequestParam(value = "Currency", required = false, defaultValue = "USD") String Currency,
+			@RequestParam(value = "Target", required = false, defaultValue = "NetPrice") String Target,
+			@RequestParam(value = "LastN", required = false, defaultValue = "1") String LastN) {
+		if (PnRoot.isEmpty()) {
+			return "url:/Data/AnalyseQuote?Site=SITE&PN=PN&Currency=USD&Target=NetPrice&LastN=1\nAvailable Target:NetPrice,QuoteNO,QuoteDate,CustomerCode,CustomerName,OrderNO,OrderFlag,QTY";
+		}
+		return analyseService.analyseQuote(Site, PnRoot, Currency, Target, LastN);
+	}
+
+	@GetMapping("/Data/AnalyseSales")
+	public String analyseSales(
+			@RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
+			@RequestParam(value = "PN", required = false, defaultValue = "") String PnRoot,
+			@RequestParam(value = "Currency", required = false, defaultValue = "USD") String Currency,
+			@RequestParam(value = "Target", required = false, defaultValue = "NetPrice") String Target,
+			@RequestParam(value = "LastN", required = false, defaultValue = "1") String LastN) {
+		if (PnRoot.isEmpty()) {
+			return "url:/Data/AnalyseSales?Site=SITE&PN=PN&Currency=USD&Target=NetPrice&LastN=1\nAvailable Target:NetPrice,OrderNO,OrderDate,CustomerCode,CustomerName,QTY";
+		}
+		return analyseService.analyseSales(Site, PnRoot, Currency, Target, LastN);
 	}
 }

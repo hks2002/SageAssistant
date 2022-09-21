@@ -5,11 +5,24 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import sageassistant.model.AnalysePurchase;
+import sageassistant.model.AnalyseQuote;
 import sageassistant.model.AnalyseQuoteSalesCost;
+import sageassistant.model.AnalyseSales;
 
 @Mapper
 public interface AnalyseMapper {
 	List<AnalyseQuoteSalesCost> analyseQuoteSalesCost(@Param("Site") String Site,
-			@Param("CategoryCode") String CategoryCode, @Param("PnRoot") String PnRoot, @Param("DateFrom") String DateFrom,
+			@Param("CategoryCode") String CategoryCode, @Param("PnRoot") String PnRoot,
+			@Param("DateFrom") String DateFrom,
 			@Param("DateTo") String DateTo, @Param("Limit") Integer Limit);
+
+	List<AnalysePurchase> analysePurchase(@Param("Site") String Site, @Param("PnRoot") String PnRoot,
+			@Param("Currency") String Currency, @Param("LastN") String LastN);
+
+	List<AnalyseQuote> analyseQuote(@Param("Site") String Site, @Param("PnRoot") String PnRoot,
+			@Param("Currency") String Currency, @Param("LastN") String LastN);
+
+	List<AnalyseSales> analyseSales(@Param("Site") String Site, @Param("PnRoot") String PnRoot,
+			@Param("Currency") String Currency, @Param("LastN") String LastN);
 }
