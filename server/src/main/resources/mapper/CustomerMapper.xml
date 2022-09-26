@@ -2,19 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="sageassistant.dao.CustomerMapper">
-    <!--Open L2 Cache under Names pace: 1 Hour-->
-    <cache eviction="LRU" flushInterval="3600000" readOnly="true" size="1024"/>
-    <select id="findCustomerByCodeOrName" parameterType="String" resultType="sageassistant.model.CustomerName">
+	<!--Open L2 Cache under Names pace: 1 Hour-->
+	<cache eviction="LRU" flushInterval="3600000" readOnly="true" size="1024" />
+	<select id="findCustomerByCodeOrName" resultType="sageassistant.model.CustomerName">
 	    SELECT
 	        BPARTNER.BPRNUM_0 AS CustomerCode,
 	        BPARTNER.BPRNAM_0+BPARTNER.BPRNAM_1 AS CustomerName
 	    FROM EXPLOIT.BPARTNER AS BPARTNER
 			INNER JOIN EXPLOIT.BPCUSTOMER AS BPCUSTOMER
 				ON BPARTNER.BPRNUM_0 = BPCUSTOMER.BPCNUM_0
-		WHERE BPARTNER.BPRNUM_0 LIKE #{CustomerCodeOrName} OR BPARTNER.BPRNAM_0 LIKE #{CustomerCodeOrName} OR BPARTNER.BPRNAM_1 LIKE #{CustomerCodeOrName}
-			ORDER BY BPRNUM_0 ASC
+		WHERE 
+			BPARTNER.BPRNUM_0 LIKE #{CustomerCodeOrName} 
+				OR BPARTNER.BPRNAM_0 LIKE #{CustomerCodeOrName} 
+				OR BPARTNER.BPRNAM_1 LIKE #{CustomerCodeOrName}
+		ORDER BY BPRNUM_0 ASC
+		OFFSET 0 ROWS
+		FETCH NEXT #{Count} ROWS ONLY
     </select>
-     <select id="findCustomerDetailsByCode" parameterType="String" resultType="sageassistant.model.CustomerDetails">
+	<select id="findCustomerDetailsByCode" resultType="sageassistant.model.CustomerDetails">
 	    SELECT 
 		    BPARTNER.BPRNUM_0 AS CustomerCode,
 		    BPARTNER.BPRNAM_0 AS CustomerName0,
@@ -43,7 +48,7 @@
 		     ON BPARTNER.BPRNUM_0 = BPADDRESS.BPANUM_0
 		WHERE BPARTNER.BPRNUM_0 = #{CustomerCode}
     </select>
-    <select id="findCustomerTotalAmount" parameterType="String" resultType="sageassistant.model.CustomerSummaryAmount">
+	<select id="findCustomerTotalAmount" resultType="sageassistant.model.CustomerSummaryAmount">
         SELECT DISTINCT
 		    SORDER.SALFCY_0 AS Site,
 			SORDER.BPCORD_0 AS CustomerCode,
@@ -53,7 +58,7 @@
 		WHERE BPCORD_0=#{CustomerCode}
 		      AND (SORDER.ORDDAT_0 BETWEEN CONVERT(datetime, #{DateFrom},120) AND CONVERT(datetime, #{DateTo},120) )
     </select>
-    <select id="findCustomerTotalProjectQty" parameterType="String" resultType="sageassistant.model.CustomerSummaryQty">
+	<select id="findCustomerTotalProjectQty" resultType="sageassistant.model.CustomerSummaryQty">
         SELECT DISTINCT
 		    SORDERQ.SALFCY_0 AS Site,
 		    SORDERQ.BPCORD_0 AS CustomerCode,
@@ -63,7 +68,7 @@
 		WHERE SORDERQ.BPCORD_0=#{CustomerCode}
 		      AND (SORDERQ.ORDDAT_0 BETWEEN CONVERT(datetime, #{DateFrom},120) AND CONVERT(datetime, #{DateTo},120) )
     </select>
-    <select id="findCustomerTotalItemQty" parameterType="String" resultType="sageassistant.model.CustomerSummaryQty">
+	<select id="findCustomerTotalItemQty" resultType="sageassistant.model.CustomerSummaryQty">
         SELECT DISTINCT
 		    SORDERQ.SALFCY_0 AS Site,
 		    SORDERQ.BPCORD_0 AS CustomerCode,
@@ -73,7 +78,7 @@
 		WHERE SORDERQ.BPCORD_0=#{CustomerCode}
 		      AND (SORDERQ.ORDDAT_0 BETWEEN CONVERT(datetime, #{DateFrom},120) AND CONVERT(datetime, #{DateTo},120) )
     </select>
-    <select id="findCustomerTotalProductQty" parameterType="String" resultType="sageassistant.model.CustomerSummaryQty">
+	<select id="findCustomerTotalProductQty" resultType="sageassistant.model.CustomerSummaryQty">
         SELECT DISTINCT
 		SORDERQ.SALFCY_0 AS Site,
 		    SORDERQ.BPCORD_0 AS CustomerCode,
@@ -83,7 +88,7 @@
 		WHERE SORDERQ.BPCORD_0=#{CustomerCode}
 		      AND (SORDERQ.ORDDAT_0 BETWEEN CONVERT(datetime, #{DateFrom},120) AND CONVERT(datetime, #{DateTo},120) )
     </select>
-    <select id="findCustomerOpenAmount" parameterType="String" resultType="sageassistant.model.CustomerSummaryAmount">
+	<select id="findCustomerOpenAmount" resultType="sageassistant.model.CustomerSummaryAmount">
         SELECT DISTINCT
 		    SORDER.SALFCY_0 AS Site,
 			SORDER.BPCORD_0 AS CustomerCode,
@@ -93,7 +98,7 @@
 		WHERE BPCORD_0=#{CustomerCode}
 		      AND SORDER.ORDSTA_0 != 2		
 	</select>
-	<select id="findCustomerOpenProjectQty" parameterType="String" resultType="sageassistant.model.CustomerSummaryQty">
+	<select id="findCustomerOpenProjectQty" resultType="sageassistant.model.CustomerSummaryQty">
         SELECT DISTINCT
 		    SORDERQ.SALFCY_0 AS Site,
 		    SORDERQ.BPCORD_0 AS CustomerCode,
@@ -105,7 +110,7 @@
 		WHERE SORDERQ.BPCORD_0=#{CustomerCode}
 		      AND SORDER.ORDSTA_0 != 2
 	</select>
-	<select id="findCustomerOpenItemQty" parameterType="String" resultType="sageassistant.model.CustomerSummaryQty">
+	<select id="findCustomerOpenItemQty" resultType="sageassistant.model.CustomerSummaryQty">
         SELECT DISTINCT
 		    SORDERQ.SALFCY_0 AS Site,
 		    SORDERQ.BPCORD_0 AS CustomerCode,
@@ -117,7 +122,7 @@
 		WHERE SORDERQ.BPCORD_0=#{CustomerCode}
 		     AND SORDER.ORDSTA_0 != 2
 	</select>
-	<select id="findCustomerOpenProductQty" parameterType="String" resultType="sageassistant.model.CustomerSummaryQty">
+	<select id="findCustomerOpenProductQty" resultType="sageassistant.model.CustomerSummaryQty">
         SELECT DISTINCT
 		SORDERQ.SALFCY_0 AS Site,
 		    SORDERQ.BPCORD_0 AS CustomerCode,
@@ -129,7 +134,7 @@
 		WHERE SORDERQ.BPCORD_0=#{CustomerCode}
 		      AND SORDER.ORDSTA_0 != 2
 	</select>
-	<select id="findCustomerDeliveryHistory" parameterType="String" resultType="sageassistant.model.CustomerDeliveryHistory">
+	<select id="findCustomerDeliveryHistory" resultType="sageassistant.model.CustomerDeliveryHistory">
 	    SELECT DISTINCT 
 			SORDERQ.SALFCY_0 AS Site,
 			SORDERQ.BPCORD_0 AS CustomerCode,
@@ -151,7 +156,7 @@
 		    AND (SORDERQ.SHIDAT_0 BETWEEN CONVERT(datetime, #{DateFrom},120) AND CONVERT(datetime, #{DateTo},120) )
 		ORDER BY SORDERQ.SHIDAT_0
 	</select>
-	<select id="findCustomerDelayHistory" parameterType="String" resultType="sageassistant.model.CustomerDelayHistory">
+	<select id="findCustomerDelayHistory" resultType="sageassistant.model.CustomerDelayHistory">
 		SELECT DISTINCT 
 			SORDERQ.SALFCY_0 AS Site,
 			SORDERQ.BPCORD_0 AS CustomerCode,
@@ -176,7 +181,7 @@
 			AND (SORDERQ.SHIDAT_0 - SORDERQ.DEMDLVDAT_0 >0 OR SORDERQ.SDHNUM_0 IS NULL )
 		ORDER BY SORDERQ.DEMDLVDAT_0
 	</select>
-	<select id="findCustomerOpenItems" parameterType="String" resultType="sageassistant.model.CustomerOpenItems">
+	<select id="findCustomerOpenItems" resultType="sageassistant.model.CustomerOpenItems">
 	SELECT DISTINCT
 		SORDERQ.SALFCY_0 AS Site,
 		SORDERQ.BPCORD_0 AS CustomerCode,

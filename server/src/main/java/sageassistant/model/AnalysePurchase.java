@@ -1,67 +1,28 @@
+/*
+ * @Author         : Robert Huang<56649783@qq.com>
+ * @Date           : 2022-09-21 09:17:04
+ * @LastEditors    : Robert Huang<56649783@qq.com>
+ * @LastEditTime   : 2022-09-23 09:24:32
+ * @FilePath       : \server\src\main\java\sageassistant\model\AnalysePurchase.java
+ * @CopyRight      : Dedienne Aerospace China ZhuHai
+ */
 package sageassistant.model;
 
-import java.math.BigDecimal;
 import java.util.Date;
-
+import lombok.Getter;
+import lombok.Setter;
 import sageassistant.model.base.ModelTemplate;
 
+@Getter
+@Setter
 public class AnalysePurchase extends ModelTemplate {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private String ProjectNO;
-	private String PurchaseNO;
-	private BigDecimal NetPrice;
-	private Date ProjectDate;
-	private Date PurchaseDate;
-	private Integer ROWNUM;
-
-	public String getProjectNO() {
-		return ProjectNO;
-	}
-
-	public void setProjectNO(String projectNO) {
-		ProjectNO = projectNO;
-	}
-
-	public String getPurchaseNO() {
-		return PurchaseNO;
-	}
-
-	public void setPurchaseNO(String purchaseNO) {
-		PurchaseNO = purchaseNO;
-	}
-
-	public BigDecimal getNetPrice() {
-		return NetPrice;
-	}
-
-	public void setNetPrice(BigDecimal netPrice) {
-		NetPrice = netPrice;
-	}
-
-	public Date getProjectDate() {
-		return ProjectDate;
-	}
-
-	public void setProjectDate(Date projectDate) {
-		ProjectDate = projectDate;
-	}
-
-	public Date getPurchaseDate() {
-		return PurchaseDate;
-	}
-
-	public void setPurchaseDate(Date purchaseDate) {
-		PurchaseDate = purchaseDate;
-	}
-
-	public Integer getROWNUM() {
-		return ROWNUM;
-	}
-
-	public void setROWNUM(Integer rOWNUM) {
-		ROWNUM = rOWNUM;
-	}
-
+    private String ProjectNO;
+    private String PurchaseNO;
+    private Double NetPrice;
+    private Date ProjectDate;
+    private Date PurchaseDate;
+    private Integer ROWNUM;
 }

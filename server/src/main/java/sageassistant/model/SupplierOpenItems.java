@@ -1,114 +1,32 @@
+/*
+ * @Author         : Robert Huang<56649783@qq.com>
+ * @Date           : 2022-03-26 17:01:30
+ * @LastEditors    : Robert Huang<56649783@qq.com>
+ * @LastEditTime   : 2022-09-22 14:03:51
+ * @FilePath       : \server\src\main\java\sageassistant\model\SupplierOpenItems.java
+ * @CopyRight      : Dedienne Aerospace China ZhuHai
+ */
 package sageassistant.model;
 
 import java.util.Date;
-
+import lombok.Getter;
+import lombok.Setter;
 import sageassistant.model.base.ModelTemplate;
 
+@Getter
+@Setter
 public class SupplierOpenItems extends ModelTemplate {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
-	private String Site;
-	private String SupplierCode;
-	private String PurchaseNO;
-	private String ProjectNO;
-	private String PN;
-	private String Description;
-	private Date AckDate;
-	private Date ExpectDate;
-	private Date OrderDate;
-	private int DaysDelay;
+    private static final long serialVersionUID = 1L;
 
-	public String getSite() {
-		return Site;
-	}
-
-	public void setSite(String site) {
-		Site = site;
-	}
-
-	public String getSupplierCode() {
-		return SupplierCode;
-	}
-
-	public void setSupplierCode(String supplierCode) {
-		SupplierCode = supplierCode;
-	}
-
-	public String getPurchaseNO() {
-		return PurchaseNO;
-	}
-
-	public void setPurchaseNO(String purchaseNO) {
-		PurchaseNO = purchaseNO;
-	}
-
-	public String getProjectNO() {
-		return ProjectNO;
-	}
-
-	public void setProjectNO(String projectNO) {
-		ProjectNO = projectNO;
-	}
-
-	public String getPN() {
-		return PN;
-	}
-
-	public void setPN(String pN) {
-		PN = pN;
-	}
-
-	public String getDescription() {
-		return Description;
-	}
-
-	public void setDescription(String description) {
-		Description = description;
-	}
-
-	public Date getAckDate() {
-		return AckDate;
-	}
-
-	public void setAckDate(Date ackDate) {
-		AckDate = ackDate;
-	}
-
-	public Date getExpectDate() {
-		return ExpectDate;
-	}
-
-	public void setExpectDate(Date expectDate) {
-		ExpectDate = expectDate;
-	}
-
-	public Date getOrderDate() {
-		return OrderDate;
-	}
-
-	public void setOrderDate(Date orderDate) {
-		OrderDate = orderDate;
-	}
-
-	public int getDateNeed() {
-		return DateNeed;
-	}
-
-	public void setDateNeed(int dateNeed) {
-		DateNeed = dateNeed;
-	}
-
-	public int getDaysDelay() {
-		return DaysDelay;
-	}
-
-	public void setDaysDelay(int daysDelay) {
-		DaysDelay = daysDelay;
-	}
-
-	private int DateNeed;
-
+    private String Site;
+    private String SupplierCode;
+    private String PurchaseNO;
+    private String ProjectNO;
+    private String PN;
+    private String Description;
+    private Date AckDate;
+    private Date ExpectDate;
+    private Date OrderDate;
+    private int DaysDelay;
 }

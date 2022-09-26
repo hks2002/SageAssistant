@@ -1,10 +1,10 @@
 {
     "recommendations": [
         "visualstudioexptteam.vscodeintellicode",
-        "eamodio.gitlens",
         "pivotal.vscode-boot-dev-pack",
         "vscjava.vscode-java-test",
-        "redhat.vscode-xml"
+        "redhat.vscode-xml",
+        "mwpb.java-prettier-formatter"
     ],
     "unwantedRecommendations": [
         "DavidAnson.vscode-markdownlint"

@@ -1,17 +1,18 @@
-package sageassistant.utils;
+package sageassistant;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import sageassistant.utils.Utils;
 
 @SpringBootTest
 public class UtilsTest {
+
     private static final Logger log = LogManager.getLogger(Utils.class);
 
     @Test

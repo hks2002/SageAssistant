@@ -1,22 +1,20 @@
+/*
+ * @Author         : Robert Huang<56649783@qq.com>
+ * @Date           : 2022-03-26 17:01:29
+ * @LastEditors    : Robert Huang<56649783@qq.com>
+ * @LastEditTime   : 2022-09-22 14:02:04
+ * @FilePath       : \server\src\main\java\sageassistant\model\RptPurchaseTax.java
+ * @CopyRight      : Dedienne Aerospace China ZhuHai
+ */
 package sageassistant.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class RptPurchaseTax {
-	Float VATRAT_0;
-	Float AMTTAX_0;
 
-	public Float getVATRAT_0() {
-		return VATRAT_0;
-	}
-
-	public void setVATRAT_0(Float vATRAT_0) {
-		VATRAT_0 = vATRAT_0;
-	}
-
-	public Float getAMTTAX_0() {
-		return AMTTAX_0;
-	}
-
-	public void setAMTTAX_0(Float aMTTAX_0) {
-		AMTTAX_0 = aMTTAX_0;
-	}
+    Float VATRAT_0;
+    Float AMTTAX_0;
 }

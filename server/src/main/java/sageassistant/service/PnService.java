@@ -1,17 +1,21 @@
+/*
+ * @Author         : Robert Huang<56649783@qq.com>
+ * @Date           : 2022-03-26 17:57:07
+ * @LastEditors    : Robert Huang<56649783@qq.com>
+ * @LastEditTime   : 2022-09-22 15:44:58
+ * @FilePath       : \server\src\main\java\sageassistant\service\PnService.java
+ * @CopyRight      : Dedienne Aerospace China ZhuHai
+ */
 package sageassistant.service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.github.pagehelper.PageHelper;
-
 import sageassistant.dao.PnMapper;
 import sageassistant.dao.StockMapper;
 import sageassistant.model.CostHistory;
@@ -26,115 +30,110 @@ import sageassistant.utils.Utils;
 
 @Service
 public class PnService {
-	private static final Logger log = LogManager.getLogger();
 
-	@Autowired
-	private PnMapper pnMapper;
+    private static final Logger log = LogManager.getLogger();
 
-	@Autowired
-	private StockMapper stockMapper;
+    @Autowired
+    private PnMapper pnMapper;
 
-	@Autowired
-	private CurrencyService currencyService;
+    @Autowired
+    private StockMapper stockMapper;
 
-	public List<PnRootPn> findPnByStartWith(String cond, Integer count) {
-		PageHelper.startPage(1, count);
-		List<PnRootPn> listPage = pnMapper.findPnByLike(cond + "%");
+    @Autowired
+    private CurrencyService currencyService;
 
-		return listPage;
-	}
+    public List<PnRootPn> findPnByStartWith(String cond, Integer Count) {
+        List<PnRootPn> listPage = pnMapper.findPnByLike(cond + "%", Count);
 
-	public List<PnRootPn> findPnByEndWith(String cond, Integer count) {
-		PageHelper.startPage(1, count);
-		List<PnRootPn> listPage = pnMapper.findPnByLike("%" + cond);
+        return listPage;
+    }
 
-		return listPage;
-	}
+    public List<PnRootPn> findPnByEndWith(String cond, Integer Count) {
+        List<PnRootPn> listPage = pnMapper.findPnByLike("%" + cond, Count);
 
-	public List<PnRootPn> findPnByContains(String cond, Integer count) {
-		PageHelper.startPage(1, count);
-		List<PnRootPn> listPage = pnMapper.findPnByLike("%" + cond + "%");
+        return listPage;
+    }
 
-		return listPage;
-	}
+    public List<PnRootPn> findPnByContains(String cond, Integer Count) {
+        List<PnRootPn> listPage = pnMapper.findPnByLike("%" + cond + "%", Count);
 
-	public List<PnDetails> findAllPnByPnRoot(String pnRoot) {
-		return pnMapper.findAllPnByPnRoot(pnRoot);
-	}
+        return listPage;
+    }
 
-	public List<SalesHistory> findSalesHistoryByPnRoot(String pnRoot, Integer count) {
-		PageHelper.startPage(1, count);
-		List<SalesHistory> listPage = (ArrayList<SalesHistory>) pnMapper.findSalesHistoryByPnRoot(pnRoot);
+    public List<PnDetails> findAllPnByPnRoot(String PnRoot) {
+        return pnMapper.findAllPnByPnRoot(PnRoot);
+    }
 
-		for (SalesHistory o : listPage) {
-			String key = o.getCurrency() + "USD" + Utils.formatDate(o.getOrderDate());
-			log.debug("key:" + key);
-			try {
-				o.setRate(Float.parseFloat(currencyService.cache.get(key)));
-				log.debug("Rate:" + o.getRate());
-			} catch (NumberFormatException e) {
-				log.error(e.getMessage());
-			} catch (ExecutionException e) {
-				log.error(e.getMessage());
-			}
-			o.setUSD(o.getNetPrice().multiply(new BigDecimal(o.getRate())));
-		}
+    public List<SalesHistory> findSalesHistoryByPnRoot(String PnRoot) {
+        List<SalesHistory> listPage = (ArrayList<SalesHistory>) pnMapper.findSalesHistoryByPnRoot(PnRoot);
 
-		return listPage;
-	}
+        for (SalesHistory o : listPage) {
+            String key = o.getCurrency() + "USD" + Utils.formatDate(o.getOrderDate());
+            log.debug("key:" + key);
+            try {
+                o.setRate(Float.parseFloat(currencyService.cache.get(key)));
+                log.debug("Rate:" + o.getRate());
+            } catch (NumberFormatException e) {
+                log.error(e.getMessage());
+            } catch (ExecutionException e) {
+                log.error(e.getMessage());
+            }
+            o.setUSD(o.getNetPrice().multiply(new BigDecimal(o.getRate())));
+        }
 
-	public List<QuoteHistory> findQuoteHistoryByPnRoot(String pnRoot, Integer count) {
-		PageHelper.startPage(1, count);
-		List<QuoteHistory> listPage = pnMapper.findQuoteHistoryByPnRoot(pnRoot);
+        return listPage;
+    }
 
-		for (QuoteHistory o : listPage) {
-			String key = o.getCurrency() + "USD" + Utils.formatDate(o.getQuoteDate());
-			log.debug("key:" + key);
-			try {
-				o.setRate(Float.parseFloat(currencyService.cache.get(key)));
-				log.debug("Rate:" + o.getRate());
-			} catch (NumberFormatException e) {
-				log.error(e.getMessage());
-			} catch (ExecutionException e) {
-				log.error(e.getMessage());
-			}
-			o.setUSD(o.getNetPrice().multiply(new BigDecimal(o.getRate())));
-		}
+    public List<QuoteHistory> findQuoteHistoryByPnRoot(String PnRoot) {
+        List<QuoteHistory> listPage = pnMapper.findQuoteHistoryByPnRoot(PnRoot);
 
-		return listPage;
-	}
+        for (QuoteHistory o : listPage) {
+            String key = o.getCurrency() + "USD" + Utils.formatDate(o.getQuoteDate());
+            log.debug("key:" + key);
+            try {
+                o.setRate(Float.parseFloat(currencyService.cache.get(key)));
+                log.debug("Rate:" + o.getRate());
+            } catch (NumberFormatException e) {
+                log.error(e.getMessage());
+            } catch (ExecutionException e) {
+                log.error(e.getMessage());
+            }
+            o.setUSD(o.getNetPrice().multiply(new BigDecimal(o.getRate())));
+        }
 
-	public List<CostHistory> findCostHistoryByPnRoot(String pnRoot, Integer count) {
-		PageHelper.startPage(1, count);
-		List<CostHistory> listPage = pnMapper.findCostHistoryByPnRoot(pnRoot);
+        return listPage;
+    }
 
-		for (CostHistory o : listPage) {
-			String key = o.getCurrency() + "USD" + Utils.formatDate(o.getOrderDate());
-			log.debug("key:" + key);
-			try {
-				o.setRate(Float.parseFloat(currencyService.cache.get(key)));
-				log.debug("Rate:" + o.getRate());
-			} catch (NumberFormatException e) {
-				log.error(e.getMessage());
-			} catch (ExecutionException e) {
-				log.error(e.getMessage());
-			}
-			o.setUSD(o.getNetPrice().multiply(new BigDecimal(o.getRate())));
-		}
-		// one project maybe purchase line with different currency
+    public List<CostHistory> findCostHistoryByPnRoot(String PnRoot) {
+        List<CostHistory> listPage = pnMapper.findCostHistoryByPnRoot(PnRoot);
 
-		return listPage;
-	}
+        for (CostHistory o : listPage) {
+            String key = o.getCurrency() + "USD" + Utils.formatDate(o.getOrderDate());
+            log.debug("key:" + key);
+            try {
+                o.setRate(Float.parseFloat(currencyService.cache.get(key)));
+                log.debug("Rate:" + o.getRate());
+            } catch (NumberFormatException e) {
+                log.error(e.getMessage());
+            } catch (ExecutionException e) {
+                log.error(e.getMessage());
+            }
+            o.setUSD(o.getNetPrice().multiply(new BigDecimal(o.getRate())));
+        }
+        // one project maybe purchase line with different currency
 
-	public List<DeliveryDuration> findDeliveryDurationByPnRoot(String pnRoot) {
-		return pnMapper.findDeliveryDurationByPnRoot(pnRoot);
-	}
+        return listPage;
+    }
 
-	public List<StockInfo> findStockInfoByPnRoot(String pnRoot) {
-		return stockMapper.findStockInfoByPnRoot(pnRoot);
-	}
+    public List<DeliveryDuration> findDeliveryDurationByPnRoot(String PnRoot) {
+        return pnMapper.findDeliveryDurationByPnRoot(PnRoot);
+    }
 
-	public List<PnStatus> findObseletPnBySite(String site) {
-		return pnMapper.findObseletPnBySite(site);
-	}
+    public List<StockInfo> findStockInfoByPnRoot(String PnRoot) {
+        return stockMapper.findStockInfoByPnRoot(PnRoot);
+    }
+
+    public List<PnStatus> findObseletPnBySite(String Site) {
+        return pnMapper.findObseletPnBySite(Site);
+    }
 }

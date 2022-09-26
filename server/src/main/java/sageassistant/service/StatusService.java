@@ -1,150 +1,102 @@
+/*
+ * @Author         : Robert Huang<56649783@qq.com>
+ * @Date           : 2022-03-26 17:57:07
+ * @LastEditors    : Robert Huang<56649783@qq.com>
+ * @LastEditTime   : 2022-09-22 15:45:12
+ * @FilePath       : \server\src\main\java\sageassistant\service\StatusService.java
+ * @CopyRight      : Dedienne Aerospace China ZhuHai
+ */
 package sageassistant.service;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.github.pagehelper.PageHelper;
-
 import sageassistant.dao.StatusMapper;
-import sageassistant.dao2.TrackingMapper;
 import sageassistant.model.TobeClosedWO;
 import sageassistant.model.TobeDealWithOrderLine;
 import sageassistant.model.TobeDelivery;
 import sageassistant.model.TobePurchaseBom;
 import sageassistant.model.TobeReceive;
-import sageassistant.model.TrackingNotes;
 import sageassistant.model.TobeTracking;
 import sageassistant.utils.Utils;
 
 @Service
 public class StatusService {
-	private static final Logger log = LogManager.getLogger();
 
-	@Autowired
-	private StatusMapper statusMapper;
+    private static final Logger log = LogManager.getLogger();
 
-	@Autowired
-	private TrackingMapper trackingMapper;
+    @Autowired
+    private StatusMapper statusMapper;
 
-	@Autowired
-	private CurrencyService currencyService;
+    @Autowired
+    private CurrencyService currencyService;
 
-	public List<TobeDelivery> findTobeDeliveryBySite(String site, Integer count) {
-		PageHelper.startPage(1, count);
-		List<TobeDelivery> listPage = statusMapper.findTobeDeliveryBySite(site);
+    public List<TobeDelivery> findTobeDeliveryBySite(String site, Integer count) {
+        List<TobeDelivery> listPage = statusMapper.findTobeDeliveryBySite(site, count);
 
-		for (TobeDelivery o : listPage) {
-			// log.debug("ooo:" + o.toString());
-			String key = o.getCurrency() + "USD" + Utils.formatDate(o.getOrderDate());
-			// log.debug("key:" + key);
-			try {
-				o.setRate(Float.parseFloat(currencyService.cache.get(key)));
-				// log.debug("Rate:" + o.getRate());
-			} catch (NumberFormatException e) {
-				log.error(e.getMessage());
-			} catch (ExecutionException e) {
-				log.error(e.getMessage());
-			}
-			// o.setUSD(o.getNetPrice().multiply(new BigDecimal(o.getRate())));
-		}
+        for (TobeDelivery o : listPage) {
+            // log.debug("ooo:" + o.toString());
+            String key = o.getCurrency() + "USD" + Utils.formatDate(o.getOrderDate());
+            // log.debug("key:" + key);
+            try {
+                o.setRate(Float.parseFloat(currencyService.cache.get(key)));
+                // log.debug("Rate:" + o.getRate());
+            } catch (NumberFormatException e) {
+                log.error(e.getMessage());
+            } catch (ExecutionException e) {
+                log.error(e.getMessage());
+            }
+            // o.setUSD(o.getNetPrice().multiply(new BigDecimal(o.getRate())));
+        }
 
-		return listPage;
-	}
+        return listPage;
+    }
 
-	public List<TobeReceive> findTobeReceiveBySite(String site, Integer count) {
-		PageHelper.startPage(1, count);
-		List<TobeReceive> listPage = statusMapper.findTobeReceiveBySite(site);
+    public List<TobeReceive> findTobeReceiveBySite(String site, Integer count) {
+        List<TobeReceive> listPage = statusMapper.findTobeReceiveBySite(site, count);
 
-		for (TobeReceive o : listPage) {
-			String key = o.getCurrency() + "USD" + Utils.formatDate(o.getOrderDate());
-			// log.debug("key:" + key);
-			try {
-				o.setRate(Float.parseFloat(currencyService.cache.get(key)));
-				// log.debug("Rate:" + o.getRate());
-			} catch (NumberFormatException e) {
-				log.error(e.getMessage());
-			} catch (ExecutionException e) {
-				log.error(e.getMessage());
-			}
-			o.setUSD(o.getNetPrice().multiply(new BigDecimal(o.getRate())));
-		}
+        for (TobeReceive o : listPage) {
+            String key = o.getCurrency() + "USD" + Utils.formatDate(o.getOrderDate());
+            // log.debug("key:" + key);
+            try {
+                o.setRate(Float.parseFloat(currencyService.cache.get(key)));
+                // log.debug("Rate:" + o.getRate());
+            } catch (NumberFormatException e) {
+                log.error(e.getMessage());
+            } catch (ExecutionException e) {
+                log.error(e.getMessage());
+            }
+            o.setUSD(o.getNetPrice().multiply(new BigDecimal(o.getRate())));
+        }
 
-		return listPage;
-	}
+        return listPage;
+    }
 
-	public List<TobeDealWithOrderLine> findTobeDealWithOrderLineBySite(String site, Integer count) {
-		PageHelper.startPage(1, count);
-		List<TobeDealWithOrderLine> listPage = statusMapper.findTobeDealWithOrderLineBySite(site);
+    public List<TobeDealWithOrderLine> findTobeDealWithOrderLineBySite(String site, Integer count) {
+        List<TobeDealWithOrderLine> listPage = statusMapper.findTobeDealWithOrderLineBySite(site, count);
 
-		return listPage;
-	}
+        return listPage;
+    }
 
-	public List<TobePurchaseBom> findTobePurchaseBomBySite(String site, Integer count) {
-		PageHelper.startPage(1, count);
-		List<TobePurchaseBom> listPage = statusMapper.findTobePurchaseBomBySite(site);
+    public List<TobePurchaseBom> findTobePurchaseBomBySite(String site, Integer count) {
+        List<TobePurchaseBom> listPage = statusMapper.findTobePurchaseBomBySite(site, count);
 
-		return listPage;
-	}
+        return listPage;
+    }
 
-	public List<TobeClosedWO> findTobeClosedWOBySite(String site, Integer count) {
-		PageHelper.startPage(1, count);
-		List<TobeClosedWO> listPage = statusMapper.findTobeClosedWOBySite(site);
+    public List<TobeClosedWO> findTobeClosedWOBySite(String site, Integer count) {
+        List<TobeClosedWO> listPage = statusMapper.findTobeClosedWOBySite(site, count);
 
-		return listPage;
-	}
+        return listPage;
+    }
 
-	public List<TobeTracking> findTobeTracking(String site) {
-		List<TobeTracking> listPage = statusMapper.findTobeTracking(site);
+    public List<TobeTracking> findTobeTracking(String site) {
+        List<TobeTracking> listPage = statusMapper.findTobeTracking(site);
 
-		return listPage;
-	}
-
-	public List<TrackingNotes> findTrackingNotes(String trackCode) {
-		List<TrackingNotes> listPage = trackingMapper.findTrackingNotes(trackCode);
-
-		return listPage;
-	}
-
-	public Boolean insertTrackingNotes(String trackCode, String note, String createBy) {
-		Date date = new Date(System.currentTimeMillis());
-		Integer rst = trackingMapper.insertTrackingNotes(trackCode, note, date.toString(), createBy);
-		if (rst > 0) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public Boolean deleteTrackingNotes(String trackCode) {
-		Integer rst = trackingMapper.deleteTrackingNotes(trackCode);
-		if (rst == 1) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public Boolean updateTrackingNotes(String trackCode, String note, String updateBy) {
-		Date date = new Date(System.currentTimeMillis());
-		List<TrackingNotes> notes = findTrackingNotes(trackCode);
-		log.info(notes.toString());
-		if (notes.size() > 0) {
-			Integer rst = trackingMapper.updateTrackingNotes(trackCode, note, date.toString(), updateBy);
-			if (rst == 1) {
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			return insertTrackingNotes(trackCode, note, updateBy);
-		}
-	}
-
+        return listPage;
+    }
 }

@@ -4,7 +4,7 @@
 <mapper namespace="sageassistant.dao.StatusMapper">
 	<!--Open L2 Cache under Names pace: 1 Hour-->
 	<cache eviction="LRU" flushInterval="3600000" readOnly="true" size="1024" />
-	<select id="findTobeDeliveryBySite" parameterType="String" resultType="sageassistant.model.TobeDelivery">
+	<select id="findTobeDeliveryBySite" resultType="sageassistant.model.TobeDelivery">
 		SELECT DISTINCT
 			IIF(SORDERQ.YSOQ_PJTORI_0='',SORDERQ.YSOH_PJT_0,SORDERQ.YSOQ_PJTORI_0) AS ProjectNO,
 			SORDERQ.SOHNUM_0 AS OrderNO,
@@ -41,7 +41,7 @@
 			AND SORDERQ.SALFCY_0=#{site}
 		ORDER BY SORDERQ.DEMDLVDAT_0 ASC
 	</select>
-	<select id="findTobeReceiveBySite" parameterType="String" resultType="sageassistant.model.TobeReceive">
+	<select id="findTobeReceiveBySite" resultType="sageassistant.model.TobeReceive">
 		SELECT DISTINCT
 			PORDERP.POHNUM_0 AS PurchaseNO,
 			PORDERP.POPLIN_0 AS Line,
@@ -70,7 +70,7 @@
 		   AND PORDERQ.PRHFCY_0=#{site}
 		ORDER BY PORDERQ.EXTRCPDAT_0 ASC
 	</select>
-	<select id="findTobeDealWithOrderLineBySite" parameterType="String" resultType="sageassistant.model.TobeDealWithOrderLine">
+	<select id="findTobeDealWithOrderLineBySite" resultType="sageassistant.model.TobeDealWithOrderLine">
 		SELECT DISTINCT
 			SORDERP.SOHNUM_0 AS SalesOrderNO,
 			SORDER.SOHTYP_0 AS OrderType,
@@ -121,7 +121,7 @@
 			AND SORDERQ.SALFCY_0=#{site}
 		ORDER BY SORDERQ.ORDDAT_0 ASC
 	</select>
-	<select id="findTobePurchaseBomBySite" parameterType="String" resultType="sageassistant.model.TobePurchaseBom">
+	<select id="findTobePurchaseBomBySite" resultType="sageassistant.model.TobePurchaseBom">
 		SELECT DISTINCT
 			MFGITM.PJT_0 AS ProjectNO,			
 			SORDER.SOHTYP_0 AS OrderType,
@@ -152,9 +152,9 @@
 					AND PORDERP.ITMREF_0=MFGMAT.ITMREF_0
 		WHERE MFGMAT.SHTQTY_0 > 0
 			AND PORDERP.POHNUM_0 IS NULL
-			AND MFGMAT.MFGFCY_0 = 'ZHU'
+			AND MFGMAT.MFGFCY_0 = #{Site}
 		</select>
-	<select id="findTobeClosedWOBySite" parameterType="String" resultType="sageassistant.model.TobeClosedWO">
+	<select id="findTobeClosedWOBySite" resultType="sageassistant.model.TobeClosedWO">
 	 	SELECT DISTINCT 
 			IIF(SORDERQ.YSOQ_PJTORI_0='',SORDERQ.YSOH_PJT_0,SORDERQ.YSOQ_PJTORI_0) AS ProjectNO,
 			SORDERQ.SOHNUM_0 AS OrderNO,
@@ -194,7 +194,7 @@
 			AND MFGITM.ITMSTA_0 !=3
 		ORDER BY SORDER.ORDDAT_0 DESC
 	 </select>
-	<select id="findTobeTracking" parameterType="String" resultType="sageassistant.model.TobeTracking">
+	<select id="findTobeTracking" resultType="sageassistant.model.TobeTracking">
 		SELECT DISTINCT 
 		    T1.ItemNO,
 			T1.OrderNO,

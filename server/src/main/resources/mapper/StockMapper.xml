@@ -4,14 +4,14 @@
 <mapper namespace="sageassistant.dao.StockMapper">
 	<!--Open L2 Cache under Names pace: 1 Hour-->
 	<cache eviction="LRU" flushInterval="3600000" readOnly="true" size="1024" />
-	<select id="checkPN" parameterType="String" resultType="java.lang.String">
+	<select id="checkPN" resultType="java.lang.String">
 		SELECT TOP 1
 			ITMMASTER.ITMREF_0
 		FROM
 			ITMMASTER
 		WHERE ITMMASTER.ITMREF_0=#{pnRoot}
 	</select>
-	<select id="findStockQty" parameterType="String" resultType="java.lang.String">
+	<select id="findStockQty" resultType="java.lang.String">
 		SELECT 
 			SUM(STOCK.QTYSTU_0) AS QTY
 		FROM
@@ -20,7 +20,7 @@
 			STOCK.ITMREF_0=#{pnRoot}
 			AND STOCK.STOFCY_0=#{Site}
 	</select>
-	<select id="findStockOptionPN" parameterType="String" resultType="java.lang.String">
+	<select id="findStockOptionPN" resultType="java.lang.String">
 		SELECT
 			STUFF((SELECT DISTINCT ';' + T0.OptionPN FROM (
 			SELECT 
@@ -51,7 +51,7 @@
 			) T0
 			FOR XML PATH('')),1,1,'') AS OptionPN
 	</select>
-	<select id="findStockInfoByPnRoot" parameterType="String" resultType="sageassistant.model.StockInfo">
+	<select id="findStockInfoByPnRoot" resultType="sageassistant.model.StockInfo">
 		SELECT 
 			STOCK.STOFCY_0 AS StockSite,
 			STOCK.ITMREF_0 AS PN,
@@ -64,7 +64,7 @@
 		GROUP BY STOCK.STOFCY_0,
 				STOCK.ITMREF_0
 	</select>
-	<select id="findStockSummaryBySite" parameterType="String" resultType="sageassistant.model.StockSummary">
+	<select id="findStockSummaryBySite" resultType="sageassistant.model.StockSummary">
 		SELECT T1.*,  CAST(T2.Cost/T2.Cnt * T1.Qty AS numeric(10,2)) AS Cost
 		FROM (
 			SELECT DISTINCT
@@ -121,7 +121,7 @@
 		ORDER BY PN
 	</select>
 	<!-- STOJOU.VCRTYPREG_0 0:无， 6: Receive 10: workorder 17: Supplier Invoice -->
-	<select id="findStockHistoryBySite" parameterType="String" resultType="sageassistant.model.StockHistory">
+	<select id="findStockHistoryBySite" resultType="sageassistant.model.StockHistory">
 		SELECT DISTINCT
 			STOJOU.LOC_0 AS Location,
 			STOJOU.CSTCOU_0 AS Seq,

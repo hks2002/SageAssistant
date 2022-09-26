@@ -37,17 +37,21 @@
 			<AppenderRef ref="Console" />
 			<AppenderRef ref="RollingFile" />
 		</Root>
-		<Logger name="sageassistant" level="INFO" additivity="false">
+		<Logger name="sageassistant" level="DEBUG" additivity="false">
+			<AppenderRef ref="Console" />
 			<AppenderRef ref="RollingFile" />
 		</Logger>
 		<Logger name="com.zaxxer" level="INFO" additivity="false">
 			<AppenderRef ref="Console" />
 			<AppenderRef ref="RollingFile" />
 		</Logger>
-		<Logger name="org.mybatis" level="DEBUG" additivity="false">
+		<Logger name="org.mybatis" level="INFO" additivity="false">
 			<AppenderRef ref="Console" />
 		</Logger>
 		<Logger name="org.hibernate" level="INFO" additivity="false">
+			<AppenderRef ref="Console" />
+		</Logger>
+		<Logger name="com.baomidou.mybatisplus" level="INFO" additivity="false">
 			<AppenderRef ref="Console" />
 		</Logger>
 		<Logger name="org.springframework" level="INFO" additivity="false">

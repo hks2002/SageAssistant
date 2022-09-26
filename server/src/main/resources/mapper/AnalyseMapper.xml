@@ -3,7 +3,7 @@
 
 <mapper namespace="sageassistant.dao.AnalyseMapper">
 	<!--Open L2 Cache under Names pace: 1 Hour -->
-	<cache eviction="LRU" flushInterval="3600000" readOnly="true" size="10240" />
+	<cache eviction="FIFO" flushInterval="3600000" readOnly="true" size="102400" />
 
 	<select id="analyseQuoteSalesCost" resultType="sageassistant.model.AnalyseQuoteSalesCost">
 		WITH
@@ -245,14 +245,19 @@
 				INNER JOIN EXPLOIT.PORDERP PORDERP
 					ON PORDERQ.POHNUM_0 = PORDERP.POHNUM_0 
 						AND PORDERQ.POPLIN_0 = PORDERP.POPLIN_0
+				INNER JOIN SORDERQ
+					ON SORDERQ.YSOH_PJT_0 = PORDERP.PJT_0
+							OR SORDERQ.YSOQ_PJTORI_0 = PORDERP.PJT_0
 				INNER JOIN Currency
-				ON Currency.Sour =  PORDERQ.NETCUR_0
+					ON Currency.Sour =  PORDERQ.NETCUR_0
 						AND Currency.Dest= #{Currency}
 						AND PORDERQ.CREDAT_0 >= Currency.StartDate
 						AND Currency.EndDate > PORDERQ.CREDAT_0
 		WHERE
 			PORDERQ.POHFCY_0 = #{Site}
 			AND PORDERP.PRHFCY_0 = #{Site}
+			AND SORDERQ.ITMREF_0 = #{PnRoot}
+				AND SORDERQ.SALFCY_0 = #{Site}
 		)
 
 		SELECT * FROM (
