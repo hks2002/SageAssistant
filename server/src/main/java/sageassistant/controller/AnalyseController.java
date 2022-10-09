@@ -88,7 +88,7 @@ public class AnalyseController {
         @RequestParam(value = "LastN", required = false, defaultValue = "1") String LastN
     ) {
         if (PnRoot.isEmpty()) {
-            return "url:/Data/AnalysePurchase?Site=SITE&PN=PN&Currency=USD&Target=NetPrice&LastN=1\nAvailable Target:NetPrice,ProjectNO,PurchaseDate,PurchaseNO,PurchaseDate";
+            return "https://sageassistant/Data/AnalysePurchase?Site=SITE&PN=PN&Currency=USD&Target=NetPrice&LastN=1\nAvailable Target:NetPrice,ProjectNO,PurchaseDate,PurchaseNO,PurchaseDate";
         }
         return analyseService.analysePurchase(Site, PnRoot, Currency, Target, LastN);
     }
@@ -102,7 +102,7 @@ public class AnalyseController {
         @RequestParam(value = "LastN", required = false, defaultValue = "1") String LastN
     ) {
         if (PnRoot.isEmpty()) {
-            return "url:/Data/AnalyseQuote?Site=SITE&PN=PN&Currency=USD&Target=NetPrice&LastN=1\nAvailable Target:NetPrice,QuoteNO,QuoteDate,CustomerCode,CustomerName,OrderNO,OrderFlag,QTY";
+            return "https://sageassistant/Data/AnalyseQuote?Site=SITE&PN=PN&Currency=USD&Target=NetPrice&LastN=1\nAvailable Target:NetPrice,QuoteNO,QuoteDate,CustomerCode,CustomerName,OrderNO,OrderFlag,QTY";
         }
         return analyseService.analyseQuote(Site, PnRoot, Currency, Target, LastN);
     }
@@ -116,7 +116,7 @@ public class AnalyseController {
         @RequestParam(value = "LastN", required = false, defaultValue = "1") String LastN
     ) {
         if (PnRoot.isEmpty()) {
-            return "url:/Data/AnalyseSales?Site=SITE&PN=PN&Currency=USD&Target=NetPrice&LastN=1\nAvailable Target:NetPrice,OrderNO,OrderDate,CustomerCode,CustomerName,QTY";
+            return "https://sageassistant/Data/AnalyseSales?Site=SITE&PN=PN&Currency=USD&Target=NetPrice&LastN=1\nAvailable Target:NetPrice,OrderNO,OrderDate,CustomerCode,CustomerName,QTY";
         }
         return analyseService.analyseSales(Site, PnRoot, Currency, Target, LastN);
     }
