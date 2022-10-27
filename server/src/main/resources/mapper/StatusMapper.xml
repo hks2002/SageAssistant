@@ -370,9 +370,9 @@
 					ON PORDERP.POHNUM_0=PORDER.POHNUM_0
 				WHERE PORDERQ.PRHFCY_0=#{site}
 		) AS T4
-		ON ( T4.PurchaseProjectNO = T1.OrderProjectNO AND T4.PurchasePN = T1.OrderPN )
-			OR ( T4.PurchaseProjectNO = T2.BomProjectNO AND T4.PurchasePN = T2.BomPN)	  
-			OR ( T4.PurchaseProjectNO = T1.TrackingNO AND T4.PurchasePN = T1.OrderPN)
+		ON ( T4.PurchaseProjectNO = T1.OrderProjectNO )
+			OR ( T4.PurchaseProjectNO = T2.BomProjectNO )
+			OR ( T4.PurchaseProjectNO = T1.TrackingNO )
 
 		LEFT JOIN (
 			-- Receiption
