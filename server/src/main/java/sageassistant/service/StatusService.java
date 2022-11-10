@@ -2,7 +2,7 @@
  * @Author         : Robert Huang<56649783@qq.com>
  * @Date           : 2022-03-26 17:57:07
  * @LastEditors    : Robert Huang<56649783@qq.com>
- * @LastEditTime   : 2022-09-22 15:45:12
+ * @LastEditTime   : 2022-11-10 16:25:41
  * @FilePath       : \server\src\main\java\sageassistant\service\StatusService.java
  * @CopyRight      : Dedienne Aerospace China ZhuHai
  */
@@ -21,7 +21,11 @@ import sageassistant.model.TobeDealWithOrderLine;
 import sageassistant.model.TobeDelivery;
 import sageassistant.model.TobePurchaseBom;
 import sageassistant.model.TobeReceive;
-import sageassistant.model.TobeTracking;
+import sageassistant.model.TobeTrackingBOMLine;
+import sageassistant.model.TobeTrackingPurchaseOrderLine;
+import sageassistant.model.TobeTrackingQALine;
+import sageassistant.model.TobeTrackingReceiptLine;
+import sageassistant.model.TobeTrackingSalesOrderLine;
 import sageassistant.utils.Utils;
 
 @Service
@@ -35,8 +39,8 @@ public class StatusService {
     @Autowired
     private CurrencyService currencyService;
 
-    public List<TobeDelivery> findTobeDeliveryBySite(String site, Integer count) {
-        List<TobeDelivery> listPage = statusMapper.findTobeDeliveryBySite(site, count);
+    public List<TobeDelivery> findTobeDeliveryBySite(String Site) {
+        List<TobeDelivery> listPage = statusMapper.findTobeDeliveryBySite(Site);
 
         for (TobeDelivery o : listPage) {
             // log.debug("ooo:" + o.toString());
@@ -56,8 +60,8 @@ public class StatusService {
         return listPage;
     }
 
-    public List<TobeReceive> findTobeReceiveBySite(String site, Integer count) {
-        List<TobeReceive> listPage = statusMapper.findTobeReceiveBySite(site, count);
+    public List<TobeReceive> findTobeReceiveBySite(String Site) {
+        List<TobeReceive> listPage = statusMapper.findTobeReceiveBySite(Site);
 
         for (TobeReceive o : listPage) {
             String key = o.getCurrency() + "USD" + Utils.formatDate(o.getOrderDate());
@@ -76,26 +80,62 @@ public class StatusService {
         return listPage;
     }
 
-    public List<TobeDealWithOrderLine> findTobeDealWithOrderLineBySite(String site, Integer count) {
-        List<TobeDealWithOrderLine> listPage = statusMapper.findTobeDealWithOrderLineBySite(site, count);
+    public List<TobeDealWithOrderLine> findTobeDealWithOrderLineBySite(String Site) {
+        List<TobeDealWithOrderLine> listPage = statusMapper.findTobeDealWithOrderLineBySite(Site);
 
         return listPage;
     }
 
-    public List<TobePurchaseBom> findTobePurchaseBomBySite(String site, Integer count) {
-        List<TobePurchaseBom> listPage = statusMapper.findTobePurchaseBomBySite(site, count);
+    public List<TobePurchaseBom> findTobePurchaseBomBySite(String Site) {
+        List<TobePurchaseBom> listPage = statusMapper.findTobePurchaseBomBySite(Site);
 
         return listPage;
     }
 
-    public List<TobeClosedWO> findTobeClosedWOBySite(String site, Integer count) {
-        List<TobeClosedWO> listPage = statusMapper.findTobeClosedWOBySite(site, count);
+    public List<TobeClosedWO> findTobeClosedWOBySite(String Site) {
+        List<TobeClosedWO> listPage = statusMapper.findTobeClosedWOBySite(Site);
 
         return listPage;
     }
 
-    public List<TobeTracking> findTobeTracking(String site) {
-        List<TobeTracking> listPage = statusMapper.findTobeTracking(site);
+    public List<TobeTrackingSalesOrderLine> findTobeTrackingSalesOrderLine(String Site, Integer Offset, Integer Limit) {
+        List<TobeTrackingSalesOrderLine> listPage = statusMapper.findTobeTrackingSalesOrderLineBySite(
+            Site,
+            Offset,
+            Limit
+        );
+
+        return listPage;
+    }
+
+    public List<TobeTrackingBOMLine> findTobeTrackingBOMLine(String Site, Integer Offset, Integer Limit) {
+        List<TobeTrackingBOMLine> listPage = statusMapper.findTobeTrackingBOMLineBySite(Site, Offset, Limit);
+
+        return listPage;
+    }
+
+    public List<TobeTrackingPurchaseOrderLine> findTobeTrackingPurchaseOrderLine(
+        String Site,
+        Integer Offset,
+        Integer Limit
+    ) {
+        List<TobeTrackingPurchaseOrderLine> listPage = statusMapper.findTobeTrackingPurchaseOrderLineBySite(
+            Site,
+            Offset,
+            Limit
+        );
+
+        return listPage;
+    }
+
+    public List<TobeTrackingReceiptLine> findTobeTrackingReceiptLine(String Site, Integer Offset, Integer Limit) {
+        List<TobeTrackingReceiptLine> listPage = statusMapper.findTobeTrackingReceiptLineBySite(Site, Offset, Limit);
+
+        return listPage;
+    }
+
+    public List<TobeTrackingQALine> findTobeTrackingQALine(String Site, Integer Offset, Integer Limit) {
+        List<TobeTrackingQALine> listPage = statusMapper.findTobeTrackingQALineBySite(Site, Offset, Limit);
 
         return listPage;
     }

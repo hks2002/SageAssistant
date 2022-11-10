@@ -2,7 +2,7 @@
  * @Author         : Robert Huang<56649783@qq.com>
  * @Date           : 2022-03-26 17:55:01
  * @LastEditors    : Robert Huang<56649783@qq.com>
- * @LastEditTime   : 2022-09-22 14:14:57
+ * @LastEditTime   : 2022-11-10 16:21:22
  * @FilePath       : \server\src\main\java\sageassistant\dao\StatusMapper.java
  * @CopyRight      : Dedienne Aerospace China ZhuHai
  */
@@ -16,22 +16,51 @@ import sageassistant.model.TobeDealWithOrderLine;
 import sageassistant.model.TobeDelivery;
 import sageassistant.model.TobePurchaseBom;
 import sageassistant.model.TobeReceive;
-import sageassistant.model.TobeTracking;
+import sageassistant.model.TobeTrackingBOMLine;
+import sageassistant.model.TobeTrackingPurchaseOrderLine;
+import sageassistant.model.TobeTrackingQALine;
+import sageassistant.model.TobeTrackingReceiptLine;
+import sageassistant.model.TobeTrackingSalesOrderLine;
 
 @Mapper
 public interface StatusMapper {
-    List<TobeDelivery> findTobeDeliveryBySite(@Param("site") String site, @Param("Count") Integer Count);
+    List<TobeDelivery> findTobeDeliveryBySite(@Param("Site") String Site);
 
-    List<TobeReceive> findTobeReceiveBySite(@Param("site") String site, @Param("Count") Integer Count);
+    List<TobeReceive> findTobeReceiveBySite(@Param("Site") String Site);
 
-    List<TobeDealWithOrderLine> findTobeDealWithOrderLineBySite(
-        @Param("site") String site,
-        @Param("Count") Integer Count
+    List<TobeDealWithOrderLine> findTobeDealWithOrderLineBySite(@Param("Site") String site);
+
+    List<TobePurchaseBom> findTobePurchaseBomBySite(@Param("Site") String Site);
+
+    List<TobeClosedWO> findTobeClosedWOBySite(@Param("Site") String Site);
+
+    List<TobeTrackingSalesOrderLine> findTobeTrackingSalesOrderLineBySite(
+        @Param("Site") String Site,
+        @Param("Offset") Integer Offset,
+        @Param("Limit") Integer Limit
     );
 
-    List<TobePurchaseBom> findTobePurchaseBomBySite(@Param("site") String site, @Param("Count") Integer Count);
+    List<TobeTrackingBOMLine> findTobeTrackingBOMLineBySite(
+        @Param("Site") String Site,
+        @Param("Offset") Integer Offset,
+        @Param("Limit") Integer Limit
+    );
 
-    List<TobeClosedWO> findTobeClosedWOBySite(@Param("site") String site, @Param("Count") Integer Count);
+    List<TobeTrackingPurchaseOrderLine> findTobeTrackingPurchaseOrderLineBySite(
+        @Param("Site") String Site,
+        @Param("Offset") Integer Offset,
+        @Param("Limit") Integer Limit
+    );
 
-    List<TobeTracking> findTobeTracking(@Param("site") String site);
+    List<TobeTrackingReceiptLine> findTobeTrackingReceiptLineBySite(
+        @Param("Site") String Site,
+        @Param("Offset") Integer Offset,
+        @Param("Limit") Integer Limit
+    );
+
+    List<TobeTrackingQALine> findTobeTrackingQALineBySite(
+        @Param("Site") String Site,
+        @Param("Offset") Integer Offset,
+        @Param("Limit") Integer Limit
+    );
 }

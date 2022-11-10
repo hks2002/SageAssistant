@@ -2,7 +2,7 @@
  * @Author         : Robert Huang<56649783@qq.com>
  * @Date           : 2022-03-26 17:57:07
  * @LastEditors    : Robert Huang<56649783@qq.com>
- * @LastEditTime   : 2022-09-22 15:45:08
+ * @LastEditTime   : 2022-11-10 16:32:20
  * @FilePath       : \server\src\main\java\sageassistant\service\RssService.java
  * @CopyRight      : Dedienne Aerospace China ZhuHai
  */
@@ -75,7 +75,7 @@ public class RssService {
     }
 
     public String checkTobeDelivery(String site, Integer range) {
-        List<TobeDelivery> list = statusService.findTobeDeliveryBySite(site, 0);
+        List<TobeDelivery> list = statusService.findTobeDeliveryBySite(site);
 
         String content = "<table border=\"2\" style=\"border-collapse:collapse;\">";
 
@@ -130,7 +130,7 @@ public class RssService {
     }
 
     public String checkTobeReceive(String site, Integer range) {
-        List<TobeReceive> list = statusService.findTobeReceiveBySite(site, 0);
+        List<TobeReceive> list = statusService.findTobeReceiveBySite(site);
 
         String content = "<table border=\"2\" style=\"border-collapse:collapse;\">";
 
@@ -193,7 +193,7 @@ public class RssService {
     }
 
     public String checkTobePurchaseBom(String site) {
-        List<TobePurchaseBom> list = statusService.findTobePurchaseBomBySite(site, 0);
+        List<TobePurchaseBom> list = statusService.findTobePurchaseBomBySite(site);
 
         String content = "<table border=\"2\" style=\"border-collapse:collapse;\">";
 
@@ -244,7 +244,7 @@ public class RssService {
     }
 
     public String checkTobeDealWithOrderLine(String site) {
-        List<TobeDealWithOrderLine> list = statusService.findTobeDealWithOrderLineBySite(site, 0);
+        List<TobeDealWithOrderLine> list = statusService.findTobeDealWithOrderLineBySite(site);
 
         String content = "<table border=\"2\" style=\"border-collapse:collapse;\">";
 

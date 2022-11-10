@@ -2,7 +2,7 @@
  * @Author         : Robert Huang<56649783@qq.com>
  * @Date           : 2022-03-26 20:13:40
  * @LastEditors    : Robert Huang<56649783@qq.com>
- * @LastEditTime   : 2022-09-22 15:46:35
+ * @LastEditTime   : 2022-11-10 16:30:17
  * @FilePath       : \server\src\main\java\sageassistant\controller\StatusController.java
  * @CopyRight      : Dedienne Aerospace China ZhuHai
  */
@@ -29,35 +29,75 @@ public class StatusController {
 
     @GetMapping("/Data/TobeDelivery")
     public String getTobeDelivery(@RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site) {
-        return Utils.listToString(statusService.findTobeDeliveryBySite(Site, 0));
+        return Utils.listToString(statusService.findTobeDeliveryBySite(Site));
     }
 
     @GetMapping("/Data/TobeReceive")
     public String getTobeReceive(@RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site) {
-        return Utils.listToString(statusService.findTobeReceiveBySite(Site, 0));
+        return Utils.listToString(statusService.findTobeReceiveBySite(Site));
     }
 
     @GetMapping("/Data/TobeDealWithOrderLine")
     public String getTobeDealWithOrderLineBySite(
         @RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site
     ) {
-        return Utils.listToString(statusService.findTobeDealWithOrderLineBySite(Site, 0));
+        return Utils.listToString(statusService.findTobeDealWithOrderLineBySite(Site));
     }
 
     @GetMapping("/Data/TobePurchaseBom")
     public String getTobePurchaseBom(
         @RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site
     ) {
-        return Utils.listToString(statusService.findTobePurchaseBomBySite(Site, 0));
+        return Utils.listToString(statusService.findTobePurchaseBomBySite(Site));
     }
 
     @GetMapping("/Data/TobeClosedWO")
     public String getTobeClosedWO(@RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site) {
-        return Utils.listToString(statusService.findTobeClosedWOBySite(Site, 0));
+        return Utils.listToString(statusService.findTobeClosedWOBySite(Site));
     }
 
-    @GetMapping("/Data/TobeTracking")
-    public String getTobeTracking(@RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site) {
-        return Utils.listToString(statusService.findTobeTracking(Site));
+    @GetMapping("/Data/TobeTrackingSalesOrderLine")
+    public String getTobeTracking(
+        @RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
+        @RequestParam(value = "Offset", required = false, defaultValue = "0") Integer Offset,
+        @RequestParam(value = "Limit", required = false, defaultValue = "50") Integer Limit
+    ) {
+        return Utils.listToString(statusService.findTobeTrackingSalesOrderLine(Site, Offset, Limit));
+    }
+
+    @GetMapping("/Data/TobeTrackingBOMLine")
+    public String getTobeTrackingBOMLine(
+        @RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
+        @RequestParam(value = "Offset", required = false, defaultValue = "0") Integer Offset,
+        @RequestParam(value = "Limit", required = false, defaultValue = "50") Integer Limit
+    ) {
+        return Utils.listToString(statusService.findTobeTrackingBOMLine(Site, Offset, Limit));
+    }
+
+    @GetMapping("/Data/TobeTrackingPurchaseOrderLine")
+    public String getTobeTrackingPurchaseOrderLine(
+        @RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
+        @RequestParam(value = "Offset", required = false, defaultValue = "0") Integer Offset,
+        @RequestParam(value = "Limit", required = false, defaultValue = "50") Integer Limit
+    ) {
+        return Utils.listToString(statusService.findTobeTrackingPurchaseOrderLine(Site, Offset, Limit));
+    }
+
+    @GetMapping("/Data/TobeTrackingReceiptLine")
+    public String getTobeTrackingReceiptLine(
+        @RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
+        @RequestParam(value = "Offset", required = false, defaultValue = "0") Integer Offset,
+        @RequestParam(value = "Limit", required = false, defaultValue = "50") Integer Limit
+    ) {
+        return Utils.listToString(statusService.findTobeTrackingReceiptLine(Site, Offset, Limit));
+    }
+
+    @GetMapping("/Data/TobeTrackingQALine")
+    public String getTobeTrackingQALine(
+        @RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
+        @RequestParam(value = "Offset", required = false, defaultValue = "0") Integer Offset,
+        @RequestParam(value = "Limit", required = false, defaultValue = "50") Integer Limit
+    ) {
+        return Utils.listToString(statusService.findTobeTrackingQALine(Site, Offset, Limit));
     }
 }
