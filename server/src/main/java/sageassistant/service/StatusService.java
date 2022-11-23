@@ -2,7 +2,7 @@
  * @Author         : Robert Huang<56649783@qq.com>
  * @Date           : 2022-03-26 17:57:07
  * @LastEditors    : Robert Huang<56649783@qq.com>
- * @LastEditTime   : 2022-11-10 16:25:41
+ * @LastEditTime   : 2022-11-15 23:04:53
  * @FilePath       : \server\src\main\java\sageassistant\service\StatusService.java
  * @CopyRight      : Dedienne Aerospace China ZhuHai
  */
@@ -98,9 +98,34 @@ public class StatusService {
         return listPage;
     }
 
-    public List<TobeTrackingSalesOrderLine> findTobeTrackingSalesOrderLine(String Site, Integer Offset, Integer Limit) {
+    public Integer findTobeTrackingSalesOrderLineCnt(
+        String Site,
+        String OrderType,
+        String CustomerCode,
+        String VendorCode
+    ) {
+        Integer cnt = statusMapper.findTobeTrackingSalesOrderLineCntBySite(Site, OrderType, CustomerCode, VendorCode);
+
+        return cnt;
+    }
+
+    public List<TobeTrackingSalesOrderLine> findTobeTrackingSalesOrderLine(
+        String Site,
+        String OrderType,
+        String CustomerCode,
+        String VendorCode,
+        String OrderBy,
+        String Descending,
+        Integer Offset,
+        Integer Limit
+    ) {
         List<TobeTrackingSalesOrderLine> listPage = statusMapper.findTobeTrackingSalesOrderLineBySite(
             Site,
+            OrderType,
+            CustomerCode,
+            VendorCode,
+            OrderBy,
+            Descending,
             Offset,
             Limit
         );
@@ -108,19 +133,47 @@ public class StatusService {
         return listPage;
     }
 
-    public List<TobeTrackingBOMLine> findTobeTrackingBOMLine(String Site, Integer Offset, Integer Limit) {
-        List<TobeTrackingBOMLine> listPage = statusMapper.findTobeTrackingBOMLineBySite(Site, Offset, Limit);
+    public List<TobeTrackingBOMLine> findTobeTrackingBOMLine(
+        String Site,
+        String OrderType,
+        String CustomerCode,
+        String VendorCode,
+        String OrderBy,
+        String Descending,
+        Integer Offset,
+        Integer Limit
+    ) {
+        List<TobeTrackingBOMLine> listPage = statusMapper.findTobeTrackingBOMLineBySite(
+            Site,
+            OrderType,
+            CustomerCode,
+            VendorCode,
+            OrderBy,
+            Descending,
+            Offset,
+            Limit
+        );
 
         return listPage;
     }
 
     public List<TobeTrackingPurchaseOrderLine> findTobeTrackingPurchaseOrderLine(
         String Site,
+        String OrderType,
+        String CustomerCode,
+        String VendorCode,
+        String OrderBy,
+        String Descending,
         Integer Offset,
         Integer Limit
     ) {
         List<TobeTrackingPurchaseOrderLine> listPage = statusMapper.findTobeTrackingPurchaseOrderLineBySite(
             Site,
+            OrderType,
+            CustomerCode,
+            VendorCode,
+            OrderBy,
+            Descending,
             Offset,
             Limit
         );
@@ -128,14 +181,50 @@ public class StatusService {
         return listPage;
     }
 
-    public List<TobeTrackingReceiptLine> findTobeTrackingReceiptLine(String Site, Integer Offset, Integer Limit) {
-        List<TobeTrackingReceiptLine> listPage = statusMapper.findTobeTrackingReceiptLineBySite(Site, Offset, Limit);
+    public List<TobeTrackingReceiptLine> findTobeTrackingReceiptLine(
+        String Site,
+        String OrderType,
+        String CustomerCode,
+        String VendorCode,
+        String OrderBy,
+        String Descending,
+        Integer Offset,
+        Integer Limit
+    ) {
+        List<TobeTrackingReceiptLine> listPage = statusMapper.findTobeTrackingReceiptLineBySite(
+            Site,
+            OrderType,
+            CustomerCode,
+            VendorCode,
+            OrderBy,
+            Descending,
+            Offset,
+            Limit
+        );
 
         return listPage;
     }
 
-    public List<TobeTrackingQALine> findTobeTrackingQALine(String Site, Integer Offset, Integer Limit) {
-        List<TobeTrackingQALine> listPage = statusMapper.findTobeTrackingQALineBySite(Site, Offset, Limit);
+    public List<TobeTrackingQALine> findTobeTrackingQALine(
+        String Site,
+        String OrderType,
+        String CustomerCode,
+        String VendorCode,
+        String OrderBy,
+        String Descending,
+        Integer Offset,
+        Integer Limit
+    ) {
+        List<TobeTrackingQALine> listPage = statusMapper.findTobeTrackingQALineBySite(
+            Site,
+            OrderType,
+            CustomerCode,
+            VendorCode,
+            OrderBy,
+            Descending,
+            Offset,
+            Limit
+        );
 
         return listPage;
     }

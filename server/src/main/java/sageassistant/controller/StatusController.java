@@ -2,7 +2,7 @@
  * @Author         : Robert Huang<56649783@qq.com>
  * @Date           : 2022-03-26 20:13:40
  * @LastEditors    : Robert Huang<56649783@qq.com>
- * @LastEditTime   : 2022-11-10 16:30:17
+ * @LastEditTime   : 2022-11-15 22:57:51
  * @FilePath       : \server\src\main\java\sageassistant\controller\StatusController.java
  * @CopyRight      : Dedienne Aerospace China ZhuHai
  */
@@ -56,48 +56,140 @@ public class StatusController {
         return Utils.listToString(statusService.findTobeClosedWOBySite(Site));
     }
 
-    @GetMapping("/Data/TobeTrackingSalesOrderLine")
+    @GetMapping("/Data/TobeTrackingSalesOrderLineCnt")
     public String getTobeTracking(
         @RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
+        @RequestParam(value = "OrderType", required = false, defaultValue = "") String OrderType,
+        @RequestParam(value = "CustomerCode", required = false, defaultValue = "") String CustomerCode,
+        @RequestParam(value = "VendorCode", required = false, defaultValue = "") String VendorCode
+    ) {
+        return String.valueOf(
+            statusService.findTobeTrackingSalesOrderLineCnt(Site, OrderType, CustomerCode, VendorCode)
+        );
+    }
+
+    @GetMapping("/Data/TobeTrackingSalesOrderLine")
+    public String getTobeTrackingSalesOrderLine(
+        @RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
+        @RequestParam(value = "OrderType", required = false, defaultValue = "") String OrderType,
+        @RequestParam(value = "CustomerCode", required = false, defaultValue = "") String CustomerCode,
+        @RequestParam(value = "VendorCode", required = false, defaultValue = "") String VendorCode,
+        @RequestParam(value = "OrderBy", required = false, defaultValue = "DaysLeft") String OrderBy,
+        @RequestParam(value = "Descending", required = false, defaultValue = "ASC") String Descending,
         @RequestParam(value = "Offset", required = false, defaultValue = "0") Integer Offset,
         @RequestParam(value = "Limit", required = false, defaultValue = "50") Integer Limit
     ) {
-        return Utils.listToString(statusService.findTobeTrackingSalesOrderLine(Site, Offset, Limit));
+        return Utils.listToString(
+            statusService.findTobeTrackingSalesOrderLine(
+                Site,
+                OrderType,
+                CustomerCode,
+                VendorCode,
+                OrderBy,
+                Descending,
+                Offset,
+                Limit
+            )
+        );
     }
 
     @GetMapping("/Data/TobeTrackingBOMLine")
     public String getTobeTrackingBOMLine(
         @RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
+        @RequestParam(value = "OrderType", required = false, defaultValue = "") String OrderType,
+        @RequestParam(value = "CustomerCode", required = false, defaultValue = "") String CustomerCode,
+        @RequestParam(value = "VendorCode", required = false, defaultValue = "") String VendorCode,
+        @RequestParam(value = "OrderBy", required = false, defaultValue = "DaysLeft") String OrderBy,
+        @RequestParam(value = "Descending", required = false, defaultValue = "ASC") String Descending,
         @RequestParam(value = "Offset", required = false, defaultValue = "0") Integer Offset,
         @RequestParam(value = "Limit", required = false, defaultValue = "50") Integer Limit
     ) {
-        return Utils.listToString(statusService.findTobeTrackingBOMLine(Site, Offset, Limit));
+        return Utils.listToString(
+            statusService.findTobeTrackingBOMLine(
+                Site,
+                OrderType,
+                CustomerCode,
+                VendorCode,
+                OrderBy,
+                Descending,
+                Offset,
+                Limit
+            )
+        );
     }
 
     @GetMapping("/Data/TobeTrackingPurchaseOrderLine")
     public String getTobeTrackingPurchaseOrderLine(
         @RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
+        @RequestParam(value = "OrderType", required = false, defaultValue = "") String OrderType,
+        @RequestParam(value = "CustomerCode", required = false, defaultValue = "") String CustomerCode,
+        @RequestParam(value = "VendorCode", required = false, defaultValue = "") String VendorCode,
+        @RequestParam(value = "OrderBy", required = false, defaultValue = "DaysLeft") String OrderBy,
+        @RequestParam(value = "Descending", required = false, defaultValue = "ASC") String Descending,
         @RequestParam(value = "Offset", required = false, defaultValue = "0") Integer Offset,
         @RequestParam(value = "Limit", required = false, defaultValue = "50") Integer Limit
     ) {
-        return Utils.listToString(statusService.findTobeTrackingPurchaseOrderLine(Site, Offset, Limit));
+        return Utils.listToString(
+            statusService.findTobeTrackingPurchaseOrderLine(
+                Site,
+                OrderType,
+                CustomerCode,
+                VendorCode,
+                OrderBy,
+                Descending,
+                Offset,
+                Limit
+            )
+        );
     }
 
     @GetMapping("/Data/TobeTrackingReceiptLine")
     public String getTobeTrackingReceiptLine(
         @RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
+        @RequestParam(value = "OrderType", required = false, defaultValue = "") String OrderType,
+        @RequestParam(value = "CustomerCode", required = false, defaultValue = "") String CustomerCode,
+        @RequestParam(value = "VendorCode", required = false, defaultValue = "") String VendorCode,
+        @RequestParam(value = "OrderBy", required = false, defaultValue = "DaysLeft") String OrderBy,
+        @RequestParam(value = "Descending", required = false, defaultValue = "ASC") String Descending,
         @RequestParam(value = "Offset", required = false, defaultValue = "0") Integer Offset,
         @RequestParam(value = "Limit", required = false, defaultValue = "50") Integer Limit
     ) {
-        return Utils.listToString(statusService.findTobeTrackingReceiptLine(Site, Offset, Limit));
+        return Utils.listToString(
+            statusService.findTobeTrackingReceiptLine(
+                Site,
+                OrderType,
+                CustomerCode,
+                VendorCode,
+                OrderBy,
+                Descending,
+                Offset,
+                Limit
+            )
+        );
     }
 
     @GetMapping("/Data/TobeTrackingQALine")
     public String getTobeTrackingQALine(
         @RequestParam(value = "Site", required = false, defaultValue = "ZHU") String Site,
+        @RequestParam(value = "OrderType", required = false, defaultValue = "") String OrderType,
+        @RequestParam(value = "CustomerCode", required = false, defaultValue = "") String CustomerCode,
+        @RequestParam(value = "VendorCode", required = false, defaultValue = "") String VendorCode,
+        @RequestParam(value = "OrderBy", required = false, defaultValue = "DaysLeft") String OrderBy,
+        @RequestParam(value = "Descending", required = false, defaultValue = "ASC") String Descending,
         @RequestParam(value = "Offset", required = false, defaultValue = "0") Integer Offset,
         @RequestParam(value = "Limit", required = false, defaultValue = "50") Integer Limit
     ) {
-        return Utils.listToString(statusService.findTobeTrackingQALine(Site, Offset, Limit));
+        return Utils.listToString(
+            statusService.findTobeTrackingQALine(
+                Site,
+                OrderType,
+                CustomerCode,
+                VendorCode,
+                OrderBy,
+                Descending,
+                Offset,
+                Limit
+            )
+        );
     }
 }

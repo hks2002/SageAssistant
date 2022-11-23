@@ -20,7 +20,7 @@ public class TobeTrackingPurchaseOrderLine extends ModelTemplate {
     private static final long serialVersionUID = 1L;
 
     private String PurchaseNO;
-    private Integer PurchaseLine;
+    private String PurchaseLine;
     private String PurchaseProjectNO;
     private String PurchasePN;
     private String PurchasePNDesc;

@@ -198,14 +198,63 @@
 					AND MFGITM.ITMSTA_0 !=3
 		ORDER BY SORDER.ORDDAT_0 DESC
 	 </select>
+	<select id="findTobeTrackingSalesOrderLineCntBySite" resultType="java.lang.Integer">
+		SELECT DISTINCT
+		COUNT(1) AS CNT
+	FROM EXPLOIT.SORDERQ AS SORDERQ
+	INNER JOIN EXPLOIT.SORDERP AS SORDERP
+		ON SORDERP.SOHNUM_0 = SORDERQ.SOHNUM_0
+			AND SORDERP.SOPLIN_0 = SORDERQ.SOPLIN_0
+			AND SORDERQ.SALFCY_0 = #{Site}
+			AND SORDERP.SALFCY_0 = #{Site}
+			AND SORDERQ.SOQSTA_0 != 3
+	INNER JOIN EXPLOIT.SORDER SORDER
+		ON SORDERP.SOHNUM_0 = SORDER.SOHNUM_0
+			AND SORDER.SALFCY_0 = #{Site}
+		<if test=" OrderType == 'NOR' ">
+			AND SORDER.SOHTYP_0 = 'NOR'
+			</if>
+		<if test=" OrderType == 'OTHER' ">
+			AND ( (SORDER.SOHTYP_0 = 'NOR' AND SORDERQ.YSOQ_STA_0 =7)  OR SORDER.SOHTYP_0 != 'NOR')
+			</if>
+		<if test=" CustomerCode != '' ">
+			AND SORDER.BPCORD_0 = #{CustomerCode}
+			</if>
+		<if test=" VendorCode != '' ">
+	INNER JOIN EXPLOIT.PORDERP PORDERP
+		ON (PORDERP.PJT_0 = SORDERQ.YSOH_PJT_0 OR PORDERP.PJT_0 = SORDERQ.YSOQ_PJTORI_0 )
+			AND PORDERP.PRHFCY_0 = #{Site}
+	INNER JOIN EXPLOIT.PORDER AS PORDER
+		ON PORDERP.POHNUM_0=PORDER.POHNUM_0
+			AND PORDER.POHFCY_0 =  #{Site}
+			AND PORDER.BPSNUM_0 = #{VendorCode}
+	</if>
+	</select>
 	<select id="findTobeTrackingSalesOrderLineBySite" resultType="sageassistant.model.TobeTrackingSalesOrderLine">
-	SELECT DISTINCT
-		ROW_NUMBER() OVER (ORDER BY SORDERQ.DEMDLVDAT_0 ASC, SORDERQ.ROWID ASC) AS ItemNO,
+		SELECT DISTINCT
+		<choose>
+			<when test=" OrderBy == 'DaysLeft'  and  Descending =='ASC' ">
+			ROW_NUMBER() OVER (ORDER BY SORDERQ.DEMDLVDAT_0 ASC, SORDERQ.ROWID ASC) AS ItemNO,
+			</when>
+			<when test=" OrderBy == 'DaysLeft'  and  Descending =='DESC' ">
+			ROW_NUMBER() OVER (ORDER BY SORDERQ.DEMDLVDAT_0 DESC, SORDERQ.ROWID ASC) AS ItemNO,
+			</when>
+			<when test=" OrderBy == 'OrderPlanedDate'  and  Descending =='ASC' ">
+			ROW_NUMBER() OVER (ORDER BY SORDERQ.YSOQ_DLIVP_0 ASC, SORDERQ.ROWID ASC) AS ItemNO,
+			</when>
+			<when test=" OrderBy == 'OrderPlanedDate'  and  Descending =='DESC' ">
+			ROW_NUMBER() OVER (ORDER BY SORDERQ.YSOQ_DLIVP_0 DESC, SORDERQ.ROWID ASC) AS ItemNO,
+			</when>
+			<otherwise>
+			ROW_NUMBER() OVER (ORDER BY SORDERQ.DEMDLVDAT_0 ASC, SORDERQ.ROWID ASC) AS ItemNO,
+			</otherwise>
+		</choose>
 		SORDERQ.SOHNUM_0 AS OrderNO, 
 		SORDERQ.SOPLIN_0 AS OrderLine,
 		IIF(SORDER.SOHTYP_0 = 'RCL' OR SORDER.SOHTYP_0 = 'REP',
 			SORDERQ.SOHNUM_0 + '-' + CAST(SORDERQ.YSOH_ITEM_0 AS VARCHAR),
-			IIF(SORDERQ.YSOQ_PJTORI_0 != '',
+			-- Empty OriProjectNO or Z0001 type OriProjectNO, using ProjectNO
+			IIF(SORDERQ.YSOQ_PJTORI_0 != '' AND LEN(SORDERQ.YSOQ_PJTORI_0) !=5,
 				SORDERQ.YSOQ_PJTORI_0,
 				SORDERQ.YSOH_PJT_0
 		)) AS TrackingNO,
@@ -251,18 +300,53 @@
 	INNER JOIN EXPLOIT.SORDER SORDER
 		ON SORDERP.SOHNUM_0 = SORDER.SOHNUM_0
 			AND SORDER.SALFCY_0 = #{Site}
-	ORDER BY ItemNO ASC
+		<if test=" OrderType == 'NOR' ">
+			AND SORDER.SOHTYP_0 = 'NOR'
+			</if>
+		<if test=" OrderType == 'OTHER' ">
+			AND ( (SORDER.SOHTYP_0 = 'NOR' AND SORDERQ.YSOQ_STA_0 =7)  OR SORDER.SOHTYP_0 != 'NOR')
+			</if>
+		<if test=" CustomerCode != '' ">
+			AND SORDER.BPCORD_0 = #{CustomerCode}
+			</if>
+		<if test=" VendorCode != '' ">
+	INNER JOIN EXPLOIT.PORDERP PORDERP
+		ON (PORDERP.PJT_0 = SORDERQ.YSOH_PJT_0 OR PORDERP.PJT_0 = SORDERQ.YSOQ_PJTORI_0 )
+			AND PORDERP.PRHFCY_0 = #{Site}
+	INNER JOIN EXPLOIT.PORDER AS PORDER
+		ON PORDERP.POHNUM_0=PORDER.POHNUM_0
+			AND PORDER.POHFCY_0 =  #{Site}
+			AND PORDER.BPSNUM_0 = #{VendorCode}
+	</if>
+		ORDER BY ItemNO ASC
 	OFFSET #{Offset} ROWS
 	FETCH NEXT #{Limit} ROWS ONLY
 	</select>
 	<select id="findTobeTrackingBOMLineBySite" resultType="sageassistant.model.TobeTrackingBOMLine">
-	WITH T1 AS (
+		WITH T1 AS (
 	SELECT DISTINCT
 		-- Sales open items
-		ROW_NUMBER() OVER (ORDER BY SORDERQ.DEMDLVDAT_0 ASC, SORDERQ.ROWID ASC) AS ItemNO,
+		<choose>
+			<when test=" OrderBy == 'DaysLeft'  and  Descending =='ASC' ">
+			ROW_NUMBER() OVER (ORDER BY SORDERQ.DEMDLVDAT_0 ASC, SORDERQ.ROWID ASC) AS ItemNO,
+			</when>
+			<when test=" OrderBy == 'DaysLeft'  and  Descending =='DESC' ">
+			ROW_NUMBER() OVER (ORDER BY SORDERQ.DEMDLVDAT_0 DESC, SORDERQ.ROWID ASC) AS ItemNO,
+			</when>
+			<when test=" OrderBy == 'OrderPlanedDate'  and  Descending =='ASC' ">
+			ROW_NUMBER() OVER (ORDER BY SORDERQ.YSOQ_DLIVP_0 ASC, SORDERQ.ROWID ASC) AS ItemNO,
+			</when>
+			<when test=" OrderBy == 'OrderPlanedDate'  and  Descending =='DESC' ">
+			ROW_NUMBER() OVER (ORDER BY SORDERQ.YSOQ_DLIVP_0 DESC, SORDERQ.ROWID ASC) AS ItemNO,
+			</when>
+			<otherwise>
+			ROW_NUMBER() OVER (ORDER BY SORDERQ.DEMDLVDAT_0 ASC, SORDERQ.ROWID ASC) AS ItemNO,
+			</otherwise>
+		</choose>
 		IIF(SORDER.SOHTYP_0 = 'RCL' OR SORDER.SOHTYP_0 = 'REP',
 			SORDERQ.SOHNUM_0 + '-' + CAST(SORDERQ.YSOH_ITEM_0 AS VARCHAR),
-			IIF(SORDERQ.YSOQ_PJTORI_0 != '',
+			-- Empty OriProjectNO or Z0001 type OriProjectNO, using ProjectNO
+			IIF(SORDERQ.YSOQ_PJTORI_0 != '' AND LEN(SORDERQ.YSOQ_PJTORI_0) !=5,
 				SORDERQ.YSOQ_PJTORI_0,
 				SORDERQ.YSOH_PJT_0
 		)) AS TrackingNO,
@@ -278,7 +362,25 @@
 	INNER JOIN EXPLOIT.SORDER SORDER
 		ON SORDERP.SOHNUM_0 = SORDER.SOHNUM_0
 			AND SORDER.SALFCY_0 = #{Site}
-	ORDER BY ItemNO	ASC
+		<if test=" OrderType == 'NOR' ">
+			AND SORDER.SOHTYP_0 = 'NOR'
+			</if>
+		<if test=" OrderType == 'OTHER' ">
+			AND ( (SORDER.SOHTYP_0 = 'NOR' AND SORDERQ.YSOQ_STA_0 =7)  OR SORDER.SOHTYP_0 != 'NOR')
+			</if>
+		<if test=" CustomerCode != '' ">
+			AND SORDER.BPCORD_0 = #{CustomerCode}
+			</if>
+		<if test=" VendorCode != '' ">
+	INNER JOIN EXPLOIT.PORDERP PORDERP
+		ON (PORDERP.PJT_0 = SORDERQ.YSOH_PJT_0 OR PORDERP.PJT_0 = SORDERQ.YSOQ_PJTORI_0 )
+			AND PORDERP.PRHFCY_0 = #{Site}
+	INNER JOIN EXPLOIT.PORDER AS PORDER
+		ON PORDERP.POHNUM_0=PORDER.POHNUM_0
+			AND PORDER.POHFCY_0 =  #{Site}
+			AND PORDER.BPSNUM_0 = #{VendorCode}
+	</if>
+		ORDER BY ItemNO	ASC
 		OFFSET #{Offset} ROWS
 		FETCH NEXT #{Limit} ROWS ONLY
 	)
@@ -298,8 +400,8 @@
 	FROM T1
 	INNER JOIN EXPLOIT.MFGITM AS MFGITM
 			ON (T1.ProjectNO = MFGITM.PJT_0 OR T1.OriProjectNO = MFGITM.PJT_0)
-			AND MFGITM.MFGFCY_0 = #{Site}
-			AND LEFT(REVERSE(MFGITM.PJT_0),4) != '1000'
+			AND MFGITM.PJT_0 != ''
+			AND LEN(T1.OriProjectNO) != 5
 	LEFT JOIN EXPLOIT.MFGMAT AS MFGMAT
 			ON MFGITM.MFGNUM_0 = MFGMAT.MFGNUM_0
 				AND MFGITM.MFGLIN_0 = MFGMAT.MFGLIN_0
@@ -311,13 +413,30 @@
 			AND STOCK.STOFCY_0 = #{Site}
 	</select>
 	<select id="findTobeTrackingPurchaseOrderLineBySite" resultType="sageassistant.model.TobeTrackingPurchaseOrderLine">
-	WITH T1 AS (
+		WITH T1 AS (
 	SELECT DISTINCT
 		-- Sales open items
-		ROW_NUMBER() OVER (ORDER BY SORDERQ.DEMDLVDAT_0 ASC, SORDERQ.ROWID ASC) AS ItemNO,
+		<choose>
+			<when test=" OrderBy == 'DaysLeft'  and  Descending =='ASC' ">
+			ROW_NUMBER() OVER (ORDER BY SORDERQ.DEMDLVDAT_0 ASC, SORDERQ.ROWID ASC) AS ItemNO,
+			</when>
+			<when test=" OrderBy == 'DaysLeft'  and  Descending =='DESC' ">
+			ROW_NUMBER() OVER (ORDER BY SORDERQ.DEMDLVDAT_0 DESC, SORDERQ.ROWID ASC) AS ItemNO,
+			</when>
+			<when test=" OrderBy == 'OrderPlanedDate'  and  Descending =='ASC' ">
+			ROW_NUMBER() OVER (ORDER BY SORDERQ.YSOQ_DLIVP_0 ASC, SORDERQ.ROWID ASC) AS ItemNO,
+			</when>
+			<when test=" OrderBy == 'OrderPlanedDate'  and  Descending =='DESC' ">
+			ROW_NUMBER() OVER (ORDER BY SORDERQ.YSOQ_DLIVP_0 DESC, SORDERQ.ROWID ASC) AS ItemNO,
+			</when>
+			<otherwise>
+			ROW_NUMBER() OVER (ORDER BY SORDERQ.DEMDLVDAT_0 ASC, SORDERQ.ROWID ASC) AS ItemNO,
+			</otherwise>
+		</choose>
 		IIF(SORDER.SOHTYP_0 = 'RCL' OR SORDER.SOHTYP_0 = 'REP',
 			SORDERQ.SOHNUM_0 + '-' + CAST(SORDERQ.YSOH_ITEM_0 AS VARCHAR),
-			IIF(SORDERQ.YSOQ_PJTORI_0 != '',
+			-- Empty OriProjectNO or Z0001 type OriProjectNO, using ProjectNO
+			IIF(SORDERQ.YSOQ_PJTORI_0 != '' AND LEN(SORDERQ.YSOQ_PJTORI_0) !=5,
 				SORDERQ.YSOQ_PJTORI_0,
 				SORDERQ.YSOH_PJT_0
 		)) AS TrackingNO,
@@ -333,7 +452,25 @@
 	INNER JOIN EXPLOIT.SORDER SORDER
 		ON SORDERP.SOHNUM_0 = SORDER.SOHNUM_0
 			AND SORDER.SALFCY_0 = #{Site}
-	ORDER BY ItemNO	ASC
+		<if test=" OrderType == 'NOR' ">
+			AND SORDER.SOHTYP_0 = 'NOR'
+			</if>
+		<if test=" OrderType == 'OTHER' ">
+			AND ( (SORDER.SOHTYP_0 = 'NOR' AND SORDERQ.YSOQ_STA_0 =7)  OR SORDER.SOHTYP_0 != 'NOR')
+			</if>
+		<if test=" CustomerCode != '' ">
+			AND SORDER.BPCORD_0 = #{CustomerCode}
+			</if>
+		<if test=" VendorCode != '' ">
+	INNER JOIN EXPLOIT.PORDERP PORDERP
+		ON (PORDERP.PJT_0 = SORDERQ.YSOH_PJT_0 OR PORDERP.PJT_0 = SORDERQ.YSOQ_PJTORI_0 )
+			AND PORDERP.PRHFCY_0 = #{Site}
+	INNER JOIN EXPLOIT.PORDER AS PORDER
+		ON PORDERP.POHNUM_0=PORDER.POHNUM_0
+			AND PORDER.POHFCY_0 =  #{Site}
+			AND PORDER.BPSNUM_0 = #{VendorCode}
+	</if>
+		ORDER BY ItemNO	ASC
 		OFFSET #{Offset} ROWS
 		FETCH NEXT #{Limit} ROWS ONLY
 	)
@@ -356,6 +493,8 @@
 	FROM  T1
 	INNER JOIN EXPLOIT.PORDERP AS PORDERP
 		ON (PORDERP.PJT_0 = T1.ProjectNO OR PORDERP.PJT_0 = T1.OriProjectNO)
+			AND PORDERP.PJT_0 != ''
+			AND LEN(T1.OriProjectNO) != 5
 			AND PORDERP.PRHFCY_0 = #{Site}
 	INNER JOIN EXPLOIT.PORDERQ AS PORDERQ
 		ON PORDERP.POHNUM_0 = PORDERQ.POHNUM_0
@@ -366,13 +505,30 @@
 			AND PORDER.POHFCY_0 = #{Site}
 	</select>
 	<select id="findTobeTrackingReceiptLineBySite" resultType="sageassistant.model.TobeTrackingReceiptLine">
-	WITH T1 AS (
+		WITH T1 AS (
 	SELECT DISTINCT
 		-- Sales open items
-		ROW_NUMBER() OVER (ORDER BY SORDERQ.DEMDLVDAT_0 ASC, SORDERQ.ROWID ASC) AS ItemNO,
+		<choose>
+			<when test=" OrderBy == 'DaysLeft'  and  Descending =='ASC' ">
+			ROW_NUMBER() OVER (ORDER BY SORDERQ.DEMDLVDAT_0 ASC, SORDERQ.ROWID ASC) AS ItemNO,
+			</when>
+			<when test=" OrderBy == 'DaysLeft'  and  Descending =='DESC' ">
+			ROW_NUMBER() OVER (ORDER BY SORDERQ.DEMDLVDAT_0 DESC, SORDERQ.ROWID ASC) AS ItemNO,
+			</when>
+			<when test=" OrderBy == 'OrderPlanedDate'  and  Descending =='ASC' ">
+			ROW_NUMBER() OVER (ORDER BY SORDERQ.YSOQ_DLIVP_0 ASC, SORDERQ.ROWID ASC) AS ItemNO,
+			</when>
+			<when test=" OrderBy == 'OrderPlanedDate'  and  Descending =='DESC' ">
+			ROW_NUMBER() OVER (ORDER BY SORDERQ.YSOQ_DLIVP_0 DESC, SORDERQ.ROWID ASC) AS ItemNO,
+			</when>
+			<otherwise>
+			ROW_NUMBER() OVER (ORDER BY SORDERQ.DEMDLVDAT_0 ASC, SORDERQ.ROWID ASC) AS ItemNO,
+			</otherwise>
+		</choose>
 		IIF(SORDER.SOHTYP_0 = 'RCL' OR SORDER.SOHTYP_0 = 'REP',
 			SORDERQ.SOHNUM_0 + '-' + CAST(SORDERQ.YSOH_ITEM_0 AS VARCHAR),
-			IIF(SORDERQ.YSOQ_PJTORI_0 != '',
+			-- Empty OriProjectNO or Z0001 type OriProjectNO, using ProjectNO
+			IIF(SORDERQ.YSOQ_PJTORI_0 != '' AND LEN(SORDERQ.YSOQ_PJTORI_0) !=5,
 				SORDERQ.YSOQ_PJTORI_0,
 				SORDERQ.YSOH_PJT_0
 		)) AS TrackingNO,
@@ -388,7 +544,25 @@
 	INNER JOIN EXPLOIT.SORDER SORDER
 		ON SORDERP.SOHNUM_0 = SORDER.SOHNUM_0
 			AND SORDER.SALFCY_0 = #{Site}
-	ORDER BY ItemNO	ASC
+		<if test=" OrderType == 'NOR' ">
+			AND SORDER.SOHTYP_0 = 'NOR'
+			</if>
+		<if test=" OrderType == 'OTHER' ">
+			AND ( (SORDER.SOHTYP_0 = 'NOR' AND SORDERQ.YSOQ_STA_0 =7)  OR SORDER.SOHTYP_0 != 'NOR')
+			</if>
+		<if test=" CustomerCode != '' ">
+			AND SORDER.BPCORD_0 = #{CustomerCode}
+			</if>
+		<if test=" VendorCode != '' ">
+	INNER JOIN EXPLOIT.PORDERP PORDERP
+		ON (PORDERP.PJT_0 = SORDERQ.YSOH_PJT_0 OR PORDERP.PJT_0 = SORDERQ.YSOQ_PJTORI_0 )
+			AND PORDERP.PRHFCY_0 = #{Site}
+	INNER JOIN EXPLOIT.PORDER AS PORDER
+		ON PORDERP.POHNUM_0=PORDER.POHNUM_0
+			AND PORDER.POHFCY_0 =  #{Site}
+			AND PORDER.BPSNUM_0 = #{VendorCode}
+	</if>
+		ORDER BY ItemNO	ASC
 		OFFSET #{Offset} ROWS
 		FETCH NEXT #{Limit} ROWS ONLY
 	)
@@ -399,11 +573,13 @@
 		PRECEIPTD.POHNUM_0 AS ReceiptPurchaseNO,
 		PRECEIPTD.POPLIN_0 AS ReceiptPurchaseLine,
 		PRECEIPTD.RCPDAT_0 AS ReceiptDate,
-		PRECEIPTD.CREUSR_0 AS Receipter,
+		PRECEIPTD.CREUSR_0 AS Receiptor,
 		PRECEIPTD.QTYSTU_0 AS ReceiptQty
 	FROM  T1
 	INNER JOIN EXPLOIT.PORDERP AS PORDERP
 		ON (PORDERP.PJT_0 = T1.ProjectNO OR PORDERP.PJT_0 = T1.OriProjectNO)
+			AND PORDERP.PJT_0 != ''
+			AND LEN(T1.OriProjectNO) != 5
 			AND PORDERP.PRHFCY_0 = #{Site}
 	INNER JOIN EXPLOIT.PRECEIPTD AS PRECEIPTD
 		ON PORDERP.POHNUM_0 = PRECEIPTD.POHNUM_0
@@ -411,13 +587,30 @@
 			AND PRECEIPTD.PRHFCY_0 = #{Site}
 	</select>
 	<select id="findTobeTrackingQALineBySite" resultType="sageassistant.model.TobeTrackingQALine">
-	WITH T1 AS (
+		WITH T1 AS (
 	SELECT DISTINCT
 		-- Sales open items
-		ROW_NUMBER() OVER (ORDER BY SORDERQ.DEMDLVDAT_0 ASC, SORDERQ.ROWID ASC) AS ItemNO,
+		<choose>
+			<when test=" OrderBy == 'DaysLeft'  and  Descending =='ASC' ">
+			ROW_NUMBER() OVER (ORDER BY SORDERQ.DEMDLVDAT_0 ASC, SORDERQ.ROWID ASC) AS ItemNO,
+			</when>
+			<when test=" OrderBy == 'DaysLeft'  and  Descending =='DESC' ">
+			ROW_NUMBER() OVER (ORDER BY SORDERQ.DEMDLVDAT_0 DESC, SORDERQ.ROWID ASC) AS ItemNO,
+			</when>
+			<when test=" OrderBy == 'OrderPlanedDate'  and  Descending =='ASC' ">
+			ROW_NUMBER() OVER (ORDER BY SORDERQ.YSOQ_DLIVP_0 ASC, SORDERQ.ROWID ASC) AS ItemNO,
+			</when>
+			<when test=" OrderBy == 'OrderPlanedDate'  and  Descending =='DESC' ">
+			ROW_NUMBER() OVER (ORDER BY SORDERQ.YSOQ_DLIVP_0 DESC, SORDERQ.ROWID ASC) AS ItemNO,
+			</when>
+			<otherwise>
+			ROW_NUMBER() OVER (ORDER BY SORDERQ.DEMDLVDAT_0 ASC, SORDERQ.ROWID ASC) AS ItemNO,
+			</otherwise>
+		</choose>
 		IIF(SORDER.SOHTYP_0 = 'RCL' OR SORDER.SOHTYP_0 = 'REP',
 			SORDERQ.SOHNUM_0 + '-' + CAST(SORDERQ.YSOH_ITEM_0 AS VARCHAR),
-			IIF(SORDERQ.YSOQ_PJTORI_0 != '',
+			-- Empty OriProjectNO or Z0001 type OriProjectNO, using ProjectNO
+			IIF(SORDERQ.YSOQ_PJTORI_0 != '' AND LEN(SORDERQ.YSOQ_PJTORI_0) !=5,
 				SORDERQ.YSOQ_PJTORI_0,
 				SORDERQ.YSOH_PJT_0
 		)) AS TrackingNO,
@@ -433,7 +626,25 @@
 	INNER JOIN EXPLOIT.SORDER SORDER
 		ON SORDERP.SOHNUM_0 = SORDER.SOHNUM_0
 			AND SORDER.SALFCY_0 = #{Site}
-	ORDER BY ItemNO	ASC
+		<if test=" OrderType == 'NOR' ">
+			AND SORDER.SOHTYP_0 = 'NOR'
+			</if>
+		<if test=" OrderType == 'OTHER' ">
+			AND ( (SORDER.SOHTYP_0 = 'NOR' AND SORDERQ.YSOQ_STA_0 =7)  OR SORDER.SOHTYP_0 != 'NOR')
+			</if>
+		<if test=" CustomerCode != '' ">
+			AND SORDER.BPCORD_0 = #{CustomerCode}
+			</if>
+		<if test=" VendorCode != '' ">
+	INNER JOIN EXPLOIT.PORDERP PORDERP
+		ON (PORDERP.PJT_0 = SORDERQ.YSOH_PJT_0 OR PORDERP.PJT_0 = SORDERQ.YSOQ_PJTORI_0 )
+			AND PORDERP.PRHFCY_0 = #{Site}
+	INNER JOIN EXPLOIT.PORDER AS PORDER
+		ON PORDERP.POHNUM_0=PORDER.POHNUM_0
+			AND PORDER.POHFCY_0 =  #{Site}
+			AND PORDER.BPSNUM_0 = #{VendorCode}
+	</if>
+		ORDER BY ItemNO	ASC
 		OFFSET #{Offset} ROWS
 		FETCH NEXT #{Limit} ROWS ONLY
 	)
@@ -494,6 +705,7 @@
 	INNER JOIN EXPLOIT.SERREQUEST SERREQUEST
 		ON ( T1.ProjectNO = SERREQUEST.YORIPJT_0 OR T1.OriProjectNO = SERREQUEST.YORIPJT_0 )
 		    AND SERREQUEST.YORIPJT_0 != ''
+			AND LEN(T1.OriProjectNO) != 5
 			AND SERREQUEST.SALFCY_0 = #{Site}
 	</select>
 </mapper>
