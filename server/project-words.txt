@@ -1,3 +1,9 @@
+axios
 dedienne
+echart
+echarts
+Fapiao
+mockjs
+pinia
 sageassistant
 tobe
