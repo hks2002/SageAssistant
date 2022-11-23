@@ -2,7 +2,7 @@
  * @Author         : Robert Huang<56649783@qq.com>
  * @Date           : 2022-03-26 17:57:07
  * @LastEditors    : Robert Huang<56649783@qq.com>
- * @LastEditTime   : 2022-09-22 15:44:32
+ * @LastEditTime   : 2022-11-23 19:38:55
  * @FilePath       : \server\src\main\java\sageassistant\service\CurrencyService.java
  * @CopyRight      : Dedienne Aerospace China ZhuHai
  */
@@ -29,7 +29,7 @@ public class CurrencyService {
 
     private static final Logger log = LogManager.getLogger();
 
-    private static HashMap<String, String> dafaultRate = new HashMap<String, String>();
+    private static HashMap<String, String> defaultRate = new HashMap<String, String>();
     static HttpService httpService;
 
     @Autowired
@@ -53,17 +53,17 @@ public class CurrencyService {
         );
 
     public CurrencyService() {
-        dafaultRate.put("EURUSD", "1.18");
-        dafaultRate.put("GBPUSD", "1.31");
-        dafaultRate.put("SGDUSD", "0.73");
-        dafaultRate.put("RMBUSD", "0.145");
-        dafaultRate.put("HKDUSD", "0.13");
-        dafaultRate.put("MXNUSD", "0.064");
-        dafaultRate.put("AEDUSD", "0.27");
-        dafaultRate.put("QARUSD", "0.275");
-        dafaultRate.put("CADUSD", "0.7639");
-        dafaultRate.put("AUDUSD", "0.7285");
-        dafaultRate.put("JPYUSD", "0.00962");
+        defaultRate.put("EURUSD", "1.18");
+        defaultRate.put("GBPUSD", "1.31");
+        defaultRate.put("SGDUSD", "0.73");
+        defaultRate.put("RMBUSD", "0.145");
+        defaultRate.put("HKDUSD", "0.13");
+        defaultRate.put("MXNUSD", "0.064");
+        defaultRate.put("AEDUSD", "0.27");
+        defaultRate.put("QARUSD", "0.275");
+        defaultRate.put("CADUSD", "0.7639");
+        defaultRate.put("AUDUSD", "0.7285");
+        defaultRate.put("JPYUSD", "0.00962");
     }
 
     /*
@@ -143,13 +143,13 @@ public class CurrencyService {
                 log.debug("rateRMBUSD:" + rateRMBUSD);
             }
 
-            // calulate by RMBUSD for other currency
+            // calculate by RMBUSD for other currency
             if (jsonArrayInner.getString(1).equals(Sour) && jsonArrayInner.getString(3).equals("RMB")) {
                 rate = jsonArrayInner.getFloat(2) / jsonArrayInner.getIntValue(0) * rateRMBUSD;
                 log.debug("rate1:" + rate);
                 break;
             }
-            // calulate by RMBUSD for other currency
+            // calculate by RMBUSD for other currency
             if (jsonArrayInner.getString(1).equals("RMB") && jsonArrayInner.getString(3).equals(Sour)) {
                 // backup of if
                 rate = jsonArrayInner.getIntValue(0) / jsonArrayInner.getFloat(2) * rateRMBUSD;
@@ -162,8 +162,8 @@ public class CurrencyService {
         nf.setGroupingUsed(false);
         String rateStr = nf.format(rate);
 
-        if (rateStr.equals("0") && dafaultRate.containsKey(Sour + Dest)) {
-            rateStr = dafaultRate.get(Sour + Dest);
+        if (rateStr.equals("0") && defaultRate.containsKey(Sour + Dest)) {
+            rateStr = defaultRate.get(Sour + Dest);
         }
         return rateStr;
     }
@@ -187,8 +187,8 @@ public class CurrencyService {
         List<CurrencyHistory> list = currencyMapper.findCurrencyRate(Sour, Dest, Date);
 
         String rateStr = "0";
-        if (list.size() == 0 && dafaultRate.containsKey(Sour + Dest)) {
-            rateStr = dafaultRate.get(Sour + Dest);
+        if (list.size() == 0 && defaultRate.containsKey(Sour + Dest)) {
+            rateStr = defaultRate.get(Sour + Dest);
         } else {
             rateStr = list.get(0).getRate().toString();
         }
