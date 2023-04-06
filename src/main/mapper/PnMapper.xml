@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.da.sage.assistant.dao.PnMapper">
+	<!--Open L2 Cache under Names pace: 1 Hour-->
+	<cache eviction="LRU" flushInterval="3600000" readOnly="true" size="1024" />
+	<select id="findPnByLike" resultType="com.da.sage.assistant.model.PnRootPn">
+		SELECT DISTINCT
+		    ITMMASTER.ITMREF_0 AS PNROOT,
+		    IIF(ECCSTA.ITMREF_0 IS NULL,
+				ITMMASTER.ITMREF_0,
+				IIF(ECCSTA.ECCVALMAJ_0='#',
+					ECCSTA.ITMREF_0,					
+					IIF(ECCSTA.ECCVALMAJ_0='-',
+					    ECCSTA.ITMREF_0,					
+					    ECCSTA.ITMREF_0 + '_' + ECCSTA.ECCVALMAJ_0
+				    )
+				)
+			) AS PN
+		FROM ITMMASTER
+		LEFT JOIN ECCSTA
+		     ON ITMMASTER.ITMREF_0 = ECCSTA.ITMREF_0
+		WHERE ITMMASTER.ITMREF_0 LIKE #{PnOrPnRoot} 
+				OR (ECCSTA.ITMREF_0 + '_' + ECCSTA.ECCVALMAJ_0 LIKE #{PnOrPnRoot})
+		ORDER BY ITMMASTER.ITMREF_0 DESC, PN
+		OFFSET 0 ROWS
+		FETCH NEXT #{Count} ROWS ONLY
+	</select>
+	<select id="findAllPnByPnRoot" resultType="com.da.sage.assistant.model.PnDetails">
+		SELECT
+			row_number() OVER (ORDER BY ECCSTA.ZECCREVMAJ_0 DESC) AS ROWID,
+			ITMMASTER.ITMREF_0 AS PNROOT,
+			IIF(ITMMASTER.ECCFLG_0=2, ITMMASTER.ITMREF_0 + '_' + ECCSTA.ECCVALMAJ_0, ITMMASTER.ITMREF_0) AS PN,
+			ITMMASTER.TSICOD_0 AS Cat,
+			ECCSTA.ECCVALMAJ_0 AS Version,
+			ITMMASTER.ITMDES1_0 AS Desc1,
+			ITMMASTER.ITMDES2_0 AS Desc2,
+			ITMMASTER.ITMDES3_0 AS Desc3,
+			ITMMASTER.YITM_COMSTA_0 AS Comment,
+			IIF(ECCSTA.EXNFLG_0=2, 5, ITMMASTER.ITMSTA_0) AS Status,
+		    ITMMASTER.CREDAT_0 AS CreateDate
+		FROM ITMMASTER
+		LEFT JOIN ECCSTA
+		     ON ITMMASTER.ITMREF_0 = ECCSTA.ITMREF_0
+		WHERE ITMMASTER.ITMREF_0 = #{PnRoot}
+	</select>
+	<select id="findOptionPn" resultType="java.lang.String">
+		SELECT DISTINCT T0.OptionPN 
+		FROM (
+			SELECT 
+				ITMREFBPS_0 AS OptionPN
+			FROM ITMBPS
+			WHERE 
+				ITMREF_0=#{PnRoot}
+				AND ITMREF_0 !=ITMREFBPS_0
+			UNION
+			SELECT 
+				ITMREF_0 AS OptionPN
+			FROM ITMBPS
+			WHERE 
+				ITMREFBPS_0=#{PnRoot}
+				AND ITMREF_0 !=ITMREFBPS_0
+			UNION
+			SELECT
+				T2.ITMREFBPS_0 AS OptionPN
+			FROM
+				ITMBPS T1
+			INNER JOIN ITMBPS T2
+				ON T1.ITMREF_0 = T2.ITMREF_0
+			WHERE 
+				T1.ITMREFBPS_0 = #{PnRoot}
+				AND T2.ITMREFBPS_0 != #{PnRoot}
+			) T0
+	</select>
+	<select id="findSalesHistoryByPnRoot" resultType="com.da.sage.assistant.model.SalesHistory">
+		SELECT
+		    SORDERP.SALFCY_0 AS SalesSite,
+		    SORDERP.SOHNUM_0 AS OrderNO,
+		    SORDER.ORDDAT_0 AS OrderDate,
+		    SORDER.BPCORD_0 AS CustomerCode,
+		    SORDER.BPCNAM_0 AS CustomerName,
+		    SORDERP.ITMREF_0 AS PN,
+		    SORDERQ.QTY_0 AS QTY,
+		    SORDERP.NETPRI_0 AS NetPrice,
+		    SORDER.CUR_0 AS Currency,
+		    SORDER.EECICT_0 AS TradeTerm
+		FROM SORDER
+		LEFT JOIN SORDERP
+		    ON SORDERP.SOHNUM_0 = SORDER.SOHNUM_0
+		INNER JOIN SORDERQ
+		    ON SORDERQ.SOHNUM_0 = SORDERP.SOHNUM_0
+		        AND SORDERQ.SOPLIN_0 = SORDERP.SOPLIN_0
+		WHERE
+		     SORDERP.NETPRI_0 > 0   AND SORDERP.ITMREF_0 = #{PnRoot}
+		ORDER BY OrderDate ASC
+    </select>
+	<select id="findQuoteHistoryByPnRoot" resultType="com.da.sage.assistant.model.QuoteHistory">
+	    SELECT
+		    SQUOTED.SALFCY_0 AS SalesSite,
+		    SQUOTED.SQHNUM_0 AS QuoteNO,
+		    SQUOTED.QUODAT_0 AS QuoteDate,
+		    SQUOTE.BPCORD_0 AS CustomerCode,
+		    SQUOTE.BPCNAM_0 AS CustomerName,
+		    SQUOTED.ITMREF_0 AS PN,
+		    SQUOTED.QTY_0 AS QTY,
+		    SQUOTED.NETPRI_0 AS NetPrice,
+		    SQUOTE.CUR_0 AS Currency,
+		    SQUOTED.ORDFLG_0 AS OrderFlag,
+		    SQUOTED.SOHNUM_0 AS OrderNO,
+		    SQUOTE.EECICT_0 AS TradeTerm
+		FROM SQUOTE
+		LEFT JOIN SQUOTED
+		    ON SQUOTED.SQHNUM_0=SQUOTE.SQHNUM_0
+		WHERE 
+		    SQUOTED.NETPRI_0 > 0   AND SQUOTED.ITMREF_0 = #{PnRoot}
+		ORDER BY QuoteDate ASC
+     </select>
+	<select id="findCostHistoryByPnRoot" resultType="com.da.sage.assistant.model.CostHistory">
+	    SELECT DISTINCT
+			PORDERP.PRHFCY_0 AS PurchaseSite,
+			IIF(SORDERQ.YSOQ_PJTORI_0='', SORDERQ.YSOH_PJT_0, SORDERQ.YSOQ_PJTORI_0) AS ProjectNO,
+			SORDERQ.ITMREF_0 AS OrderPN,
+			SORDERQ.CREDAT_0 AS OrderDate,
+			PORDERP.POHNUM_0 AS PurchaseNO,
+			PORDERP.POPLIN_0 As Line,
+			PORDER.BPSNUM_0 AS VendorCode,
+			PORDER.BPRNAM_0 AS VendorName,
+			PORDERP.ITMREF_0 AS PurchasePN,
+			PORDERP.ITMDES_0 AS Description,
+			PORDER.CUR_0 AS Currency,
+			PORDERP.NETPRI_0 AS NetPrice,
+			PORDERQ.QTYPUU_0 AS Qty
+			FROM SORDERQ
+				INNER JOIN PORDERP
+					  ON ( SORDERQ.YSOH_PJT_0 = PORDERP.PJT_0 OR SORDERQ.YSOQ_PJTORI_0 = PORDERP.PJT_0 ) AND SORDERQ.SALFCY_0=PORDERP.PRHFCY_0
+				INNER JOIN PORDERQ
+					  ON PORDERQ.POHNUM_0 = PORDERP.POHNUM_0 AND PORDERQ.POPLIN_0 = PORDERP.POPLIN_0
+				INNER JOIN PORDER
+					  ON PORDER.POHNUM_0 = PORDERP.POHNUM_0
+			WHERE SORDERQ.ITMREF_0 = #{PnRoot} AND PORDERP.NETPRI_0 > 0
+			ORDER BY OrderDate ASC
+     </select>
+	<select id="findDeliveryDurationByPnRoot" resultType="com.da.sage.assistant.model.DeliveryDuration">
+		SELECT SORDERP.SALFCY_0 AS SalesSite,
+		        SORDERP.ITMREF_0 AS PN,
+				SORDER.ORDDAT_0 AS OrderDate,
+				SORDER.SHIDAT_0 AS ShipDate,
+				DateDiff(day, SORDER.ORDDAT_0,SORDER.SHIDAT_0) AS Duration
+		FROM SORDER
+		    LEFT JOIN SORDERP
+		    ON SORDERP.SOHNUM_0=SORDER.SOHNUM_0
+		WHERE 
+		    SORDERP.ITMREF_0=#{PnRoot}
+		    AND DateDiff(day, SORDER.ORDDAT_0,SORDER.SHIDAT_0) != 0
+		ORDER BY SORDER.SHIDAT_0 ASC
+     </select>
+	<select id="findObsoletePnBySite" resultType="com.da.sage.assistant.model.PnStatus">
+	SELECT IIF(
+			ITMMASTER.ECCFLG_0 = 2,
+			ITMMASTER.ITMREF_0 + '_' + ECCSTA.ECCVALMAJ_0,
+			ITMMASTER.ITMREF_0
+		) AS PN,
+		ITMMASTER.ITMDES1_0 AS Desc1,
+		ITMMASTER.ITMDES2_0 AS Desc2,
+		ITMMASTER.ITMDES3_0 AS Desc3,
+		IIF(
+			ECCSTA.EXNFLG_0 = 2,
+			'Obsolete',
+			(
+				CASE
+					WHEN ITMMASTER.ITMSTA_0 = 1 THEN 'Active'
+					WHEN ITMMASTER.ITMSTA_0 = 2 THEN 'InDevelopment'
+					WHEN ITMMASTER.ITMSTA_0 = 3 THEN 'OnShortage'
+					WHEN ITMMASTER.ITMSTA_0 = 4 THEN 'NotRenewed'
+					WHEN ITMMASTER.ITMSTA_0 = 5 THEN 'Obsolete'
+					WHEN ITMMASTER.ITMSTA_0 = 6 THEN 'NotUsable'
+					ELSE 'UNK'
+				END
+			)
+		) AS PNStatus,
+		ITMMASTER.YITM_SUP_0 AS WC,
+		IIF(
+			SORDERQ.YSOQ_PJTORI_0 = '',
+			SORDERQ.YSOH_PJT_0,
+			SORDERQ.YSOQ_PJTORI_0
+		) AS ProjectNO,
+		SORDER.BPCORD_0 AS CustomerCode,
+		SORDER.BPCNAM_0 AS CustomerName
+	FROM EXPLOIT.SORDERQ AS SORDERQ
+		LEFT JOIN EXPLOIT.SORDER ON SORDERQ.SOHNUM_0 = SORDER.SOHNUM_0
+		LEFT JOIN EXPLOIT.ECCSTA AS ECCSTA ON SORDERQ.ITMREF_0 = ECCSTA.ITMREF_0
+		AND SORDERQ.ECCVALMAJ_0 = ECCSTA.ECCVALMAJ_0
+		LEFT JOIN EXPLOIT.ITMMASTER AS ITMMASTER ON ITMMASTER.ITMREF_0 = SORDERQ.ITMREF_0
+	WHERE SORDERQ.SOQSTA_0 != 3
+		AND ITMMASTER.ITMSTA_0 != 1
+		AND SORDERQ.SALFCY_0 = #{Site}
+    </select>
+</mapper>

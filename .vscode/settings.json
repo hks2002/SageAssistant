@@ -1,0 +1,37 @@
+{
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "boot-java.change-detection.on": true,
+    "[java]": {
+        "editor.defaultFormatter": "mwpb.java-prettier-formatter"
+    },
+    "cSpell.customDictionaries": {
+        "project-words": {
+            "name": "project-words",
+            "path": "${workspaceRoot}/project-words.txt",
+            "description": "Words used in this project",
+            "addWords": true
+        },
+        "custom": true, // Enable the `custom` dictionary
+        "internal-terms": false // Disable the `internal-terms` dictionary
+    },
+    "java.compile.nullAnalysis.mode": "automatic",
+    "auto-header-plus.pathContainsWorkspaceFolder": false,
+    "xml.format.enabled": false,
+    "sqltools.connections": [
+        {
+            "mssqlOptions": {
+                "appName": "SQLTools",
+                "useUTC": true,
+                "encrypt": true
+            },
+            "previewLimit": 50,
+            "server": "192.168.10.60\\x3v12",
+            "port": 1433,
+            "driver": "MSSQL",
+            "name": "SAGE",
+            "database": "x3v12",
+            "username": "BI",
+            "password": "BIDEDIENNE"
+        }
+    ]
+}
