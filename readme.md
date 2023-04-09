@@ -1,10 +1,13 @@
 # Getting Started
 
-### This project contains two parts 
-* srv(developed with java)
-* web(is developed with vue/quasar)
+### This project contains three parts
+
+- data-srv(developed with java)
+- rpt-srv(developed with java)
+- web(developed with vue/quasar)
 
 ### Screen snap
+
 ![Products Show](./Products.png)
 ![Todo](./Todo.png)
 ![DataView](./DataView.png)
@@ -13,63 +16,79 @@
 ![Suppliers](./Suppliers.png)
 ![Report](./Report.png)
 
-### Server install&config
-1. install Oracle Jre Environment (java 8 or later) 
-  (suggest download rpm, and using ```rpm -ivh ******.rpm``` to install it)
-```Crystal report doesn't support OpenJDK, it cannot found fonts when export pdf. So, please make sure you are using Oracle Jre runtime, and install the fonts first, if you plan to deploy it to Linux.```
-2. install fonts as requried
-3. install tomcat/nginx (tomcat 9 or later)
- (suggest download rpm, and using ```rpm -ivh ******.rpm``` to install it)
-4. copy SageAssistantSrv.war to path ```tomcat-*/webapps```
-5. copy web/dist/spa/* to ```nginx/html/``` 
-6. mount windows share foler in linux ```mount -t cifs -o user=user,password=password //server/sharename /mnt/mnt/Manual``` ```mount -t cifs -o user=user,password=password //server/sharename /mnt/mnt/Drawing```
-7. add these config to ```nginx.conf```
+### Server installation&config
+
+#### JAVA
+
+1. Download/Install JAVA Environment (java 17 or later).
+2. Set "JAVA_HOME" and "CLASSPATH" environment variables. You can copy `java.sh` to `profile.d` folder to do it, modify the `JAVA_HOME` as required.
+3. Run the command: `java -version` to check if Java is installed.
+
+#### JAVA FONTS
+
+1. Install report fonts as required (see `rpt-srv` README).
+
+#### Tomcat
+
+1. Download/Install tomcat (tomcat 10 or later).
+2. Set tomcat service, you can copy `tomcat.service` to `/usr/lib/systemd/system` folder, modify the `JAVA_HOME` as required.
+3. Run the command: `systemctl start tomcat` to start the tomcat.
+4. Open a browser and type `http://serverIP:port` to check if tomcat works.
+5. Copy `DataSrv.war;RptSrv.war` to path `tomcat-*/webapps`.
+
+#### ShareFolder (optional)
+
+1. mount windows share folder in linux `mount -t cifs -o user=user,password=password //server/sharename /mnt/mnt/Manual` `mount -t cifs -o user=user,password=password //server/sharename /mnt/mnt/Drawing`
+
+#### Nginx
+
+1. Download/Install nginx.
+2. Set nginx service, you can copy `nginx.service` to `/usr/lib/systemd/system` folder.
+3. Run the command: `systemctl start nginx` to start the nginx.
+4. copy `web/dist/spa/\*` to `nginx/html/`
+5. add these config to `nginx.conf`
    ```
    location ^~ /Data/ {
-       proxy_pass http://localhost:8080;
-	   proxy_http_version 1.1;
-	   proxy_set_header Upgrade $http_upgrade;
-	   proxy_set_header Connection 'upgrade';
-	   proxy_set_header Host $host;
-	   proxy_cache_bypass $http_upgrade;
+      proxy_pass http://localhost:8080/data-srv;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection 'upgrade';
+      proxy_set_header Host $host;
+      proxy_cache_bypass $http_upgrade;
    }
    location ^~ /Report/ {
-       proxy_pass http://localhost:8080;
-	   proxy_http_version 1.1;
-	   proxy_set_header Upgrade $http_upgrade;
-	   proxy_set_header Connection 'upgrade';
-	   proxy_set_header Host $host;
-	   proxy_cache_bypass $http_upgrade;
+      proxy_pass http://localhost:8080/rpt-srv;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection 'upgrade';
+      proxy_set_header Host $host;
+      proxy_cache_bypass $http_upgrade;
    }
    location ^~ /File/ {
        root /mnt;
-	   rewrite '^File/(.*)' /$1 break;
+      rewrite '^File/(.*)' /$1 break;
    }
    location ^~ /mnt/Drawing/ {
       root /mnt/Drawing;
-   }   
+   }
    location ^~ /mnt/Manual/ {
       root /mnt/Manual;
    }
    ```
-   
-```Don't forget open you firewall to allow the http 80 port```
 
-8. start tomcat with ```tomcat/bin/startup.sh```
-9. start nginx with ```nginx -s start```
-10. if use file upload function, mostly, you need change the default upload size limit both in ```nginx.conf``` 
-    ```
-    client_max_body_size  500m;
-    proxy_connect_timeout 300s;
-    proxy_send_timeout 300s;
-    proxy_read_timeout 300s;
-    ```
-    and java app ```application.properties```
-    ```
-    // single file size limit
-    spring.servlet.multipart.max-file-size= 500MB
-    // total size limit per one request
-    spring.servlet.multipart.max-request-size= 500MB
-    ```
-11. if chinese text can't display in pdf, please configure /ect/locale.conf
-    ```LANG=zh_CN.UTF-8```
+> Note: Don't forget open you firewall to allow the http 80 port
+
+6. if use file upload function, mostly, you need change the default upload size limit both in `nginx.conf`
+   ```
+   client_max_body_size  500m;
+   proxy_connect_timeout 300s;
+   proxy_send_timeout 300s;
+   proxy_read_timeout 300s;
+   ```
+   and java app `application.properties`
+   ```
+   // single file size limit
+   spring.servlet.multipart.max-file-size= 500MB
+   // total size limit per one request
+   spring.servlet.multipart.max-request-size= 500MB
+   ```

@@ -1,0 +1,13 @@
+[Unit]
+Description=Tomcat10
+After=network.target
+
+[Service]
+Environment="JAVA_HOME=/usr/java/jdk-17.0.6"
+Type=forking
+ExecStart=/usr/tomcat-10.1.7/bin/catalina.sh start
+ExecReload=/usr/tomcat-10.1.7/bin/catalina.sh restart
+ExecStop=/usr/tomcat-10.1.7/bin/catalina.sh stop
+
+[Install]
+WantedBy=multi-user.target
