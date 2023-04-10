@@ -1,10 +1,12 @@
 # Getting Started
 
-### This project contains three parts
+### This project contains five parts
 
-- data-srv(developed with java)
-- rpt-srv(developed with java)
-- web(developed with vue/quasar)
+- [Data Server](https://github.com/hks2002/sage-assistant-server) ![Github Version](https://img.shields.io/github/v/release/hks2002/sage-assistant-server?display_name=release)
+- [Report Server](https://github.com/hks2002/crystal-report-server-java) ![Github Version](https://img.shields.io/github/v/release/hks2002/crystal-report-server-java?display_name=release)
+- [Reports](https://github.com/hks2002/sage-assistant-reports) ![Github Version](https://img.shields.io/github/v/release/hks2002/sage-assistant-reports?)
+- [Web UI](https://github.com/hks2002/sage-assistant-web) ![Github Version](https://img.shields.io/github/v/release/hks2002/sage-assistant-web?display_name=release)
+- [fapiao](https://github.com/hks2002/fapiao) ![Github Version](https://img.shields.io/github/v/release/hks2002/fapiao?display_name=release)
 
 ### Screen snap
 
